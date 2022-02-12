@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: user-depl
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: user
-          image: thasup/user
+          image: us.gcr.io/microservices-ecommerce-341106/user
 ---
 apiVersion: v1
 kind: Service

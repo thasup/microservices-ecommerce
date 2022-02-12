@@ -5,10 +5,12 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  local:
-    push: false
+  # local:
+  #   push: false
+  googleCloudBuild:
+    projectId: microservices-ecommerce-341106
   artifacts:
-    - image: thasup/user
+    - image: us.gcr.io/microservices-ecommerce-341106/user
       context: user
       docker:
         dockerfile: Dockerfile
