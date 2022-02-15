@@ -4,7 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --legacy-watch ./src/index.ts"
+    "start": "nodemon --legacy-watch ./src/index.ts",
+    "test": "jest --watchAll --no-cache"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -12,6 +20,7 @@
   "dependencies": {
     "@types/cookie-session": "^2.0.44",
     "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.8",
     "cookie-session": "^2.0.0",
     "express": "^4.17.2",
     "express-async-errors": "^3.1.1",
@@ -23,6 +32,11 @@
     "typescript": "^4.5.5"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^8.5.8"
+    "@types/jest": "^27.4.0",
+    "@types/supertest": "^2.0.11",
+    "jest": "^27.5.1",
+    "mongodb-memory-server": "^8.3.0",
+    "supertest": "^6.2.2",
+    "ts-jest": "^27.1.3"
   }
 }
