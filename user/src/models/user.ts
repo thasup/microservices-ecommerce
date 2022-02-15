@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
+import { Password } from "../services/Password";
 
 // An interface that describes the properties
 // that are requried to create a new User
 interface UserAttrs {
   email: string;
   password: string;
+  isAdmin: boolean;
 }
 
 // An interface that describes the properties
@@ -18,6 +20,7 @@ interface UserModel extends mongoose.Model<UserDoc> {
 interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
+  isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -31,6 +34,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isAdmin: {
+    type: Boolean,
+    required: true,
+  },
+});
+
+userSchema.pre("save", async function (done) {
+  if (this.isModified("password")) {
+    const hashed = await Password.toHash(this.get("password"));
+    this.set("password", hashed);
+  }
+  done();
 });
 
 userSchema.statics.build = (attrs: UserAttrs) => {

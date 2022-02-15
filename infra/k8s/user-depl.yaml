@@ -15,6 +15,12 @@ spec:
       containers:
         - name: user
           image: us.gcr.io/microservices-ecommerce-341106/user
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
 ---
 apiVersion: v1
 kind: Service
