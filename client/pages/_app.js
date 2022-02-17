@@ -1,5 +1,5 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
+import { Container } from "react-bootstrap";
 import "../styles/globals.css";
 
 const MyApp = (props) => {
@@ -7,9 +7,9 @@ const MyApp = (props) => {
 
   return (
     <>
-      <div className="container">
+      <Container fluid>
         <Component currentUser={currentUser} {...pageProps} />
-      </div>
+      </Container>
     </>
   );
 };
