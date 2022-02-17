@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
+import Router from "next/router";
 
+import useRequest from "../../hooks/use-request";
 import styles from "../../styles/signup.module.css";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import FormContainer from "../../components/FormContainer";
@@ -8,21 +9,21 @@ import FormContainer from "../../components/FormContainer";
 const signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState([]);
+  const { doRequest, errors } = useRequest({
+    url: "/api/users/signup",
+    method: "post",
+    body: {
+      email,
+      password,
+    },
+    onSuccess: () => Router.push("/"),
+  });
 
   const submitHandler = async (event) => {
     event.preventDefault();
 
-    try {
-      const response = await axios.post("/api/users/signup", {
-        email,
-        password,
-      });
-
-      console.log(response.data);
-    } catch (err) {
-      setErrors(err.response.data.errors);
-    }
+    const response = await doRequest();
+    console.log(response);
   };
 
   return (
@@ -30,8 +31,8 @@ const signup = () => {
       <Col sm={8}>
         <FormContainer>
           <h1>Sign Up</h1>
-          <Form onSubmit={submitHandler}>
-            <Form.Group>
+          <Form className="mt-3" onSubmit={submitHandler}>
+            <Form.Group className="mt-2">
               <Form.Label>Email Address</Form.Label>
               <Form.Control
                 value={email}
@@ -40,7 +41,7 @@ const signup = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group>
+            <Form.Group className="mt-2">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 value={password}
@@ -51,7 +52,7 @@ const signup = () => {
             </Form.Group>
 
             {errors}
-            <Button type="submit" variant="primary">
+            <Button className="mt-3" type="submit" variant="primary">
               Sign Up
             </Button>
           </Form>
