@@ -1,20 +1,16 @@
 import React from "react";
-import axios from "axios";
 import Head from "next/head";
 import { Container } from "react-bootstrap";
+
 import "../styles/bootstrap.css";
 import "../styles/globals.css";
 
+import buildClient from "../api/build-client";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const MyApp = ({ Component, pageProps, data, currentUser }) => {
-  // const {
-  //   data: { currentUser },
-  // } = pageProps;
-
+const MyApp = ({ Component, pageProps, currentUser }) => {
   console.log(pageProps);
-  console.log(data);
   console.log(currentUser);
 
   return (
@@ -46,22 +42,19 @@ const MyApp = ({ Component, pageProps, data, currentUser }) => {
   );
 };
 
-export async function getServerSideProps(context) {
-  const { data } = await axios
-    .get(
-      "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
-      {
-        withCredentials: true,
-        headers: context.req.headers,
-      }
-    )
-    .catch((err) => {
-      console.log(err.message);
-    });
+MyApp.getInitialProps = async (appContext) => {
+  const client = buildClient(appContext.ctx);
+  const { data } = await client.get("/api/users/currentuser");
 
-  console.log(appContext);
+  let pageProps = {};
+  if (appContext.Component.getInitialProps) {
+    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+  }
 
-  return { props: { ...data } };
-}
+  return {
+    pageProps,
+    ...data,
+  };
+};
 
 export default MyApp;

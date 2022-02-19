@@ -1,4 +1,4 @@
-import axios from "axios";
+import buildClient from "../api/build-client";
 import styles from "../styles/Home.module.css";
 
 const Home = ({ data }) => {
@@ -15,19 +15,8 @@ const Home = ({ data }) => {
 };
 
 export async function getServerSideProps(context) {
-  const { data } = await axios
-    .get(
-      "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
-      {
-        withCredentials: true,
-        headers: context.req.headers,
-      }
-    )
-    .catch((err) => {
-      console.log(err.message);
-    });
-
-  console.log(context);
+  const client = buildClient(context);
+  const { data } = await client.get("/api/users/currentuser");
 
   return { props: { data } };
 }
