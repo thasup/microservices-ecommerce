@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Router from "next/router";
 
-import useRequest from "../../hooks/use-request";
+import useRequest from "../hooks/use-request";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import FormContainer from "../../components/FormContainer";
+import FormContainer from "../components/FormContainer";
 
-const signin = () => {
+const signin = ({ currentUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { doRequest, errors } = useRequest({

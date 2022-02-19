@@ -8,8 +8,14 @@ import "../styles/globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const MyApp = (props) => {
-  const { Component, pageProps, currentUser } = props;
+const MyApp = ({ Component, pageProps, data, currentUser }) => {
+  // const {
+  //   data: { currentUser },
+  // } = pageProps;
+
+  console.log(pageProps);
+  console.log(data);
+  console.log(currentUser);
 
   return (
     <>
@@ -29,7 +35,7 @@ const MyApp = (props) => {
           referrerpolicy="no-referrer"
         />
       </Head>
-      <Header />
+      <Header currentUser={currentUser} />
       <main className="py-3">
         <Container fluid>
           <Component currentUser={currentUser} {...pageProps} />
@@ -40,22 +46,22 @@ const MyApp = (props) => {
   );
 };
 
-export async function getServerSideProps(appContext) {
+export async function getServerSideProps(context) {
   const { data } = await axios
     .get(
       "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
       {
         withCredentials: true,
-        headers: appContext.ctx.req.headers,
+        headers: context.req.headers,
       }
     )
     .catch((err) => {
       console.log(err.message);
     });
 
-  console.log(data);
+  console.log(appContext);
 
-  return { props: { data } };
+  return { props: { ...data } };
 }
 
 export default MyApp;
