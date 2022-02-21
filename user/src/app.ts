@@ -1,9 +1,8 @@
 import express from "express";
 import "express-async-errors";
 import cookieSession from "cookie-session";
+import { NotFoundError, errorHandler } from "@thasup-dev/common";
 
-import { NotFoundError } from "./errors/NotFoundError";
-import { errorHandler } from "./middlewares/error-handler";
 import { currentUserRouter } from "./routes/current-user";
 import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";
