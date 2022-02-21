@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-depl
+  name: product-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user
+      app: product
   template:
     metadata:
       labels:
-        app: user
+        app: product
     spec:
       containers:
-        - name: user
-          image: us.gcr.io/microservices-ecommerce-341106/user
+        - name: product
+          image: us.gcr.io/microservices-ecommerce-341106/product
           env:
-            - name: MONGO_URI_USER
+            - name: MONGO_URI_PRODUCT
               valueFrom:
                 secretKeyRef:
                   name: mongo-secret
-                  key: MONGO_URI_USER
+                  key: MONGO_URI_PRODUCT
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -30,13 +30,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-srv
+  name: product-srv
 spec:
   selector:
-    app: user
+    app: product
   type: ClusterIP
   ports:
-    - name: user
+    - name: product
       protocol: TCP
       port: 3000
       targetPort: 3000
