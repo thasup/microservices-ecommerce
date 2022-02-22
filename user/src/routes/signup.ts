@@ -18,15 +18,13 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password, isAdmin } = req.body;
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
       throw new BadRequestError("Email in use");
     }
-
-    const isAdmin = false;
 
     const user = User.build({ email, password, isAdmin });
     await user.save();
