@@ -1,5 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
+import { Product } from "../../models/product";
 
 it("has a route handler listening to /api/products for post requests", async () => {
   const response = await request(app).post("/api/products").send({});
@@ -69,23 +70,36 @@ it("returns an error if an invalid price is provided", async () => {
     .expect(400);
 });
 
-// it('creates a product with valid inputs', async () => {
-//   let products = await Product.find({});
-//   expect(products.length).toEqual(0);
+it("creates a product with valid inputs", async () => {
+  let products = await Product.find({});
+  expect(products.length).toEqual(0);
 
-//   const title = 'asldkfj';
+  const title = "Sample Dress";
 
-//   await request(app)
-//     .post('/api/products')
-//     .set('Cookie', global.adminSignin())
-//     .send({
-//       title,
-//       price: 20,
-//     })
-//     .expect(201);
+  await request(app)
+    .post("/api/products")
+    .set("Cookie", global.adminSignin())
+    .send({
+      title,
+      price: 1990,
+      userId: "6214a0227e0d2db80ddb0860",
+      image: "./asset/sample.jpg",
+      colors: [{ name: "Red" }, { name: "Black" }],
+      sizes: [{ name: "S" }, { name: "M" }, { name: "L" }],
+      brand: "Uniqlo",
+      category: "Dress",
+      material: "Polyester 100%",
+      description:
+        "Knee-length dress in woven fabric. Round neckline, concealed zipper at back, and tailored seams at front and back. Short sleeves, narrow belt at waist with metal carabiner hooks, and a slit at back of hem. Lined.",
+      // reviews,
+      numReviews: 0,
+      rating: 5,
+      countInStock: 12,
+    })
+    .expect(201);
 
-//   products = await Product.find({});
-//   expect(products.length).toEqual(1);
-//   expect(products[0].price).toEqual(20);
-//   expect(products[0].title).toEqual(title);
-// });
+  products = await Product.find({});
+  expect(products.length).toEqual(1);
+  expect(products[0].price).toEqual(1990);
+  expect(products[0].title).toEqual(title);
+});
