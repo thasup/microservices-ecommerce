@@ -123,19 +123,10 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
       type: String,
       required: true,
     },
-    colors: [
-      {
-        name: { type: String },
-      },
-    ],
-    sizes: [
-      {
-        name: { type: String },
-      },
-    ],
+    colors: { type: String },
+    sizes: { type: String },
     brand: {
       type: String,
-      required: true,
     },
     category: {
       type: String,
@@ -168,6 +159,7 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
   {
     toJSON: {
       transform(doc, ret) {
+        ret.id = ret._id;
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;

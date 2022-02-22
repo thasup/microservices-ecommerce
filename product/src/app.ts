@@ -1,14 +1,12 @@
 import express from "express";
 import "express-async-errors";
 import cookieSession from "cookie-session";
-import {
-  NotFoundError,
-  errorHandler,
-  adminUser,
-  currentUser,
-} from "@thasup-dev/common";
+import { NotFoundError, errorHandler, currentUser } from "@thasup-dev/common";
 
-import { createProductRouter } from "./routes/new";
+import { createProductRouter } from "./routes/create-product";
+import { showProductRouter } from "./routes/get-product";
+import { indexProductRouter } from "./routes/show-product";
+import { updateProductRouter } from "./routes/update-product";
 
 const app = express();
 app.set("trust proxy", true);
@@ -22,6 +20,9 @@ app.use(
 app.use(currentUser);
 
 app.use(createProductRouter);
+app.use(showProductRouter);
+app.use(indexProductRouter);
+app.use(updateProductRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();

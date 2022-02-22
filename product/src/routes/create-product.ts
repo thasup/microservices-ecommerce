@@ -17,8 +17,6 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    console.log(req.currentUser);
-
     const {
       title,
       price,
