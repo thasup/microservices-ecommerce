@@ -1,7 +1,10 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { adminUser, requireAuth, validateRequest } from "@thasup-dev/common";
+
 import { Product } from "../models/product";
+import { ProductCreatedPublisher } from "../events/publishers/ProductCreatedPublisher";
+import { natsWrapper } from "../NatsWrapper";
 
 const router = express.Router();
 
@@ -51,6 +54,22 @@ router.post(
     });
 
     await product.save();
+    await new ProductCreatedPublisher(natsWrapper.client).publish({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      userId: product.userId,
+      image: product.image,
+      colors: product.colors,
+      sizes: product.sizes,
+      brand: product.brand,
+      category: product.category,
+      material: product.material,
+      description: product.description,
+      numReviews: product.numReviews,
+      rating: product.rating,
+      countInStock: product.countInStock,
+    });
 
     res.status(201).send(product);
   }
