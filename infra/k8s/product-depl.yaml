@@ -16,6 +16,14 @@ spec:
         - name: product
           image: us.gcr.io/microservices-ecommerce-341106/product
           env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: "http://nats-srv:4222"
+            - name: NATS_CLUSTER_ID
+              value: microservices-ecommerce
             - name: MONGO_URI_PRODUCT
               valueFrom:
                 secretKeyRef:
