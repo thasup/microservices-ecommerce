@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import { Product } from "../../models/product";
+import { natsWrapper } from "../../NatsWrapper";
 
 it("has a route handler listening to /api/products for post requests", async () => {
   const response = await request(app).post("/api/products").send({});
@@ -102,4 +103,30 @@ it("creates a product with valid inputs", async () => {
   expect(products.length).toEqual(1);
   expect(products[0].price).toEqual(1990);
   expect(products[0].title).toEqual(title);
+});
+
+it("publishes an event", async () => {
+  await request(app)
+    .post("/api/products")
+    .set("Cookie", global.adminSignin())
+    .send({
+      title: "Sample Dress",
+      price: 1990,
+      userId: "6214a0227e0d2db80ddb0860",
+      image: "./asset/sample.jpg",
+      colors: "White,Black",
+      sizes: "S,M,L",
+      brand: "Uniqlo",
+      category: "Dress",
+      material: "Polyester 100%",
+      description:
+        "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
+      // reviews,
+      numReviews: 0,
+      rating: 5,
+      countInStock: 12,
+    })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
