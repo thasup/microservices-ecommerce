@@ -1,38 +1,39 @@
 import express, { Request, Response } from "express";
-import { param } from "express-validator";
 import {
   NotAuthorizedError,
   NotFoundError,
+  OrderStatus,
   requireAuth,
   validateRequest,
 } from "@thasup-dev/common";
-
 import { Order } from "../models/order";
+import { param } from "express-validator";
 
 const router = express.Router();
 
-router.get(
+router.patch(
   "/api/orders/:orderId",
   requireAuth,
   [param("orderId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
   validateRequest,
   async (req: Request, res: Response) => {
-    const order = await Order.findById(req.params.orderId).populate("product");
+    const { orderId } = req.params;
+
+    const order = await Order.findById(orderId).populate("product");
 
     if (!order) {
       throw new NotFoundError();
     }
 
-    // Only admin *OR* the user who request that order can only access the order
-    if (
-      order.userId !== req.currentUser!.id &&
-      req.currentUser!.isAdmin === false
-    ) {
+    if (order.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
     }
+
+    order.status = OrderStatus.Cancelled;
+    await order.save();
 
     res.status(200).send(order);
   }
 );
 
-export { router as getOrderRouter };
+export { router as patchOrderRouter };
