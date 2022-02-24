@@ -4,8 +4,8 @@ import cookieSession from "cookie-session";
 import { NotFoundError, errorHandler, currentUser } from "@thasup-dev/common";
 
 import { createProductRouter } from "./routes/create-product";
-import { showProductRouter } from "./routes/get-product";
-import { indexProductRouter } from "./routes/show-product";
+import { getProductRouter } from "./routes/get-product";
+import { showProductRouter } from "./routes/show-product";
 import { updateProductRouter } from "./routes/update-product";
 
 const app = express();
@@ -20,8 +20,8 @@ app.use(
 app.use(currentUser);
 
 app.use(createProductRouter);
+app.use(getProductRouter);
 app.use(showProductRouter);
-app.use(indexProductRouter);
 app.use(updateProductRouter);
 
 app.all("*", async (req, res) => {

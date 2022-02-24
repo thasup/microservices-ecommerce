@@ -20,4 +20,4 @@ router.get(
   }
 );
 
-export { router as showProductRouter };
+export { router as getProductRouter };
