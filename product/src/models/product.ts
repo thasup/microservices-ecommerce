@@ -1,32 +1,6 @@
 import mongoose from "mongoose";
-
-// An interface that describes the properties
-// that are requried to create a new Review
-interface ReviewAttrs {
-  _id: mongoose.Types.ObjectId;
-  title: string;
-  rating: number;
-  comment: string;
-  userId: string;
-}
-
-// An interface that describes the properties
-// that a Review Model has
-interface ReviewModel extends mongoose.Model<ReviewDoc> {
-  build(attrs: ReviewAttrs): ReviewDoc;
-}
-
-// An interface that describes the properties
-// that a Review Document has
-interface ReviewDoc extends mongoose.Document {
-  _id: mongoose.Types.ObjectId;
-  title: string;
-  rating: number;
-  comment: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { ReviewDoc } from "./review";
 
 // An interface that describes the properties
 // that are requried to create a new Product
@@ -41,7 +15,7 @@ interface ProductAttrs {
   category: string;
   material: string;
   description: string;
-  reviews: number;
+  reviews?: ReviewDoc;
   numReviews: number;
   rating: number;
   countInStock: number;
@@ -70,39 +44,10 @@ interface ProductDoc extends mongoose.Document {
   numReviews: number;
   rating: number;
   countInStock: number;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
-
-const reviewSchema = new mongoose.Schema<ReviewDoc, ReviewModel>(
-  {
-    title: {
-      type: String,
-      required: true,
-    },
-    rating: {
-      type: Number,
-      required: true,
-    },
-    comment: {
-      type: String,
-      required: true,
-    },
-    userId: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    toJSON: {
-      transform(doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
-  }
-);
 
 const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
   {
@@ -139,7 +84,10 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
       type: String,
       required: true,
     },
-    reviews: reviewSchema,
+    reviews: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review",
+    },
     numReviews: {
       type: Number,
       required: true,
@@ -153,7 +101,7 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
     countInStock: {
       type: Number,
       required: true,
-      default: 0,
+      default: 1,
     },
   },
   {
@@ -165,8 +113,12 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
         delete ret.__v;
       },
     },
+    timestamps: true,
   }
 );
+
+productSchema.set("versionKey", "version");
+productSchema.plugin(updateIfCurrentPlugin);
 
 productSchema.statics.build = (attrs: ProductAttrs) => {
   return new Product(attrs);
