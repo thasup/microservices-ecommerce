@@ -9,6 +9,7 @@ import { OrderStatus } from "@thasup-dev/common";
 it("marks an order as cancelled", async () => {
   // create a product with Product Model
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",
@@ -41,6 +42,7 @@ it("marks an order as cancelled", async () => {
 
 it("emits a order cancelled event", async () => {
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",

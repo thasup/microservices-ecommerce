@@ -19,6 +19,7 @@ it("returns an error if the product does not exist", async () => {
 
 it("return 201 if the product has more than 1 set", async () => {
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",
@@ -45,6 +46,7 @@ it("return 201 if the product has more than 1 set", async () => {
 
 it("returns an error if the product is already reserved", async () => {
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",
@@ -71,6 +73,7 @@ it("returns an error if the product is already reserved", async () => {
 
 it("reserves a product", async () => {
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",
@@ -89,6 +92,7 @@ it("reserves a product", async () => {
 
 it("emits an order created event", async () => {
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",

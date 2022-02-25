@@ -5,6 +5,7 @@ import { Product } from "../../models/product";
 
 const buildProduct = async () => {
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",

@@ -7,6 +7,7 @@ import { Product } from "../../models/product";
 it("fetches the order by the user themself", async () => {
   // Create a product
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",
@@ -38,6 +39,7 @@ it("fetches the order by the user themself", async () => {
 it("fetches the order by admin", async () => {
   // Create a product
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",
@@ -70,6 +72,7 @@ it("fetches the order by admin", async () => {
 it("returns an error if one user tries to fetch another users order", async () => {
   // Create a product
   const product = Product.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     image: "./asset/sample.jpg",
