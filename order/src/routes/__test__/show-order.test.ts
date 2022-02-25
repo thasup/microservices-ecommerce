@@ -94,8 +94,6 @@ it("fetches all orders by admin", async () => {
     .set("Cookie", admin)
     .expect(200);
 
-  console.log(response);
-
   // Make sure we got all orders for admin
   expect(response.body.length).toEqual(3);
   expect(response.body[0].id).toEqual(orderOneForUserOne.id);

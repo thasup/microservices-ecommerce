@@ -87,4 +87,23 @@ it("reserves a product", async () => {
     .expect(201);
 });
 
-it.todo("emits an order created event");
+it("emits an order created event", async () => {
+  const product = Product.build({
+    title: "Sample Dress",
+    price: 1990,
+    image: "./asset/sample.jpg",
+    colors: "White,Black",
+    sizes: "S,M,L",
+    countInStock: 1,
+  });
+  await product.save();
+
+  // make a request to create an order
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", global.signin())
+    .send({ productId: product.id })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});

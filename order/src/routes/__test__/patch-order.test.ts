@@ -39,31 +39,32 @@ it("marks an order as cancelled", async () => {
   expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
 });
 
-// it('emits a order cancelled event', async () => {
-//   const product = Product.build({
-//     title: "Sample Dress",
-//     price: 1990,
-//     image: "./asset/sample.jpg",
-//     colors: "White,Black",
-//     sizes: "S,M,L",
-//     countInStock: 1,
-//   });
-//   await product.save();
+it("emits a order cancelled event", async () => {
+  const product = Product.build({
+    title: "Sample Dress",
+    price: 1990,
+    image: "./asset/sample.jpg",
+    colors: "White,Black",
+    sizes: "S,M,L",
+    countInStock: 1,
+  });
+  await product.save();
 
-//   const user = global.signin();
-//   // make a request to create an order
-//   const { body: order } = await request(app)
-//     .post('/api/orders')
-//     .set('Cookie', user)
-//     .send({ productId: product.id })
-//     .expect(201);
+  const user = global.signin();
 
-//   // make a request to cancel the order
-//   await request(app)
-//     .delete(`/api/orders/${order.id}`)
-//     .set('Cookie', user)
-//     .send()
-//     .expect(204);
+  // make a request to create an order
+  const { body: order } = await request(app)
+    .post("/api/orders")
+    .set("Cookie", user)
+    .send({ productId: product.id })
+    .expect(201);
 
-//   expect(natsWrapper.client.publish).toHaveBeenCalled();
-// });
+  // make a request to cancel the order
+  await request(app)
+    .patch(`/api/orders/${order.id}`)
+    .set("Cookie", user)
+    .send()
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
