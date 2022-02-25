@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 // An interface that describes the properties
 // that are requried to create a new Product
 interface ProductAttrs {
+  id: string;
   title: string;
   price: number;
   image: string;
@@ -65,7 +66,15 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
 );
 
 productSchema.statics.build = (attrs: ProductAttrs) => {
-  return new Product(attrs);
+  return new Product({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price,
+    image: attrs.image,
+    colors: attrs.colors,
+    sizes: attrs.sizes,
+    countInStock: attrs.countInStock,
+  });
 };
 
 const Product = mongoose.model<ProductDoc, ProductModel>(
