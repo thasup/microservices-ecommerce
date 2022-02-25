@@ -8,6 +8,8 @@ import {
 } from "@thasup-dev/common";
 import { Order } from "../models/order";
 import { param } from "express-validator";
+import { natsWrapper } from "../NatsWrapper";
+import { OrderCancelledPublisher } from "../events/publishers/OrderCancelledPublisher";
 
 const router = express.Router();
 
@@ -31,6 +33,23 @@ router.patch(
 
     order.status = OrderStatus.Cancelled;
     await order.save();
+
+    // publishing an event saying this was cancelled!
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      status: order.status,
+      userId: order.userId,
+      expiresAt: order.expiresAt.toISOString(),
+      product: {
+        id: order.product.id,
+        title: order.product.title,
+        price: order.product.price,
+        image: order.product.image,
+        colors: order.product.colors,
+        sizes: order.product.sizes,
+        countInStock: order.product.countInStock,
+      },
+    });
 
     res.status(200).send(order);
   }
