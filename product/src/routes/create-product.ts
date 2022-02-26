@@ -81,6 +81,7 @@ router.post(
         numReviews: product.numReviews,
         rating: product.rating,
         countInStock: product.countInStock,
+        version: product.version,
       });
 
       await session.commitTransaction();

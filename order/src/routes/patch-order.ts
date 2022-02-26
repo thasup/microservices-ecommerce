@@ -40,6 +40,7 @@ router.patch(
       status: order.status,
       userId: order.userId,
       expiresAt: order.expiresAt.toISOString(),
+      version: order.version,
       product: {
         id: order.product.id,
         title: order.product.title,

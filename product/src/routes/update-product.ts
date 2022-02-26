@@ -60,6 +60,7 @@ router.patch(
         numReviews: product.numReviews,
         rating: product.rating,
         countInStock: product.countInStock,
+        version: product.version,
       });
     } else {
       throw new NotFoundError();

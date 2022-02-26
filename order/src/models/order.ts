@@ -24,6 +24,7 @@ interface OrderDoc extends mongoose.Document {
   status: OrderStatus;
   expiresAt: Date;
   product: ProductDoc;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -56,6 +57,7 @@ const orderSchema = new mongoose.Schema(
         delete ret.__v;
       },
     },
+    timestamps: true,
   }
 );
 
