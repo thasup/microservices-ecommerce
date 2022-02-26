@@ -3,11 +3,10 @@ import mongoose from "mongoose";
 import { OrderCreatedEvent, OrderStatus } from "@thasup-dev/common";
 import { OrderCreatedListener } from "../OrderCreatedListener";
 import { Product } from "../../../models/product";
-import { natsWrapper } from "../../../__mocks__/NatsWrapper";
+import { natsWrapper } from "../../../NatsWrapper";
 
 const setup = async () => {
   // Create an instance of the listener
-  // @ts-ignore
   const listener = new OrderCreatedListener(natsWrapper.client);
 
   // Create and save a product
@@ -82,8 +81,6 @@ it("publishes a product updated event", async () => {
   const productUpdatedData = JSON.parse(
     (natsWrapper.client.publish as jest.Mock).mock.calls[0][1]
   );
-
-  console.log(natsWrapper.client.publish.mock.calls);
 
   expect(data.id).toEqual(productUpdatedData.orderId);
 });

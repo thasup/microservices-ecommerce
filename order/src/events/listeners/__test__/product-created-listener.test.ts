@@ -2,20 +2,33 @@ import { Message } from "node-nats-streaming";
 import mongoose from "mongoose";
 import { ProductCreatedEvent } from "@thasup-dev/common";
 import { ProductCreatedListener } from "../ProductCreatedListener";
-import { natsWrapper } from "../../../NatsWrapper";
 import { Product } from "../../../models/product";
+import { natsWrapper } from "../../../NatsWrapper";
 
 const setup = async () => {
   // create an instance of the listener
   const listener = new ProductCreatedListener(natsWrapper.client);
 
-  // create a fake data event
-  const data: ProductCreatedEvent["data"] = {
-    version: 0,
+  // Create and save a product
+  const product = Product.build({
     id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     userId: new mongoose.Types.ObjectId().toHexString(),
+    image: "./asset/sample.jpg",
+    colors: "White,Black",
+    sizes: "S,M,L",
+    countInStock: 1,
+  });
+  await product.save();
+
+  // create a fake data event
+  const data: ProductCreatedEvent["data"] = {
+    version: 0,
+    id: product.id,
+    title: "Sample Dress",
+    price: 1990,
+    userId: product.userId,
     image: "./asset/sample.jpg",
     colors: "White,Black",
     sizes: "S,M,L",
@@ -46,6 +59,8 @@ it("creates and saves a product", async () => {
 
   // write assertions to make sure a product was created!
   const product = await Product.findById(data.id);
+
+  console.log(product);
 
   expect(product).toBeDefined();
   expect(product!.title).toEqual(data.title);

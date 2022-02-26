@@ -3,11 +3,10 @@ import mongoose from "mongoose";
 import { OrderCancelledEvent, OrderStatus } from "@thasup-dev/common";
 import { OrderCancelledListener } from "../OrderCancelledListener";
 import { Product } from "../../../models/product";
-import { natsWrapper } from "../../../__mocks__/NatsWrapper";
+import { natsWrapper } from "../../../NatsWrapper";
 
 const setup = async () => {
   // Create an instance of the listener
-  // @ts-ignore
   const listener = new OrderCancelledListener(natsWrapper.client);
 
   // Create and save a product
