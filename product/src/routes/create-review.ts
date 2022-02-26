@@ -10,75 +10,80 @@ import {
 import mongoose from "mongoose";
 
 import { Product } from "../models/product";
+import { Review, ReviewDoc } from "../models/review";
 
 const router = express.Router();
 
 router.post(
-  "/api/products/:ProductId/reviews",
+  "/api/products/:productId/reviews",
   requireAuth,
   [
     body("title").not().isEmpty().withMessage("Title is required"),
-    body("rating")
-      .isInt({ gt: 0 })
-      .withMessage("Rating must be greater than 0"),
+    body("rating").not().isEmpty().withMessage("Rating is required"),
     body("comment").not().isEmpty().withMessage("Comment is required"),
-    param("ProductId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
+    param("productId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
     const { title, rating, comment } = req.body;
 
-    // Check if user successfully purchased the product before reviewing
-
     // Check the product is existing
-    const product = await Product.findById(req.params.ProductId).populate(
-      "Review"
-    );
+    const product = await Product.findById(req.params.productId);
+
     if (!product) {
       throw new NotFoundError();
     }
 
-    // Check user does *NOT* already reviewed the product
-    const alreadyReviewed = product.reviews!.find(
-      (review: any) => review.userId.toString() === req.currentUser!.id
-    );
-    if (alreadyReviewed) {
-      throw new BadRequestError("Product already reviewed");
-    }
+    if (product.reviews) {
+      // Check user does *NOT* already reviewed the product
+      const alreadyReviewed = product.reviews.find(
+        (review) => review.userId.toString() === req.currentUser!.id
+      );
 
-    // Handle mongoDB transactions
-    const session = await mongoose.startSession();
+      if (alreadyReviewed) {
+        throw new BadRequestError("Product already reviewed");
+      }
 
-    try {
-      session.startTransaction();
+      // Check user successfully purchased the product before trying to review
 
-      // Create the review
-      const review = {
+      // Create a review
+      const review = Review.build({
         title,
         rating,
         comment,
         userId: req.currentUser!.id,
-      };
+      });
 
-      product.reviews!.push(review);
+      await review.save();
 
-      // Calculate and update numReviews and rating in Product database
-      product.numReviews = product.reviews!.length;
-      product.rating =
-        product.reviews!.reduce(
-          (acc: number, item: { rating: number }) => item.rating + acc,
-          0
-        ) / product.reviews!.length;
+      // Update reviews in Product database
+      product.reviews.push(review);
 
-      await product.save();
+      // Calculate numReviews and rating
+      let numReviews;
+      let productRating;
+      if (product.reviews.length !== 0) {
+        numReviews = product.reviews?.length;
+        productRating =
+          product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+          numReviews;
+      } else {
+        numReviews = 0;
+        productRating =
+          product.reviews.reduce((acc, item) => item.rating + acc, 0) / 1;
+      }
 
-      await session.commitTransaction();
-      res.status(201).send(product);
-    } catch (err) {
-      await session.abortTransaction();
-      throw new DatabaseConnectionError();
-    } finally {
-      session.endSession();
+      // Update numReviews and rating in Product database
+      product.numReviews = numReviews ?? product.numReviews;
+      product.rating = parseFloat(productRating.toFixed(1)) ?? product.rating;
+
+      product.save(function (err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+
+      res.status(200).send(review);
     }
   }
 );

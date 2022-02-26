@@ -42,7 +42,7 @@ router.post(
       countInStock,
     } = req.body;
 
-    // Hnadle mongoDB transactions
+    // Handle mongoDB transactions
     const session = await mongoose.startSession();
 
     try {

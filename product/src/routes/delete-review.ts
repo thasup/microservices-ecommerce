@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
 import { param } from "express-validator";
 import {
-  DatabaseConnectionError,
   NotFoundError,
   requireAuth,
   validateRequest,
@@ -13,47 +12,50 @@ import { Product } from "../models/product";
 const router = express.Router();
 
 router.delete(
-  "/api/products/:ProductId/reviews",
+  "/api/products/:productId/reviews",
   requireAuth,
-  [param("ProductId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
+  [param("productId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
   validateRequest,
   async (req: Request, res: Response) => {
     // Check the product is existing
-    const product = await Product.findById(req.params.ProductId).populate(
-      "Review"
-    );
+    const product = await Product.findById(req.params.productId);
+
     if (!product) {
       throw new NotFoundError();
     }
 
-    // Handle mongoDB transactions
-    const session = await mongoose.startSession();
-
-    try {
-      session.startTransaction();
-
+    if (product.reviews) {
       // Filter all reviews of the product *EXCEPT* the review of this user
-      const reviews = product.reviews!.filter(
-        (review: any) => review.userId.toString() !== req.currentUser!.id
+      const updateReviews = product.reviews.filter(
+        (review) => review.userId.toString() !== req.currentUser!.id
       );
 
-      // Calculate and update numReviews and rating in Product database
-      product.numReviews = product.reviews!.length;
-      product.rating =
-        product.reviews!.reduce(
-          (acc: number, item: { rating: number }) => item.rating + acc,
-          0
-        ) / product.reviews!.length;
+      // Calculate numReviews and rating
+      let numReviews;
+      let productRating;
+      if (updateReviews.length !== 0) {
+        numReviews = updateReviews.length;
+        productRating =
+          updateReviews.reduce((acc, item) => item.rating + acc, 0) /
+          numReviews;
+      } else {
+        numReviews = 0;
+        productRating =
+          updateReviews.reduce((acc, item) => item.rating + acc, 0) / 1;
+      }
 
-      await product.save();
+      // Update Product
+      product.reviews = updateReviews;
+      product.numReviews = numReviews ?? product.numReviews;
+      product.rating = parseFloat(productRating.toFixed(1)) ?? product.rating;
 
-      await session.commitTransaction();
-      res.status(201).send(product);
-    } catch (err) {
-      await session.abortTransaction();
-      throw new DatabaseConnectionError();
-    } finally {
-      session.endSession();
+      product.save(function (err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+
+      res.status(200).send(product);
     }
   }
 );

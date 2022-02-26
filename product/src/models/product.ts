@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
-import { ReviewDoc } from "./review";
+import { ReviewDoc, reviewSchema } from "./review";
 
 // An interface that describes the properties
 // that are requried to create a new Product
@@ -15,7 +15,7 @@ interface ProductAttrs {
   category: string;
   material: string;
   description: string;
-  reviews?: ReviewDoc;
+  reviews?: Array<ReviewDoc>;
   numReviews: number;
   rating: number;
   countInStock: number;
@@ -40,7 +40,7 @@ interface ProductDoc extends mongoose.Document {
   category: string;
   material?: string;
   description: string;
-  reviews?: ReviewDoc;
+  reviews?: Array<ReviewDoc>;
   numReviews: number;
   rating: number;
   countInStock: number;
@@ -84,10 +84,7 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
       type: String,
       required: true,
     },
-    reviews: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Review",
-    },
+    reviews: [reviewSchema],
     numReviews: {
       type: Number,
       required: true,

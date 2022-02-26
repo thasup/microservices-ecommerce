@@ -26,7 +26,7 @@ export interface ReviewDoc extends mongoose.Document {
   updatedAt: string;
 }
 
-const reviewSchema = new mongoose.Schema<ReviewDoc, ReviewModel>(
+export const reviewSchema = new mongoose.Schema<ReviewDoc, ReviewModel>(
   {
     title: {
       type: String,
@@ -56,6 +56,10 @@ const reviewSchema = new mongoose.Schema<ReviewDoc, ReviewModel>(
     timestamps: true,
   }
 );
+
+reviewSchema.statics.build = (attrs: ReviewAttrs) => {
+  return new Review(attrs);
+};
 
 const Review = mongoose.model<ReviewDoc, ReviewModel>("Review", reviewSchema);
 

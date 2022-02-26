@@ -38,6 +38,9 @@ router.patch(
       product.category = req.body.category ?? product.category;
       product.material = req.body.material ?? product.material;
       product.description = req.body.description ?? product.description;
+      product.reviews = req.body.reviews ?? product.reviews;
+      product.numReviews = req.body.numReviews ?? product.numReviews;
+      product.rating = req.body.rating ?? product.rating;
       product.countInStock = req.body.countInStock ?? product.countInStock;
 
       await product.save();
