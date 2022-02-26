@@ -1,5 +1,5 @@
 {
-  "name": "order",
+  "name": "expiration",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,16 +19,8 @@
   "license": "ISC",
   "dependencies": {
     "@thasup-dev/common": "^1.0.18",
-    "@types/cookie-session": "^2.0.44",
-    "@types/express": "^4.17.13",
-    "@types/jsonwebtoken": "^8.5.8",
-    "cookie-session": "^2.0.0",
-    "express": "^4.17.2",
-    "express-async-errors": "^3.1.1",
-    "express-validator": "^6.14.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.2.1",
-    "mongoose-update-if-current": "^1.4.0",
+    "@types/bull": "^3.15.8",
+    "bull": "^4.6.2",
     "node-nats-streaming": "^0.3.2",
     "nodemon": "^2.0.15",
     "ts-node-dev": "^1.1.8",
@@ -36,10 +28,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
-    "@types/supertest": "^2.0.11",
     "jest": "^27.5.1",
-    "mongodb-memory-server": "^8.3.0",
-    "supertest": "^6.2.2",
     "ts-jest": "^27.1.3"
   }
 }
