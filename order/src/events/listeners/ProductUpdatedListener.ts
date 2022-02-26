@@ -4,13 +4,13 @@ import {
   Listener,
   ProductUpdatedEvent,
   NotFoundError,
+  QueueGroupNames,
 } from "@thasup-dev/common";
 import { Product } from "../../models/product";
-import { queueGroupName } from "./queue-group-name";
 
 export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
   subject: Subjects.ProductUpdated = Subjects.ProductUpdated;
-  queueGroupName = queueGroupName;
+  queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
   async onMessage(data: ProductUpdatedEvent["data"], msg: Message) {
     const product = await Product.findByEvent(data);

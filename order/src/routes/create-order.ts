@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import mongoose from "mongoose";
 import { body } from "express-validator";
 import {
   BadRequestError,
@@ -7,6 +8,7 @@ import {
   requireAuth,
   validateRequest,
 } from "@thasup-dev/common";
+
 import { Product } from "../models/product";
 import { Order } from "../models/order";
 import { natsWrapper } from "../NatsWrapper";
@@ -26,12 +28,26 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { productId } = req.body;
+    let product;
+    try {
+      // Find the product the user is trying to order in the database
+      product = await Product.findOne({
+        id: new mongoose.Types.ObjectId(productId),
+      });
+      console.log("thasup 1", product);
 
-    // Find the product the user is trying to order in the database
-    const product = await Product.findById(productId);
+      const all = await Product.find({});
+      console.log("thasup 1.5", all);
+    } catch (err) {
+      console.log(err);
+    }
+
     if (!product) {
+      console.log("thasup 2");
+
       throw new NotFoundError();
     }
+    console.log("thasup 3");
 
     // Make sure that this product is not already reserved
     // Check if the product has only 1 set. If true then run query
