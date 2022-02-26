@@ -7,6 +7,7 @@ interface ProductAttrs {
   id: string;
   title: string;
   price: number;
+  userId: string;
   image: string;
   colors?: string;
   sizes?: string;
@@ -17,6 +18,10 @@ interface ProductAttrs {
 // that a Product Model has
 interface ProductModel extends mongoose.Model<ProductDoc> {
   build(attrs: ProductAttrs): ProductDoc;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<ProductDoc | null>;
 }
 
 // An interface that describes the properties
@@ -24,6 +29,7 @@ interface ProductModel extends mongoose.Model<ProductDoc> {
 export interface ProductDoc extends mongoose.Document {
   title: string;
   price: number;
+  userId: string;
   image: string;
   colors?: string;
   sizes?: string;
@@ -44,6 +50,7 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
       required: true,
       default: 0,
     },
+    userId: { type: String, required: true },
     image: {
       type: String,
       required: true,
@@ -71,11 +78,22 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
 productSchema.set("versionKey", "version");
 productSchema.plugin(updateIfCurrentPlugin);
 
+productSchema.statics.findByEvent = (event: {
+  id: string;
+  version: number;
+}) => {
+  return Product.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  });
+};
+
 productSchema.statics.build = (attrs: ProductAttrs) => {
   return new Product({
     _id: attrs.id,
     title: attrs.title,
     price: attrs.price,
+    userId: attrs.userId,
     image: attrs.image,
     colors: attrs.colors,
     sizes: attrs.sizes,
