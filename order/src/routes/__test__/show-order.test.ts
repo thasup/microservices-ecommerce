@@ -8,6 +8,7 @@ const buildProduct = async () => {
     id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
+    userId: new mongoose.Types.ObjectId().toHexString(),
     image: "./asset/sample.jpg",
     colors: "White,Black",
     sizes: "S,M,L",

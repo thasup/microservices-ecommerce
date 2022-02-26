@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "@thasup-dev/common";
 import { ProductDoc } from "./product";
 
@@ -60,6 +61,9 @@ const orderSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);
