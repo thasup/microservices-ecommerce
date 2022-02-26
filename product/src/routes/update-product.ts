@@ -5,6 +5,7 @@ import {
   NotFoundError,
   requireAuth,
   adminUser,
+  BadRequestError,
 } from "@thasup-dev/common";
 
 import { Product } from "../models/product";
@@ -28,43 +29,47 @@ router.patch(
   async (req: Request, res: Response) => {
     const product = await Product.findById(req.params.id);
 
-    if (product) {
-      product.title = req.body.title ?? product.title;
-      product.price = req.body.price ?? product.price;
-      product.image = req.body.image ?? product.image;
-      product.colors = req.body.colors ?? product.colors;
-      product.sizes = req.body.sizes ?? product.sizes;
-      product.brand = req.body.brand ?? product.brand;
-      product.category = req.body.category ?? product.category;
-      product.material = req.body.material ?? product.material;
-      product.description = req.body.description ?? product.description;
-      product.reviews = req.body.reviews ?? product.reviews;
-      product.numReviews = req.body.numReviews ?? product.numReviews;
-      product.rating = req.body.rating ?? product.rating;
-      product.countInStock = req.body.countInStock ?? product.countInStock;
-
-      await product.save();
-
-      new ProductUpdatedPublisher(natsWrapper.client).publish({
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        userId: product.userId,
-        image: product.image,
-        colors: product.colors,
-        sizes: product.sizes,
-        brand: product.brand,
-        category: product.category,
-        material: product.material,
-        description: product.description,
-        numReviews: product.numReviews,
-        rating: product.rating,
-        countInStock: product.countInStock,
-        version: product.version,
-      });
-    } else {
+    if (!product) {
       throw new NotFoundError();
     }
+
+    if (product.orderId) {
+      throw new BadRequestError("Cannot edit a reserved ticket");
+    }
+
+    product.title = req.body.title ?? product.title;
+    product.price = req.body.price ?? product.price;
+    product.image = req.body.image ?? product.image;
+    product.colors = req.body.colors ?? product.colors;
+    product.sizes = req.body.sizes ?? product.sizes;
+    product.brand = req.body.brand ?? product.brand;
+    product.category = req.body.category ?? product.category;
+    product.material = req.body.material ?? product.material;
+    product.description = req.body.description ?? product.description;
+    product.reviews = req.body.reviews ?? product.reviews;
+    product.numReviews = req.body.numReviews ?? product.numReviews;
+    product.rating = req.body.rating ?? product.rating;
+    product.countInStock = req.body.countInStock ?? product.countInStock;
+
+    await product.save();
+
+    new ProductUpdatedPublisher(natsWrapper.client).publish({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      userId: product.userId,
+      image: product.image,
+      colors: product.colors,
+      sizes: product.sizes,
+      brand: product.brand,
+      category: product.category,
+      material: product.material,
+      description: product.description,
+      numReviews: product.numReviews,
+      rating: product.rating,
+      countInStock: product.countInStock,
+      version: product.version,
+    });
 
     res.send(product);
   }
