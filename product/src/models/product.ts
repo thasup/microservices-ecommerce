@@ -44,6 +44,7 @@ interface ProductDoc extends mongoose.Document {
   numReviews: number;
   rating: number;
   countInStock: number;
+  orderId?: string;
   version: number;
   createdAt: string;
   updatedAt: string;
@@ -99,6 +100,9 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
       type: Number,
       required: true,
       default: 1,
+    },
+    orderId: {
+      type: String,
     },
   },
   {

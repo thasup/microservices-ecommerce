@@ -89,16 +89,7 @@ productSchema.statics.findByEvent = (event: {
 };
 
 productSchema.statics.build = (attrs: ProductAttrs) => {
-  return new Product({
-    _id: attrs.id,
-    title: attrs.title,
-    price: attrs.price,
-    userId: attrs.userId,
-    image: attrs.image,
-    colors: attrs.colors,
-    sizes: attrs.sizes,
-    countInStock: attrs.countInStock,
-  });
+  return new Product(attrs);
 };
 
 const Product = mongoose.model<ProductDoc, ProductModel>(
