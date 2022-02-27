@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import {
   Listener,
   OrderCreatedEvent,
@@ -15,7 +16,9 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 
   async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
     // Find the product that the order is reserving
-    const product = await Product.findById(data.product.id);
+    const product = await Product.findOne({
+      id: new mongoose.Types.ObjectId(data.product.id),
+    });
 
     // If no product, throw error
     if (!product) {

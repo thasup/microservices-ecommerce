@@ -83,7 +83,7 @@ productSchema.statics.findByEvent = (event: {
   version: number;
 }) => {
   return Product.findOne({
-    _id: event.id,
+    _id: new mongoose.Types.ObjectId(event.id),
     version: event.version - 1,
   });
 };
