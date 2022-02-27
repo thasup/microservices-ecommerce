@@ -60,8 +60,6 @@ it("creates and saves a product", async () => {
   // write assertions to make sure a product was created!
   const product = await Product.findById(data.id);
 
-  console.log(product);
-
   expect(product).toBeDefined();
   expect(product!.title).toEqual(data.title);
   expect(product!.price).toEqual(data.price);

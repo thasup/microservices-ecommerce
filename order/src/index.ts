@@ -4,6 +4,7 @@ import { app } from "./app";
 import { natsWrapper } from "./NatsWrapper";
 import { ProductCreatedListener } from "../src/events/listeners/ProductCreatedListener";
 import { ProductUpdatedListener } from "../src/events/listeners/ProductUpdatedListener";
+import { ExpirationCompletedListener } from "./events/listeners/ExpirationCompletedListener";
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -39,6 +40,7 @@ const start = async () => {
 
     new ProductCreatedListener(natsWrapper.client).listen();
     new ProductUpdatedListener(natsWrapper.client).listen();
+    new ExpirationCompletedListener(natsWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI_ORDER);
     console.log("Connected to MongoDB");
