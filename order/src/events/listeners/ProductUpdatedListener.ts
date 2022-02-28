@@ -1,4 +1,5 @@
 import { Message } from "node-nats-streaming";
+import mongoose from "mongoose";
 import {
   Subjects,
   Listener,
@@ -13,7 +14,13 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
   queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
   async onMessage(data: ProductUpdatedEvent["data"], msg: Message) {
-    const product = await Product.findByEvent(data);
+    let product;
+
+    try {
+      product = await Product.findByEvent(data);
+    } catch (err) {
+      console.log(err);
+    }
 
     if (!product) {
       throw new NotFoundError();

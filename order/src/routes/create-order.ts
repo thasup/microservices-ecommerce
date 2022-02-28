@@ -16,7 +16,7 @@ import { OrderCreatedPublisher } from "../events/publishers/OrderCreatedPublishe
 
 const router = express.Router();
 
-const EXPIRATION_WINDOW_SECONDS = 30 * 60;
+const EXPIRATION_WINDOW_SECONDS = 5 * 60;
 
 router.post(
   "/api/orders",
@@ -29,10 +29,18 @@ router.post(
   async (req: Request, res: Response) => {
     const { productId } = req.body;
 
-    // Find the product the user is trying to order in the database
-    const product = await Product.findOne({
-      id: new mongoose.Types.ObjectId(productId),
-    });
+    console.log("productId", productId);
+    let product;
+    try {
+      // Find the product the user is trying to order in the database
+      product = await Product.findOne({ id: productId });
+      const vvv = await new mongoose.Types.ObjectId(productId);
+      console.log(vvv);
+
+      console.log(product);
+    } catch (err) {
+      console.log(err);
+    }
 
     if (!product) {
       throw new NotFoundError();
@@ -64,7 +72,7 @@ router.post(
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
       expiresAt: expiration,
-      product,
+      product: product,
     });
     await order.save();
 
