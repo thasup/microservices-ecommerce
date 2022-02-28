@@ -8,6 +8,8 @@ import {
 } from "@thasup-dev/common";
 
 import { Product } from "../models/product";
+import { ProductDeletedPublisher } from "../events/publishers/ProductDeletedPublisher";
+import { natsWrapper } from "../NatsWrapper";
 
 const router = express.Router();
 
@@ -26,6 +28,12 @@ router.delete(
     }
 
     deletedProduct.remove();
+
+    // Publish an event
+    await new ProductDeletedPublisher(natsWrapper.client).publish({
+      id: deletedProduct.id,
+      version: deletedProduct.version,
+    });
 
     res.status(200).send({});
   }
