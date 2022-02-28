@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import {
   Listener,
   OrderCreatedEvent,

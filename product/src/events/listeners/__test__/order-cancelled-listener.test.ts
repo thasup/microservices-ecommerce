@@ -37,7 +37,7 @@ const setup = async () => {
     version: 0,
     status: OrderStatus.Cancelled,
     userId: product.userId,
-    expiresAt: "alskdjf",
+    expiresAt: new Date(),
     product: {
       id: product.id,
       title: "Sample Dress",

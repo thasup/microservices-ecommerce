@@ -9,26 +9,13 @@ const setup = async () => {
   // create an instance of the listener
   const listener = new ProductCreatedListener(natsWrapper.client);
 
-  // Create and save a product
-  const product = Product.build({
+  // create a fake data event
+  const data: ProductCreatedEvent["data"] = {
+    version: 0,
     id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",
     price: 1990,
     userId: new mongoose.Types.ObjectId().toHexString(),
-    image: "./asset/sample.jpg",
-    colors: "White,Black",
-    sizes: "S,M,L",
-    countInStock: 1,
-  });
-  await product.save();
-
-  // create a fake data event
-  const data: ProductCreatedEvent["data"] = {
-    version: 0,
-    id: product.id,
-    title: "Sample Dress",
-    price: 1990,
-    userId: product.userId,
     image: "./asset/sample.jpg",
     colors: "White,Black",
     sizes: "S,M,L",

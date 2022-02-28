@@ -15,8 +15,6 @@ export class ProductCreatedListener extends Listener<ProductCreatedEvent> {
     const { id, title, price, userId, image, colors, sizes, countInStock } =
       data;
 
-    console.log("thasup 2", id);
-
     const product = Product.build({
       id,
       title,
