@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 import { app } from "./app";
+import { OrderCancelledListener } from "./events/listeners/OrderCancelledListener";
+import { OrderCreatedListener } from "./events/listeners/OrderCreatedListener";
+import { ProductCreatedListener } from "./events/listeners/ProductCreatedListener";
+import { ProductDeletedListener } from "./events/listeners/ProductDeletedListener";
+import { ProductUpdatedListener } from "./events/listeners/ProductUpdatedListener";
 import { natsWrapper } from "./NatsWrapper";
 
 const start = async () => {
@@ -33,6 +38,12 @@ const start = async () => {
 
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
+
+    new ProductCreatedListener(natsWrapper.client).listen();
+    new ProductUpdatedListener(natsWrapper.client).listen();
+    new ProductDeletedListener(natsWrapper.client).listen();
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI_PAYMENT);
     console.log("Connected to MongoDB");

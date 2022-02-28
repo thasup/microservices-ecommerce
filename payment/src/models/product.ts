@@ -83,13 +83,22 @@ productSchema.statics.findByEvent = (event: {
   version: number;
 }) => {
   return Product.findOne({
-    _id: new mongoose.Types.ObjectId(event.id),
+    _id: event.id,
     version: event.version - 1,
   });
 };
 
 productSchema.statics.build = (attrs: ProductAttrs) => {
-  return new Product(attrs);
+  return new Product({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price,
+    userId: attrs.userId,
+    image: attrs.image,
+    colors: attrs.colors,
+    sizes: attrs.sizes,
+    countInStock: attrs.countInStock,
+  });
 };
 
 const Product = mongoose.model<ProductDoc, ProductModel>(

@@ -17,6 +17,10 @@ interface OrderAttrs {
 // that a Order Model has
 interface OrderModel extends mongoose.Model<OrderDoc> {
   build(attrs: OrderAttrs): OrderDoc;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<ProductDoc | null>;
 }
 
 // An interface that describes the properties
@@ -61,6 +65,13 @@ const orderSchema = new mongoose.Schema(
 
 orderSchema.set("versionKey", "version");
 orderSchema.plugin(updateIfCurrentPlugin);
+
+orderSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+  return Order.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  });
+};
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order({
