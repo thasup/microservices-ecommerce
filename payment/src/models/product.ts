@@ -3,7 +3,7 @@ import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 // An interface that describes the properties
 // that are requried to create a new Product
-interface ProductAttrs {
+export interface ProductAttrs {
   id: string;
   title: string;
   price: number;
@@ -39,7 +39,7 @@ export interface ProductDoc extends mongoose.Document {
   updatedAt: string;
 }
 
-const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
+export const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
   {
     title: {
       type: String,

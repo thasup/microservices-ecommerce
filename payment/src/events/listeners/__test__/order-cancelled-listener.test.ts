@@ -23,6 +23,7 @@ const setup = async () => {
   });
   await product.save();
 
+  // Create and save the order
   const order = Order.build({
     id: new mongoose.Types.ObjectId().toHexString(),
     status: OrderStatus.Created,
