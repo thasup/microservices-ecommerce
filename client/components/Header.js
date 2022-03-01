@@ -23,6 +23,16 @@ const Header = ({ currentUser }) => {
                   <Link href="#" passHref>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </Link>
+                  {currentUser.isAdmin && (
+                    <>
+                      <Link href="/admin/products" passHref>
+                        <NavDropdown.Item>Products</NavDropdown.Item>
+                      </Link>
+                      <Link href="/admin/create" passHref>
+                        <NavDropdown.Item>Create Product</NavDropdown.Item>
+                      </Link>
+                    </>
+                  )}
                   <Link href="/signout" passHref>
                     <NavDropdown.Item>Logout</NavDropdown.Item>
                   </Link>

@@ -8,6 +8,7 @@ import FormContainer from "../components/FormContainer";
 const signin = ({ currentUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const { doRequest, errors } = useRequest({
     url: "/api/users/signin",
     method: "post",
@@ -51,7 +52,7 @@ const signin = ({ currentUser }) => {
             </Form.Group>
 
             {errors}
-            <Button className="mt-3" type="submit" variant="primary">
+            <Button className="mt-3" type="submit" variant="dark">
               Sign In
             </Button>
           </Form>

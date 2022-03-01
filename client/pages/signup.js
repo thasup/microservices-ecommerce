@@ -52,7 +52,7 @@ const signup = ({ currentUser }) => {
             </Form.Group>
 
             {errors}
-            <Button className="mt-3" type="submit" variant="primary">
+            <Button className="mt-3" type="submit" variant="dark">
               Sign Up
             </Button>
           </Form>
