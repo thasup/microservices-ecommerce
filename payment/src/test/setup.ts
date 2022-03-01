@@ -3,11 +3,14 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
 declare global {
-  var signin: () => string[];
-  var adminSignin: () => string[];
+  var signin: (userId?: string) => string[];
+  var adminSignin: (userId?: string) => string[];
 }
 
 jest.mock("../NatsWrapper");
+
+process.env.STRIPE_KEY =
+  "sk_test_51KYCbpCqypc6uabtqqhd5R6cl7nl25a1lNwQOIBNJlyFISVZbIwy9t50Zqvnl2fdKBTShQxMZ8cLCdXsBJKuDYhu00cwUU9fcm";
 
 let mongo: any;
 
@@ -34,10 +37,10 @@ afterAll(async () => {
   await mongo.stop();
 });
 
-global.signin = () => {
+global.signin = (userId?: string) => {
   // Build a JWT payload.  { id, email }
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: userId || new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
     password: "password",
     isAdmin: false,
@@ -59,10 +62,10 @@ global.signin = () => {
   return [`session=${base64}`];
 };
 
-global.adminSignin = () => {
+global.adminSignin = (userId?: string) => {
   // Build a JWT payload.  { id, email }
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: userId || new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
     password: "password",
     isAdmin: true,
