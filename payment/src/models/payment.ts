@@ -30,6 +30,7 @@ const paymentSchema = new mongoose.Schema(
       type: String,
     },
   },
+
   {
     toJSON: {
       transform(doc, ret) {
@@ -38,6 +39,7 @@ const paymentSchema = new mongoose.Schema(
         delete ret.__v;
       },
     },
+    timestamps: true,
   }
 );
 
