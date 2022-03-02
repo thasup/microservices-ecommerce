@@ -1,6 +1,6 @@
 import {
   Listener,
-  OrderCancelledEvent,
+  OrderUpdatedEvent,
   Subjects,
   QueueGroupNames,
 } from "@thasup-dev/common";
@@ -9,11 +9,11 @@ import { Message } from "node-nats-streaming";
 import { Product } from "../../models/product";
 import { ProductUpdatedPublisher } from "../publishers/ProductUpdatedPublisher";
 
-export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
-  subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
+export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
+  subject: Subjects.OrderUpdated = Subjects.OrderUpdated;
   queueGroupName = QueueGroupNames.PRODUCT_SERVICE;
 
-  async onMessage(data: OrderCancelledEvent["data"], msg: Message) {
+  async onMessage(data: OrderUpdatedEvent["data"], msg: Message) {
     // Find the product that the order is reserving
     const product = await Product.findById(data.product.id);
 

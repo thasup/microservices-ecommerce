@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 import { Message } from "node-nats-streaming";
-import { OrderStatus, OrderCancelledEvent } from "@thasup-dev/common";
+import { OrderStatus, OrderUpdatedEvent } from "@thasup-dev/common";
 
-import { OrderCancelledListener } from "../OrderCancelledListener";
+import { OrderUpdatedListener } from "../OrderUpdatedListener";
 import { natsWrapper } from "../../../NatsWrapper";
 import { Order } from "../../../models/order";
 import { Product } from "../../../models/product";
 
 const setup = async () => {
-  const listener = new OrderCancelledListener(natsWrapper.client);
+  const listener = new OrderUpdatedListener(natsWrapper.client);
 
   // Create and save a product
   const product = Product.build({
@@ -39,7 +39,7 @@ const setup = async () => {
   });
   await order.save();
 
-  const data: OrderCancelledEvent["data"] = {
+  const data: OrderUpdatedEvent["data"] = {
     id: order.id,
     status: OrderStatus.Cancelled,
     userId: order.userId,

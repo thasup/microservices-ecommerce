@@ -6,8 +6,9 @@ import {
   Subjects,
 } from "@thasup-dev/common";
 import { Message } from "node-nats-streaming";
+
 import { Order } from "../../models/order";
-import { OrderCancelledPublisher } from "../publishers/OrderCancelledPublisher";
+import { OrderUpdatedPublisher } from "../publishers/OrderUpdatedPublisher";
 
 export class ExpirationCompletedListener extends Listener<ExpirationCompletedEvent> {
   subject: Subjects.ExpirationCompleted = Subjects.ExpirationCompleted;
@@ -20,7 +21,7 @@ export class ExpirationCompletedListener extends Listener<ExpirationCompletedEve
       throw new Error("Order not found");
     }
 
-    if (order.status === OrderStatus.Complete) {
+    if (order.status === OrderStatus.Completed) {
       return msg.ack();
     }
 
@@ -30,7 +31,7 @@ export class ExpirationCompletedListener extends Listener<ExpirationCompletedEve
 
     await order.save();
 
-    await new OrderCancelledPublisher(this.client).publish({
+    await new OrderUpdatedPublisher(this.client).publish({
       id: order.id,
       status: OrderStatus.Cancelled,
       userId: order.userId,

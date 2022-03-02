@@ -6,6 +6,7 @@ import {
   NotFoundError,
   QueueGroupNames,
 } from "@thasup-dev/common";
+
 import { Product } from "../../models/product";
 
 export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {

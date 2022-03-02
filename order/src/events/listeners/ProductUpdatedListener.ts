@@ -1,5 +1,4 @@
 import { Message } from "node-nats-streaming";
-import mongoose from "mongoose";
 import {
   Subjects,
   Listener,
@@ -7,6 +6,7 @@ import {
   NotFoundError,
   QueueGroupNames,
 } from "@thasup-dev/common";
+
 import { Product } from "../../models/product";
 
 export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {

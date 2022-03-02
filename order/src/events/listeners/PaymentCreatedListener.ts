@@ -6,6 +6,7 @@ import {
   QueueGroupNames,
 } from "@thasup-dev/common";
 import { Message } from "node-nats-streaming";
+
 import { Order } from "../../models/order";
 
 export class PaymentCreatedListener extends Listener<PaymentCreatedEvent> {
@@ -20,7 +21,7 @@ export class PaymentCreatedListener extends Listener<PaymentCreatedEvent> {
     }
 
     order.set({
-      status: OrderStatus.Complete,
+      status: OrderStatus.Completed,
     });
     await order.save();
 

@@ -10,7 +10,7 @@ import { param } from "express-validator";
 
 import { Order } from "../models/order";
 import { natsWrapper } from "../NatsWrapper";
-import { OrderCancelledPublisher } from "../events/publishers/OrderCancelledPublisher";
+import { OrderUpdatedPublisher } from "../events/publishers/OrderUpdatedPublisher";
 
 const router = express.Router();
 
@@ -36,7 +36,7 @@ router.patch(
     await order.save();
 
     // publishing an event saying this was cancelled!
-    new OrderCancelledPublisher(natsWrapper.client).publish({
+    new OrderUpdatedPublisher(natsWrapper.client).publish({
       id: order.id,
       status: order.status,
       userId: order.userId,

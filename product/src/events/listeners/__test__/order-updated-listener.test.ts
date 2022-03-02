@@ -1,13 +1,13 @@
 import { Message } from "node-nats-streaming";
 import mongoose from "mongoose";
-import { OrderCancelledEvent, OrderStatus } from "@thasup-dev/common";
-import { OrderCancelledListener } from "../OrderCancelledListener";
+import { OrderUpdatedEvent, OrderStatus } from "@thasup-dev/common";
+import { OrderUpdatedListener } from "../OrderUpdatedListener";
 import { Product } from "../../../models/product";
 import { natsWrapper } from "../../../NatsWrapper";
 
 const setup = async () => {
   // Create an instance of the listener
-  const listener = new OrderCancelledListener(natsWrapper.client);
+  const listener = new OrderUpdatedListener(natsWrapper.client);
 
   // Create and save a product
   const product = Product.build({
@@ -32,7 +32,7 @@ const setup = async () => {
   await product.save();
 
   // Create the fake data event
-  const data: OrderCancelledEvent["data"] = {
+  const data: OrderUpdatedEvent["data"] = {
     id: orderId,
     version: 0,
     status: OrderStatus.Cancelled,
@@ -57,7 +57,7 @@ const setup = async () => {
   return { listener, product, orderId, data, msg };
 };
 
-it("updates the order to cancelled status", async () => {
+it("updates the order to updated status", async () => {
   const { listener, product, orderId, data, msg } = await setup();
 
   await listener.onMessage(data, msg);

@@ -41,7 +41,7 @@ it("marks an order as cancelled", async () => {
   expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
 });
 
-it("emits a order cancelled event", async () => {
+it("emits a order updated event", async () => {
   const product = Product.build({
     id: new mongoose.Types.ObjectId().toHexString(),
     title: "Sample Dress",

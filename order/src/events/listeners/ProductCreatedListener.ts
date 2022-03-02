@@ -5,6 +5,7 @@ import {
   ProductCreatedEvent,
   QueueGroupNames,
 } from "@thasup-dev/common";
+
 import { Product } from "../../models/product";
 
 export class ProductCreatedListener extends Listener<ProductCreatedEvent> {

@@ -1,6 +1,6 @@
 import {
   Listener,
-  OrderCancelledEvent,
+  OrderUpdatedEvent,
   Subjects,
   QueueGroupNames,
   OrderStatus,
@@ -9,11 +9,11 @@ import { Message } from "node-nats-streaming";
 
 import { Order } from "../../models/order";
 
-export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
-  subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
+export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
+  subject: Subjects.OrderUpdated = Subjects.OrderUpdated;
   queueGroupName = QueueGroupNames.PAYMENT_SERVICE;
 
-  async onMessage(data: OrderCancelledEvent["data"], msg: Message) {
+  async onMessage(data: OrderUpdatedEvent["data"], msg: Message) {
     // Find the product that the order is reserving
     const order = await Order.findByEvent(data);
 
