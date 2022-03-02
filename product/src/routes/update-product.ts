@@ -21,6 +21,22 @@ router.patch(
   [param("id").isMongoId().withMessage("Invalid MongoDB ObjectId")],
   validateRequest,
   async (req: Request, res: Response) => {
+    const {
+      title,
+      price,
+      image,
+      colors,
+      sizes,
+      brand,
+      category,
+      material,
+      description,
+      reviews,
+      numReviews,
+      rating,
+      countInStock,
+    } = req.body;
+
     const product = await Product.findById(req.params.id);
 
     if (!product) {
@@ -31,37 +47,41 @@ router.patch(
       throw new BadRequestError("Cannot edit a reserved ticket");
     }
 
-    product.title = req.body.title ?? product.title;
-    product.price = req.body.price ?? product.price;
-    product.image = req.body.image ?? product.image;
-    product.colors = req.body.colors ?? product.colors;
-    product.sizes = req.body.sizes ?? product.sizes;
-    product.brand = req.body.brand ?? product.brand;
-    product.category = req.body.category ?? product.category;
-    product.material = req.body.material ?? product.material;
-    product.description = req.body.description ?? product.description;
-    product.reviews = req.body.reviews ?? product.reviews;
-    product.numReviews = req.body.numReviews ?? product.numReviews;
-    product.rating = req.body.rating ?? product.rating;
-    product.countInStock = req.body.countInStock ?? product.countInStock;
+    product.title = title ?? product.title;
+    product.price = price ?? product.price;
+    product.image = image ?? product.image;
+    product.colors = colors ?? product.colors;
+    product.sizes = sizes ?? product.sizes;
+    product.brand = brand ?? product.brand;
+    product.category = category ?? product.category;
+    product.material = material ?? product.material;
+    product.description = description ?? product.description;
+    product.reviews = reviews ?? product.reviews;
+    product.numReviews = numReviews ?? product.numReviews;
+    product.rating = rating ?? product.rating;
+    product.countInStock = countInStock ?? product.countInStock;
+
+    console.log("before", product.version);
 
     await product.save();
 
+    console.log("after", product.version);
+
     new ProductUpdatedPublisher(natsWrapper.client).publish({
       id: product.id,
-      title: product.title,
-      price: product.price,
+      title: title,
+      price: price,
       userId: product.userId,
-      image: product.image,
-      colors: product.colors,
-      sizes: product.sizes,
-      brand: product.brand,
-      category: product.category,
-      material: product.material,
-      description: product.description,
-      numReviews: product.numReviews,
-      rating: product.rating,
-      countInStock: product.countInStock,
+      image: image,
+      colors: colors,
+      sizes: sizes,
+      brand: brand,
+      category: category,
+      material: material,
+      description: description,
+      numReviews: numReviews,
+      rating: rating,
+      countInStock: countInStock,
       version: product.version,
     });
 

@@ -22,34 +22,39 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       throw new Error("Product not found");
     }
 
+    const qty = 1;
+    const countInStock = data.product.countInStock - qty;
+
     if (product.countInStock !== 1) {
-      msg.ack();
+      product.set({ countInStock: countInStock });
+
+      // Save the product
+      await product.save();
+    } else {
+      // Mark the product as being reserved by setting its orderId property
+      product.set({ orderId: data.id, countInStock: countInStock });
+
+      // Save the product
+      await product.save();
     }
 
-    // Mark the product as being reserved by setting its orderId property
-    product.set({ orderId: data.id });
-
-    // Save the product
-    await product.save();
-
-    // await new ProductUpdatedPublisher(this.client).publish({
-    //   id: product.id,
-    //   price: product.price,
-    //   title: product.title,
-    //   userId: product.userId,
-    //   image: product.image,
-    //   colors: product.colors,
-    //   sizes: product.sizes,
-    //   brand: product.brand,
-    //   category: product.category,
-    //   material: product.material,
-    //   description: product.description,
-    //   numReviews: product.numReviews,
-    //   rating: product.rating,
-    //   countInStock: product.countInStock,
-    //   orderId: product.orderId,
-    //   version: product.version,
-    // });
+    await new ProductUpdatedPublisher(this.client).publish({
+      id: product.id,
+      price: product.price,
+      title: product.title,
+      userId: product.userId,
+      image: product.image,
+      colors: product.colors,
+      sizes: product.sizes,
+      brand: product.brand,
+      category: product.category,
+      material: product.material,
+      description: product.description,
+      numReviews: product.numReviews,
+      rating: product.rating,
+      countInStock: product.countInStock,
+      version: product.version,
+    });
 
     // ack the message
     msg.ack();
