@@ -5,10 +5,18 @@ import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 const Header = ({ currentUser }) => {
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg">
+      <Navbar
+        bg="light"
+        variant="light"
+        expand="lg"
+        // fixed="top"
+        collapseOnSelect="true"
+      >
         <Container>
           <Link href="/" passHref>
-            <Navbar.Brand>Aurapan</Navbar.Brand>
+            <Navbar.Brand className="header-logo text-uppercase">
+              Aurapan
+            </Navbar.Brand>
           </Link>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">

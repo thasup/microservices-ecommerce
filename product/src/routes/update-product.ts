@@ -18,13 +18,7 @@ router.patch(
   "/api/products/:id",
   requireAuth,
   adminUser,
-  [
-    param("id").isMongoId().withMessage("Invalid MongoDB ObjectId"),
-    body("title").not().isEmpty().withMessage("Title is required"),
-    body("price")
-      .isFloat({ gt: 0 })
-      .withMessage("Price must be provided and must be greater than 0"),
-  ],
+  [param("id").isMongoId().withMessage("Invalid MongoDB ObjectId")],
   validateRequest,
   async (req: Request, res: Response) => {
     const product = await Product.findById(req.params.id);

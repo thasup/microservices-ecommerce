@@ -22,6 +22,10 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       throw new Error("Product not found");
     }
 
+    if (product.countInStock !== 1) {
+      msg.ack();
+    }
+
     // Mark the product as being reserved by setting its orderId property
     product.set({ orderId: data.id });
 

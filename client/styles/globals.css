@@ -10,3 +10,63 @@ footer {
   height: 2.5rem;
   text-align: center;
 }
+
+.header-logo {
+  font-family: "Italiana", serif;
+  font-size: 2rem;
+}
+
+/* Home Page */
+.product-card {
+  border: 0px;
+}
+
+.product-img {
+  position: relative;
+}
+
+.product-img__cover {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  padding-top: 150%;
+  cursor: pointer;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 650ms ease-in-out;
+}
+
+.product-img__cover:hover {
+  opacity: 0;
+}
+
+.product-img__hover {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding-top: 150%;
+  cursor: pointer;
+  opacity: 0;
+  visibility: visible;
+  transition: opacity 650ms ease-in-out;
+}
+
+.product-img__hover:hover {
+  opacity: 1;
+}
+
+.card-product-title {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  font-family: "Playfair Display", serif;
+}
+
+.card-product-price {
+  font-family: serif;
+  font-weight: 400;
+}
+
+.card-product-reviews {
+  font-family: "Open Sans";
+}
