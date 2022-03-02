@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, ListGroup, Card, Button, Form } from "react-bootstrap";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -11,7 +11,8 @@ import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
 
 const productDetail = ({ products, currentUser }) => {
-  const { productId } = Router.query;
+  const router = useRouter();
+  const { productId } = router.query;
 
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
@@ -58,7 +59,7 @@ const productDetail = ({ products, currentUser }) => {
       <Link href="/" passHref>
         <a className="btn btn-outline-dark mb-3">Back</a>
       </Link>
-      {!product.id || product.id !== router.query.productId ? (
+      {!product.id || product.id !== productId ? (
         <Loader />
       ) : (
         <>

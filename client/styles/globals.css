@@ -62,6 +62,11 @@ footer {
   font-family: "Playfair Display", serif;
 }
 
+.card-product-title a {
+  color: black;
+  text-decoration: none;
+}
+
 .card-product-price {
   font-family: serif;
   font-weight: 400;
