@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: us.gcr.io/microservices-ecommerce-341106/client
+          image: us.gcr.io/microservices-task/client
 ---
 apiVersion: v1
 kind: Service

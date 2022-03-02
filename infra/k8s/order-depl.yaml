@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: order
-          image: us.gcr.io/microservices-ecommerce-341106/order
+          image: us.gcr.io/microservices-task/order
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -23,7 +23,7 @@ spec:
             - name: NATS_URL
               value: "http://nats-srv:4222"
             - name: NATS_CLUSTER_ID
-              value: microservices-ecommerce
+              value: my-first-cluster-1
             - name: MONGO_URI_ORDER
               valueFrom:
                 secretKeyRef:

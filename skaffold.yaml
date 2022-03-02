@@ -8,9 +8,9 @@ build:
   # local:
   #   push: false
   googleCloudBuild:
-    projectId: microservices-ecommerce-341106
+    projectId: microservices-task
   artifacts:
-    - image: us.gcr.io/microservices-ecommerce-341106/user
+    - image: us.gcr.io/microservices-task/user
       context: user
       docker:
         dockerfile: Dockerfile
@@ -18,7 +18,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/microservices-ecommerce-341106/client
+    - image: us.gcr.io/microservices-task/client
       context: client
       docker:
         dockerfile: Dockerfile
@@ -26,7 +26,7 @@ build:
         manual:
           - src: "**/*.js"
             dest: .
-    - image: us.gcr.io/microservices-ecommerce-341106/product
+    - image: us.gcr.io/microservices-task/product
       context: product
       docker:
         dockerfile: Dockerfile
@@ -34,7 +34,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/microservices-ecommerce-341106/order
+    - image: us.gcr.io/microservices-task/order
       context: order
       docker:
         dockerfile: Dockerfile
@@ -42,7 +42,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/microservices-ecommerce-341106/expiration
+    - image: us.gcr.io/microservices-task/expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -50,7 +50,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/microservices-ecommerce-341106/payment
+    - image: us.gcr.io/microservices-task/payment
       context: payment
       docker:
         dockerfile: Dockerfile

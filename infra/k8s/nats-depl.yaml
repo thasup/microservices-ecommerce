@@ -29,7 +29,7 @@ spec:
               "2",
               "-SD",
               "-cid",
-              "microservices-ecommerce",
+              "my-first-cluster-1",
             ]
 ---
 apiVersion: v1
