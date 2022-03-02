@@ -23,7 +23,8 @@ const setup = async () => {
   });
   await product.save();
 
-  console.log("zzzzz", product);
+  const itemsPrice = parseFloat(product.price.toFixed(2));
+  const taxPrice = parseFloat((product.price * 0.07).toFixed(2));
 
   // Create the fake data event
   const data: OrderCreatedEvent["data"] = {
@@ -32,15 +33,11 @@ const setup = async () => {
     userId: new mongoose.Types.ObjectId().toHexString(),
     expiresAt: new Date(),
     version: 0,
-    product: {
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      image: product.image,
-      colors: product.colors,
-      sizes: product.sizes,
-      countInStock: product.countInStock,
-    },
+    paymentMethod: "stripe",
+    itemsPrice,
+    shippingPrice: 0,
+    taxPrice,
+    totalPrice: itemsPrice + taxPrice,
   };
 
   // @ts-ignore
@@ -58,10 +55,7 @@ it("replicates the order info", async () => {
 
   const order = await Order.findById(data.id);
 
-  console.log("order", order);
-  console.log("data", data);
-
-  expect(order!.product.price).toEqual(data.product.price);
+  expect(order!.totalPrice).toEqual(data.totalPrice);
 });
 
 it("acks the message", async () => {

@@ -36,15 +36,13 @@ export class ExpirationCompletedListener extends Listener<ExpirationCompletedEve
       userId: order.userId,
       expiresAt: order.expiresAt,
       version: order.version,
-      product: {
-        id: order.product.id,
-        title: order.product.title,
-        price: order.product.price,
-        image: order.product.image,
-        colors: order.product.colors,
-        sizes: order.product.sizes,
-        countInStock: order.product.countInStock,
-      },
+      paymentMethod: order.paymentMethod,
+      itemsPrice: order.itemsPrice,
+      shippingPrice: order.shippingPrice,
+      taxPrice: order.taxPrice,
+      totalPrice: order.totalPrice,
+      isPaid: order.isPaid,
+      isDelivered: order.isDelivered,
     });
 
     msg.ack();

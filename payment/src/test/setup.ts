@@ -8,6 +8,7 @@ declare global {
 }
 
 jest.mock("../NatsWrapper");
+jest.mock("../stripe");
 
 process.env.STRIPE_KEY =
   "sk_test_51KYCbpCqypc6uabtqqhd5R6cl7nl25a1lNwQOIBNJlyFISVZbIwy9t50Zqvnl2fdKBTShQxMZ8cLCdXsBJKuDYhu00cwUU9fcm";

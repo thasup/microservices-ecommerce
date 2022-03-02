@@ -31,9 +31,6 @@ const productDetail = ({ products, currentUser }) => {
 
   const product = products.find((product) => product.id === productId);
 
-  console.log(product);
-  console.log(productId);
-
   const addToCartHandler = () => {
     doRequest();
     // router.push(`/cart/${product.id}?qty=${qty}`);

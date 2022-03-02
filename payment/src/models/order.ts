@@ -9,8 +9,14 @@ interface OrderAttrs {
   id: string;
   userId: string;
   status: OrderStatus;
-  product: ProductDoc;
   version: number;
+  paymentMethod: string;
+  itemsPrice: number;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
+  isPaid?: boolean;
+  paidAt?: Date;
 }
 
 // An interface that describes the properties
@@ -28,8 +34,14 @@ interface OrderModel extends mongoose.Model<OrderDoc> {
 interface OrderDoc extends mongoose.Document {
   userId: string;
   status: OrderStatus;
-  product: ProductDoc;
   version: number;
+  paymentMethod: string;
+  itemsPrice: number;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
+  isPaid?: boolean;
+  paidAt?: Date;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,9 +58,37 @@ const orderSchema = new mongoose.Schema(
       enum: Object.values(OrderStatus),
       default: OrderStatus.Created,
     },
-    product: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+    paymentMethod: {
+      type: String,
+      required: true,
+      default: "stripe",
+    },
+    itemsPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    shippingPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    taxPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
+    paidAt: {
+      type: Date,
     },
   },
   {
@@ -79,7 +119,13 @@ orderSchema.statics.build = (attrs: OrderAttrs) => {
     userId: attrs.userId,
     status: attrs.status,
     version: attrs.version,
-    product: attrs.product,
+    paymentMethod: attrs.paymentMethod,
+    itemsPrice: attrs.itemsPrice,
+    shippingPrice: attrs.shippingPrice,
+    taxPrice: attrs.taxPrice,
+    totalPrice: attrs.totalPrice,
+    isPaid: attrs.isPaid,
+    paidAt: attrs.paidAt,
   });
 };
 

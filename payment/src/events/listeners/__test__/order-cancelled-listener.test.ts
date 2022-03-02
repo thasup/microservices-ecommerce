@@ -23,13 +23,19 @@ const setup = async () => {
   });
   await product.save();
 
-  // Create and save the order
+  const itemsPrice = parseFloat(product.price.toFixed(2));
+  const taxPrice = parseFloat((product.price * 0.07).toFixed(2));
+
   const order = Order.build({
     id: new mongoose.Types.ObjectId().toHexString(),
+    userId: "123456",
     status: OrderStatus.Created,
-    userId: new mongoose.Types.ObjectId().toHexString(),
     version: 0,
-    product,
+    paymentMethod: "stripe",
+    itemsPrice,
+    shippingPrice: 0,
+    taxPrice,
+    totalPrice: itemsPrice + taxPrice,
   });
   await order.save();
 
@@ -39,15 +45,11 @@ const setup = async () => {
     userId: order.userId,
     expiresAt: new Date(),
     version: 1,
-    product: {
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      image: product.image,
-      colors: product.colors,
-      sizes: product.sizes,
-      countInStock: product.countInStock,
-    },
+    paymentMethod: order.paymentMethod,
+    itemsPrice: order.itemsPrice,
+    shippingPrice: order.shippingPrice,
+    taxPrice: order.taxPrice,
+    totalPrice: order.totalPrice,
   };
 
   // @ts-ignore
