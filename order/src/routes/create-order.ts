@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
+import mongoose from "mongoose";
 import {
   BadRequestError,
   NotFoundError,
@@ -53,7 +54,11 @@ router.post(
       const existingOrder = await Order.findOne({
         product: product,
         status: {
-          $in: [OrderStatus.Created, OrderStatus.Pending, OrderStatus.Complete],
+          $in: [
+            OrderStatus.Created,
+            OrderStatus.Pending,
+            OrderStatus.Completed,
+          ],
         },
       });
 
@@ -97,6 +102,19 @@ router.post(
     });
     await order.save();
 
+    let cartItems = [];
+    for (let i = 0; i < items.length; i++) {
+      const cartItem = {
+        title: items[i].title,
+        qty: items[i].qty,
+        image: items[i].image,
+        price: items[i].price,
+        discount: items[i].discount,
+        productId: items[i].product.id,
+      };
+      cartItems.push(cartItem);
+    }
+
     // Publish an event saying that an order was created
     new OrderCreatedPublisher(natsWrapper.client).publish({
       id: order.id,
@@ -104,6 +122,7 @@ router.post(
       userId: order.userId,
       expiresAt: order.expiresAt,
       version: order.version,
+      cart: cartItems,
       paymentMethod: order.paymentMethod,
       itemsPrice: order.itemsPrice,
       shippingPrice: order.shippingPrice,

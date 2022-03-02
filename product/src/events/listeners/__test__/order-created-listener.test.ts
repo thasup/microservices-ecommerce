@@ -28,6 +28,9 @@ const setup = async () => {
   });
   await product.save();
 
+  const itemsPrice = parseFloat(product.price.toFixed(2));
+  const taxPrice = parseFloat((product.price * 0.07).toFixed(2));
+
   // Create the fake data event
   const data: OrderCreatedEvent["data"] = {
     id: new mongoose.Types.ObjectId().toHexString(),
@@ -35,15 +38,21 @@ const setup = async () => {
     status: OrderStatus.Created,
     userId: product.userId,
     expiresAt: new Date(),
-    product: {
-      id: product.id,
-      title: "Sample Dress",
-      price: 1990,
-      image: "./asset/sample.jpg",
-      colors: "White,Black",
-      sizes: "S,M,L",
-      countInStock: 1,
-    },
+    cart: [
+      {
+        title: product.title,
+        qty: 1,
+        image: product.image,
+        price: product.price,
+        discount: 1,
+        productId: product.id,
+      },
+    ],
+    paymentMethod: "stripe",
+    itemsPrice: itemsPrice,
+    shippingPrice: 0,
+    taxPrice: taxPrice,
+    totalPrice: itemsPrice + taxPrice,
   };
 
   // @ts-ignore

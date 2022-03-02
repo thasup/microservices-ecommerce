@@ -14,47 +14,61 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   queueGroupName = QueueGroupNames.PRODUCT_SERVICE;
 
   async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
-    // Find the product that the order is reserving
-    const product = await Product.findById(data.product.id);
+    const items = data.cart;
 
-    // If no product, throw error
-    if (!product) {
-      throw new Error("Product not found");
+    if (items!.length === 0) {
+      // ack the message
+      msg.ack();
     }
 
-    const qty = 1;
-    const countInStock = data.product.countInStock - qty;
-
-    if (product.countInStock !== 1) {
-      product.set({ countInStock: countInStock });
-
-      // Save the product
-      await product.save();
-    } else {
-      // Mark the product as being reserved by setting its orderId property
-      product.set({ orderId: data.id, countInStock: countInStock });
-
-      // Save the product
-      await product.save();
+    if (!items) {
+      throw new Error("Cart not found");
     }
 
-    await new ProductUpdatedPublisher(this.client).publish({
-      id: product.id,
-      price: product.price,
-      title: product.title,
-      userId: product.userId,
-      image: product.image,
-      colors: product.colors,
-      sizes: product.sizes,
-      brand: product.brand,
-      category: product.category,
-      material: product.material,
-      description: product.description,
-      numReviews: product.numReviews,
-      rating: product.rating,
-      countInStock: product.countInStock,
-      version: product.version,
-    });
+    for (let i = 0; i < items.length; i++) {
+      // Find the product that the order is reserving
+      const product = await Product.findById(items[i].productId);
+
+      // If no product, throw error
+      if (!product) {
+        throw new Error("Product not found");
+      }
+
+      // Decrease the product quantity in stock
+      const countInStock = product.countInStock - items[i].qty;
+
+      if (product.countInStock > 1) {
+        product.set({ countInStock: countInStock });
+
+        // Save the product
+        await product.save();
+      } else {
+        // Mark the product as being reserved by setting its orderId property
+        product.set({ orderId: data.id, countInStock: countInStock });
+
+        // Save the product
+        await product.save();
+      }
+
+      await new ProductUpdatedPublisher(this.client).publish({
+        id: product.id,
+        price: product.price,
+        title: product.title,
+        userId: product.userId,
+        image: product.image,
+        colors: product.colors,
+        sizes: product.sizes,
+        brand: product.brand,
+        category: product.category,
+        material: product.material,
+        description: product.description,
+        numReviews: product.numReviews,
+        rating: product.rating,
+        countInStock: product.countInStock,
+        version: product.version,
+        orderId: data.id,
+      });
+    }
 
     // ack the message
     msg.ack();
