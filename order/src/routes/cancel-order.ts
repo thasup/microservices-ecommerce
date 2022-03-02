@@ -6,8 +6,9 @@ import {
   requireAuth,
   validateRequest,
 } from "@thasup-dev/common";
-import { Order } from "../models/order";
 import { param } from "express-validator";
+
+import { Order } from "../models/order";
 import { natsWrapper } from "../NatsWrapper";
 import { OrderCancelledPublisher } from "../events/publishers/OrderCancelledPublisher";
 
@@ -41,19 +42,17 @@ router.patch(
       userId: order.userId,
       expiresAt: order.expiresAt,
       version: order.version,
-      product: {
-        id: order.product.id,
-        title: order.product.title,
-        price: order.product.price,
-        image: order.product.image,
-        colors: order.product.colors,
-        sizes: order.product.sizes,
-        countInStock: order.product.countInStock,
-      },
+      paymentMethod: order.paymentMethod,
+      itemsPrice: order.itemsPrice,
+      shippingPrice: order.shippingPrice,
+      taxPrice: order.taxPrice,
+      totalPrice: order.totalPrice,
+      isPaid: order.isPaid,
+      isDelivered: order.isDelivered,
     });
 
     res.status(200).send(order);
   }
 );
 
-export { router as patchOrderRouter };
+export { router as cancelOrderRouter };

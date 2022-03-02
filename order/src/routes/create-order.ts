@@ -12,6 +12,7 @@ import { Product } from "../models/product";
 import { Order } from "../models/order";
 import { natsWrapper } from "../NatsWrapper";
 import { OrderCreatedPublisher } from "../events/publishers/OrderCreatedPublisher";
+import { Cart } from "../models/cart";
 
 const router = express.Router();
 
@@ -22,11 +23,19 @@ router.post(
   requireAuth,
   [
     body("productId").not().isEmpty().withMessage("ProductId must be provided"),
+    body("shippingAddress")
+      .not()
+      .isEmpty()
+      .withMessage("shippingAddress must be provided"),
+    body("paymentMethod")
+      .not()
+      .isEmpty()
+      .withMessage("paymentMethod must be provided"),
     body("productId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { productId } = req.body;
+    const { productId, shippingAddress, paymentMethod } = req.body;
 
     // Find the product the user is trying to order in the database
     const product = await Product.findById(productId);
@@ -47,6 +56,7 @@ router.post(
           $in: [OrderStatus.Created, OrderStatus.Pending, OrderStatus.Complete],
         },
       });
+
       if (existingOrder) {
         throw new BadRequestError("Product is already reserved");
       }
@@ -56,12 +66,34 @@ router.post(
     let expiration = new Date();
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
+    // Fetch items in cart
+    const items = await Cart.find({ userId: req.currentUser!.id });
+    console.log("ts items: ", items);
+
+    // Calculate discount factor
+    const shippingDiscount = 1;
+
+    // Calculate price
+    const itemsPrice = items.reduce(
+      (acc, item) => acc + item.price * item.qty * item.discount,
+      0
+    );
+    const shippingPrice = itemsPrice > 100 ? 0 : 10 * shippingDiscount;
+    const taxPrice = 0.07 * itemsPrice;
+    const totalPrice = itemsPrice + shippingPrice + taxPrice;
+
     // Build the order and save it to the database
     const order = Order.build({
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
       expiresAt: expiration,
-      product,
+      cart: items,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice: parseFloat(itemsPrice.toFixed(2)),
+      shippingPrice: parseFloat(shippingPrice.toFixed(2)),
+      taxPrice: parseFloat(taxPrice.toFixed(2)),
+      totalPrice: parseFloat(totalPrice.toFixed(2)),
     });
     await order.save();
 
@@ -72,15 +104,13 @@ router.post(
       userId: order.userId,
       expiresAt: order.expiresAt,
       version: order.version,
-      product: {
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        image: product.image,
-        colors: product.colors,
-        sizes: product.sizes,
-        countInStock: product.countInStock,
-      },
+      paymentMethod: order.paymentMethod,
+      itemsPrice: order.itemsPrice,
+      shippingPrice: order.shippingPrice,
+      taxPrice: order.taxPrice,
+      totalPrice: order.totalPrice,
+      isPaid: order.isPaid,
+      isDelivered: order.isDelivered,
     });
 
     res.status(201).send(order);

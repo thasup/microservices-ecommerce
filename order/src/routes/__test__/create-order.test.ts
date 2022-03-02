@@ -6,6 +6,7 @@ import { app } from "../../app";
 import { Order } from "../../models/order";
 import { Product } from "../../models/product";
 import { natsWrapper } from "../../NatsWrapper";
+import { Cart } from "../../models/cart";
 
 it("returns an error if the product does not exist", async () => {
   const productId = new mongoose.Types.ObjectId();
@@ -30,11 +31,28 @@ it("return 201 if the product has more than 1 set", async () => {
   });
   await product.save();
 
+  const cart = Cart.build({
+    userId: product.userId,
+    title: product.title,
+    qty: 1,
+    image: product.image,
+    price: product.price,
+    discount: 1,
+    product,
+  });
+
+  const itemsPrice = parseFloat(product.price.toFixed(2));
+  const taxPrice = parseFloat((product.price * 0.07).toFixed(2));
   const order = Order.build({
     userId: "123456",
     status: OrderStatus.Created,
     expiresAt: new Date(),
-    product,
+    cart: [cart],
+    paymentMethod: "stripe",
+    itemsPrice,
+    shippingPrice: 0,
+    taxPrice,
+    totalPrice: itemsPrice + taxPrice,
   });
   await order.save();
 
@@ -58,11 +76,28 @@ it("returns an error if the product is already reserved", async () => {
   });
   await product.save();
 
+  const cart = Cart.build({
+    userId: product.userId,
+    title: product.title,
+    qty: 1,
+    image: product.image,
+    price: product.price,
+    discount: 1,
+    product,
+  });
+
+  const itemsPrice = parseFloat(product.price.toFixed(2));
+  const taxPrice = parseFloat((product.price * 0.07).toFixed(2));
   const order = Order.build({
     userId: "123456",
-    status: OrderStatus.Complete,
+    status: OrderStatus.Created,
     expiresAt: new Date(),
-    product,
+    cart: [cart],
+    paymentMethod: "stripe",
+    itemsPrice,
+    shippingPrice: 0,
+    taxPrice,
+    totalPrice: itemsPrice + taxPrice,
   });
   await order.save();
 

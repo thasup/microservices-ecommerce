@@ -13,6 +13,8 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
   queueGroupName = QueueGroupNames.PAYMENT_SERVICE;
 
   async onMessage(data: ProductUpdatedEvent["data"], msg: Message) {
+    console.log("version", data.version);
+
     const product = await Product.findByEvent(data);
 
     if (!product) {

@@ -10,9 +10,9 @@ router.get("/api/orders", requireAuth, async (req: Request, res: Response) => {
   if (req.currentUser?.isAdmin !== true) {
     orders = await Order.find({
       userId: req.currentUser!.id,
-    }).populate("product");
+    });
   } else {
-    orders = await Order.find({}).populate("product");
+    orders = await Order.find({});
   }
 
   res.send(orders);

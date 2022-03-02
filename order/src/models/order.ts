@@ -1,7 +1,14 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "@thasup-dev/common";
-import { ProductDoc } from "./product";
+import { CartDoc, cartSchema } from "./cart";
+
+interface shippingAddressAttrs {
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
 
 // An interface that describes the properties
 // that are requried to create a new Order
@@ -9,7 +16,17 @@ interface OrderAttrs {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  product: ProductDoc;
+  cart?: Array<CartDoc>;
+  shippingAddress?: shippingAddressAttrs;
+  paymentMethod: string;
+  itemsPrice: number;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
+  isPaid?: boolean;
+  paidAt?: Date;
+  isDelivered?: boolean;
+  deliveredAt?: Date;
 }
 
 // An interface that describes the properties
@@ -24,7 +41,17 @@ interface OrderDoc extends mongoose.Document {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  product: ProductDoc;
+  cart?: Array<CartDoc>;
+  shippingAddress?: shippingAddressAttrs;
+  paymentMethod: string;
+  itemsPrice: number;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
+  isPaid?: boolean;
+  paidAt?: Date;
+  isDelivered?: boolean;
+  deliveredAt?: Date;
   version: number;
   createdAt: string;
   updatedAt: string;
@@ -44,10 +71,53 @@ const orderSchema = new mongoose.Schema(
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
+      required: true,
     },
-    product: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+    cart: [cartSchema],
+    shippingAddress: {
+      address: { type: String },
+      city: { type: String },
+      postalCode: { type: String },
+      country: { type: String },
+    },
+    paymentMethod: {
+      type: String,
+      required: true,
+      default: "stripe",
+    },
+    itemsPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    shippingPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    taxPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
+    paidAt: {
+      type: Date,
+    },
+    isDelivered: {
+      type: Boolean,
+      default: false,
+    },
+    deliveredAt: {
+      type: Date,
     },
   },
   {
