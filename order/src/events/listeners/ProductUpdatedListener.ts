@@ -14,13 +14,7 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
   queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
   async onMessage(data: ProductUpdatedEvent["data"], msg: Message) {
-    let product;
-
-    try {
-      product = await Product.findByEvent(data);
-    } catch (err) {
-      console.log(err);
-    }
+    const product = await Product.findByEvent(data);
 
     if (!product) {
       throw new NotFoundError();

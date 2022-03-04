@@ -15,7 +15,7 @@ export class ExpirationCompletedListener extends Listener<ExpirationCompletedEve
   queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
   async onMessage(data: ExpirationCompletedEvent["data"], msg: Message) {
-    const order = await Order.findById(data.orderId).populate("product");
+    const order = await Order.findById(data.orderId);
 
     if (!order) {
       throw new Error("Order not found");

@@ -73,8 +73,6 @@ router.post(
       version: product.version,
     });
 
-    console.log("thasup 1", product.id);
-
     res.status(201).send(product);
   }
 );

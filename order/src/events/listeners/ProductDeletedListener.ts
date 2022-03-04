@@ -1,5 +1,4 @@
 import { Message } from "node-nats-streaming";
-import mongoose from "mongoose";
 import {
   Subjects,
   Listener,
@@ -15,13 +14,7 @@ export class ProductDeletedListener extends Listener<ProductDeletedEvent> {
   queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
   async onMessage(data: ProductDeletedEvent["data"], msg: Message) {
-    let product;
-
-    try {
-      product = await Product.findByEvent(data);
-    } catch (err) {
-      console.log(err);
-    }
+    const product = await Product.findByEvent(data);
 
     if (!product) {
       throw new NotFoundError();

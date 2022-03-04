@@ -21,12 +21,20 @@ const setup = async () => {
   });
   await product.save();
 
+  const itemsPrice = parseFloat(product.price.toFixed(2));
+  const taxPrice = parseFloat((product.price * 0.07).toFixed(2));
+
   const order = Order.build({
     status: OrderStatus.Created,
-    userId: "alskdfj",
+    userId: new mongoose.Types.ObjectId().toHexString(),
     expiresAt: new Date(),
-    product,
+    paymentMethod: "stripe",
+    itemsPrice: itemsPrice,
+    shippingPrice: 0.0,
+    taxPrice: taxPrice,
+    totalPrice: itemsPrice + taxPrice,
   });
+
   await order.save();
 
   const data: ExpirationCompletedEvent["data"] = {
