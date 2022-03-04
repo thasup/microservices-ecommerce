@@ -22,6 +22,27 @@ router.post(
   async (req: Request, res: Response) => {
     const { qty, discount } = req.body;
 
+    // Find the existing item in cart
+    const alreadyAddedItem = await Cart.findOne({
+      userId: req.currentUser!.id,
+      product: req.params.productId,
+    }).catch((err) => console.log(err));
+
+    if (alreadyAddedItem) {
+      // Do nothing
+      if (alreadyAddedItem.qty === qty) {
+        throw new Error("Product already added");
+      }
+
+      // Edit item quantity and save
+      if (alreadyAddedItem.qty !== qty) {
+        alreadyAddedItem.qty = qty;
+        await alreadyAddedItem.save();
+
+        res.status(200).send(alreadyAddedItem);
+      }
+    }
+
     // Check the product is existing
     const product = await Product.findById(req.params.productId);
 
