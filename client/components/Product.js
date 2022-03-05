@@ -39,7 +39,7 @@ const Product = ({ product }) => {
         </div>
       </Link>
 
-      <Card.Body>
+      <Card.Body className="px-2">
         <div className="d-flex flex-row justify-content-between">
           <Card.Title className="card-product-title" as="h4">
             <Link href={`/products/[productId]`} as={`/products/${product.id}`}>

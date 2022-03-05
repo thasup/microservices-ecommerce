@@ -58,8 +58,8 @@ footer {
 .card-product-title {
   text-decoration: none;
   color: black;
-  font-weight: bold;
-  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  font-family: "Open Sans", sans-serif;
 }
 
 .card-product-title a {
@@ -68,7 +68,7 @@ footer {
 }
 
 .card-product-price {
-  font-family: serif;
+  font-family: "Open Sans", sans-serif;
   font-weight: 400;
 }
 
