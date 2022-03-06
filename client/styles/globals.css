@@ -75,3 +75,12 @@ footer {
 .card-product-reviews {
   font-family: "Open Sans";
 }
+
+/* Product Page */
+.coupon-text {
+  width: 70%;
+}
+
+.coupon-button {
+  width: 30%;
+}

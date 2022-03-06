@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, ListGroup, Card, Button, Form } from "react-bootstrap";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -11,29 +11,64 @@ import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
 
 const productDetail = ({ products, currentUser }) => {
-  const router = useRouter();
-  const { productId } = router.query;
+  const { productId } = useRouter().query;
 
   const [qty, setQty] = useState(1);
+  const [discount, setDiscount] = useState("");
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [couponSuccess, setCouponSuccess] = useState(false);
+  const [couponError, setCouponError] = useState(false);
+
+  // const { doRequest, errors } = useRequest({
+  //   url: "/api/orders",
+  //   method: "post",
+  //   body: {
+  //     productId,
+  //   },
+  //   onSuccess: (order) => console.log(order),
+  //   // Router.push("/"),
+  // });
 
   const { doRequest, errors } = useRequest({
-    url: "/api/orders",
+    url: `/api/orders/${productId}/cart`,
     method: "post",
     body: {
-      productId,
+      qty,
+      discount,
     },
-    onSuccess: (order) => console.log(order),
-    // Router.push("/"),
+    onSuccess: () => Router.push("/cart"),
   });
+
+  // useEffect(
+  //   (e) => {
+  //     applyCoupon(e);
+  //   },
+  //   [couponSuccess, couponError]
+  // );
 
   const product = products.find((product) => product.id === productId);
 
-  const addToCartHandler = () => {
+  const applyCoupon = (e) => {
+    e.preventDefault();
+
+    if (
+      discount === "FREE" ||
+      discount === "GRANDSALE" ||
+      discount === "HOTDEAL"
+    ) {
+      setCouponSuccess(true);
+      setCouponError(false);
+    } else {
+      setCouponSuccess(false);
+      setCouponError(true);
+    }
+  };
+
+  const addToCartHandler = (e) => {
+    e.preventDefault();
     doRequest();
-    // router.push(`/cart/${product.id}?qty=${qty}`);
   };
 
   const submitReviewHandler = (e) => {
@@ -67,6 +102,7 @@ const productDetail = ({ products, currentUser }) => {
                 src={product.image}
                 width={400}
                 height={400}
+                priority="true"
                 layout="responsive"
                 objectFit="contain"
                 alt={product.title}
@@ -114,27 +150,62 @@ const productDetail = ({ products, currentUser }) => {
                   </ListGroup.Item>
 
                   {product.countInStock > 0 && (
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>Qty</Col>
-                        <Col>
-                          <Form.Control
-                            className="form-select"
-                            as="select"
-                            value={qty}
-                            onChange={(e) => setQty(e.target.value)}
-                          >
-                            {[...Array(product.countInStock).keys()].map(
-                              (obj) => (
-                                <option key={obj + 1} value={obj + 1}>
-                                  {obj + 1}
-                                </option>
-                              )
-                            )}
-                          </Form.Control>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
+                    <>
+                      <ListGroup.Item>
+                        <Row>
+                          <Col>Qty:</Col>
+                          <Col>
+                            <Form.Control
+                              className="form-select"
+                              as="select"
+                              value={qty}
+                              onChange={(e) => setQty(e.target.value)}
+                            >
+                              {[...Array(product.countInStock).keys()].map(
+                                (obj) => (
+                                  <option key={obj + 1} value={obj + 1}>
+                                    {obj + 1}
+                                  </option>
+                                )
+                              )}
+                            </Form.Control>
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
+
+                      <ListGroup.Item>
+                        <Row className="px-3">
+                          {couponError && (
+                            <div className="px-0 py-2" style={{ color: "red" }}>
+                              {
+                                "The coupon code entered is not valid for this product"
+                              }
+                            </div>
+                          )}
+                          {couponSuccess ? (
+                            <div className="px-0 py-2">{`${discount} is applied`}</div>
+                          ) : (
+                            <>
+                              <Form.Control
+                                className="coupon-text text-uppercase"
+                                type="text"
+                                value={discount}
+                                onChange={(e) => setDiscount(e.target.value)}
+                              ></Form.Control>
+                              <Button
+                                className="coupon-button"
+                                onClick={applyCoupon}
+                                type="button"
+                                variant="dark"
+                                placeholder="Enter Coupon"
+                              >
+                                Apply
+                              </Button>
+                            </>
+                          )}
+                        </Row>
+                      </ListGroup.Item>
+                    </>
                   )}
 
                   {errors}
