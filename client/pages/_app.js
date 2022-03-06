@@ -35,7 +35,7 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
         />
       </Head>
       <Header currentUser={currentUser} />
-      <main className="pt-3 pb-5">
+      <main className="pb-5">
         <Container fluid className="px-0">
           <Component currentUser={currentUser} {...pageProps} />
         </Container>

@@ -49,6 +49,7 @@ const productDetail = ({ products, currentUser }) => {
   // );
 
   const product = products.find((product) => product.id === productId);
+  console.log(product);
 
   const applyCoupon = (e) => {
     e.preventDefault();
@@ -83,8 +84,19 @@ const productDetail = ({ products, currentUser }) => {
   };
 
   const myLoader = ({ src, width, quality }) => {
-    return `https://www.dropbox.com/${src}?raw=1&w=${width}&q=${quality || 75}`;
+    return `https://www.dropbox.com/s/${src}?raw=1&w=${width}&q=${
+      quality || 75
+    }`;
   };
+
+  console.log(Object.values(product.images));
+
+  let allImages = [];
+  for (const img in product.images) {
+    if (product.images[img] !== "" && typeof product.images[img] === "string") {
+      allImages.push(product.images[img]);
+    }
+  }
 
   return (
     <div className="px-5">
@@ -96,17 +108,36 @@ const productDetail = ({ products, currentUser }) => {
       ) : (
         <>
           <Row>
-            <Col md={6} className="mb-3">
-              <Image
-                loader={myLoader}
-                src={product.image}
-                width={400}
-                height={400}
-                priority="true"
-                layout="responsive"
-                objectFit="contain"
-                alt={product.title}
-              />
+            <Col md={1} className="mb-3">
+              {allImages.map((img, index) => (
+                <div className="product-img-side" key={index}>
+                  <Image
+                    loader={myLoader}
+                    src={img}
+                    // width={400}
+                    // height={400}
+                    // priority="true"
+                    layout="fill"
+                    objectFit="cover"
+                    alt={`product_image_${index}`}
+                  />
+                </div>
+              ))}
+            </Col>
+
+            <Col md={5} className="mb-3">
+              <div className="product-img-main">
+                <Image
+                  loader={myLoader}
+                  src={product.images.image1}
+                  // width={400}
+                  // height={400}
+                  // priority="true"
+                  layout="fill"
+                  objectFit="cover"
+                  alt={product.title}
+                />
+              </div>
             </Col>
 
             <Col md={3}>

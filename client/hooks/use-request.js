@@ -16,16 +16,17 @@ export default ({ url, method, body, onSuccess }) => {
 
       return response.data;
     } catch (err) {
-      setErrors(
-        <Alert variant="danger" className="mt-3 mb-0">
-          <Alert.Heading>Ooops....</Alert.Heading>
-          <ListGroup className="my-0">
-            {err.response.data.errors.map((err) => (
-              <ListGroup.Item key={err.message}>{err.message}</ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Alert>
-      );
+      console.log(err.response.data);
+      // setErrors(
+      //   <Alert variant="danger" className="mt-3 mb-0">
+      //     <Alert.Heading>Ooops....</Alert.Heading>
+      //     <ListGroup className="my-0">
+      //       {err.response.data.errors.map((err) => (
+      //         <ListGroup.Item key={err.message}>{err.message}</ListGroup.Item>
+      //       ))}
+      //     </ListGroup>
+      //   </Alert>
+      // );
     }
   };
 

@@ -7,7 +7,7 @@ import Image from "next/image";
 
 const Product = ({ product }) => {
   const myLoader = ({ src, width, quality }) => {
-    return `https://www.dropbox.com/${src}?raw=1&w=${width}&q=${quality || 75}`;
+    return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 75}`;
   };
 
   return (
@@ -17,20 +17,20 @@ const Product = ({ product }) => {
           <Card.Body className="product-img__cover">
             <Image
               loader={myLoader}
-              src={product.image}
-              width={475}
-              height={475}
+              src={product.images.image1 || product.image}
               layout="fill"
               objectFit="cover"
               alt={`${product.title} image 1`}
             />
           </Card.Body>
+
           <Card.Body className="product-img__hover">
             <Image
               loader={myLoader}
-              src={"s/4ojq7yz8ksrpln7/1050f24bf8dcd22c28fd9f15274765ce.jpg"}
-              width={475}
-              height={475}
+              src={
+                product.images.image2 ||
+                "4ojq7yz8ksrpln7/1050f24bf8dcd22c28fd9f15274765ce.jpg"
+              }
               layout="fill"
               objectFit="cover"
               alt={`${product.title} image 2`}
