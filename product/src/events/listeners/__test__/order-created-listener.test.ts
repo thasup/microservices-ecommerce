@@ -14,7 +14,9 @@ const setup = async () => {
     title: "Sample Dress",
     price: 1990,
     userId: new mongoose.Types.ObjectId().toHexString(),
-    image: "./asset/sample.jpg",
+    images: {
+      image1: "./asset/sample.jpg",
+    },
     colors: "White,Black",
     sizes: "S,M,L",
     brand: "Uniqlo",
@@ -42,7 +44,7 @@ const setup = async () => {
       {
         title: product.title,
         qty: 1,
-        image: product.image,
+        image: product.images.image1,
         price: product.price,
         discount: 1,
         productId: product.id,

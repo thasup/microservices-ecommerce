@@ -9,7 +9,7 @@ const createProduct = () => {
       title: "sample",
       price: 20,
       userId: "6214a0227e0d2db80ddb0860",
-      image: "./asset/sample.jpg",
+      image1: "./asset/sample.jpg",
       colors: "White,Black",
       sizes: "S,M,L",
       brand: "Uniqlo",

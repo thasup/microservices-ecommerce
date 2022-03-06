@@ -6,7 +6,9 @@ it("implements optimistic concurrency control", async () => {
     title: "Sample Dress",
     price: 1990,
     userId: "6214a0227e0d2db80ddb0860",
-    image: "./asset/sample.jpg",
+    images: {
+      image1: "./asset/sample.jpg",
+    },
     colors: "White,Black",
     sizes: "S,M,L",
     brand: "Uniqlo",
@@ -48,7 +50,9 @@ it("increments the version number on multiple saves", async () => {
     title: "Sample Dress",
     price: 1990,
     userId: "6214a0227e0d2db80ddb0860",
-    image: "./asset/sample.jpg",
+    images: {
+      image1: "./asset/sample.jpg",
+    },
     colors: "White,Black",
     sizes: "S,M,L",
     brand: "Uniqlo",

@@ -8,12 +8,14 @@ import FormContainer from "../../components/FormContainer";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import useRequest from "../../hooks/use-request";
-import useAuthorized from "../../hooks/use-authorization";
 
 const create = ({ currentUser }) => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
+  const [image1, setImage1] = useState("");
+  const [image2, setImage2] = useState("");
+  const [image3, setImage3] = useState("");
+  const [image4, setImage4] = useState("");
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const [brand, setBrand] = useState("");
@@ -23,18 +25,16 @@ const create = ({ currentUser }) => {
   const [countInStock, setCountInStock] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  // const { doAuthorized } = useAuthorized({
-  //   currentUser: currentUser,
-  //   onSuccess: () => Router.push("/"),
-  // });
-
   const { doRequest, errors } = useRequest({
     url: "/api/products",
     method: "post",
     body: {
       title,
       price,
-      image,
+      image1,
+      image2,
+      image3,
+      image4,
       color,
       size,
       brand,
@@ -96,6 +96,48 @@ const create = ({ currentUser }) => {
                 fill="responsive"
                 objectFit="contain"
               />
+
+              <>
+                <Form.Group controlId="image" className="my-3">
+                  <Form.Label>Image 1</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter image 1 URL"
+                    value={image1}
+                    onChange={(e) => setImage1(e.target.value)}
+                  ></Form.Control>
+                </Form.Group>
+
+                <Form.Group controlId="image" className="my-3">
+                  <Form.Label>Image 2</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter image 2 URL"
+                    value={image2}
+                    onChange={(e) => setImage2(e.target.value)}
+                  ></Form.Control>
+                </Form.Group>
+
+                <Form.Group controlId="image" className="my-3">
+                  <Form.Label>Image 3</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter image 3 URL"
+                    value={image3}
+                    onChange={(e) => setImage3(e.target.value)}
+                  ></Form.Control>
+                </Form.Group>
+
+                <Form.Group controlId="image" className="my-3">
+                  <Form.Label>Image 4</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter image 4 URL"
+                    value={image4}
+                    onChange={(e) => setImage4(e.target.value)}
+                  ></Form.Control>
+                </Form.Group>
+              </>
             </Col>
 
             <Col xs={12} xl={6}>
@@ -118,16 +160,6 @@ const create = ({ currentUser }) => {
                     placeholder="Enter price"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
-                  ></Form.Control>
-                </Form.Group>
-
-                <Form.Group controlId="image" className="my-3">
-                  <Form.Label>Image</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter image URL"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
 

@@ -30,7 +30,10 @@ router.patch(
     const {
       title,
       price,
-      image,
+      image1,
+      image2,
+      image3,
+      image4,
       colors,
       sizes,
       brand,
@@ -55,7 +58,10 @@ router.patch(
 
     product.title = title ?? product.title;
     product.price = price ?? product.price;
-    product.image = image ?? product.image;
+    product.images.image1 = image1 ?? product.images.image1;
+    product.images.image2 = image2 ?? product.images.image2;
+    product.images.image3 = image3 ?? product.images.image3;
+    product.images.image4 = image4 ?? product.images.image4;
     product.colors = colors ?? product.colors;
     product.sizes = sizes ?? product.sizes;
     product.brand = brand ?? product.brand;
@@ -67,18 +73,14 @@ router.patch(
     product.rating = rating ?? product.rating;
     product.countInStock = countInStock ?? product.countInStock;
 
-    console.log("before", product.version);
-
     await product.save();
-
-    console.log("after", product.version);
 
     new ProductUpdatedPublisher(natsWrapper.client).publish({
       id: product.id,
       title: title,
       price: price,
       userId: product.userId,
-      image: image,
+      image: product.images.image1,
       colors: colors,
       sizes: sizes,
       brand: brand,

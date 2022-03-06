@@ -2,13 +2,20 @@ import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { ReviewDoc, reviewSchema } from "./review";
 
+interface ImageInterface {
+  image1: string;
+  image2?: string;
+  image3?: string;
+  image4?: string;
+}
+
 // An interface that describes the properties
 // that are requried to create a new Product
 interface ProductAttrs {
   title: string;
   price: number;
   userId: string;
-  image: string;
+  images: ImageInterface;
   colors?: string;
   sizes?: string;
   brand: string;
@@ -33,7 +40,7 @@ interface ProductDoc extends mongoose.Document {
   title: string;
   price: number;
   userId: string;
-  image: string;
+  images: ImageInterface;
   colors?: string;
   sizes?: string;
   brand?: string;
@@ -65,9 +72,11 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
+    images: {
+      image1: { type: String, required: true },
+      image2: { type: String },
+      image3: { type: String },
+      image4: { type: String },
     },
     colors: { type: String },
     sizes: { type: String },
