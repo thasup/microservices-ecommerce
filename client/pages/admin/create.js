@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Carousel, Col, Container, Form, Row } from "react-bootstrap";
 import Link from "next/link";
 import Image from "next/image";
 import Router from "next/router";
@@ -24,6 +24,7 @@ const create = ({ currentUser }) => {
   const [description, setDescription] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [index, setIndex] = useState(0);
 
   const { doRequest, errors } = useRequest({
     url: "/api/products",
@@ -68,11 +69,17 @@ const create = ({ currentUser }) => {
   // };
 
   const myLoader = ({ src, width, quality }) => {
-    return `https://www.dropbox.com/${src}?raw=1&w=${width}&q=${quality || 75}`;
+    return `https://www.dropbox.com/s/${src}?raw=1&w=${width}&q=${
+      quality || 75
+    }`;
+  };
+
+  const handleSelect = (selectedIndex, e) => {
+    setIndex(selectedIndex);
   };
 
   return (
-    <div className="px-5">
+    <div className="px-5 create-product-page">
       <Link href="/admin/product" passHref>
         <a type="button" className="btn btn-outline-dark my-3">
           Back
@@ -87,63 +94,119 @@ const create = ({ currentUser }) => {
         <Container className="mt-5">
           <Row className="justify-content-md-center">
             <Col xs={12} xl={6}>
-              <Image
-                loader={myLoader}
-                src={image || "s/1urt48smfa8pzxx/airpods.jpg"}
-                alt="Sample Product"
-                width={600}
-                height={600}
-                fill="responsive"
-                objectFit="contain"
-              />
+              <Carousel
+                variant="dark"
+                activeIndex={index}
+                onSelect={handleSelect}
+              >
+                <Carousel.Item>
+                  <Image
+                    loader={myLoader}
+                    src={
+                      image1 ||
+                      "sf6t25da3113hl2/de2ea552-4ae1-42e6-a593-5cb80bd40056.jpg"
+                    }
+                    alt="Sample Product image 1"
+                    // width={600}
+                    // height={600}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </Carousel.Item>
 
-              <>
-                <Form.Group controlId="image" className="my-3">
-                  <Form.Label>Image 1</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter image 1 URL"
-                    value={image1}
-                    onChange={(e) => setImage1(e.target.value)}
-                  ></Form.Control>
-                </Form.Group>
+                <Carousel.Item>
+                  <Image
+                    loader={myLoader}
+                    src={
+                      image2 ||
+                      "sf6t25da3113hl2/de2ea552-4ae1-42e6-a593-5cb80bd40056.jpg"
+                    }
+                    alt="Sample Product image 2"
+                    // width={600}
+                    // height={600}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </Carousel.Item>
 
-                <Form.Group controlId="image" className="my-3">
-                  <Form.Label>Image 2</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter image 2 URL"
-                    value={image2}
-                    onChange={(e) => setImage2(e.target.value)}
-                  ></Form.Control>
-                </Form.Group>
+                <Carousel.Item>
+                  <Image
+                    loader={myLoader}
+                    src={
+                      image3 ||
+                      "sf6t25da3113hl2/de2ea552-4ae1-42e6-a593-5cb80bd40056.jpg"
+                    }
+                    alt="Sample Product image 3"
+                    // width={600}
+                    // height={600}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </Carousel.Item>
 
-                <Form.Group controlId="image" className="my-3">
-                  <Form.Label>Image 3</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter image 3 URL"
-                    value={image3}
-                    onChange={(e) => setImage3(e.target.value)}
-                  ></Form.Control>
-                </Form.Group>
-
-                <Form.Group controlId="image" className="my-3">
-                  <Form.Label>Image 4</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter image 4 URL"
-                    value={image4}
-                    onChange={(e) => setImage4(e.target.value)}
-                  ></Form.Control>
-                </Form.Group>
-              </>
+                <Carousel.Item>
+                  <Image
+                    loader={myLoader}
+                    src={
+                      image4 ||
+                      "sf6t25da3113hl2/de2ea552-4ae1-42e6-a593-5cb80bd40056.jpg"
+                    }
+                    alt="Sample Product image 4"
+                    // width={600}
+                    // height={600}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </Carousel.Item>
+              </Carousel>
             </Col>
 
-            <Col xs={12} xl={6}>
+            <Col xs={12} xl={3}>
+              <Form.Group controlId="image" className="mb-3">
+                <Form.Label>Image 1</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter image 1 URL"
+                  value={image1}
+                  onChange={(e) => setImage1(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+
+              <Form.Group controlId="image" className="mb-3">
+                <Form.Label>Image 2</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter image 2 URL"
+                  value={image2}
+                  onChange={(e) => setImage2(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+
+              <Form.Group controlId="image" className="mb-3">
+                <Form.Label>Image 3</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter image 3 URL"
+                  value={image3}
+                  onChange={(e) => setImage3(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+
+              <Form.Group controlId="image" className="mb-3">
+                <Form.Label>Image 4</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter image 4 URL"
+                  value={image4}
+                  onChange={(e) => setImage4(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+            </Col>
+
+            <Col xs={12} xl={3}>
               {errors}
               <Form onSubmit={submitHandler}>
-                <Form.Group controlId="name" className="my-3">
+                <Form.Group controlId="name" className="mb-3">
                   <Form.Label>Title</Form.Label>
                   <Form.Control
                     type="text"
@@ -153,7 +216,7 @@ const create = ({ currentUser }) => {
                   ></Form.Control>
                 </Form.Group>
 
-                <Form.Group controlId="price" className="my-3">
+                <Form.Group controlId="price" className="mb-3">
                   <Form.Label>Price</Form.Label>
                   <Form.Control
                     type="number"
@@ -163,7 +226,7 @@ const create = ({ currentUser }) => {
                   ></Form.Control>
                 </Form.Group>
 
-                <Form.Group controlId="color" className="my-3">
+                <Form.Group controlId="color" className="mb-3">
                   <Form.Label>Color</Form.Label>
                   <Form.Control
                     type="text"
@@ -173,7 +236,7 @@ const create = ({ currentUser }) => {
                   ></Form.Control>
                 </Form.Group>
 
-                <Form.Group controlId="size" className="my-3">
+                <Form.Group controlId="size" className="mb-3">
                   <Form.Label>Size</Form.Label>
                   <Form.Control
                     type="text"
@@ -183,7 +246,7 @@ const create = ({ currentUser }) => {
                   ></Form.Control>
                 </Form.Group>
 
-                <Form.Group controlId="brand" className="my-3">
+                <Form.Group controlId="brand" className="mb-3">
                   <Form.Label>Brand</Form.Label>
                   <Form.Control
                     type="text"
@@ -193,7 +256,7 @@ const create = ({ currentUser }) => {
                   ></Form.Control>
                 </Form.Group>
 
-                <Form.Group controlId="category" className="my-3">
+                <Form.Group controlId="category" className="mb-3">
                   <Form.Label>Category</Form.Label>
                   <Form.Control
                     as="select"
@@ -206,11 +269,11 @@ const create = ({ currentUser }) => {
                     <option value="Bottom">Bottom</option>
                     <option value="Dress">Dress</option>
                     <option value="Set">Set</option>
-                    <option value="Outerwear">Outerwear</option>
+                    <option value="Coat">Coat</option>
                   </Form.Control>
                 </Form.Group>
 
-                <Form.Group controlId="material" className="my-3">
+                <Form.Group controlId="material" className="mb-3">
                   <Form.Label>Material</Form.Label>
                   <Form.Control
                     type="text"
@@ -220,7 +283,7 @@ const create = ({ currentUser }) => {
                   ></Form.Control>
                 </Form.Group>
 
-                <Form.Group controlId="description" className="my-3">
+                <Form.Group controlId="description" className="mb-3">
                   <Form.Label>Description</Form.Label>
                   <Form.Control
                     as="textarea"
@@ -231,7 +294,7 @@ const create = ({ currentUser }) => {
                   ></Form.Control>
                 </Form.Group>
 
-                <Form.Group controlId="countInStock" className="my-3">
+                <Form.Group controlId="countInStock" className="mb-3">
                   <Form.Label>Count In Stock</Form.Label>
                   <Form.Control
                     type="number"

@@ -6,7 +6,6 @@ const Header = ({ currentUser }) => {
   return (
     <header>
       <Navbar
-        bg="light"
         variant="light"
         expand="lg"
         // fixed="top"
@@ -21,7 +20,7 @@ const Header = ({ currentUser }) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Link href="#" passHref>
+              <Link href="/cart" passHref>
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i> Cart
                 </Nav.Link>
