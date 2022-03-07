@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-const NextImage = ({ src, alt, quality }) => {
+const NextImage = ({ src, alt, priority, quality }) => {
   const myLoader = ({ src, quality }) => {
     return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 75}`;
   };
@@ -12,6 +12,7 @@ const NextImage = ({ src, alt, quality }) => {
       src={src}
       layout="fill"
       objectFit="cover"
+      priority={priority || false}
       alt={alt}
     />
   );

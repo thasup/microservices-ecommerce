@@ -17,9 +17,12 @@ const productDetail = ({ products, currentUser }) => {
   const [discount, setDiscount] = useState("");
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [couponSuccess, setCouponSuccess] = useState(false);
   const [couponError, setCouponError] = useState(false);
+  const [initialSetImage, setInitialSetImage] = useState(false);
+  const [addToCart, setAddToCart] = useState(false);
 
   // const { doRequest, errors } = useRequest({
   //   url: "/api/orders",
@@ -42,15 +45,67 @@ const productDetail = ({ products, currentUser }) => {
   });
 
   useEffect(() => {
-    const mainImage = document.getElementsByClassName("product-main-img");
-    mainImage[0].classList.add("toggle-main-img");
-  }, []);
+    if (initialSetImage === false) {
+      const mainImage = document.getElementsByClassName("product-main-img");
+      mainImage[0].classList.add("toggle-main-img");
+      setInitialSetImage(true);
+    }
+
+    const item = {
+      userId: currentUser.id,
+      title: product.title,
+      qty: Number(qty),
+      image: product.images.image1,
+      price: product.price,
+      countInStock: product.countInStock,
+      discount: discount || 1,
+      productId: productId,
+    };
+    console.log("item", item);
+
+    const cartItems = localStorage.getItem("cartItems")
+      ? JSON.parse(localStorage.getItem("cartItems"))
+      : [];
+
+    if (addToCart) {
+      console.log("initial storage cartItems:", cartItems);
+
+      const existItem = cartItems.find((x) => x.productId === item.productId);
+
+      if (existItem) {
+        cartItems = cartItems.map((x) =>
+          x.productId === existItem.productId ? item : x
+        );
+      } else {
+        cartItems.push(item);
+        console.log("push!!", cartItems);
+      }
+
+      console.log("final storage cartItems:", cartItems);
+
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      setAddToCart(false);
+    }
+  }, [addToCart]);
 
   const product = products.find((product) => product.id === productId);
-  console.log(product);
 
   const applyCoupon = (e) => {
     e.preventDefault();
+
+    switch (discount) {
+      case "FREE":
+        setDiscount(0);
+        break;
+      case "GRANDSALE":
+        setDiscount(0.5);
+        break;
+      case "HOTDEAL":
+        setDiscount(0.75);
+        break;
+      default:
+        setDiscount(1);
+    }
 
     if (
       discount === "FREE" ||
@@ -65,9 +120,16 @@ const productDetail = ({ products, currentUser }) => {
     }
   };
 
+  // const eveluateCoupon = (discount) => {
+  //   // Evaluate discount factor
+
+  //   return discountFactor;
+  // };
+
   const addToCartHandler = (e) => {
     e.preventDefault();
-    doRequest();
+    setAddToCart(true);
+    // doRequest();
   };
 
   const submitReviewHandler = (e) => {
@@ -126,7 +188,12 @@ const productDetail = ({ products, currentUser }) => {
                   key={index}
                   onClick={imageHandler}
                 >
-                  <NextImage src={img} alt={`product_image_${index}`} />
+                  <NextImage
+                    src={img}
+                    alt={`product_image_${index}`}
+                    priority={true}
+                    quality={50}
+                  />
                 </div>
               ))}
             </Col>
@@ -137,6 +204,7 @@ const productDetail = ({ products, currentUser }) => {
                   <NextImage
                     src={img}
                     alt={`product_image_${index}`}
+                    priority={true}
                     quality={100}
                   />
                 </div>
