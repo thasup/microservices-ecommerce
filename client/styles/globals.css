@@ -128,3 +128,9 @@ footer {
   height: 100%;
   padding-top: 130%;
 }
+
+/* Cart Page */
+.cart-img {
+  position: relative;
+  aspect-ratio: 6/9;
+}
