@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, ListGroup, Card, Button, Form } from "react-bootstrap";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
-import Image from "next/image";
 
 import Loader from "../../components/Loader";
 import Rating from "../../components/Rating";
 import Message from "../../components/Message";
 import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
+import NextImage from "../../components/NextImage";
 
 const productDetail = ({ products, currentUser }) => {
   const { productId } = useRouter().query;
@@ -41,12 +41,10 @@ const productDetail = ({ products, currentUser }) => {
     onSuccess: () => Router.push("/cart"),
   });
 
-  // useEffect(
-  //   (e) => {
-  //     applyCoupon(e);
-  //   },
-  //   [couponSuccess, couponError]
-  // );
+  useEffect(() => {
+    const mainImage = document.getElementsByClassName("product-main-img");
+    mainImage[0].classList.add("toggle-main-img");
+  }, []);
 
   const product = products.find((product) => product.id === productId);
   console.log(product);
@@ -83,20 +81,32 @@ const productDetail = ({ products, currentUser }) => {
     }
   };
 
-  const myLoader = ({ src, width, quality }) => {
-    return `https://www.dropbox.com/s/${src}?raw=1&w=${width}&q=${
-      quality || 75
-    }`;
-  };
-
-  console.log(Object.values(product.images));
-
   let allImages = [];
   for (const img in product.images) {
     if (product.images[img] !== "" && typeof product.images[img] === "string") {
       allImages.push(product.images[img]);
     }
   }
+
+  const imageHandler = (e) => {
+    e.preventDefault();
+    const mainImage = document.getElementsByClassName("product-main-img");
+    const sideImage = document.getElementsByClassName("product-side-img");
+
+    for (let i = 0; i < mainImage.length; i++) {
+      mainImage[i].classList.remove("toggle-main-img");
+    }
+
+    const currentId = e.target.parentElement.parentElement.id.slice(-1);
+
+    mainImage[currentId].classList.add("toggle-main-img");
+
+    for (let i = 0; i < sideImage.length; i++) {
+      sideImage[i].classList.remove("toggle-side-img");
+    }
+
+    e.target.parentElement.parentElement.classList.add("toggle-side-img");
+  };
 
   return (
     <div className="px-5">
@@ -110,34 +120,27 @@ const productDetail = ({ products, currentUser }) => {
           <Row>
             <Col md={1} className="mb-3">
               {allImages.map((img, index) => (
-                <div className="product-img-side" key={index}>
-                  <Image
-                    loader={myLoader}
-                    src={img}
-                    // width={400}
-                    // height={400}
-                    // priority="true"
-                    layout="fill"
-                    objectFit="cover"
-                    alt={`product_image_${index}`}
-                  />
+                <div
+                  className="product-side-img"
+                  id={`side-img-${index}`}
+                  key={index}
+                  onClick={imageHandler}
+                >
+                  <NextImage src={img} alt={`product_image_${index}`} />
                 </div>
               ))}
             </Col>
 
-            <Col md={5} className="mb-3">
-              <div className="product-img-main">
-                <Image
-                  loader={myLoader}
-                  src={product.images.image1}
-                  // width={400}
-                  // height={400}
-                  // priority="true"
-                  layout="fill"
-                  objectFit="cover"
-                  alt={product.title}
-                />
-              </div>
+            <Col md={5} className="mb-3 position-relative">
+              {allImages.map((img, index) => (
+                <div className="product-main-img" key={index}>
+                  <NextImage
+                    src={img}
+                    alt={`product_image_${index}`}
+                    quality={100}
+                  />
+                </div>
+              ))}
             </Col>
 
             <Col md={3}>
