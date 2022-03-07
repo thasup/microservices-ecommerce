@@ -22,7 +22,7 @@ router.patch(
   async (req: Request, res: Response) => {
     const { orderId } = req.params;
 
-    const order = await Order.findById(orderId).populate("product");
+    const order = await Order.findById(orderId);
 
     if (!order) {
       throw new NotFoundError();

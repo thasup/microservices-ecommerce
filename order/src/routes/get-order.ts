@@ -17,7 +17,7 @@ router.get(
   [param("orderId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
   validateRequest,
   async (req: Request, res: Response) => {
-    const order = await Order.findById(req.params.orderId).populate("product");
+    const order = await Order.findById(req.params.orderId);
 
     if (!order) {
       throw new NotFoundError();

@@ -12,6 +12,7 @@ interface ProductAttrs {
   colors?: string;
   sizes?: string;
   countInStock: number;
+  orderId?: string;
 }
 
 // An interface that describes the properties
@@ -34,6 +35,7 @@ export interface ProductDoc extends mongoose.Document {
   colors?: string;
   sizes?: string;
   countInStock: number;
+  orderId?: string;
   version: number;
   createdAt: string;
   updatedAt: string;
@@ -61,6 +63,9 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
       type: Number,
       required: true,
       default: 1,
+    },
+    orderId: {
+      type: String,
     },
   },
   {
@@ -98,6 +103,7 @@ productSchema.statics.build = (attrs: ProductAttrs) => {
     colors: attrs.colors,
     sizes: attrs.sizes,
     countInStock: attrs.countInStock,
+    orderId: attrs.orderId,
   });
 };
 

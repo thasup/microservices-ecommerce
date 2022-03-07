@@ -40,6 +40,7 @@ const setup = async () => {
     numReviews: 0,
     rating: 0,
     countInStock: 1,
+    orderId: new mongoose.Types.ObjectId().toHexString(),
   };
 
   // Create a fake msg object
@@ -62,6 +63,7 @@ it("finds, updates, and saves a product", async () => {
   expect(updatedProduct!.title).toEqual(data.title);
   expect(updatedProduct!.price).toEqual(data.price);
   expect(updatedProduct!.version).toEqual(data.version);
+  expect(updatedProduct!.orderId).toEqual(data.orderId);
 });
 
 it("acks the message", async () => {

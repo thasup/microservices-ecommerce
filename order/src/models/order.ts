@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "@thasup-dev/common";
-import { CartDoc, cartSchema } from "./cart";
+import { CartAttrs } from "./cart";
 
 interface shippingAddressAttrs {
   address: string;
@@ -16,7 +16,7 @@ interface OrderAttrs {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  cart?: Array<CartDoc>;
+  cart?: Array<CartAttrs>;
   shippingAddress?: shippingAddressAttrs;
   paymentMethod: string;
   itemsPrice: number;
@@ -41,7 +41,7 @@ interface OrderDoc extends mongoose.Document {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  cart?: Array<CartDoc>;
+  cart?: Array<CartAttrs>;
   shippingAddress?: shippingAddressAttrs;
   paymentMethod: string;
   itemsPrice: number;
@@ -73,7 +73,18 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Date,
       required: true,
     },
-    cart: [cartSchema],
+    cart: [
+      {
+        userId: { type: String, required: true },
+        title: { type: String, required: true },
+        qty: { type: Number, required: true },
+        image: { type: String, required: true },
+        price: { type: Number, required: true },
+        countInStock: { type: Number, required: true },
+        discount: { type: Number, default: 1 },
+        productId: { type: String, required: true },
+      },
+    ],
     shippingAddress: {
       address: { type: String },
       city: { type: String },

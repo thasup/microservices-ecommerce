@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
-import { ProductDoc } from "./product";
 
 // An interface that describes the properties
 // that are requried to create a new Cart
-interface CartAttrs {
+export interface CartAttrs {
   userId: string;
   title: string;
   qty: number;
   image: string;
   price: number;
+  countInStock: number;
   discount: number;
-  product: ProductDoc;
+  productId: string;
 }
 
 // An interface that describes the properties
@@ -27,8 +27,9 @@ export interface CartDoc extends mongoose.Document {
   qty: number;
   image: string;
   price: number;
+  countInStock: number;
   discount: number;
-  product: ProductDoc;
+  productId: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -40,11 +41,9 @@ export const cartSchema = new mongoose.Schema<CartDoc, CartModel>(
     qty: { type: Number, required: true },
     image: { type: String, required: true },
     price: { type: Number, required: true },
+    countInStock: { type: Number, required: true },
     discount: { type: Number, default: 1 },
-    product: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
-    },
+    productId: { type: String, required: true },
   },
   {
     toJSON: {
