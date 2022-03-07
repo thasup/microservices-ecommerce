@@ -5,7 +5,6 @@ import {
   requireAuth,
   validateRequest,
 } from "@thasup-dev/common";
-import mongoose from "mongoose";
 
 import { Product } from "../models/product";
 

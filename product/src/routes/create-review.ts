@@ -2,15 +2,13 @@ import express, { Request, Response } from "express";
 import { body, param } from "express-validator";
 import {
   BadRequestError,
-  DatabaseConnectionError,
   NotFoundError,
   requireAuth,
   validateRequest,
 } from "@thasup-dev/common";
-import mongoose from "mongoose";
 
 import { Product } from "../models/product";
-import { Review, ReviewDoc } from "../models/review";
+import { Review } from "../models/review";
 
 const router = express.Router();
 

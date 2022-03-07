@@ -16,33 +16,45 @@ const productDetail = ({ products, currentUser }) => {
   const [qty, setQty] = useState(1);
   const [discount, setDiscount] = useState("");
   const [rating, setRating] = useState(0);
+  const [reviewHeader, setReviewHeader] = useState("");
   const [comment, setComment] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [discountFactor, setDiscountFactor] = useState(1);
   const [couponSuccess, setCouponSuccess] = useState(false);
   const [couponError, setCouponError] = useState(false);
   const [initialSetImage, setInitialSetImage] = useState(false);
   const [addToCart, setAddToCart] = useState(false);
 
-  // const { doRequest, errors } = useRequest({
-  //   url: "/api/orders",
-  //   method: "post",
-  //   body: {
-  //     productId,
-  //   },
-  //   onSuccess: (order) => console.log(order),
-  //   // Router.push("/"),
-  // });
-
-  const { doRequest, errors } = useRequest({
-    url: `/api/orders/${productId}/cart`,
+  const { doRequest: addReview, errors: addReviewErrors } = useRequest({
+    url: `/api/products/${productId}/reviews`,
     method: "post",
     body: {
-      qty,
-      discount,
+      title: reviewHeader,
+      rating,
+      comment,
     },
-    onSuccess: () => Router.push("/cart"),
+    onSuccess: (review) => {
+      console.log(review);
+    },
   });
+
+  const { doRequest: removeReview, errors: deleteReviewErrors } = useRequest({
+    url: `/api/products/${productId}/reviews`,
+    method: "delete",
+    body: {},
+    onSuccess: () => console.log("successfully deleted a review"),
+  });
+
+  // const { doRequest, errors } = useRequest({
+  //   url: `/api/orders/${productId}/cart`,
+  //   method: "post",
+  //   body: {
+  //     qty,
+  //     discount,
+  //   },
+  //   onSuccess: () => Router.push("/cart"),
+  // });
 
   useEffect(() => {
     if (initialSetImage === false) {
@@ -58,7 +70,7 @@ const productDetail = ({ products, currentUser }) => {
       image: product.images.image1,
       price: product.price,
       countInStock: product.countInStock,
-      discount: discount || 1,
+      discount: discountFactor,
       productId: productId,
     };
     console.log("item", item);
@@ -86,7 +98,7 @@ const productDetail = ({ products, currentUser }) => {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setAddToCart(false);
     }
-  }, [addToCart]);
+  }, [addToCart, loading]);
 
   const product = products.find((product) => product.id === productId);
 
@@ -94,23 +106,26 @@ const productDetail = ({ products, currentUser }) => {
     e.preventDefault();
 
     switch (discount) {
-      case "FREE":
-        setDiscount(0);
+      case "free":
+        console.log("free");
+        setDiscountFactor(0);
         break;
-      case "GRANDSALE":
-        setDiscount(0.5);
+      case "grandsale":
+        console.log("grandsale");
+        setDiscountFactor(0.5);
         break;
-      case "HOTDEAL":
-        setDiscount(0.75);
+      case "hotdeal":
+        console.log("hotdeal");
+        setDiscountFactor(0.75);
         break;
       default:
-        setDiscount(1);
+        setDiscountFactor(1);
     }
 
     if (
-      discount === "FREE" ||
-      discount === "GRANDSALE" ||
-      discount === "HOTDEAL"
+      discount === "free" ||
+      discount === "grandsale" ||
+      discount === "hotdeal"
     ) {
       setCouponSuccess(true);
       setCouponError(false);
@@ -118,26 +133,27 @@ const productDetail = ({ products, currentUser }) => {
       setCouponSuccess(false);
       setCouponError(true);
     }
+
+    console.log("discount!!!!!!", discountFactor);
   };
-
-  // const eveluateCoupon = (discount) => {
-  //   // Evaluate discount factor
-
-  //   return discountFactor;
-  // };
 
   const addToCartHandler = (e) => {
     e.preventDefault();
     setAddToCart(true);
-    // doRequest();
   };
 
   const submitReviewHandler = (e) => {
     e.preventDefault();
+    setLoading(true);
+    addReview();
+    setLoading(false);
   };
 
   const deleteReviewHandler = (review) => {
     if (currentUser && review.userId === currentUser.id) {
+      setLoading(true);
+      removeReview();
+      setLoading(false);
     } else {
       alert("Not allow");
     }
@@ -288,6 +304,7 @@ const productDetail = ({ products, currentUser }) => {
                             <div className="px-0 py-2">{`${discount} is applied`}</div>
                           ) : (
                             <>
+                              <Form.Label className="px-0">Coupon:</Form.Label>
                               <Form.Control
                                 className="coupon-text text-uppercase"
                                 type="text"
@@ -310,7 +327,6 @@ const productDetail = ({ products, currentUser }) => {
                     </>
                   )}
 
-                  {errors}
                   <ListGroup.Item className="d-grid">
                     <Button
                       onClick={addToCartHandler}
@@ -326,9 +342,7 @@ const productDetail = ({ products, currentUser }) => {
             </Col>
           </Row>
 
-          {/* {errorDeleteProductReview && (
-            <Message variant="danger">{errorDeleteProductReview}</Message>
-          )} */}
+          {deleteReviewErrors}
           <Row className="mt-3 pb-5">
             <Col md={6}>
               {loading && <Loader />}
@@ -341,19 +355,20 @@ const productDetail = ({ products, currentUser }) => {
                   <ListGroup.Item key={review.id}>
                     <Row className="">
                       <Col>
-                        <strong>{review.title}</strong>
+                        <strong>{review.userId}</strong>
                         <Rating value={review.rating} />
                         <p>{review.createdAt.substring(0, 10)}</p>
+                        <p>{review.title}</p>
                         <p>{review.comment}</p>
                       </Col>
                       {review.userId === currentUser?.id && (
                         <Col className="col-1 justify-content-end">
                           <button
                             type="button"
-                            class="btn-sm mx-1 btn btn-danger"
+                            className="btn-sm mx-1 btn btn-danger"
                             onClick={() => deleteReviewHandler(review)}
                           >
-                            <i class="fas fa-trash"></i>
+                            <i className="fas fa-trash"></i>
                           </button>
                         </Col>
                       )}
@@ -367,11 +382,7 @@ const productDetail = ({ products, currentUser }) => {
                     ) && (
                       <ListGroup className="mt-3">
                         <h2>Write a Review</h2>
-                        {/* {errorProductReview && (
-                          <Message variant="danger">
-                            {errorProductReview}
-                          </Message>
-                        )} */}
+                        {addReviewErrors}
                         <Form onSubmit={submitReviewHandler}>
                           <Form.Group className="my-3">
                             <Form.Label>Rating</Form.Label>
@@ -390,6 +401,17 @@ const productDetail = ({ products, currentUser }) => {
                               <option value="5">5 - Excellent</option>
                             </Form.Control>
                           </Form.Group>
+
+                          <Form.Group controlId="reviewHeader" className="my-3">
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Tell people about this product."
+                              value={reviewHeader}
+                              onChange={(e) => setReviewHeader(e.target.value)}
+                            ></Form.Control>
+                          </Form.Group>
+
                           <Form.Group controlId="comment" className="my-3">
                             <Form.Label>Comment</Form.Label>
                             <Form.Control
@@ -399,6 +421,7 @@ const productDetail = ({ products, currentUser }) => {
                               onChange={(e) => setComment(e.target.value)}
                             ></Form.Control>
                           </Form.Group>
+
                           <Button type="submit" variant="dark">
                             Submit
                           </Button>
