@@ -44,10 +44,17 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
       const countInStock = product.countInStock + items[i].qty;
 
       let orderId = product.orderId;
+
+      // If product already reserved
       if (product.countInStock === 0) {
+        // Cancelled reserved  product
         orderId = undefined;
         // Mark the product as avaliable by setting its orderId property
-        product.set({ orderId: undefined, countInStock: countInStock });
+        product.set({
+          orderId: undefined,
+          countInStock: countInStock,
+          isReserved: false,
+        });
 
         // Save the product
         await product.save();
@@ -73,6 +80,7 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
         numReviews: product.numReviews,
         rating: product.rating,
         countInStock: product.countInStock,
+        isReserved: product.isReserved,
         version: product.version,
         orderId: orderId,
       });

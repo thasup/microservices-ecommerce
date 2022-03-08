@@ -19,6 +19,7 @@ it("implements optimistic concurrency control", async () => {
     numReviews: 0,
     rating: 0,
     countInStock: 1,
+    isReserved: false,
   });
 
   // Save the product to the database
@@ -63,6 +64,7 @@ it("increments the version number on multiple saves", async () => {
     numReviews: 0,
     rating: 0,
     countInStock: 1,
+    isReserved: false,
   });
 
   await product.save();

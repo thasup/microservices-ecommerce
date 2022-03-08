@@ -26,7 +26,8 @@ const setup = async () => {
       "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
     numReviews: 0,
     rating: 0,
-    countInStock: 1,
+    countInStock: 3,
+    isReserved: false,
   });
   await product.save();
 
@@ -43,7 +44,7 @@ const setup = async () => {
     cart: [
       {
         title: product.title,
-        qty: 1,
+        qty: 3,
         image: product.images.image1,
         price: product.price,
         discount: 1,
@@ -65,7 +66,7 @@ const setup = async () => {
   return { listener, product, data, msg };
 };
 
-it("sets the userId of the product", async () => {
+it("sets the orderId of the product", async () => {
   const { listener, product, data, msg } = await setup();
 
   await listener.onMessage(data, msg);

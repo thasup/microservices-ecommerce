@@ -26,6 +26,7 @@ interface ProductAttrs {
   numReviews: number;
   rating: number;
   countInStock: number;
+  isReserved: boolean;
 }
 
 // An interface that describes the properties
@@ -51,6 +52,7 @@ interface ProductDoc extends mongoose.Document {
   numReviews: number;
   rating: number;
   countInStock: number;
+  isReserved: boolean;
   orderId?: string;
   version: number;
   createdAt: string;
@@ -109,6 +111,11 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
       type: Number,
       required: true,
       default: 1,
+    },
+    isReserved: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
     orderId: {
       type: String,

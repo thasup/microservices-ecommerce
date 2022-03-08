@@ -27,6 +27,7 @@ const setup = async () => {
     numReviews: 0,
     rating: 0,
     countInStock: 0,
+    isReserved: false,
   });
 
   const orderId = new mongoose.Types.ObjectId().toHexString();

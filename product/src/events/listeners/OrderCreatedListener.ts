@@ -37,14 +37,19 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       // Decrease the product quantity in stock
       const countInStock = product.countInStock - items[i].qty;
 
-      if (product.countInStock > 1) {
-        product.set({ countInStock: countInStock });
+      // If the product has been sold out of stock
+      if (countInStock === 0) {
+        // Mark the product as being reserved by setting its orderId property
+        product.set({
+          orderId: data.id,
+          countInStock: countInStock,
+          isReserved: true,
+        });
 
         // Save the product
         await product.save();
       } else {
-        // Mark the product as being reserved by setting its orderId property
-        product.set({ orderId: data.id, countInStock: countInStock });
+        product.set({ countInStock: countInStock });
 
         // Save the product
         await product.save();
@@ -65,6 +70,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
         numReviews: product.numReviews,
         rating: product.rating,
         countInStock: product.countInStock,
+        isReserved: product.isReserved,
         version: product.version,
         orderId: data.id,
       });

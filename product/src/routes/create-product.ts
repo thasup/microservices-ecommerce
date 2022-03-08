@@ -60,6 +60,7 @@ router.post(
       numReviews,
       rating,
       countInStock,
+      isReserved: false,
     });
 
     await product.save();
@@ -78,7 +79,9 @@ router.post(
       numReviews: product.numReviews,
       rating: product.rating,
       countInStock: product.countInStock,
+      isReserved: false,
       version: product.version,
+      orderId: undefined,
     });
 
     res.status(201).send(product);

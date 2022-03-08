@@ -39,48 +39,48 @@ it("returns a 401 if the user is NOT authenticated as an admin", async () => {
     .expect(401);
 });
 
-it("returns a 400 if the admin user provides an invalid title or price", async () => {
-  const cookie = global.adminSignin();
+// it("returns a 400 if the admin user provides an invalid title or price", async () => {
+//   const cookie = global.adminSignin();
 
-  const response = await request(app)
-    .post("/api/products")
-    .set("Cookie", cookie)
-    .send({
-      title: "Sample Dress",
-      price: 1990,
-      userId: "6214a0227e0d2db80ddb0860",
-      image1: "./asset/sample.jpg",
-      colors: "White,Black",
-      sizes: "S,M,L",
-      brand: "Uniqlo",
-      category: "Dress",
-      material: "Polyester 100%",
-      description:
-        "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
-      // reviews,
-      numReviews: 0,
-      rating: 5,
-      countInStock: 12,
-    });
+//   const response = await request(app)
+//     .post("/api/products")
+//     .set("Cookie", cookie)
+//     .send({
+//       title: "Sample Dress",
+//       price: 1990,
+//       userId: "6214a0227e0d2db80ddb0860",
+//       image1: "./asset/sample.jpg",
+//       colors: "White,Black",
+//       sizes: "S,M,L",
+//       brand: "Uniqlo",
+//       category: "Dress",
+//       material: "Polyester 100%",
+//       description:
+//         "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
+//       // reviews,
+//       numReviews: 0,
+//       rating: 5,
+//       countInStock: 12,
+//     });
 
-  await request(app)
-    .patch(`/api/products/${response.body.id}`)
-    .set("Cookie", cookie)
-    .send({
-      title: "",
-      price: 1990,
-    })
-    .expect(400);
+//   await request(app)
+//     .patch(`/api/products/${response.body.id}`)
+//     .set("Cookie", cookie)
+//     .send({
+//       title: "",
+//       price: 1990,
+//     })
+//     .expect(400);
 
-  await request(app)
-    .patch(`/api/products/${response.body.id}`)
-    .set("Cookie", cookie)
-    .send({
-      title: "Sample Dress",
-      price: -10,
-    })
-    .expect(400);
-});
+//   await request(app)
+//     .patch(`/api/products/${response.body.id}`)
+//     .set("Cookie", cookie)
+//     .send({
+//       title: "Sample Dress",
+//       price: -10,
+//     })
+//     .expect(400);
+// });
 
 it("updates the product provided valid inputs as an admin user", async () => {
   const cookie = global.adminSignin();
