@@ -26,6 +26,12 @@ build:
         manual:
           - src: "**/*.js"
             dest: .
+          - src: "**/*.css"
+            dest: .
+          - src: "**/*.jpg"
+            dest: .
+          - src: "**/*.png"
+            dest: .
     - image: us.gcr.io/microservices-task/product
       context: product
       docker:
