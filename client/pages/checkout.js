@@ -27,7 +27,7 @@ const CheckoutPage = ({ currentUser }) => {
     onSuccess: (order) => {
       console.log(order);
       setOnSuccess(true);
-      Router.push(`/order/${order.id}`);
+      Router.push(`/orders/${order.id}`);
     },
   });
 
