@@ -6,8 +6,9 @@ import Link from "next/link";
 import useRequest from "../hooks/use-request";
 import CheckoutSteps from "../components/CheckoutSteps";
 import NextImage from "../components/NextImage";
+import Message from "../components/Message";
 
-const PlaceOrderScreen = ({ currentUser }) => {
+const CheckoutPage = ({ currentUser }) => {
   const [storageReady, setStorageReady] = useState(false);
   const [cart, setCart] = useState(null);
   const [shippingAddress, setShippingAddress] = useState(null);
@@ -26,7 +27,7 @@ const PlaceOrderScreen = ({ currentUser }) => {
     onSuccess: (order) => {
       console.log(order);
       setOnSuccess(true);
-      // Router.push(`/order/${order.id}`)
+      Router.push(`/order/${order.id}`);
     },
   });
 
@@ -78,7 +79,7 @@ const PlaceOrderScreen = ({ currentUser }) => {
     ).toFixed(2);
   }
 
-  const placeOrderHandler = (e) => {
+  const checkoutHandler = (e) => {
     e.preventDefault();
     doRequest();
   };
@@ -192,7 +193,7 @@ const PlaceOrderScreen = ({ currentUser }) => {
                   type="button"
                   variant="dark"
                   disabled={cart === 0}
-                  onClick={placeOrderHandler}
+                  onClick={checkoutHandler}
                 >
                   Checkout
                 </Button>
@@ -205,4 +206,4 @@ const PlaceOrderScreen = ({ currentUser }) => {
   ) : null;
 };
 
-export default PlaceOrderScreen;
+export default CheckoutPage;

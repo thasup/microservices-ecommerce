@@ -4,7 +4,6 @@ import Product from "../components/Product";
 import styles from "../styles/Home.module.css";
 
 const Home = ({ products, currentUser }) => {
-  console.log(products);
   return (
     <>
       <Row className="mx-0">

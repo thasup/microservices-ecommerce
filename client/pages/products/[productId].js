@@ -46,16 +46,6 @@ const productDetail = ({ products, currentUser }) => {
     onSuccess: () => console.log("successfully deleted a review"),
   });
 
-  // const { doRequest, errors } = useRequest({
-  //   url: `/api/orders/${productId}/cart`,
-  //   method: "post",
-  //   body: {
-  //     qty,
-  //     discount,
-  //   },
-  //   onSuccess: () => Router.push("/cart"),
-  // });
-
   useEffect(() => {
     if (initialSetImage === false) {
       const mainImage = document.getElementsByClassName("product-main-img");

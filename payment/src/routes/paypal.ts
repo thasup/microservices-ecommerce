@@ -7,7 +7,8 @@ router.get(
   "/api/config/paypal",
   requireAuth,
   async (req: Request, res: Response) => {
-    res.status(200).send(process.env.PAYPAL_CLIENT_ID);
+    const id = process.env.PAYPAL_CLIENT_ID;
+    res.status(200).send("hello worlddd?");
   }
 );
 

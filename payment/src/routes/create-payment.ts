@@ -55,16 +55,12 @@ router.post(
       source: token,
     });
 
-    console.log("charge", charge);
-
     const payment = Payment.build({
       orderId,
       stripeId: charge.id,
     });
 
     await payment.save();
-
-    console.log("GGGG", payment);
 
     order.set({ status: OrderStatus.Completed });
     await order.save();
