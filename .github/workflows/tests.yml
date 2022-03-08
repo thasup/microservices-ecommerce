@@ -3,9 +3,9 @@ name: tests
 on:
   pull_request
   
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - run: cd user && npm install && npm run test:ci
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd user && npm install && npm run test:ci
