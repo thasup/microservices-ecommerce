@@ -4,13 +4,11 @@ import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 interface PaymentAttrs {
   orderId: string;
   stripeId: string;
-  version: number;
 }
 
 interface PaymentDoc extends mongoose.Document {
   orderId: string;
   stripeId: string;
-  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -42,9 +40,6 @@ const paymentSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-paymentSchema.set("versionKey", "version");
-paymentSchema.plugin(updateIfCurrentPlugin);
 
 paymentSchema.statics.build = (attrs: PaymentAttrs) => {
   return new Payment(attrs);

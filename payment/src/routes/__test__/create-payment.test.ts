@@ -8,6 +8,8 @@ import { Product } from "../../models/product";
 import { stripe } from "../../stripe";
 import { Payment } from "../../models/payment";
 
+jest.mock("../../stripe");
+
 it("returns a 404 when purchasing an order that does not exist", async () => {
   await request(app)
     .post("/api/payments")
@@ -30,6 +32,7 @@ it("returns a 401 when purchasing an order that doesnt belong to the user", asyn
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    isReserved: false,
   });
   await product.save();
 
@@ -74,6 +77,7 @@ it("returns a 400 when purchasing a cancelled order", async () => {
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    isReserved: false,
   });
   await product.save();
 
@@ -118,6 +122,7 @@ it("returns a 201 with valid inputs", async () => {
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    isReserved: false,
   });
   await product.save();
 
@@ -137,6 +142,7 @@ it("returns a 201 with valid inputs", async () => {
     totalPrice: itemsPrice + taxPrice,
   });
   await order.save();
+  console.log(order);
 
   await request(app)
     .post("/api/payments")
@@ -148,6 +154,8 @@ it("returns a 201 with valid inputs", async () => {
     .expect(201);
 
   const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
+
+  console.log("SHOW ME!!!", chargeOptions);
 
   expect(chargeOptions.source).toEqual("tok_visa");
   expect(chargeOptions.amount).toEqual(order.totalPrice * 100);

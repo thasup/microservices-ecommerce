@@ -55,21 +55,24 @@ router.post(
       source: token,
     });
 
+    console.log("charge", charge);
+
     const payment = Payment.build({
       orderId,
       stripeId: charge.id,
-      version: 0,
     });
+
     await payment.save();
+
+    console.log("GGGG", payment);
 
     order.set({ status: OrderStatus.Completed });
     await order.save();
 
-    new PaymentCreatedPublisher(natsWrapper.client).publish({
+    await new PaymentCreatedPublisher(natsWrapper.client).publish({
       id: payment.id,
       orderId: payment.orderId,
       stripeId: payment.stripeId,
-      version: payment.version,
     });
 
     res.status(201).send(payment);

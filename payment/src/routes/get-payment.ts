@@ -12,7 +12,7 @@ import { Order } from "../models/order";
 const router = express.Router();
 
 router.get(
-  "/api/payments:orderId",
+  "/api/payments/:orderId",
   requireAuth,
   [param("orderId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
   validateRequest,

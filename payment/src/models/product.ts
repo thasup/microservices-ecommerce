@@ -12,6 +12,7 @@ export interface ProductAttrs {
   colors?: string;
   sizes?: string;
   countInStock: number;
+  isReserved: boolean;
 }
 
 // An interface that describes the properties
@@ -34,6 +35,7 @@ export interface ProductDoc extends mongoose.Document {
   colors?: string;
   sizes?: string;
   countInStock: number;
+  isReserved: boolean;
   version: number;
   createdAt: string;
   updatedAt: string;
@@ -61,6 +63,11 @@ export const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
       type: Number,
       required: true,
       default: 1,
+    },
+    isReserved: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
   },
   {
@@ -98,6 +105,7 @@ productSchema.statics.build = (attrs: ProductAttrs) => {
     colors: attrs.colors,
     sizes: attrs.sizes,
     countInStock: attrs.countInStock,
+    isReserved: attrs.isReserved,
   });
 };
 

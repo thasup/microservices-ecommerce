@@ -20,6 +20,7 @@ const setup = async () => {
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    isReserved: false,
   });
   await product.save();
 

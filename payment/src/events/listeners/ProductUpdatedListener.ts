@@ -22,9 +22,19 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       throw new NotFoundError();
     }
 
-    const { id, title, price, image, colors, sizes, countInStock } = data;
+    const { id, title, price, image, colors, sizes, countInStock, isReserved } =
+      data;
 
-    product.set({ id, title, price, image, colors, sizes, countInStock });
+    product.set({
+      id,
+      title,
+      price,
+      image,
+      colors,
+      sizes,
+      countInStock,
+      isReserved,
+    });
     await product.save();
 
     // Acknowledge the message and tell NATS server it successfully processed

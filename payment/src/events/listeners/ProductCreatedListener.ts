@@ -13,8 +13,17 @@ export class ProductCreatedListener extends Listener<ProductCreatedEvent> {
   queueGroupName = QueueGroupNames.PAYMENT_SERVICE;
 
   async onMessage(data: ProductCreatedEvent["data"], msg: Message) {
-    const { id, title, price, userId, image, colors, sizes, countInStock } =
-      data;
+    const {
+      id,
+      title,
+      price,
+      userId,
+      image,
+      colors,
+      sizes,
+      countInStock,
+      isReserved,
+    } = data;
 
     const product = Product.build({
       id,
@@ -25,6 +34,7 @@ export class ProductCreatedListener extends Listener<ProductCreatedEvent> {
       colors,
       sizes,
       countInStock,
+      isReserved: false,
     });
     await product.save();
 
