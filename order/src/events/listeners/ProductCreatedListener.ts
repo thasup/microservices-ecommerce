@@ -25,7 +25,8 @@ export class ProductCreatedListener extends Listener<ProductCreatedEvent> {
       colors,
       sizes,
       countInStock,
-      orderId: "",
+      isReserved: false,
+      orderId: undefined,
     });
     await product.save();
 

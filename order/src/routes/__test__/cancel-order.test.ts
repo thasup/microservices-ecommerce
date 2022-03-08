@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../../app";
-
 import { Product, ProductDoc } from "../../models/product";
+import { Order } from "../../models/order";
+import { natsWrapper } from "../../NatsWrapper";
+import { OrderStatus } from "@thasup-dev/common";
 
 const buildProduct = async () => {
   const product = Product.build({
@@ -48,22 +50,18 @@ const buildJSON = (product: ProductDoc, userId: string) => {
   return { jsonCartItems, jsonShippingAddress, jsonPaymentMethod };
 };
 
-it("fetches the order by the user themself", async () => {
-  // Create a product
+it("marks an order as cancelled", async () => {
   const product = await buildProduct();
-
   const userId = new mongoose.Types.ObjectId().toHexString();
-  const user = global.signin(userId);
 
   const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
     product,
     userId
   );
 
-  // make a request to build an order with this product
   const { body: order } = await request(app)
     .post("/api/orders")
-    .set("Cookie", user)
+    .set("Cookie", global.signin(userId))
     .send({
       jsonCartItems: jsonCartItems,
       jsonShippingAddress: jsonShippingAddress,
@@ -71,78 +69,44 @@ it("fetches the order by the user themself", async () => {
     })
     .expect(201);
 
-  // make request to fetch the order by *USER* themself
-  const { body: fetchedOrder } = await request(app)
-    .get(`/api/orders/${order.id}`)
-    .set("Cookie", user)
-    .send()
-    .expect(200);
-
-  expect(fetchedOrder.id).toEqual(order.id);
-});
-
-it("fetches the order by admin", async () => {
-  // Create a product
-  const product = await buildProduct();
-
-  const userId = new mongoose.Types.ObjectId().toHexString();
-  const user = global.signin(userId);
-  const admin = global.adminSignin();
-
-  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
-    product,
-    userId
-  );
-
-  // make a request to build an order with this product
-  const { body: order } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", user)
-    .send({
-      jsonCartItems: jsonCartItems,
-      jsonShippingAddress: jsonShippingAddress,
-      jsonPaymentMethod: jsonPaymentMethod,
-    })
-    .expect(201);
-
-  // make request to fetch the order by *ADMIN*
-  const { body: fetchedOrder } = await request(app)
-    .get(`/api/orders/${order.id}`)
-    .set("Cookie", admin)
-    .send()
-    .expect(200);
-
-  expect(fetchedOrder.id).toEqual(order.id);
-});
-
-it("returns an error if one user tries to fetch another users order", async () => {
-  // Create a product
-  const product = await buildProduct();
-
-  const userId = new mongoose.Types.ObjectId().toHexString();
-  const user = global.signin(userId);
-  const anotherUser = global.signin();
-
-  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
-    product,
-    userId
-  );
-
-  // make a request to build an order with this product
-  const { body: order } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", user)
-    .send({
-      jsonCartItems: jsonCartItems,
-      jsonShippingAddress: jsonShippingAddress,
-      jsonPaymentMethod: jsonPaymentMethod,
-    })
-    .expect(201);
-
-  // make request to fetch the order by *ANOTHER USER*
+  // make a request to cancel the order
   await request(app)
-    .get(`/api/orders/${order.id}`)
-    .set("Cookie", anotherUser)
+    .patch(`/api/orders/${order.id}`)
+    .set("Cookie", global.signin(userId))
     .send()
-    .expect(401);
+    .expect(200);
+
+  // expectation to make sure the thing is cancelled
+  const updatedOrder = await Order.findById(order.id);
+
+  expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
+});
+
+it("emits a order updated event", async () => {
+  const product = await buildProduct();
+  const userId = new mongoose.Types.ObjectId().toHexString();
+
+  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
+    product,
+    userId
+  );
+
+  const { body: order } = await request(app)
+    .post("/api/orders")
+    .set("Cookie", global.signin(userId))
+    .send({
+      jsonCartItems: jsonCartItems,
+      jsonShippingAddress: jsonShippingAddress,
+      jsonPaymentMethod: jsonPaymentMethod,
+    })
+    .expect(201);
+
+  // make a request to cancel the order
+  await request(app)
+    .patch(`/api/orders/${order.id}`)
+    .set("Cookie", global.signin(userId))
+    .send()
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

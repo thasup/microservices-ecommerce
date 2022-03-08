@@ -1,19 +1,17 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import mongoose from "mongoose";
 import {
-  BadRequestError,
   NotFoundError,
   OrderStatus,
   requireAuth,
   validateRequest,
 } from "@thasup-dev/common";
 
-import { Product } from "../models/product";
 import { Order } from "../models/order";
 import { natsWrapper } from "../NatsWrapper";
 import { OrderCreatedPublisher } from "../events/publishers/OrderCreatedPublisher";
 import { Cart } from "../models/cart";
+import { Product } from "../models/product";
 
 const router = express.Router();
 
@@ -23,67 +21,77 @@ router.post(
   "/api/orders",
   requireAuth,
   [
-    body("productId").not().isEmpty().withMessage("ProductId must be provided"),
-    body("shippingAddress")
+    body("jsonCartItems")
       .not()
       .isEmpty()
-      .withMessage("shippingAddress must be provided"),
-    body("paymentMethod")
+      .withMessage("CartItems must be provided"),
+    body("jsonShippingAddress")
       .not()
       .isEmpty()
-      .withMessage("paymentMethod must be provided"),
-    body("productId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
+      .withMessage("Shipping Address must be provided"),
+    body("jsonPaymentMethod")
+      .not()
+      .isEmpty()
+      .withMessage("Payment Method must be provided"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { productId, shippingAddress, paymentMethod } = req.body;
+    const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = req.body;
 
-    // Find the product the user is trying to order in the database
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      throw new NotFoundError();
-    }
-
-    // Make sure that this product is not already reserved
-    // Check if the product has only 1 set. If true then run query
-    // to look at all orders. Find an order where the product
-    // is the product we just found *AND* thr orders status is *NOT* cancelled.
-    // If we find an order from that means the product *IS* reserved
-    if (product.countInStock === 1) {
-      const existingOrder = await Order.findOne({
-        product: product,
-        status: {
-          $in: [
-            OrderStatus.Created,
-            OrderStatus.Pending,
-            OrderStatus.Completed,
-          ],
-        },
-      });
-
-      if (existingOrder) {
-        throw new BadRequestError("Product is already reserved");
-      }
+    interface CartInterface {
+      userId: string;
+      title: string;
+      qty: number;
+      image: string;
+      price: number;
+      countInStock: number;
+      discount: number;
+      productId: string;
     }
 
     // Calculate an expiration date for this order
     let expiration = new Date();
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
-    // Fetch items in cart
-    const items = await Cart.find({ userId: req.currentUser!.id });
-    console.log("ts items: ", items);
+    // Create shippingAddress
+    const cartItems: Array<CartInterface> = JSON.parse(jsonCartItems);
+
+    // Convert JSON to javascript object
+    const shippingAddress = JSON.parse(jsonShippingAddress);
+    const paymentMethod = JSON.parse(jsonPaymentMethod);
+
+    // Find reserve product in cart
+    for (let i = 0; i < cartItems.length; i++) {
+      // Find the product that the order is reserving
+      const reservedProduct = await Product.find({
+        id: cartItems[i].productId,
+        isReserved: true,
+      });
+
+      const existedProduct = await Product.find({
+        id: cartItems[i].productId,
+      });
+
+      // If reservedProduct existed, throw an error
+      if (reservedProduct && reservedProduct.length !== 0) {
+        throw new Error(`${cartItems[i].title} is already reserved`);
+      }
+
+      // If existedProduct DO NOT existed, throw an error
+      if (!existedProduct || existedProduct.length === 0) {
+        throw new NotFoundError();
+      }
+    }
 
     // Calculate discount factor
     const shippingDiscount = 1;
 
     // Calculate price
-    const itemsPrice = items.reduce(
+    const itemsPrice = cartItems.reduce(
       (acc, item) => acc + item.price * item.qty * item.discount,
       0
     );
-    const shippingPrice = itemsPrice > 100 ? 0 : 10 * shippingDiscount;
+    const shippingPrice = itemsPrice > 100.0 ? 0.0 : 10.0 * shippingDiscount;
     const taxPrice = 0.07 * itemsPrice;
     const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
@@ -92,7 +100,7 @@ router.post(
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
       expiresAt: expiration,
-      cart: items,
+      cart: cartItems,
       shippingAddress,
       paymentMethod,
       itemsPrice: parseFloat(itemsPrice.toFixed(2)),
@@ -102,18 +110,18 @@ router.post(
     });
     await order.save();
 
-    let cartItems = [];
-    for (let i = 0; i < items.length; i++) {
-      const cartItem = {
-        title: items[i].title,
-        qty: items[i].qty,
-        image: items[i].image,
-        price: items[i].price,
-        discount: items[i].discount,
-        productId: items[i].product.id,
-      };
-      cartItems.push(cartItem);
-    }
+    // let cartItems = [];
+    // for (let i = 0; i < items.length; i++) {
+    //   const cartItem = {
+    //     title: items[i].title,
+    //     qty: items[i].qty,
+    //     image: items[i].image,
+    //     price: items[i].price,
+    //     discount: items[i].discount,
+    //     productId: items[i].productId,
+    //   };
+    //   cartItems.push(cartItem);
+    // }
 
     // Publish an event saying that an order was created
     new OrderCreatedPublisher(natsWrapper.client).publish({
@@ -131,6 +139,9 @@ router.post(
       isPaid: order.isPaid,
       isDelivered: order.isDelivered,
     });
+
+    // Delete item from cart
+    await Cart.deleteMany({ userId: req.currentUser!.id });
 
     res.status(201).send(order);
   }

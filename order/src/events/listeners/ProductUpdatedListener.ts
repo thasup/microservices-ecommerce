@@ -20,8 +20,17 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       throw new NotFoundError();
     }
 
-    const { id, title, price, image, colors, sizes, countInStock, orderId } =
-      data;
+    const {
+      id,
+      title,
+      price,
+      image,
+      colors,
+      sizes,
+      countInStock,
+      isReserved,
+      orderId,
+    } = data;
 
     product.set({
       id,
@@ -31,6 +40,7 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       colors,
       sizes,
       countInStock,
+      isReserved,
       orderId,
     });
     await product.save();

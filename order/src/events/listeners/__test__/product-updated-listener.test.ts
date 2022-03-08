@@ -19,6 +19,8 @@ const setup = async () => {
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    isReserved: false,
+    orderId: undefined,
   });
   await product.save();
 
@@ -40,6 +42,7 @@ const setup = async () => {
     numReviews: 0,
     rating: 0,
     countInStock: 1,
+    isReserved: true,
     orderId: new mongoose.Types.ObjectId().toHexString(),
   };
 
@@ -62,6 +65,7 @@ it("finds, updates, and saves a product", async () => {
 
   expect(updatedProduct!.title).toEqual(data.title);
   expect(updatedProduct!.price).toEqual(data.price);
+  expect(updatedProduct!.isReserved).toEqual(data.isReserved);
   expect(updatedProduct!.version).toEqual(data.version);
   expect(updatedProduct!.orderId).toEqual(data.orderId);
 });

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../../app";
-import { Product } from "../../models/product";
+import { Product, ProductDoc } from "../../models/product";
 
 const buildProduct = async () => {
   const product = Product.build({
@@ -13,10 +13,38 @@ const buildProduct = async () => {
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    isReserved: false,
+    orderId: undefined,
   });
   await product.save();
 
   return product;
+};
+
+const buildJSON = (product: ProductDoc, userId: string) => {
+  const jsonCartItems = JSON.stringify([
+    {
+      userId: userId,
+      title: product.title,
+      qty: 1,
+      image: product.image,
+      price: product.price,
+      countInStock: product.countInStock,
+      discount: 1,
+      productId: product.id,
+    },
+  ]);
+
+  const jsonShippingAddress = JSON.stringify({
+    address: "sunset villa",
+    city: "New York",
+    postalCode: "44205",
+    country: "USA",
+  });
+
+  const jsonPaymentMethod = JSON.stringify("stripe");
+
+  return { jsonCartItems, jsonShippingAddress, jsonPaymentMethod };
 };
 
 it("fetches orders for an particular user", async () => {
@@ -25,26 +53,60 @@ it("fetches orders for an particular user", async () => {
   const productTwo = await buildProduct();
   const productThree = await buildProduct();
 
-  const userOne = global.signin();
-  const userTwo = global.signin();
+  const userOneId = new mongoose.Types.ObjectId().toHexString();
+  const userTwoId = new mongoose.Types.ObjectId().toHexString();
+
+  const userOne = global.signin(userOneId);
+  const userTwo = global.signin(userTwoId);
+
+  const {
+    jsonCartItems: jsonCartItemsUserOne,
+    jsonShippingAddress: jsonShippingAddressUserOne,
+    jsonPaymentMethod: jsonPaymentMethodUserOne,
+  } = buildJSON(productOne, userOneId);
+
+  const {
+    jsonCartItems: jsonCartItemsUserTwoOrderOne,
+    jsonShippingAddress: jsonShippingAddressUserTwoOrderOne,
+    jsonPaymentMethod: jsonPaymentMethodUserTwoOrderOne,
+  } = buildJSON(productTwo, userTwoId);
+
+  const {
+    jsonCartItems: jsonCartItemsUserTwoOrderTwo,
+    jsonShippingAddress: jsonShippingAddressUserTwoOrderTwo,
+    jsonPaymentMethod: jsonPaymentMethodUserTwoOrderTwo,
+  } = buildJSON(productThree, userTwoId);
 
   // Create one order as User #1
   await request(app)
     .post("/api/orders")
     .set("Cookie", userOne)
-    .send({ productId: productOne.id })
+    .send({
+      jsonCartItems: jsonCartItemsUserOne,
+      jsonShippingAddress: jsonShippingAddressUserOne,
+      jsonPaymentMethod: jsonPaymentMethodUserOne,
+    })
     .expect(201);
 
   // Create two orders as User #2
   const { body: orderOne } = await request(app)
     .post("/api/orders")
     .set("Cookie", userTwo)
-    .send({ productId: productTwo.id })
+    .send({
+      jsonCartItems: jsonCartItemsUserTwoOrderOne,
+      jsonShippingAddress: jsonShippingAddressUserTwoOrderOne,
+      jsonPaymentMethod: jsonPaymentMethodUserTwoOrderOne,
+    })
     .expect(201);
+
   const { body: orderTwo } = await request(app)
     .post("/api/orders")
     .set("Cookie", userTwo)
-    .send({ productId: productThree.id })
+    .send({
+      jsonCartItems: jsonCartItemsUserTwoOrderTwo,
+      jsonShippingAddress: jsonShippingAddressUserTwoOrderTwo,
+      jsonPaymentMethod: jsonPaymentMethodUserTwoOrderTwo,
+    })
     .expect(201);
 
   // Make request to get orders for User #2
@@ -57,8 +119,8 @@ it("fetches orders for an particular user", async () => {
   expect(response.body.length).toEqual(2);
   expect(response.body[0].id).toEqual(orderOne.id);
   expect(response.body[1].id).toEqual(orderTwo.id);
-  expect(response.body[0].product.id).toEqual(productTwo.id);
-  expect(response.body[1].product.id).toEqual(productThree.id);
+  expect(response.body[0].cart[0].productId).toEqual(productTwo.id);
+  expect(response.body[1].cart[0].productId).toEqual(productThree.id);
 });
 
 it("fetches all orders by admin", async () => {
@@ -67,27 +129,61 @@ it("fetches all orders by admin", async () => {
   const productTwo = await buildProduct();
   const productThree = await buildProduct();
 
-  const userOne = global.signin();
-  const userTwo = global.signin();
+  const userOneId = new mongoose.Types.ObjectId().toHexString();
+  const userTwoId = new mongoose.Types.ObjectId().toHexString();
+
+  const userOne = global.signin(userOneId);
+  const userTwo = global.signin(userTwoId);
   const admin = global.adminSignin();
+
+  const {
+    jsonCartItems: jsonCartItemsUserOne,
+    jsonShippingAddress: jsonShippingAddressUserOne,
+    jsonPaymentMethod: jsonPaymentMethodUserOne,
+  } = buildJSON(productOne, userOneId);
+
+  const {
+    jsonCartItems: jsonCartItemsUserTwoOrderOne,
+    jsonShippingAddress: jsonShippingAddressUserTwoOrderOne,
+    jsonPaymentMethod: jsonPaymentMethodUserTwoOrderOne,
+  } = buildJSON(productTwo, userTwoId);
+
+  const {
+    jsonCartItems: jsonCartItemsUserTwoOrderTwo,
+    jsonShippingAddress: jsonShippingAddressUserTwoOrderTwo,
+    jsonPaymentMethod: jsonPaymentMethodUserTwoOrderTwo,
+  } = buildJSON(productThree, userTwoId);
 
   // Create one order as User #1
   const { body: orderOneForUserOne } = await request(app)
     .post("/api/orders")
     .set("Cookie", userOne)
-    .send({ productId: productOne.id })
+    .send({
+      jsonCartItems: jsonCartItemsUserOne,
+      jsonShippingAddress: jsonShippingAddressUserOne,
+      jsonPaymentMethod: jsonPaymentMethodUserOne,
+    })
     .expect(201);
 
   // Create two orders as User #2
   const { body: orderOneForUserTwo } = await request(app)
     .post("/api/orders")
     .set("Cookie", userTwo)
-    .send({ productId: productTwo.id })
+    .send({
+      jsonCartItems: jsonCartItemsUserTwoOrderOne,
+      jsonShippingAddress: jsonShippingAddressUserTwoOrderOne,
+      jsonPaymentMethod: jsonPaymentMethodUserTwoOrderOne,
+    })
     .expect(201);
+
   const { body: orderTwoForUserTwo } = await request(app)
     .post("/api/orders")
     .set("Cookie", userTwo)
-    .send({ productId: productThree.id })
+    .send({
+      jsonCartItems: jsonCartItemsUserTwoOrderTwo,
+      jsonShippingAddress: jsonShippingAddressUserTwoOrderTwo,
+      jsonPaymentMethod: jsonPaymentMethodUserTwoOrderTwo,
+    })
     .expect(201);
 
   // Make request to get all orders by *ADMIN*
@@ -101,7 +197,7 @@ it("fetches all orders by admin", async () => {
   expect(response.body[0].id).toEqual(orderOneForUserOne.id);
   expect(response.body[1].id).toEqual(orderOneForUserTwo.id);
   expect(response.body[2].id).toEqual(orderTwoForUserTwo.id);
-  expect(response.body[0].product.id).toEqual(productOne.id);
-  expect(response.body[1].product.id).toEqual(productTwo.id);
-  expect(response.body[2].product.id).toEqual(productThree.id);
+  expect(response.body[0].cart[0].productId).toEqual(productOne.id);
+  expect(response.body[1].cart[0].productId).toEqual(productTwo.id);
+  expect(response.body[2].cart[0].productId).toEqual(productThree.id);
 });
