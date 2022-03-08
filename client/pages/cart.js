@@ -18,8 +18,8 @@ const CartPage = () => {
 
   const [storageReady, setStorageReady] = useState(false);
   const [cart, setCart] = useState(null);
-  const [addToCart, setAddToCart] = useState(false);
-  const [removeFromCart, setRemoveFromCart] = useState(false);
+  const [onEdit, setOnEdit] = useState(false);
+  const [onRemove, setOnRemove] = useState(false);
 
   useEffect(() => {
     const cartItems = localStorage.getItem("cartItems")
@@ -27,17 +27,20 @@ const CartPage = () => {
       : [];
     console.log("initial storage cartItems:", cartItems);
 
+    // Cart has items or empty
     if (cartItems !== undefined) {
+      // Set cart state to cartItems in localStorage
       setCart(cartItems);
+
+      // Start render the page
       setStorageReady(true);
     }
 
-    // Edit item in cart
-    if (addToCart) {
-      // Check if the product exist in cart
+    if (onEdit) {
+      console.log("Started onEdit cartItems:", cartItems);
       const existItem = cartItems.find((x) => x.productId === productId);
 
-      const item = {
+      const editedItem = {
         userId: existItem.userId,
         title: existItem.title,
         qty: qty,
@@ -45,49 +48,50 @@ const CartPage = () => {
         price: existItem.price,
         countInStock: existItem.countInStock,
         discount: existItem.discount,
-        productId: productId,
+        productId: editedItemId,
       };
-      console.log("item!!!!!!", item);
 
       // If it existed, replace it with new data
       if (existItem) {
         cartItems = cartItems.map((x) =>
-          x.productId === existItem.productId ? item : x
+          x.productId === existItem.productId ? editedItem : x
         );
       } else {
-        cartItems.push(item);
+        cartItems.push(editedItem);
         console.log("push!!", cartItems);
       }
 
-      console.log("final storage cartItems:", cartItems);
+      console.log("Finished onEdit cartItems:", cartItems);
 
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      setAddToCart(false);
+      setOnEdit(false);
     }
 
-    // Remove item from cart
-    if (removeFromCart) {
+    if (onRemove) {
+      console.log("Started onRemove cartItems:", cartItems);
       cartItems = cartItems.filter((item) => item.productId !== deletedItemId);
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      setRemoveFromCart(false);
-    }
-  }, [addToCart, removeFromCart]);
 
-  const editItemHandler = (id, qty) => {
-    // e.preverntDefault();
+      console.log("Finished onRemove cartItems:", cartItems);
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      setOnRemove(false);
+    }
+  }, [onEdit, onRemove]);
+
+  const editItemHandler = (e, id, qty) => {
+    e.preventDefault();
     setProductId(id);
     setQty(qty);
-    setAddToCart(true);
+    setOnEdit(true);
   };
 
-  const removeFromCartHandler = (productId) => {
-    // e.preverntDefault();
+  const removeFromCartHandler = (e, productId) => {
+    e.preventDefault();
     setDeletedItemId(productId);
-    setRemoveFromCart(true);
+    setOnRemove(true);
   };
 
   const checkoutHandler = (e) => {
-    e.preverntDefault();
+    e.preventDefault();
     Router.push("/shipping");
   };
 
@@ -127,7 +131,19 @@ const CartPage = () => {
                         <a>{item.title}</a>
                       </Link>
                     </Col>
-                    <Col md={2}>${item.price}</Col>
+                    {item.discount !== 1 ? (
+                      <>
+                        <Col md={1} className="text-decoration-line-through">
+                          ${item.price}
+                        </Col>
+                        <Col md={1}>${item.price * item.discount}</Col>
+                      </>
+                    ) : (
+                      <>
+                        <Col md={1}>${item.price}</Col>
+                        <Col md={1}>{""}</Col>
+                      </>
+                    )}
                     <Col md={2}>
                       <Form.Control
                         className="form-select"
@@ -173,7 +189,10 @@ const CartPage = () => {
                 </h2>
                 $
                 {cart
-                  .reduce((acc, item) => acc + item.qty * item.price, 0)
+                  .reduce(
+                    (acc, item) => acc + item.qty * item.price * item.discount,
+                    0
+                  )
                   .toFixed(2)}
               </ListGroup.Item>
               <ListGroup.Item className="d-grid gap-2">

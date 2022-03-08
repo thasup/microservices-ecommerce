@@ -24,7 +24,7 @@ const productDetail = ({ products, currentUser }) => {
   const [couponSuccess, setCouponSuccess] = useState(false);
   const [couponError, setCouponError] = useState(false);
   const [initialSetImage, setInitialSetImage] = useState(false);
-  const [addToCart, setAddToCart] = useState(false);
+  const [onAdd, setOnAdd] = useState(false);
 
   const { doRequest: addReview, errors: addReviewErrors } = useRequest({
     url: `/api/products/${productId}/reviews`,
@@ -63,6 +63,11 @@ const productDetail = ({ products, currentUser }) => {
       setInitialSetImage(true);
     }
 
+    const cartItems = localStorage.getItem("cartItems")
+      ? JSON.parse(localStorage.getItem("cartItems"))
+      : [];
+    console.log("initial storage cartItems:", cartItems);
+
     const item = {
       userId: currentUser.id,
       title: product.title,
@@ -75,15 +80,12 @@ const productDetail = ({ products, currentUser }) => {
     };
     console.log("item", item);
 
-    const cartItems = localStorage.getItem("cartItems")
-      ? JSON.parse(localStorage.getItem("cartItems"))
-      : [];
+    if (onAdd) {
+      console.log("Started onAdd cartItems:", cartItems);
+      // Check if the product exist in cart
+      const existItem = cartItems.find((x) => x.productId === productId);
 
-    if (addToCart) {
-      console.log("initial storage cartItems:", cartItems);
-
-      const existItem = cartItems.find((x) => x.productId === item.productId);
-
+      // If it existed, replace it with new data
       if (existItem) {
         cartItems = cartItems.map((x) =>
           x.productId === existItem.productId ? item : x
@@ -93,12 +95,12 @@ const productDetail = ({ products, currentUser }) => {
         console.log("push!!", cartItems);
       }
 
-      console.log("final storage cartItems:", cartItems);
+      console.log("Finished onAdd cartItems:", cartItems);
 
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      setAddToCart(false);
+      setOnAdd(false);
     }
-  }, [addToCart, loading]);
+  }, [onAdd, loading]);
 
   const product = products.find((product) => product.id === productId);
 
@@ -139,7 +141,7 @@ const productDetail = ({ products, currentUser }) => {
 
   const addToCartHandler = (e) => {
     e.preventDefault();
-    setAddToCart(true);
+    setOnAdd(true);
   };
 
   const submitReviewHandler = (e) => {
