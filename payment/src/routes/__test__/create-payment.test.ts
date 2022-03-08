@@ -8,8 +8,7 @@ import { Product } from "../../models/product";
 import { stripe } from "../../stripe";
 import { Payment } from "../../models/payment";
 
-jest.mock("../../stripe");
-
+// jest.mock("../stripe");
 it("returns a 404 when purchasing an order that does not exist", async () => {
   await request(app)
     .post("/api/payments")
@@ -153,11 +152,23 @@ it("returns a 201 with valid inputs", async () => {
     })
     .expect(201);
 
-  const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
+  // const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
 
-  console.log("SHOW ME!!!", chargeOptions);
+  // expect(chargeOptions.source).toEqual("tok_visa");
+  // expect(chargeOptions.amount).toEqual(order.totalPrice * 100);
+  // expect(chargeOptions.currency).toEqual("usd");
 
-  expect(chargeOptions.source).toEqual("tok_visa");
-  expect(chargeOptions.amount).toEqual(order.totalPrice * 100);
-  expect(chargeOptions.currency).toEqual("usd");
+  const stripeCharges = await stripe.charges.list({ limit: 50 });
+  const stripeCharge = stripeCharges.data.find((charge) => {
+    return charge.amount === order.totalPrice * 100;
+  });
+
+  expect(stripeCharge).toBeDefined();
+  expect(stripeCharge!.currency).toEqual("usd");
+
+  const payment = await Payment.findOne({
+    orderId: order.id,
+    stripeId: stripeCharge!.id,
+  });
+  expect(payment).not.toBeNull();
 });
