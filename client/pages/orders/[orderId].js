@@ -39,7 +39,6 @@ const OrderPage = ({ currentUser }) => {
     onSuccess: (order) => {
       console.log(order);
       setOrder(order);
-      setLoading(false);
     },
   });
 
@@ -55,18 +54,20 @@ const OrderPage = ({ currentUser }) => {
     },
   });
 
-  useEffect(() => {
+  useEffect(async () => {
     if (!currentUser) {
       Router.push("/signin");
     }
 
     // Fetch the order from client-side
-    fetchOrder();
+    await fetchOrder();
+
+    if (currentUser.isAdmin !== true && currentUser.id !== order.userId) {
+      Router.push("/");
+    }
+    setLoading(false);
 
     const addPayPalScript = async () => {
-      // Fetch paypal clientId
-      //   fetchPaypalId();
-
       // Add paypal script to DOM
       const script = document.createElement("script");
       script.type = "text/javascript";
@@ -82,7 +83,6 @@ const OrderPage = ({ currentUser }) => {
     if (!order || order.id !== orderId) {
       fetchOrder();
     }
-
     // Check if customer hasn't paid the order and chose to proceed with paypal
     else if (order.paymentMethod === "paypal" && order.isPaid === false) {
       // Check if the page hasn't loaded with paypal, then
