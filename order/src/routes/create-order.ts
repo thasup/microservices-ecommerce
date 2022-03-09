@@ -38,6 +38,8 @@ router.post(
   async (req: Request, res: Response) => {
     const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = req.body;
 
+    console.log("RUN!!!!!!!!! 1");
+
     interface CartInterface {
       userId: string;
       title: string;
@@ -53,36 +55,47 @@ router.post(
     const expiration = new Date();
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
-    // Create shippingAddress
-    const cartItems: Array<CartInterface> = JSON.parse(jsonCartItems);
+    console.log(typeof jsonCartItems);
+    console.log(typeof jsonShippingAddress);
+    console.log(typeof jsonPaymentMethod);
+
+    console.log("RUN!!!!!!!!! 2");
+    const cartItems: Array<CartInterface> = jsonCartItems;
+    console.log("RUN!!!!!!!!! 3");
 
     // Convert JSON to javascript object
-    const shippingAddress = JSON.parse(jsonShippingAddress);
-    const paymentMethod = JSON.parse(jsonPaymentMethod);
+    const shippingAddress = jsonShippingAddress;
+    const paymentMethod = jsonPaymentMethod;
 
+    console.log("RUN!!!!!!!!! 4");
     // Find reserve product in cart
     for (let i = 0; i < cartItems.length; i++) {
       // Find the product that the order is reserving
       const reservedProduct = await Product.find({
-        id: cartItems[i].productId,
+        _id: cartItems[i].productId,
         isReserved: true,
       });
+      console.log("RUN!!!!!!!!! 4.1", reservedProduct);
 
       const existedProduct = await Product.find({
-        id: cartItems[i].productId,
+        _id: cartItems[i].productId,
       });
 
+      console.log("RUN!!!!!!!!! 4.2", existedProduct);
       // If reservedProduct existed, throw an error
       if (reservedProduct && reservedProduct.length !== 0) {
         throw new Error(`${cartItems[i].title} is already reserved`);
       }
+      console.log("RUN!!!!!!!!! 4.3");
 
       // If existedProduct DO NOT existed, throw an error
       if (!existedProduct || existedProduct.length === 0) {
         throw new NotFoundError();
       }
+      console.log("RUN!!!!!!!!! 4.4");
     }
 
+    console.log("RUN!!!!!!!!! 5");
     // Calculate discount factor
     const shippingDiscount = 1;
 
@@ -95,6 +108,7 @@ router.post(
     const taxPrice = 0.07 * itemsPrice;
     const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
+    console.log("RUN!!!!!!!!! 6");
     // Build the order and save it to the database
     const order = Order.build({
       userId: req.currentUser!.id,
@@ -110,6 +124,7 @@ router.post(
     });
     await order.save();
 
+    console.log("RUN!!!!!!!!! 7");
     // Publish an event saying that an order was created
     new OrderCreatedPublisher(natsWrapper.client).publish({
       id: order.id,
@@ -126,11 +141,13 @@ router.post(
       isPaid: order.isPaid,
       isDelivered: order.isDelivered,
     });
+    console.log("RUN!!!!!!!!! 8");
 
     // Delete item from cart
     await Cart.deleteMany({ userId: req.currentUser!.id });
 
-    res.status(201).send(order);
+    console.log("RUN!!!!!!!!! 9");
+    res.status(201).send({});
   }
 );
 

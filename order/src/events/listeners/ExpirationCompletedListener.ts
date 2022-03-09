@@ -37,6 +37,7 @@ export class ExpirationCompletedListener extends Listener<ExpirationCompletedEve
       userId: order.userId,
       expiresAt: order.expiresAt,
       version: order.version,
+      cart: order.cart,
       paymentMethod: order.paymentMethod,
       itemsPrice: order.itemsPrice,
       shippingPrice: order.shippingPrice,
