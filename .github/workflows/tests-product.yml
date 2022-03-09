@@ -1,6 +1,9 @@
 name: tests-product
 
-on: pull_request
+on:
+  pull_request:
+    paths:
+      - "product/**"
 
 jobs:
   build:

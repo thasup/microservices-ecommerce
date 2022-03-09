@@ -1,6 +1,9 @@
 name: tests-user
 
-on: pull_request
+on:
+  pull_request:
+    paths:
+      - "user/**"
 
 jobs:
   build:
