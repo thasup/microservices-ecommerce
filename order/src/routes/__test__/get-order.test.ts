@@ -48,7 +48,7 @@ const buildJSON = (product: ProductDoc, userId: string) => {
   return { jsonCartItems, jsonShippingAddress, jsonPaymentMethod };
 };
 
-it("fetches the order by the user themself", async () => {
+it("fetches the order by the user itself", async () => {
   // Create a product
   const product = await buildProduct();
 
@@ -71,7 +71,7 @@ it("fetches the order by the user themself", async () => {
     })
     .expect(201);
 
-  // make request to fetch the order by *USER* themself
+  // make request to fetch the order by the *USER* itself
   const { body: fetchedOrder } = await request(app)
     .get(`/api/orders/${order.id}`)
     .set("Cookie", user)
