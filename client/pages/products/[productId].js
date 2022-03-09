@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, ListGroup, Card, Button, Form } from "react-bootstrap";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
+import Image from "next/image";
+import ReactStars from "react-rating-stars-component";
 
 import Loader from "../../components/Loader";
 import Rating from "../../components/Rating";
@@ -9,6 +11,7 @@ import Message from "../../components/Message";
 import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
 import NextImage from "../../components/NextImage";
+import SocialShare from "../../components/SocialShare";
 
 const productDetail = ({ products, currentUser }) => {
   const { productId } = useRouter().query;
@@ -16,7 +19,7 @@ const productDetail = ({ products, currentUser }) => {
   const [qty, setQty] = useState(1);
   const [discount, setDiscount] = useState("");
   const [rating, setRating] = useState(0);
-  const [reviewHeader, setReviewHeader] = useState("");
+  const [reviewTitle, setReviewTitle] = useState("");
   const [comment, setComment] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -30,12 +33,14 @@ const productDetail = ({ products, currentUser }) => {
     url: `/api/products/${productId}/reviews`,
     method: "post",
     body: {
-      title: reviewHeader,
+      title: reviewTitle,
       rating,
       comment,
     },
     onSuccess: (review) => {
       console.log(review);
+      setLoading(false);
+      Router.push(`/products/${productId}`);
     },
   });
 
@@ -43,7 +48,11 @@ const productDetail = ({ products, currentUser }) => {
     url: `/api/products/${productId}/reviews`,
     method: "delete",
     body: {},
-    onSuccess: () => console.log("successfully deleted a review"),
+    onSuccess: () => {
+      console.log("successfully deleted a review");
+      setLoading(false);
+      Router.push(`/products/${productId}`);
+    },
   });
 
   useEffect(() => {
@@ -56,7 +65,6 @@ const productDetail = ({ products, currentUser }) => {
     const cartItems = localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [];
-    console.log("initial storage cartItems:", cartItems);
 
     const item = {
       userId: currentUser.id,
@@ -68,7 +76,6 @@ const productDetail = ({ products, currentUser }) => {
       discount: discountFactor,
       productId: productId,
     };
-    console.log("item", item);
 
     if (onAdd) {
       console.log("Started onAdd cartItems:", cartItems);
@@ -125,8 +132,6 @@ const productDetail = ({ products, currentUser }) => {
       setCouponSuccess(false);
       setCouponError(true);
     }
-
-    console.log("discount!!!!!!", discountFactor);
   };
 
   const addToCartHandler = (e) => {
@@ -138,14 +143,12 @@ const productDetail = ({ products, currentUser }) => {
     e.preventDefault();
     setLoading(true);
     addReview();
-    setLoading(false);
   };
 
   const deleteReviewHandler = (review) => {
     if (currentUser && review.userId === currentUser.id) {
       setLoading(true);
       removeReview();
-      setLoading(false);
     } else {
       alert("Not allow");
     }
@@ -176,6 +179,10 @@ const productDetail = ({ products, currentUser }) => {
     }
 
     e.target.parentElement.parentElement.classList.add("toggle-side-img");
+  };
+
+  const myLoader = ({ src, width, quality }) => {
+    return `${src}&w=${width}&q=${quality || 40}`;
   };
 
   return (
@@ -220,7 +227,7 @@ const productDetail = ({ products, currentUser }) => {
             </Col>
 
             <Col md={3}>
-              <ListGroup variant="flush">
+              <ListGroup variant="flush" className="mb-3">
                 <ListGroup.Item>
                   <h3>{product.title}</h3>
                 </ListGroup.Item>
@@ -234,6 +241,10 @@ const productDetail = ({ products, currentUser }) => {
                 <ListGroup.Item>
                   <div className="my-2">Description:</div>
                   <div>{product.description}</div>
+                </ListGroup.Item>
+
+                <ListGroup.Item>
+                  <SocialShare product={product} />
                 </ListGroup.Item>
               </ListGroup>
             </Col>
@@ -346,15 +357,28 @@ const productDetail = ({ products, currentUser }) => {
                 {product.reviews.map((review) => (
                   <ListGroup.Item key={review.id}>
                     <Row className="">
-                      <Col>
-                        <strong>{review.userId}</strong>
+                      {currentUser?.image && (
+                        <Col xs={2} className="profile-img">
+                          <Image
+                            loader={myLoader}
+                            src={currentUser.image}
+                            alt="profile image"
+                            width={200}
+                            height={200}
+                            layout="responsive"
+                          />
+                        </Col>
+                      )}
+
+                      <Col xs={10}>
+                        <strong>{review.name}</strong>
                         <Rating value={review.rating} />
                         <p>{review.createdAt.substring(0, 10)}</p>
-                        <p>{review.title}</p>
+                        <strong>{review.title}</strong>
                         <p>{review.comment}</p>
                       </Col>
                       {review.userId === currentUser?.id && (
-                        <Col className="col-1 justify-content-end">
+                        <Col className="trash-btn">
                           <button
                             type="button"
                             className="btn-sm mx-1 btn btn-danger"
@@ -378,29 +402,28 @@ const productDetail = ({ products, currentUser }) => {
                         <Form onSubmit={submitReviewHandler}>
                           <Form.Group className="my-3">
                             <Form.Label>Rating</Form.Label>
-                            <Form.Control
-                              as="select"
-                              id="form-select-rating"
-                              className="form-select"
+                            <ReactStars
+                              count={5}
+                              size={40}
+                              isHalf={true}
+                              emptyIcon={<i class="fa-light fa-star"></i>}
+                              halfIcon={
+                                <i className="fa-solid fa-star-half-alt"></i>
+                              }
+                              fullIcon={<i class="fa-solid fa-star"></i>}
+                              activeColor="#000"
                               value={rating}
-                              onChange={(e) => setRating(e.target.value)}
-                            >
-                              <option value="">Select...</option>
-                              <option value="1">1 - Poor</option>
-                              <option value="2">2 - Fair</option>
-                              <option value="3">3 - Good</option>
-                              <option value="4">4 - Very Good</option>
-                              <option value="5">5 - Excellent</option>
-                            </Form.Control>
+                              onChange={(newValue) => setRating(newValue)}
+                            />
                           </Form.Group>
 
-                          <Form.Group controlId="reviewHeader" className="my-3">
+                          <Form.Group controlId="reviewTitle" className="my-3">
                             <Form.Label>Title</Form.Label>
                             <Form.Control
                               type="text"
-                              placeholder="Tell people about this product."
-                              value={reviewHeader}
-                              onChange={(e) => setReviewHeader(e.target.value)}
+                              placeholder="Enter review title"
+                              value={reviewTitle}
+                              onChange={(e) => setReviewTitle(e.target.value)}
                             ></Form.Control>
                           </Form.Group>
 
@@ -408,7 +431,8 @@ const productDetail = ({ products, currentUser }) => {
                             <Form.Label>Comment</Form.Label>
                             <Form.Control
                               as="textarea"
-                              row="3"
+                              className="text-area"
+                              placeholder="Write a review"
                               value={comment}
                               onChange={(e) => setComment(e.target.value)}
                             ></Form.Control>
@@ -423,7 +447,11 @@ const productDetail = ({ products, currentUser }) => {
                   </>
                 ) : (
                   <Message>
-                    Please <Link href="/login">sign in</Link> to write a review
+                    Please{" "}
+                    <Link href="/signin">
+                      <a>sign in</a>
+                    </Link>{" "}
+                    to write a review
                   </Message>
                 )}
               </ListGroup>

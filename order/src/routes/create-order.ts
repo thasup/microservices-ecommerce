@@ -50,7 +50,7 @@ router.post(
     }
 
     // Calculate an expiration date for this order
-    let expiration = new Date();
+    const expiration = new Date();
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
     // Create shippingAddress
@@ -109,19 +109,6 @@ router.post(
       totalPrice: parseFloat(totalPrice.toFixed(2)),
     });
     await order.save();
-
-    // let cartItems = [];
-    // for (let i = 0; i < items.length; i++) {
-    //   const cartItem = {
-    //     title: items[i].title,
-    //     qty: items[i].qty,
-    //     image: items[i].image,
-    //     price: items[i].price,
-    //     discount: items[i].discount,
-    //     productId: items[i].productId,
-    //   };
-    //   cartItems.push(cartItem);
-    // }
 
     // Publish an event saying that an order was created
     new OrderCreatedPublisher(natsWrapper.client).publish({

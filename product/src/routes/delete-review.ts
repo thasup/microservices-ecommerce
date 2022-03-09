@@ -7,6 +7,7 @@ import {
 } from "@thasup-dev/common";
 
 import { Product } from "../models/product";
+import { Review } from "../models/review";
 
 const router = express.Router();
 
@@ -53,6 +54,14 @@ router.delete(
           console.log(err);
         }
       });
+
+      const review = await Review.findOne({ userId: req.currentUser!.id });
+
+      if (!review) {
+        throw new NotFoundError();
+      }
+
+      await review.remove();
 
       res.status(200).send(product);
     }

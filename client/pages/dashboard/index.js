@@ -7,7 +7,7 @@ import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import useRequest from "../../hooks/use-request";
 
-const ProfilePage = ({ currentUser }) => {
+const Dashboard = ({ currentUser }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +29,7 @@ const ProfilePage = ({ currentUser }) => {
   const [orders, setOrders] = useState(null);
 
   const { doRequest: fetchOrders, errors: fetchOrdersErrors } = useRequest({
-    url: `/api/orders`,
+    url: `/api/orders/myorders`,
     method: "get",
     body: {},
     onSuccess: (orders) => {
@@ -38,8 +38,6 @@ const ProfilePage = ({ currentUser }) => {
       setFetchOrderSuccess(true);
     },
   });
-
-  console.log("Has orders? :", orders);
 
   const { doRequest: updateProfile, errors: updateErrors } = useRequest({
     url: "/api/users/profile",
@@ -248,4 +246,4 @@ const ProfilePage = ({ currentUser }) => {
   );
 };
 
-export default ProfilePage;
+export default Dashboard;

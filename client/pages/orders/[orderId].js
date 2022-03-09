@@ -42,7 +42,7 @@ const OrderPage = ({ currentUser }) => {
     },
   });
 
-  const { doRequest: payOrder, errors: paymentErrors } = useRequest({
+  const { doRequest: payStripeOrder, errors: paymentErrors } = useRequest({
     url: `/api/payments`,
     method: "post",
     body: {
@@ -104,7 +104,7 @@ const OrderPage = ({ currentUser }) => {
 
   //   const stripePaymentHandler = () => {
   //     setLoadingPay(true);
-  //     payOrder();
+  //     payStripeOrder();
   //     setLoadingPay(false);
   //   };
 
@@ -256,7 +256,7 @@ const OrderPage = ({ currentUser }) => {
                     <StripeCheckout
                       token={({ id }) => {
                         setLoading(true);
-                        payOrder({ token: id });
+                        payStripeOrder({ token: id });
                       }}
                       stripeKey="pk_test_51KYCbpCqypc6uabtXBYVwjkCQxYJ02VlTebqSllPb0Kei5mvKN1brmzIgEeZK371eoKkh7rJxX70lr7wet0VfZjb00PDUgCK7c"
                       amount={order.totalPrice * 100}

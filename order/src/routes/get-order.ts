@@ -26,7 +26,7 @@ router.get(
     // Only admin *OR* the user who request that order can only access the order
     if (
       order.userId !== req.currentUser!.id &&
-      req.currentUser!.isAdmin === false
+      req.currentUser!.isAdmin !== true
     ) {
       throw new NotAuthorizedError();
     }

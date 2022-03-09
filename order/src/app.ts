@@ -3,7 +3,8 @@ import "express-async-errors";
 import cookieSession from "cookie-session";
 import { NotFoundError, errorHandler, currentUser } from "@thasup-dev/common";
 
-import { showOrderRouter } from "./routes/show-order";
+import { showMyOrderRouter } from "./routes/show-my-order";
+import { showAllOrderRouter } from "./routes/show-all-order";
 import { cancelOrderRouter } from "./routes/cancel-order";
 import { getOrderRouter } from "./routes/get-order";
 import { createOrderRouter } from "./routes/create-order";
@@ -19,7 +20,8 @@ app.use(
 );
 app.use(currentUser);
 
-app.use(showOrderRouter);
+app.use(showMyOrderRouter);
+app.use(showAllOrderRouter);
 app.use(cancelOrderRouter);
 app.use(getOrderRouter);
 app.use(createOrderRouter);
