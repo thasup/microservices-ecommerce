@@ -40,6 +40,9 @@ global.signin = async () => {
     .send({
       email,
       password,
+      name: "Geralt of Rivia",
+      gender: "male",
+      age: 45,
     })
     .expect(201);
 

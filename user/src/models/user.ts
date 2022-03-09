@@ -1,5 +1,13 @@
 import mongoose from "mongoose";
 import { Password } from "../services/Password";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+
+interface shippingAddressAttrs {
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
 
 // An interface that describes the properties
 // that are requried to create a new User
@@ -7,6 +15,12 @@ interface UserAttrs {
   email: string;
   password: string;
   isAdmin: boolean;
+  name: string;
+  image?: string;
+  gender: string;
+  age: number;
+  bio?: string;
+  shippingAddress?: shippingAddressAttrs;
 }
 
 // An interface that describes the properties
@@ -21,6 +35,13 @@ interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   isAdmin: boolean;
+  name: string;
+  image?: string;
+  gender: string;
+  age: number;
+  bio?: string;
+  shippingAddress?: shippingAddressAttrs;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -40,6 +61,30 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    name: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+    },
+    gender: {
+      type: String,
+      required: true,
+    },
+    age: {
+      type: Number,
+      required: true,
+    },
+    bio: {
+      type: String,
+    },
+    shippingAddress: {
+      address: { type: String },
+      city: { type: String },
+      postalCode: { type: String },
+      country: { type: String },
+    },
   },
   {
     toJSON: {
@@ -50,8 +95,12 @@ const userSchema = new mongoose.Schema(
         delete ret.__v;
       },
     },
+    timestamps: true,
   }
 );
+
+userSchema.set("versionKey", "version");
+userSchema.plugin(updateIfCurrentPlugin);
 
 userSchema.pre("save", async function (done) {
   if (this.isModified("password")) {
