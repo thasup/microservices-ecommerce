@@ -42,6 +42,12 @@ router.post(
         id: existingUser.id,
         email: existingUser.email,
         isAdmin: existingUser.isAdmin,
+        name: existingUser.name,
+        image: existingUser.image,
+        gender: existingUser.gender,
+        age: existingUser.age,
+        bio: existingUser.bio,
+        shippingAddress: existingUser.shippingAddress,
       },
       process.env.JWT_KEY!
     );
