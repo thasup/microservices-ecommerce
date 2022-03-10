@@ -335,7 +335,7 @@ const productDetail = ({ products, currentUser }) => {
                       onClick={addToCartHandler}
                       type="button"
                       variant="dark"
-                      disabled={product.countInStock === 0}
+                      disabled={product.countInStock < 1}
                     >
                       Add To Cart
                     </Button>
