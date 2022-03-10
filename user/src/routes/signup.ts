@@ -40,14 +40,7 @@ router.post(
     }
 
     if (!image || image === "") {
-      let randomKey = Math.floor(Math.random() * 100000);
-      if (gender === "male") {
-        image = `https://joeschmoe.io/api/v1/male/${randomKey}`;
-      } else if (gender === "female") {
-        image = `https://joeschmoe.io/api/v1/female/${randomKey}`;
-      }
-
-      console.log("My random image :", image);
+      image = `https://joeschmoe.io/api/v1/${gender}/${name}${email}`;
     }
 
     const user = User.build({

@@ -16,8 +16,8 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
   async onMessage(data: OrderUpdatedEvent["data"], msg: Message) {
     // Check order status
     if (data.status !== "cancelled") {
-      // ack the message
-      msg.ack();
+      // Do nothing, just ack the message
+      return msg.ack();
     }
 
     const items = data.cart;
