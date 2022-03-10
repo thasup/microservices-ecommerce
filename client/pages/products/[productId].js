@@ -72,7 +72,7 @@ const productDetail = ({ products, currentUser }) => {
       qty: Number(qty),
       image: product.images.image1,
       price: product.price,
-      countInStock: product.countInStock,
+      countInStock: product.countInStock - Number(qty),
       discount: discountFactor,
       productId: productId,
     };
@@ -207,7 +207,7 @@ const productDetail = ({ products, currentUser }) => {
                     src={img}
                     alt={`product_image_${index}`}
                     priority={true}
-                    quality={50}
+                    quality={30}
                   />
                 </div>
               ))}
@@ -220,7 +220,7 @@ const productDetail = ({ products, currentUser }) => {
                     src={img}
                     alt={`product_image_${index}`}
                     priority={true}
-                    quality={100}
+                    quality={75}
                   />
                 </div>
               ))}

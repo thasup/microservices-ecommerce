@@ -133,8 +133,8 @@ const CheckoutPage = ({ currentUser }) => {
                         </Col>
                         <Col>
                           <Link
-                            href={"/product/[productId]"}
-                            as={`/product/${item.product}`}
+                            href={"/products/[productId]"}
+                            as={`/products/${item.productId}`}
                           >
                             <a>{item.title}</a>
                           </Link>
@@ -192,7 +192,7 @@ const CheckoutPage = ({ currentUser }) => {
                 <Button
                   type="button"
                   variant="dark"
-                  disabled={cart === 0}
+                  disabled={cart.length === 0}
                   onClick={checkoutHandler}
                 >
                   Checkout

@@ -1,27 +1,45 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
-import buildClient from "../api/build-client";
+import Link from "next/link";
+import Image from "next/image";
+
 import useRequest from "../hooks/use-request";
 
-const Header = ({ currentUser }) => {
+const Header = ({ currentUser, orders }) => {
   const [order, setOrder] = useState(null);
 
-  const { doRequest, errors } = useRequest({
-    url: `/api/orders`,
-    method: "get",
-    body: {},
-    onSuccess: (orders) => {
-      console.log(orders);
-      setOrder(orders[`${orders.length - 1}`]);
-    },
-  });
-
-  console.log("Has orders? :", order);
+  // const { doRequest, errors } = useRequest({
+  //   url: `/api/orders/myorders`,
+  //   method: "get",
+  //   body: {},
+  //   onSuccess: (orders) => {
+  //     console.log(orders);
+  //     setOrder(orders[`${orders.length - 1}`]);
+  //   },
+  // });
 
   useEffect(() => {
-    doRequest();
+    console.log("My orders :", orders);
+
+    if (orders === undefined) {
+      setOrder(null);
+    } else {
+      const unPaidOrders = orders?.filter((order) => order.isPaid === false);
+
+      const recentOrder = unPaidOrders[`${unPaidOrders?.length - 1}`];
+
+      setOrder(recentOrder);
+
+      console.log("My unpaid orders :", unPaidOrders);
+      console.log("My recent order :", order);
+    }
+
+    // doRequest();
   }, [currentUser]);
+
+  const myLoader = ({ src, width, quality }) => {
+    return `${src}&w=${width}&q=${quality || 40}`;
+  };
 
   return (
     <header>
@@ -40,7 +58,7 @@ const Header = ({ currentUser }) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              {order?.isPaid === false ? (
+              {order ? (
                 <Link
                   href="/orders/[orderId]"
                   as={`/orders/${order.id}`}
@@ -66,8 +84,20 @@ const Header = ({ currentUser }) => {
 
               {currentUser ? (
                 <NavDropdown title={currentUser.email} id="username">
-                  <Link href="/user/profile" passHref>
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                  {currentUser?.image && (
+                    <div className="profile-img">
+                      <Image
+                        loader={myLoader}
+                        src={currentUser.image}
+                        alt="profile image"
+                        width={150}
+                        height={150}
+                        layout="responsive"
+                      />
+                    </div>
+                  )}
+                  <Link href="/dashboard" passHref>
+                    <NavDropdown.Item>Dashboard</NavDropdown.Item>
                   </Link>
                   {currentUser.isAdmin && (
                     <>
@@ -106,26 +136,16 @@ const Header = ({ currentUser }) => {
   );
 };
 
-// export async function getStaticProps(context) {
-//   const client = buildClient(context);
-//   const { data } = await client.get("/api/orders");
-//   console.log("server header:", data);
-//   if (data.length !== 0) {
-//     const recentOrder = data[`${data.length - 1}`];
-//     console.log("server header:", recentOrder);
+Header.getInitialProps = async (context, client) => {
+  let { data } = await client
+    .get(`/api/orders/myorders`)
+    .catch((err) => console.log(err));
 
-//     return recentOrder;
-//   }
+  if (data === undefined) {
+    data = [];
+  }
 
-//   return { props: { order: recentOrder } };
-// }
-
-// Header.getInitialProps = async (context, client, ordersData) => {
-//   const { data } = await client.get("/api/orders");
-
-//   console.log("server header:", data);
-
-//   return { order: data };
-// };
+  return { orders: data };
+};
 
 export default Header;

@@ -48,7 +48,7 @@ const CartPage = () => {
         price: existItem.price,
         countInStock: existItem.countInStock,
         discount: existItem.discount,
-        productId: editedItemId,
+        productId: existItem.productId,
       };
 
       // If it existed, replace it with new data
@@ -77,15 +77,13 @@ const CartPage = () => {
     }
   }, [onEdit, onRemove]);
 
-  const editItemHandler = (e, id, qty) => {
-    e.preventDefault();
+  const editItemHandler = (id, qty) => {
     setProductId(id);
     setQty(qty);
     setOnEdit(true);
   };
 
-  const removeFromCartHandler = (e, productId) => {
-    e.preventDefault();
+  const removeFromCartHandler = (productId) => {
     setDeletedItemId(productId);
     setOnRemove(true);
   };

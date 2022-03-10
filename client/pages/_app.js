@@ -38,7 +38,7 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
           referrerPolicy="no-referrer"
         />
       </Head>
-      <Header currentUser={currentUser} />
+      <Header currentUser={currentUser} {...pageProps} />
       <main className="pb-5">
         <Container fluid className="px-0">
           <Component currentUser={currentUser} {...pageProps} />
