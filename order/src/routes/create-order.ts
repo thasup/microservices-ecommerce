@@ -10,7 +10,6 @@ import {
 import { Order } from "../models/order";
 import { natsWrapper } from "../NatsWrapper";
 import { OrderCreatedPublisher } from "../events/publishers/OrderCreatedPublisher";
-import { Cart } from "../models/cart";
 import { Product } from "../models/product";
 
 const router = express.Router();
@@ -38,7 +37,9 @@ router.post(
   async (req: Request, res: Response) => {
     const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = req.body;
 
-    console.log("RUN!!!!!!!!! 1");
+    console.log("RUN!!!!!!!!! 0", jsonCartItems);
+    console.log("RUN!!!!!!!!! 0.5", jsonShippingAddress);
+    console.log("RUN!!!!!!!!! 1", jsonPaymentMethod);
 
     interface CartInterface {
       userId: string;
@@ -59,15 +60,32 @@ router.post(
     console.log(typeof jsonShippingAddress);
     console.log(typeof jsonPaymentMethod);
 
-    console.log("RUN!!!!!!!!! 2");
-    const cartItems: Array<CartInterface> = jsonCartItems;
-    console.log("RUN!!!!!!!!! 3");
+    let cartItems;
+    // Check if ti is JSON type, them convrt to javascript object
+    if (typeof jsonCartItems === "string") {
+      cartItems = await JSON.parse(jsonCartItems);
+    } else if (typeof jsonCartItems === "object") {
+      cartItems = jsonCartItems;
+    }
 
-    // Convert JSON to javascript object
-    const shippingAddress = jsonShippingAddress;
-    const paymentMethod = jsonPaymentMethod;
+    console.log("RUN!!!!!!!!! 2", cartItems);
 
-    console.log("RUN!!!!!!!!! 4");
+    let shippingAddress;
+    if (typeof jsonShippingAddress === "string") {
+      shippingAddress = await JSON.parse(jsonShippingAddress);
+    } else if (typeof jsonShippingAddress === "object") {
+      shippingAddress = jsonShippingAddress;
+    }
+    console.log("RUN!!!!!!!!! 3", shippingAddress);
+
+    let paymentMethod;
+    if (typeof jsonPaymentMethod === "string") {
+      paymentMethod = await JSON.parse(jsonPaymentMethod);
+    } else if (typeof jsonPaymentMethod === "object") {
+      paymentMethod = jsonPaymentMethod;
+    }
+
+    console.log("RUN!!!!!!!!! 4", paymentMethod);
     // Find reserve product in cart
     for (let i = 0; i < cartItems.length; i++) {
       // Find the product that the order is reserving
@@ -76,10 +94,9 @@ router.post(
         isReserved: true,
       });
       console.log("RUN!!!!!!!!! 4.1", reservedProduct);
+      console.log("RUN!!!!!!!!! 4.1.1", cartItems[i].productId);
 
-      const existedProduct = await Product.find({
-        _id: cartItems[i].productId,
-      });
+      const existedProduct = await Product.findById(cartItems[i].productId);
 
       console.log("RUN!!!!!!!!! 4.2", existedProduct);
       // If reservedProduct existed, throw an error
@@ -89,7 +106,7 @@ router.post(
       console.log("RUN!!!!!!!!! 4.3");
 
       // If existedProduct DO NOT existed, throw an error
-      if (!existedProduct || existedProduct.length === 0) {
+      if (!existedProduct) {
         throw new NotFoundError();
       }
       console.log("RUN!!!!!!!!! 4.4");
@@ -101,6 +118,7 @@ router.post(
 
     // Calculate price
     const itemsPrice = cartItems.reduce(
+      //@ts-ignore
       (acc, item) => acc + item.price * item.qty * item.discount,
       0
     );
@@ -143,11 +161,7 @@ router.post(
     });
     console.log("RUN!!!!!!!!! 8");
 
-    // Delete item from cart
-    await Cart.deleteMany({ userId: req.currentUser!.id });
-
-    console.log("RUN!!!!!!!!! 9");
-    res.status(201).send({});
+    res.status(201).send({ order });
   }
 );
 
