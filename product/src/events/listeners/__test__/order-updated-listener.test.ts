@@ -76,8 +76,8 @@ it("updates the order to updated status", async () => {
 
   const updatedProduct = await Product.findById(product.id);
 
-  expect(updatedProduct!.orderId).toBeDefined(undefined);
-  expect(updatedProduct!.isReserved).toBeDefined(false);
+  expect(updatedProduct!.orderId).toEqual(undefined);
+  expect(updatedProduct!.isReserved).toEqual(false);
 });
 
 it("acks the message", async () => {
