@@ -99,13 +99,10 @@ const Header = ({ currentUser, orders }) => {
                   <Link href="/dashboard" passHref>
                     <NavDropdown.Item>Dashboard</NavDropdown.Item>
                   </Link>
-                  {currentUser.isAdmin && (
+                  {currentUser?.isAdmin && (
                     <>
-                      <Link href="/admin/product-list" passHref>
-                        <NavDropdown.Item>Products</NavDropdown.Item>
-                      </Link>
-                      <Link href="/admin/create-product" passHref>
-                        <NavDropdown.Item>Create Product</NavDropdown.Item>
+                      <Link href="/admin" passHref>
+                        <NavDropdown.Item>Admin Dashboard</NavDropdown.Item>
                       </Link>
                     </>
                   )}
@@ -137,13 +134,7 @@ const Header = ({ currentUser, orders }) => {
 };
 
 Header.getInitialProps = async (context, client) => {
-  let { data } = await client
-    .get(`/api/orders/myorders`)
-    .catch((err) => console.log(err));
-
-  if (data === undefined) {
-    data = [];
-  }
+  let { data } = await client.get(`/api/orders/myorders`);
 
   return { orders: data };
 };
