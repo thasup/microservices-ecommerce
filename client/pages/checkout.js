@@ -93,7 +93,8 @@ const CheckoutPage = ({ currentUser }) => {
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                <strong>Name: </strong> {currentUser.id}
+                <strong>Name: </strong>{" "}
+                {currentUser.name ? currentUser.name : currentUser.id}
               </p>
               <p>
                 <strong>Email: </strong>
@@ -133,8 +134,8 @@ const CheckoutPage = ({ currentUser }) => {
                         </Col>
                         <Col>
                           <Link
-                            href={"/product/[productId]"}
-                            as={`/product/${item.product}`}
+                            href={"/products/[productId]"}
+                            as={`/products/${item.productId}`}
                           >
                             <a>{item.title}</a>
                           </Link>
@@ -187,12 +188,12 @@ const CheckoutPage = ({ currentUser }) => {
                 </Row>
               </ListGroup.Item>
 
-              <ListGroup.Item>{errors}</ListGroup.Item>
+              {errors}
               <ListGroup.Item className="d-grid gap-2">
                 <Button
                   type="button"
                   variant="dark"
-                  disabled={cart === 0}
+                  disabled={cart.length === 0}
                   onClick={checkoutHandler}
                 >
                   Checkout

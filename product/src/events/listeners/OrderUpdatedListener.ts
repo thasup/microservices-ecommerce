@@ -16,16 +16,11 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
   async onMessage(data: OrderUpdatedEvent["data"], msg: Message) {
     // Check order status
     if (data.status !== "cancelled") {
-      // ack the message
-      msg.ack();
+      // Do nothing, just ack the message
+      return msg.ack();
     }
 
     const items = data.cart;
-
-    if (items!.length === 0) {
-      // ack the message
-      msg.ack();
-    }
 
     if (!items) {
       throw new Error("Cart not found");
@@ -40,16 +35,19 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
         throw new Error("Product not found");
       }
 
-      // Increase the product quantity in stock
+      // Increase the product quantity in stock by return quantity from the cancelled order
       const countInStock = product.countInStock + items[i].qty;
 
+      // Declare orderId variable outside the scope
       let orderId = product.orderId;
 
       // If product already reserved
-      if (product.countInStock === 0) {
+      if (product.countInStock === 0 && product.isReserved === true) {
         // Cancelled reserved  product
         orderId = undefined;
+
         // Mark the product as avaliable by setting its orderId property
+        // and return quantity in stock to previous state
         product.set({
           orderId: undefined,
           countInStock: countInStock,
@@ -58,7 +56,10 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
 
         // Save the product
         await product.save();
-      } else {
+      }
+
+      // If the product still have some stock left (isReserved is still false)
+      else {
         product.set({ countInStock: countInStock });
 
         // Save the product
@@ -79,7 +80,7 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
         description: product.description,
         numReviews: product.numReviews,
         rating: product.rating,
-        countInStock: product.countInStock,
+        countInStock: countInStock,
         isReserved: product.isReserved,
         version: product.version,
         orderId: orderId,

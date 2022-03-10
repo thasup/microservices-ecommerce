@@ -38,10 +38,11 @@ router.patch(
     // publishing an event saying this was cancelled!
     new OrderUpdatedPublisher(natsWrapper.client).publish({
       id: order.id,
-      status: order.status,
+      status: OrderStatus.Cancelled,
       userId: order.userId,
       expiresAt: order.expiresAt,
       version: order.version,
+      cart: order.cart,
       paymentMethod: order.paymentMethod,
       itemsPrice: order.itemsPrice,
       shippingPrice: order.shippingPrice,

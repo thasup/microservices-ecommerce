@@ -1,7 +1,17 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "@thasup-dev/common";
-import { CartAttrs } from "./cart";
+
+interface CartAttrs {
+  userId: string;
+  title: string;
+  qty: number;
+  image: string;
+  price: number;
+  countInStock: number;
+  discount: number;
+  productId: string;
+}
 
 interface shippingAddressAttrs {
   address: string;

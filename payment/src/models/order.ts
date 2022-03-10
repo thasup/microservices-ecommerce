@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "@thasup-dev/common";
-import { ProductDoc } from "./product";
 
 // An interface that describes the properties
 // that are requried to create a new Order
@@ -23,10 +22,7 @@ interface OrderAttrs {
 // that a Order Model has
 interface OrderModel extends mongoose.Model<OrderDoc> {
   build(attrs: OrderAttrs): OrderDoc;
-  findByEvent(event: {
-    id: string;
-    version: number;
-  }): Promise<ProductDoc | null>;
+  findByEvent(event: { id: string; version: number }): Promise<OrderDoc | null>;
 }
 
 // An interface that describes the properties
@@ -108,7 +104,7 @@ orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.findByEvent = (event: { id: string; version: number }) => {
   return Order.findOne({
-    _id: event.id,
+    id: event.id,
     version: event.version - 1,
   });
 };

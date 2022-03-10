@@ -6,8 +6,9 @@ import Link from "next/link";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import useRequest from "../../hooks/use-request";
+import ExpireTimer from "../../components/ExpireTimer";
 
-const Dashboard = ({ currentUser }) => {
+const Dashboard = ({ currentUser, orders }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,19 +26,19 @@ const Dashboard = ({ currentUser }) => {
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  const [fetchOrderSuccess, setFetchOrderSuccess] = useState(false);
-  const [orders, setOrders] = useState(null);
+  // const [fetchOrderSuccess, setFetchOrderSuccess] = useState(false);
+  // const [orders, setOrders] = useState(null);
 
-  const { doRequest: fetchOrders, errors: fetchOrdersErrors } = useRequest({
-    url: `/api/orders/myorders`,
-    method: "get",
-    body: {},
-    onSuccess: (orders) => {
-      console.log(orders);
-      setOrders(orders);
-      setFetchOrderSuccess(true);
-    },
-  });
+  // const { doRequest: fetchOrders, errors: fetchOrdersErrors } = useRequest({
+  //   url: `/api/orders/myorders`,
+  //   method: "get",
+  //   body: {},
+  //   onSuccess: (orders) => {
+  //     console.log(orders);
+  //     setOrders(orders);
+  //     setFetchOrderSuccess(true);
+  //   },
+  // });
 
   const { doRequest: updateProfile, errors: updateErrors } = useRequest({
     url: "/api/users/profile",
@@ -82,16 +83,10 @@ const Dashboard = ({ currentUser }) => {
       setCountry(currentUser.shippingAddress.country);
     }
 
-    if (!orders) {
-      fetchOrders();
-    }
-
-    if (loading === true) {
-      setTimeout(() => {
-        setUpdateSuccess(false);
-      }, 5000);
-    }
-  }, [currentUser, loading]);
+    // if (!orders) {
+    //   fetchOrders();
+    // }
+  }, [currentUser, loading, orders]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -161,89 +156,105 @@ const Dashboard = ({ currentUser }) => {
       </Col>
       <Col md={9}>
         <h2>My Order</h2>
-        {fetchOrderSuccess ? (
-          <>
-            {loading ? (
-              <Loader />
-            ) : fetchOrdersErrors ? (
-              { fetchOrdersErrors }
-            ) : (
-              <Table striped bordered hover responsive className="table-sm">
-                <thead>
-                  <tr>
-                    <th>ORDER ID</th>
-                    <th>DATE</th>
-                    <th>TOTAL</th>
-                    <th>PAID</th>
-                    <th>DELIVERED</th>
-                    <th>DETAILS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => (
-                    <tr key={order.id}>
-                      <td>{order.id}</td>
-                      <td>{order.createdAt.substring(0, 10)}</td>
-                      <td>$ {order.totalPrice}</td>
-                      <td>
-                        {order.isPaid ? (
-                          <p>
-                            <i
-                              className="fas fa-check"
-                              style={{ color: "green" }}
-                            ></i>{" "}
-                            {order.paidAt.substring(0, 10)}
-                          </p>
-                        ) : (
-                          <p>
-                            <i
-                              className="fas fa-times"
-                              style={{ color: "red" }}
-                            ></i>{" "}
-                            Not Paid
-                          </p>
-                        )}
-                      </td>
-                      <td>
-                        {order.isDelivered ? (
-                          <p>
-                            <i
-                              className="fas fa-check"
-                              style={{ color: "green" }}
-                            ></i>{" "}
-                            {order.deliveredAt.substring(0, 10)}
-                          </p>
-                        ) : (
-                          <p>
-                            <i
-                              className="fas fa-times"
-                              style={{ color: "red" }}
-                            ></i>{" "}
-                            Not Delivered
-                          </p>
-                        )}
-                      </td>
-                      <td>
-                        <Link
-                          href={"/orders/[orderId]"}
-                          as={`/orders/${order.id}`}
-                          passHref
-                        >
-                          <Button className="btn-sm" variant="light">
-                            <i className="fas fa-info-circle"></i> Details
-                          </Button>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            )}
-          </>
-        ) : null}
+        {loading ? (
+          <Loader />
+        ) : (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ORDER ID</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>METHOD</th>
+                <th>EXPIRE</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
+                <th>DETAILS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order.id}>
+                  <td>{order.id}</td>
+                  <td>{order.createdAt.substring(0, 10)}</td>
+                  <td>$ {order.totalPrice}</td>
+                  <td>{order.paymentMethod}</td>
+                  <td>
+                    {order.status === "cancelled" ? (
+                      <>Expired</>
+                    ) : order.status === "completed" ? (
+                      <>{"-"}</>
+                    ) : (
+                      <>
+                        <ExpireTimer order={order} />
+                      </>
+                    )}
+                  </td>
+                  <td>
+                    {order.isPaid ? (
+                      <p>
+                        <i
+                          className="fas fa-check"
+                          style={{ color: "green" }}
+                        ></i>{" "}
+                        {order.paidAt.substring(0, 10)}
+                      </p>
+                    ) : (
+                      <p>
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>{" "}
+                        Not Paid
+                      </p>
+                    )}
+                  </td>
+                  <td>
+                    {order.isDelivered ? (
+                      <p>
+                        <i
+                          className="fas fa-check"
+                          style={{ color: "green" }}
+                        ></i>{" "}
+                        {order.deliveredAt.substring(0, 10)}
+                      </p>
+                    ) : (
+                      <p>
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>{" "}
+                        Not Delivered
+                      </p>
+                    )}
+                  </td>
+                  <td>
+                    <Link
+                      href={"/orders/[orderId]"}
+                      as={`/orders/${order.id}`}
+                      passHref
+                    >
+                      <Button className="btn-sm" variant="light">
+                        <i className="fas fa-info-circle"></i> Details
+                      </Button>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Col>
     </Row>
   );
+};
+
+Dashboard.getInitialProps = async (context, client) => {
+  let { data } = await client
+    .get(`/api/orders/myorders`)
+    .catch((err) => console.log(err));
+
+  return { orders: data };
 };
 
 export default Dashboard;

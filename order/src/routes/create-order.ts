@@ -10,12 +10,11 @@ import {
 import { Order } from "../models/order";
 import { natsWrapper } from "../NatsWrapper";
 import { OrderCreatedPublisher } from "../events/publishers/OrderCreatedPublisher";
-import { Cart } from "../models/cart";
 import { Product } from "../models/product";
 
 const router = express.Router();
 
-const EXPIRATION_WINDOW_SECONDS = 15 * 60;
+const EXPIRATION_WINDOW_SECONDS = 30 * 60;
 
 router.post(
   "/api/orders",
@@ -38,39 +37,41 @@ router.post(
   async (req: Request, res: Response) => {
     const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = req.body;
 
-    interface CartInterface {
-      userId: string;
-      title: string;
-      qty: number;
-      image: string;
-      price: number;
-      countInStock: number;
-      discount: number;
-      productId: string;
-    }
-
     // Calculate an expiration date for this order
     const expiration = new Date();
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
-    // Create shippingAddress
-    const cartItems: Array<CartInterface> = JSON.parse(jsonCartItems);
+    let cartItems;
+    // Check if ti is JSON type, them convrt to javascript object
+    if (typeof jsonCartItems === "string") {
+      cartItems = await JSON.parse(jsonCartItems);
+    } else if (typeof jsonCartItems === "object") {
+      cartItems = jsonCartItems;
+    }
 
-    // Convert JSON to javascript object
-    const shippingAddress = JSON.parse(jsonShippingAddress);
-    const paymentMethod = JSON.parse(jsonPaymentMethod);
+    let shippingAddress;
+    if (typeof jsonShippingAddress === "string") {
+      shippingAddress = await JSON.parse(jsonShippingAddress);
+    } else if (typeof jsonShippingAddress === "object") {
+      shippingAddress = jsonShippingAddress;
+    }
+
+    let paymentMethod;
+    if (typeof jsonPaymentMethod === "string") {
+      paymentMethod = await JSON.parse(jsonPaymentMethod);
+    } else if (typeof jsonPaymentMethod === "object") {
+      paymentMethod = jsonPaymentMethod;
+    }
 
     // Find reserve product in cart
     for (let i = 0; i < cartItems.length; i++) {
       // Find the product that the order is reserving
       const reservedProduct = await Product.find({
-        id: cartItems[i].productId,
+        _id: cartItems[i].productId,
         isReserved: true,
       });
 
-      const existedProduct = await Product.find({
-        id: cartItems[i].productId,
-      });
+      const existedProduct = await Product.findById(cartItems[i].productId);
 
       // If reservedProduct existed, throw an error
       if (reservedProduct && reservedProduct.length !== 0) {
@@ -78,7 +79,7 @@ router.post(
       }
 
       // If existedProduct DO NOT existed, throw an error
-      if (!existedProduct || existedProduct.length === 0) {
+      if (!existedProduct) {
         throw new NotFoundError();
       }
     }
@@ -88,6 +89,7 @@ router.post(
 
     // Calculate price
     const itemsPrice = cartItems.reduce(
+      //@ts-ignore
       (acc, item) => acc + item.price * item.qty * item.discount,
       0
     );
@@ -126,9 +128,6 @@ router.post(
       isPaid: order.isPaid,
       isDelivered: order.isDelivered,
     });
-
-    // Delete item from cart
-    await Cart.deleteMany({ userId: req.currentUser!.id });
 
     res.status(201).send(order);
   }

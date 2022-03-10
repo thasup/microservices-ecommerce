@@ -5,7 +5,7 @@ import Router from "next/router";
 import FormContainer from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
 
-const ShippingPage = () => {
+const ShippingPage = ({ currentUser }) => {
   const [address, setAddress] = useState(null);
   const [city, setCity] = useState(null);
   const [postalCode, setPostalCode] = useState(null);
@@ -20,7 +20,15 @@ const ShippingPage = () => {
       : [];
     console.log("initial storage shippingAddress:", data);
 
-    if (data !== undefined) {
+    if (currentUser?.shippingAddress.address) {
+      // Set state to shippingAddress data in profile information
+      setAddress(currentUser?.shippingAddress.address);
+      setCity(currentUser?.shippingAddress.city);
+      setPostalCode(currentUser?.shippingAddress.postalCode);
+      setCountry(currentUser?.shippingAddress.country);
+
+      setStorageReady(true);
+    } else if (data !== undefined) {
       // Set state to shippingAddress data in localStorage
       setAddress(data.address);
       setCity(data.city);

@@ -13,10 +13,10 @@ router.get(
   "/api/orders/myorders",
   requireAuth,
   async (req: Request, res: Response) => {
-    const orders = await Order.find({ userId: req.currentUser!.id });
+    let orders = await Order.find({ userId: req.currentUser!.id });
 
     if (!orders || orders.length === 0) {
-      throw new NotFoundError();
+      orders = [];
     }
 
     res.status(200).send(orders);

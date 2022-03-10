@@ -10,16 +10,15 @@ import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
+import ExpireTimer from "../../components/ExpireTimer";
 
-const OrderPage = ({ currentUser }) => {
+const OrderPage = ({ currentUser, order }) => {
   const { orderId } = useRouter().query;
 
   const [sdkReady, setSdkReady] = useState(false);
   //   const [clientId, setClientId] = useState(null);
-  //   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingPay, setLoadingPay] = useState(false);
-  const [order, setOrder] = useState(null);
 
   // const { doRequest: fetchPaypalId, errors: fetchIdErrors } = useRequest({
   //   url: "/api/paypal",
@@ -32,16 +31,6 @@ const OrderPage = ({ currentUser }) => {
   //   },
   // });
 
-  const { doRequest: fetchOrder, errors: orderErrors } = useRequest({
-    url: `/api/orders/${orderId}`,
-    method: "get",
-    body: {},
-    onSuccess: (order) => {
-      console.log(order);
-      setOrder(order);
-    },
-  });
-
   const { doRequest: payStripeOrder, errors: paymentErrors } = useRequest({
     url: `/api/payments`,
     method: "post",
@@ -51,6 +40,7 @@ const OrderPage = ({ currentUser }) => {
     onSuccess: (payment) => {
       console.log(payment);
       setLoading(false);
+      Router.push(`/orders/${orderId}`);
     },
   });
 
@@ -59,11 +49,8 @@ const OrderPage = ({ currentUser }) => {
       Router.push("/signin");
     }
 
-    // Fetch the order from client-side
-    await fetchOrder();
-
     if (currentUser.isAdmin !== true && currentUser.id !== order.userId) {
-      Router.push("/");
+      Router.push("/signin");
     }
     setLoading(false);
 
@@ -73,18 +60,15 @@ const OrderPage = ({ currentUser }) => {
       script.type = "text/javascript";
       script.src = `https://www.paypal.com/sdk/js?client-id=AdL_T7SNeUKaFYK8QBDWYsmFP3wKpIYtwzMOAVl8I2s6kvKImr47ImGxB9NbPFQA4kfGqt-ZNrRmBtgx`;
       script.async = true;
+      script.defer = true;
       script.onload = () => {
         setSdkReady(true);
       };
       document.body.appendChild(script);
     };
 
-    // Check if customer has paid the order or the order has been delivered, then
-    if (!order || order.id !== orderId) {
-      fetchOrder();
-    }
     // Check if customer hasn't paid the order and chose to proceed with paypal
-    else if (order.paymentMethod === "paypal" && order.isPaid === false) {
+    if (order.paymentMethod === "paypal" && order.isPaid === false) {
       // Check if the page hasn't loaded with paypal, then
       if (!window.paypal) {
         // just add the paypal script (and sdk ready)
@@ -94,7 +78,7 @@ const OrderPage = ({ currentUser }) => {
         setSdkReady(true);
       }
     }
-  }, [loading]);
+  }, [loading, loadingPay, order]);
 
   const paypalPaymentHandler = (paymentResult) => {
     setLoadingPay(true);
@@ -112,8 +96,6 @@ const OrderPage = ({ currentUser }) => {
 
   return loading ? (
     <Loader />
-  ) : orderErrors ? (
-    { orderErrors }
   ) : (
     <>
       <h1>Order {order.id}</h1>
@@ -123,7 +105,8 @@ const OrderPage = ({ currentUser }) => {
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                <strong>Name: </strong> {order.userId}
+                <strong>Name: </strong>{" "}
+                {currentUser.name ? currentUser?.name : currentUser?.id}
               </p>
               <p>
                 <strong>Email: </strong>
@@ -140,7 +123,8 @@ const OrderPage = ({ currentUser }) => {
               </p>
               {order.isDelivered ? (
                 <Message variant="success">
-                  Delivered on {order.updatedAt}
+                  Delivered on {order.updatedAt.substring(0, 10)}{" "}
+                  {order.updatedAt.substring(11, 16)}
                 </Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
@@ -153,10 +137,17 @@ const OrderPage = ({ currentUser }) => {
                 <strong>Method: </strong>
                 {order.paymentMethod}
               </p>
-              {order.isPaid ? (
-                <Message variant="success">Paid on {order.updatedAt}</Message>
+              {order.status === "cancelled" ? (
+                <Message variant="danger">Order Cancelled</Message>
+              ) : order.isPaid ? (
+                <Message variant="success">
+                  Paid on {order.updatedAt.substring(0, 10)}{" "}
+                  {order.updatedAt.substring(11, 16)}
+                </Message>
               ) : (
-                <Message variant="danger">Not Paid</Message>
+                <Message variant="info">
+                  Order will expire in <ExpireTimer order={order} />
+                </Message>
               )}
             </ListGroup.Item>
 
@@ -236,7 +227,7 @@ const OrderPage = ({ currentUser }) => {
                 </Row>
               </ListGroup.Item>
 
-              {!order.isPaid && (
+              {!order.isPaid && order.status !== "cancelled" ? (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
                   {order.paymentMethod === "paypal" && (
@@ -264,7 +255,7 @@ const OrderPage = ({ currentUser }) => {
                     />
                   )}
                 </ListGroup.Item>
-              )}
+              ) : null}
               {/* {loadingDeliver && <Loader />} */}
               {currentUser &&
                 currentUser.isAdmin &&
@@ -273,7 +264,7 @@ const OrderPage = ({ currentUser }) => {
                   <ListGroup.Item className="d-grid">
                     <Button
                       type="button"
-                      variant="outline-dark"
+                      variant="dark"
                       onClick={deliverHandler}
                     >
                       Mark As Delivered
@@ -288,22 +279,11 @@ const OrderPage = ({ currentUser }) => {
   );
 };
 
-// export async function getStaticProps() {
-//   const aaa = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-//   console.log("from static props:", aaa);
+OrderPage.getInitialProps = async (context, client) => {
+  const { orderId } = context.query;
+  let { data } = await client.get(`/api/orders/${orderId}`);
 
-//   data = `https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`;
-
-//   return { props: { clientId: data } };
-// }
-
-// export async function getStaticPaths() {
-//   //   const { data } = await client.get(`/api/config/paypal`);
-
-//   return {
-//     paths: [{ params: { orderId: "62278ec155c7220b750bf054" } }],
-//     fallback: "blocking", // false or 'blocking'
-//   };
-// }
+  return { order: data };
+};
 
 export default OrderPage;

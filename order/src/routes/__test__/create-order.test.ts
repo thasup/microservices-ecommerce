@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import request from "supertest";
-import { OrderStatus } from "@thasup-dev/common";
 
 import { app } from "../../app";
 import { Product, ProductDoc } from "../../models/product";

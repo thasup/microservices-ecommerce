@@ -55,15 +55,16 @@ router.post(
       source: token,
     });
 
+    if (!charge.id) {
+      throw new Error("Payment failed to proceed correctly");
+    }
+
     const payment = Payment.build({
       orderId,
       stripeId: charge.id,
     });
 
     await payment.save();
-
-    order.set({ status: OrderStatus.Completed });
-    await order.save();
 
     await new PaymentCreatedPublisher(natsWrapper.client).publish({
       id: payment.id,
