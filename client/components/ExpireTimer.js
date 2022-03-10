@@ -6,11 +6,11 @@ const ExpireTimer = ({ order }) => {
   useEffect(() => {
     const findTimeLeft = () => {
       const msLeft = new Date(order?.expiresAt) - new Date();
-      setTimeLeft(Math.round(msLeft / 1000));
+      setTimeLeft(Math.round(msLeft / (60 * 1000)));
     };
 
     findTimeLeft();
-    const timerId = setInterval(findTimeLeft, 1000);
+    const timerId = setInterval(findTimeLeft, 60000);
 
     return () => {
       clearInterval(timerId);
@@ -21,7 +21,7 @@ const ExpireTimer = ({ order }) => {
     setTimeLeft(null);
   }
 
-  return timeLeft === null ? <>Expired</> : <>{timeLeft} s</>;
+  return timeLeft === null ? <>Expired</> : <>{timeLeft} minutes</>;
 };
 
 // ExpireCounter.getInitialProps = async (context, client) => {

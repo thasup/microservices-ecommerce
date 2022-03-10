@@ -40,6 +40,7 @@ const OrderPage = ({ currentUser, order }) => {
     onSuccess: (payment) => {
       console.log(payment);
       setLoading(false);
+      Router.push(`/orders/${orderId}`);
     },
   });
 
@@ -280,9 +281,7 @@ const OrderPage = ({ currentUser, order }) => {
 
 OrderPage.getInitialProps = async (context, client) => {
   const { orderId } = context.query;
-  let { data } = await client
-    .get(`/api/orders/${orderId}`)
-    .catch((err) => console.log(err));
+  let { data } = await client.get(`/api/orders/${orderId}`);
 
   return { order: data };
 };

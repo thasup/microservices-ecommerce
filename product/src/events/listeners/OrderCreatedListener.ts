@@ -18,7 +18,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 
     if (items!.length === 0) {
       // ack the message
-      msg.ack();
+      return msg.ack();
     }
 
     if (!items) {
