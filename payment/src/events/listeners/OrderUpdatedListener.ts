@@ -15,15 +15,28 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
 
   async onMessage(data: OrderUpdatedEvent["data"], msg: Message) {
     // Find the product that the order is reserving
-    const order = await Order.findByEvent(data);
+    const order = await Order.findByEvent(data).catch((err) =>
+      console.log(err)
+    );
+
+    console.log("gfdsfdsfdfdf", data);
+    console.log("gfgfgfgf", order);
 
     // If no order, throw error
     if (!order) {
       throw new Error("Order not found");
     }
 
-    // Mark the product as being reserved by setting its orderId property
-    order.set({ status: OrderStatus.Cancelled });
+    if (order.isPaid) {
+      order.set({
+        status: data.status,
+        isPaid: data.isPaid,
+        paidAt: data.paidAt,
+      });
+    } else {
+      // Mark the product as being reserved by setting its orderId property
+      order.set({ status: OrderStatus.Cancelled });
+    }
 
     // Save the product
     await order.save();

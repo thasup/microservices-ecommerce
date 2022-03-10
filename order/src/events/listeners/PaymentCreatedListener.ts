@@ -29,6 +29,8 @@ export class PaymentCreatedListener extends Listener<PaymentCreatedEvent> {
     });
     await order.save();
 
+    console.log("DEBUG", order);
+
     // publishing an event saying this was cancelled!
     new OrderUpdatedPublisher(natsWrapper.client).publish({
       id: order.id,

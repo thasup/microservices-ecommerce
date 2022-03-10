@@ -66,13 +66,6 @@ router.post(
 
     await payment.save();
 
-    order.set({
-      status: OrderStatus.Completed,
-      isPaid: true,
-      paidAt: new Date(),
-    });
-    await order.save();
-
     await new PaymentCreatedPublisher(natsWrapper.client).publish({
       id: payment.id,
       orderId: payment.orderId,

@@ -161,7 +161,7 @@ router.post(
     });
     console.log("RUN!!!!!!!!! 8");
 
-    res.status(201).send({ order });
+    res.status(201).send(order);
   }
 );
 
