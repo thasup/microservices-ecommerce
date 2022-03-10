@@ -10,17 +10,15 @@ import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
-import ExpireCounter from "../../components/ExpireCounter";
+import ExpireTimer from "../../components/ExpireTimer";
 
 const OrderPage = ({ currentUser, order }) => {
   const { orderId } = useRouter().query;
 
   const [sdkReady, setSdkReady] = useState(false);
   //   const [clientId, setClientId] = useState(null);
-  //   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingPay, setLoadingPay] = useState(false);
-  // const [order, setOrder] = useState(null);
 
   // const { doRequest: fetchPaypalId, errors: fetchIdErrors } = useRequest({
   //   url: "/api/paypal",
@@ -30,16 +28,6 @@ const OrderPage = ({ currentUser, order }) => {
   //     console.log(data);
   //     setClientId(data);
   //     setLoading(false);
-  //   },
-  // });
-
-  // const { doRequest: fetchOrder, errors: orderErrors } = useRequest({
-  //   url: `/api/orders/${orderId}`,
-  //   method: "get",
-  //   body: {},
-  //   onSuccess: (order) => {
-  //     console.log(order);
-  //     setOrder(order);
   //   },
   // });
 
@@ -60,9 +48,6 @@ const OrderPage = ({ currentUser, order }) => {
       Router.push("/signin");
     }
 
-    // Fetch the order from client-side
-    // await fetchOrder();
-
     if (currentUser.isAdmin !== true && currentUser.id !== order.userId) {
       Router.push("/signin");
     }
@@ -74,16 +59,13 @@ const OrderPage = ({ currentUser, order }) => {
       script.type = "text/javascript";
       script.src = `https://www.paypal.com/sdk/js?client-id=AdL_T7SNeUKaFYK8QBDWYsmFP3wKpIYtwzMOAVl8I2s6kvKImr47ImGxB9NbPFQA4kfGqt-ZNrRmBtgx`;
       script.async = true;
+      script.defer = true;
       script.onload = () => {
         setSdkReady(true);
       };
       document.body.appendChild(script);
     };
 
-    // Check if customer has paid the order or the order has been delivered, then
-    // if (!order || order.id !== orderId) {
-    //   fetchOrder();
-    // }
     // Check if customer hasn't paid the order and chose to proceed with paypal
     if (order.paymentMethod === "paypal" && order.isPaid === false) {
       // Check if the page hasn't loaded with paypal, then
@@ -115,18 +97,15 @@ const OrderPage = ({ currentUser, order }) => {
     <Loader />
   ) : (
     <>
-      <h1>Order Details</h1>
+      <h1>Order {order.id}</h1>
       <Row>
         <Col>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Order Id</h2>
-              <p>{order.id}</p>
-            </ListGroup.Item>
-            <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                <strong>Name: </strong> {order.userId}
+                <strong>Name: </strong>{" "}
+                {currentUser.name ? currentUser?.name : currentUser?.id}
               </p>
               <p>
                 <strong>Email: </strong>
@@ -143,7 +122,8 @@ const OrderPage = ({ currentUser, order }) => {
               </p>
               {order.isDelivered ? (
                 <Message variant="success">
-                  Delivered on {order.updatedAt}
+                  Delivered on {order.updatedAt.substring(0, 10)}{" "}
+                  {order.updatedAt.substring(11, 16)}
                 </Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
@@ -160,11 +140,12 @@ const OrderPage = ({ currentUser, order }) => {
                 <Message variant="danger">Order Cancelled</Message>
               ) : order.isPaid ? (
                 <Message variant="success">
-                  Paid on {order.updatedAt.substring(0, 10)}
+                  Paid on {order.updatedAt.substring(0, 10)}{" "}
+                  {order.updatedAt.substring(11, 16)}
                 </Message>
               ) : (
                 <Message variant="info">
-                  Order will expire in <ExpireCounter order={order} /> seconds
+                  Order will expire in <ExpireTimer order={order} />
                 </Message>
               )}
             </ListGroup.Item>

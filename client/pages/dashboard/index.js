@@ -165,6 +165,7 @@ const Dashboard = ({ currentUser, orders }) => {
                 <th>ORDER ID</th>
                 <th>DATE</th>
                 <th>TOTAL</th>
+                <th>METHOD</th>
                 <th>EXPIRE</th>
                 <th>PAID</th>
                 <th>DELIVERED</th>
@@ -177,6 +178,7 @@ const Dashboard = ({ currentUser, orders }) => {
                   <td>{order.id}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
                   <td>$ {order.totalPrice}</td>
+                  <td>{order.paymentMethod}</td>
                   <td>
                     {order.status === "cancelled" ? (
                       <>Expired</>
