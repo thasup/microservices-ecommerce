@@ -19,9 +19,6 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
       console.log(err)
     );
 
-    console.log("gfdsfdsfdfdf", data);
-    console.log("gfgfgfgf", order);
-
     // If no order, throw error
     if (!order) {
       throw new Error("Order not found");

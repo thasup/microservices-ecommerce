@@ -8,6 +8,7 @@ import { showAllOrderRouter } from "./routes/show-all-order";
 import { cancelOrderRouter } from "./routes/cancel-order";
 import { getOrderRouter } from "./routes/get-order";
 import { createOrderRouter } from "./routes/create-order";
+import { deliverOrderRouter } from "./routes/deliver-order";
 
 const app = express();
 app.set("trust proxy", true);
@@ -25,6 +26,7 @@ app.use(showAllOrderRouter);
 app.use(cancelOrderRouter);
 app.use(getOrderRouter);
 app.use(createOrderRouter);
+app.use(deliverOrderRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
