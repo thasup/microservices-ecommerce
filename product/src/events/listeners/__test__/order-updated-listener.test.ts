@@ -27,7 +27,7 @@ const setup = async () => {
     numReviews: 0,
     rating: 0,
     countInStock: 0,
-    isReserved: false,
+    isReserved: true,
   });
 
   const orderId = new mongoose.Types.ObjectId().toHexString();
@@ -47,7 +47,7 @@ const setup = async () => {
     cart: [
       {
         title: product.title,
-        qty: 1,
+        qty: 2,
         image: product.images.image1,
         price: product.price,
         discount: 1,
@@ -78,6 +78,7 @@ it("updates the order to updated status", async () => {
 
   expect(updatedProduct!.orderId).toEqual(undefined);
   expect(updatedProduct!.isReserved).toEqual(false);
+  expect(updatedProduct!.countInStock).toEqual(2);
 });
 
 it("acks the message", async () => {
