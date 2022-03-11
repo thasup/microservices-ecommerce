@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, ListGroup, Row, Card, Button } from "react-bootstrap";
+import { Col, ListGroup, Row, Card, Button, Container } from "react-bootstrap";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
 import StripeCheckout from "react-stripe-checkout";
@@ -21,7 +21,7 @@ const OrderPage = ({ currentUser, order }) => {
   const [loadingDeliver, setLoadingDeliver] = useState(false);
   const [paypalLoaded, setPaypalLoaded] = useState(false);
 
-  const { doRequest: payStripeOrder, errors: paymentErrors } = useRequest({
+  const { doRequest: payOrder, errors: paymentErrors } = useRequest({
     url: `/api/payments`,
     method: "post",
     body: {
@@ -81,9 +81,9 @@ const OrderPage = ({ currentUser, order }) => {
     }
   }, [loadingPay, loadingDeliver, order]);
 
-  const paypalPaymentHandler = (paymentResult) => {
+  const paypalPaymentHandler = () => {
     setLoadingPay(true);
-    updateOrder(orderId, paymentResult);
+    payOrder({ token: currentUser.id });
     setLoadingPay(false);
   };
 
@@ -96,7 +96,7 @@ const OrderPage = ({ currentUser, order }) => {
   return loading ? (
     <Loader />
   ) : (
-    <>
+    <Container className="app-container">
       <h1>Order {order.id}</h1>
       <Row>
         <Col>
@@ -249,7 +249,7 @@ const OrderPage = ({ currentUser, order }) => {
                     <StripeCheckout
                       token={({ id }) => {
                         setLoading(true);
-                        payStripeOrder({ token: id });
+                        payOrder({ token: id });
                       }}
                       stripeKey="pk_test_51KYCbpCqypc6uabtXBYVwjkCQxYJ02VlTebqSllPb0Kei5mvKN1brmzIgEeZK371eoKkh7rJxX70lr7wet0VfZjb00PDUgCK7c"
                       amount={order.totalPrice * 100}
@@ -271,7 +271,7 @@ const OrderPage = ({ currentUser, order }) => {
           </Card>
         </Col>
       </Row>
-    </>
+    </Container>
   );
 };
 
