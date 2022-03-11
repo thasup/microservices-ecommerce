@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, ListGroup, Form, Button, Card } from "react-bootstrap";
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 import Link from "next/link";
-import Image from "next/image";
 
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
-import useRequest from "../hooks/use-request";
 import NextImage from "../components/NextImage";
 
-const CartPage = () => {
+const CartPage = ({ currentUser }) => {
   // const { productId } = useRouter().query;
 
   const [productId, setProductId] = useState(null);
@@ -29,6 +27,9 @@ const CartPage = () => {
 
     // Cart has items or empty
     if (cartItems !== undefined) {
+      cartItems.map((item) => {
+        item.countInStock += 1;
+      });
       // Set cart state to cartItems in localStorage
       setCart(cartItems);
 
@@ -90,7 +91,11 @@ const CartPage = () => {
 
   const checkoutHandler = (e) => {
     e.preventDefault();
-    Router.push("/shipping");
+    if (!currentUser) {
+      Router.push("/signin");
+    } else {
+      Router.push("/shipping");
+    }
   };
 
   return storageReady ? (

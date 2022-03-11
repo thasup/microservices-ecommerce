@@ -14,16 +14,11 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
   queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
   async onMessage(data: ProductUpdatedEvent["data"], msg: Message) {
-    const product = await Product.findByEvent(data);
-
-    if (!product) {
-      throw new NotFoundError();
-    }
-
     const {
       id,
       title,
       price,
+      userId,
       image,
       colors,
       sizes,
@@ -31,6 +26,27 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       isReserved,
       orderId,
     } = data;
+
+    const product = await Product.findByEvent(data);
+
+    if (!product) {
+      // throw new NotFoundError();
+      const product = Product.build({
+        id,
+        title,
+        price,
+        userId,
+        image,
+        colors,
+        sizes,
+        countInStock,
+        isReserved,
+        orderId,
+      });
+      await product.save();
+
+      return msg.ack();
+    }
 
     product.set({
       id,

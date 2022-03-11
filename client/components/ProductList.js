@@ -1,15 +1,27 @@
-import axios from "axios";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col, Row, Table } from "react-bootstrap";
 
+import useRequest from "../hooks/use-request";
 import CustomTooltip from "./CustomTooltip";
 
 const ProductList = ({ products }) => {
-  const deleteHandler = async (id) => {
+  const [deleteProductId, setDeleteProductId] = useState(null);
+
+  const { doRequest, errors } = useRequest({
+    url: `/api/products/${deleteProductId}`,
+    method: "delete",
+    body: {},
+    onSuccess: () => {
+      setLoading(false);
+      Router.push("/admin");
+    },
+  });
+
+  const deleteHandler = (id) => {
     setLoading(true);
-    await axios.delete(`/api/products/${id}`);
-    setLoading(false);
+    setDeleteProductId(id);
+    doRequest();
   };
 
   return (
@@ -54,7 +66,11 @@ const ProductList = ({ products }) => {
                 <td>{product.material}</td>
                 <td>{product.numReviews}</td>
                 <td>
-                  <Link href={`/admin/product-edit`} passHref>
+                  <Link
+                    href={`/products/edit/[productId]`}
+                    as={`/products/edit/${product.id}`}
+                    passHref
+                  >
                     <Button variant="dark" className="btn-sm mx-1">
                       <i className="fas fa-edit"></i>
                     </Button>
@@ -71,6 +87,7 @@ const ProductList = ({ products }) => {
             ))}
           </tbody>
         </Table>
+        {errors}
       </Col>
     </Row>
   );

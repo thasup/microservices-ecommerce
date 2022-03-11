@@ -1,17 +1,25 @@
-import axios from "axios";
-import Link from "next/link";
-import Router from "next/router";
-import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Nav, Row, Tab, Table } from "react-bootstrap";
+import React from "react";
+import dynamic from "next/dynamic";
+import { Col, Container, Nav, Row } from "react-bootstrap";
 
 import buildClient from "../../api/build-client";
-import Loader from "../../components/Loader";
-import Message from "../../components/Message";
-import useRequest from "../../hooks/use-request";
 import CreateProduct from "../../components/CreateProduct";
-import ProductList from "../../components/ProductList";
 import UserList from "../../components/UserList";
 import OrderList from "../../components/OrderList";
+import ProductList from "../../components/ProductList";
+
+const DynamicTabContainer = dynamic(
+  () => import("react-bootstrap/TabContainer"),
+  {
+    ssr: false,
+  }
+);
+const DynamicTabContent = dynamic(() => import("react-bootstrap/TabContent"), {
+  ssr: false,
+});
+const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
+  ssr: false,
+});
 
 const AdminDashboard = ({ products, users, orders, currentUser }) => {
   // const [loading, setLoading] = useState(false);
@@ -40,9 +48,13 @@ const AdminDashboard = ({ products, users, orders, currentUser }) => {
   return (
     <Container className="app-container admin-dashboard">
       <h1>Admin Dashboard</h1>
-      <Tab.Container variant="light" defaultActiveKey="product-list">
+      <DynamicTabContainer
+        variant="light"
+        defaultActiveKey="product-list"
+        forceRenderTabPanel={true}
+      >
         <Row>
-          <Col sm={2}>
+          <Col md={2} className="mb-5">
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
                 <Nav.Link eventKey="product-list">
@@ -66,24 +78,24 @@ const AdminDashboard = ({ products, users, orders, currentUser }) => {
               </Nav.Item>
             </Nav>
           </Col>
-          <Col sm={10}>
-            <Tab.Content>
-              <Tab.Pane eventKey="product-list">
+          <Col md={10}>
+            <DynamicTabContent>
+              <DynamicTabPane eventKey="product-list">
                 <ProductList products={products} />
-              </Tab.Pane>
-              <Tab.Pane eventKey="user-list">
+              </DynamicTabPane>
+              <DynamicTabPane eventKey="user-list">
                 <UserList users={users} />
-              </Tab.Pane>
-              <Tab.Pane eventKey="order-list">
+              </DynamicTabPane>
+              <DynamicTabPane eventKey="order-list">
                 <OrderList orders={orders} />
-              </Tab.Pane>
-              <Tab.Pane eventKey="create-product">
+              </DynamicTabPane>
+              <DynamicTabPane eventKey="create-product">
                 <CreateProduct />
-              </Tab.Pane>
-            </Tab.Content>
+              </DynamicTabPane>
+            </DynamicTabContent>
           </Col>
         </Row>
-      </Tab.Container>
+      </DynamicTabContainer>
     </Container>
   );
 };

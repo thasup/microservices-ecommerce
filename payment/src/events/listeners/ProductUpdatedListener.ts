@@ -14,16 +14,39 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
   queueGroupName = QueueGroupNames.PAYMENT_SERVICE;
 
   async onMessage(data: ProductUpdatedEvent["data"], msg: Message) {
+    const {
+      id,
+      title,
+      price,
+      userId,
+      image,
+      colors,
+      sizes,
+      countInStock,
+      isReserved,
+    } = data;
+
     const product = await Product.findByEvent(data);
 
     if (!product) {
-      throw new NotFoundError();
+      // throw new NotFoundError();
+      const product = Product.build({
+        id,
+        title,
+        price,
+        userId,
+        image,
+        colors,
+        sizes,
+        countInStock,
+        isReserved,
+      });
+      await product.save();
+
+      return msg.ack();
     }
 
-    const { id, title, price, image, colors, sizes, countInStock, isReserved } =
-      data;
-
-    product.set({
+    product!.set({
       id,
       title,
       price,
@@ -33,7 +56,7 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       countInStock,
       isReserved,
     });
-    await product.save();
+    await product!.save();
 
     // Acknowledge the message and tell NATS server it successfully processed
     msg.ack();

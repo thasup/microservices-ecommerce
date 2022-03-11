@@ -17,7 +17,7 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
       <Head>
         <title>Aurapan</title>
         <meta name="description" content="Be your beautiful best." />
-        <link rel="icon" href="./asset/favicon.png" />
+        <link rel="icon" href="/asset/favicon.ico" type="image/x-icon" />
         {/* Add Google Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
