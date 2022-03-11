@@ -11,9 +11,14 @@ import useRequest from "../../hooks/use-request";
 import CreateProduct from "../../components/CreateProduct";
 import ProductList from "../../components/ProductList";
 import UserList from "../../components/UserList";
+import OrderList from "../../components/OrderList";
 
-const AdminDashboard = ({ products, users, currentUser }) => {
+const AdminDashboard = ({ products, users, orders, currentUser }) => {
   // const [loading, setLoading] = useState(false);
+
+  console.log("products", products);
+  console.log("users", users);
+  console.log("orders", orders);
 
   // useEffect(() => {
   //   if (!currentUser || !currentUser.isAdmin) {
@@ -41,22 +46,22 @@ const AdminDashboard = ({ products, users, currentUser }) => {
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
                 <Nav.Link eventKey="product-list">
-                  <i class="fa-solid fa-shirt"></i> Product List
+                  <i className="fa-solid fa-shirt"></i> Product List
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="user-list">
-                  <i class="far fa-user"></i> User List
+                  <i className="far fa-user"></i> User List
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="order-list">
-                  <i class="fa-solid fa-basket-shopping"></i> Order List
+                  <i className="fa-solid fa-basket-shopping"></i> Order List
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="create-product">
-                  <i class="fa-solid fa-plus"></i> New Product
+                  <i className="fa-solid fa-plus"></i> New Product
                 </Nav.Link>
               </Nav.Item>
             </Nav>
@@ -70,7 +75,7 @@ const AdminDashboard = ({ products, users, currentUser }) => {
                 <UserList users={users} />
               </Tab.Pane>
               <Tab.Pane eventKey="order-list">
-                <>lorem ipsum</>
+                <OrderList orders={orders} />
               </Tab.Pane>
               <Tab.Pane eventKey="create-product">
                 <CreateProduct />
@@ -85,16 +90,13 @@ const AdminDashboard = ({ products, users, currentUser }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { productData } = await client.get("/api/products");
-  // const { userData } = await client.get("/api/users");
+  const { data: productData } = await client.get("/api/products");
+  const { data: userData } = await client.get("/api/users");
+  const { data: orderData } = await client.get("/api/orders");
 
-  console.log("productData", productData);
-  // console.log("userData", userData);
-
-  // const products = JSON.parse(JSON.stringify(productData));
-  // const users = JSON.parse(JSON.stringify(userData));
-
-  return { props: { products: productData } };
+  return {
+    props: { products: productData, users: userData, orders: orderData },
+  };
 }
 
 export default AdminDashboard;

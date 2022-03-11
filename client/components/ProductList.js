@@ -1,7 +1,6 @@
 import axios from "axios";
 import Link from "next/link";
-import Router from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import { Button, Col, Row, Table } from "react-bootstrap";
 
 import CustomTooltip from "./CustomTooltip";
@@ -21,13 +20,15 @@ const ProductList = ({ products }) => {
             <tr>
               <th>ID</th>
               <th>NAME</th>
-              <th>QUANTITY</th>
+              <th>QTY</th>
               <th>PRICE</th>
               <th>COLOR</th>
               <th>SIZE</th>
               <th>CATEGORY</th>
               <th>BRAND</th>
               <th>MATERIAL</th>
+              <th>REVIEW</th>
+              <th>DETAILS</th>
             </tr>
           </thead>
           <tbody>
@@ -51,7 +52,8 @@ const ProductList = ({ products }) => {
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
                 <td>{product.material}</td>
-                <td className="d-flex justify-content-center">
+                <td>{product.numReviews}</td>
+                <td>
                   <Link href={`/admin/product-edit`} passHref>
                     <Button variant="dark" className="btn-sm mx-1">
                       <i className="fas fa-edit"></i>

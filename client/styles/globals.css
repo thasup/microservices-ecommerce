@@ -31,6 +31,9 @@ footer {
 }
 
 /* general */
+.btn {
+  text-transform: uppercase;
+}
 
 /* home page */
 .product-card {

@@ -87,7 +87,7 @@ const Dashboard = ({ currentUser, orders }) => {
     <div className="app-container">
       <Row>
         <Col md={3}>
-          <h2>User Profile</h2>
+          <h1>User Profile</h1>
           {message && <Message variant="danger">{message}</Message>}
           {updateErrors}
           {updateSuccess && (
@@ -141,7 +141,7 @@ const Dashboard = ({ currentUser, orders }) => {
           </Form>
         </Col>
         <Col md={9}>
-          <h2>My Order</h2>
+          <h1>My Order</h1>
           {loading ? (
             <Loader />
           ) : (
