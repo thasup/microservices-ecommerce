@@ -4,10 +4,11 @@ import { Card } from "react-bootstrap";
 
 import Rating from "./Rating";
 import Image from "next/image";
+import AddToCart from "./AddToCart";
 
-const Product = ({ product }) => {
+const Product = ({ product, currentUser }) => {
   const myLoader = ({ src, width, quality }) => {
-    return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 75}`;
+    return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 20}`;
   };
 
   return (
@@ -20,6 +21,7 @@ const Product = ({ product }) => {
               src={product.images.image1 || product.image}
               layout="fill"
               objectFit="cover"
+              priority
               alt={`${product.title} image 1`}
             />
           </Card.Body>
@@ -58,6 +60,8 @@ const Product = ({ product }) => {
             text={`${product.numReviews} Reviews`}
           />
         </Card.Text>
+
+        <AddToCart product={product} currentUser={currentUser} />
       </Card.Body>
     </Card>
   );

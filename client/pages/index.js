@@ -9,7 +9,7 @@ const Home = ({ products, currentUser }) => {
       <Row className="mx-0">
         {products.map((item) => (
           <Col key={item.id} xs={6} md={4} xl={3} className="p-0">
-            <Product product={item} />
+            <Product product={item} currentUser={currentUser} />
           </Col>
         ))}
       </Row>
