@@ -7,6 +7,8 @@ import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import useRequest from "../../hooks/use-request";
 import ExpireTimer from "../../components/ExpireTimer";
+import buildClient from "../../api/build-client";
+import CustomTooltip from "../../components/CustomTooltip";
 
 const Dashboard = ({ currentUser, orders }) => {
   const [name, setName] = useState("");
@@ -26,19 +28,6 @@ const Dashboard = ({ currentUser, orders }) => {
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  // const [fetchOrderSuccess, setFetchOrderSuccess] = useState(false);
-  // const [orders, setOrders] = useState(null);
-
-  // const { doRequest: fetchOrders, errors: fetchOrdersErrors } = useRequest({
-  //   url: `/api/orders/myorders`,
-  //   method: "get",
-  //   body: {},
-  //   onSuccess: (orders) => {
-  //     console.log(orders);
-  //     setOrders(orders);
-  //     setFetchOrderSuccess(true);
-  //   },
-  // });
 
   const { doRequest: updateProfile, errors: updateErrors } = useRequest({
     url: "/api/users/profile",
@@ -82,10 +71,6 @@ const Dashboard = ({ currentUser, orders }) => {
       setPostalCode(currentUser.shippingAddress.postalCode);
       setCountry(currentUser.shippingAddress.country);
     }
-
-    // if (!orders) {
-    //   fetchOrders();
-    // }
   }, [currentUser, loading, orders]);
 
   const submitHandler = (e) => {
@@ -99,162 +84,169 @@ const Dashboard = ({ currentUser, orders }) => {
   };
 
   return (
-    <Row>
-      <Col md={3}>
-        <h2>User Profile</h2>
-        {message && <Message variant="danger">{message}</Message>}
-        {updateErrors}
-        {updateSuccess && (
-          <Message variant="updateSuccess">Profile Updated</Message>
-        )}
-        {loading && <Loader />}
-        <Form onSubmit={submitHandler}>
-          <Form.Group controlId="name" className="my-3">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="name"
-              placeholder="Enter name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+    <div className="app-container">
+      <Row>
+        <Col md={3}>
+          <h1>User Profile</h1>
+          {message && <Message variant="danger">{message}</Message>}
+          {updateErrors}
+          {updateSuccess && (
+            <Message variant="updateSuccess">Profile Updated</Message>
+          )}
+          {loading && <Loader />}
+          <Form onSubmit={submitHandler}>
+            <Form.Group controlId="name" className="my-3">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="name"
+                placeholder="Enter name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId="email" className="my-3">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+            <Form.Group controlId="email" className="my-3">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId="password" className="my-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+            <Form.Group controlId="password" className="my-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId="confirmPassword" className="my-3">
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+            <Form.Group controlId="confirmPassword" className="my-3">
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Confirm password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-          <Button type="submit" variant="dark" className="my-3">
-            Update
-          </Button>
-        </Form>
-      </Col>
-      <Col md={9}>
-        <h2>My Order</h2>
-        {loading ? (
-          <Loader />
-        ) : (
-          <Table striped bordered hover responsive className="table-sm">
-            <thead>
-              <tr>
-                <th>ORDER ID</th>
-                <th>DATE</th>
-                <th>TOTAL</th>
-                <th>METHOD</th>
-                <th>EXPIRE</th>
-                <th>PAID</th>
-                <th>DELIVERED</th>
-                <th>DETAILS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order.id}>
-                  <td>{order.id}</td>
-                  <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>$ {order.totalPrice}</td>
-                  <td>{order.paymentMethod}</td>
-                  <td>
-                    {order.status === "cancelled" ? (
-                      <>Expired</>
-                    ) : order.status === "completed" ? (
-                      <>{"-"}</>
-                    ) : (
-                      <>
-                        <ExpireTimer order={order} />
-                      </>
-                    )}
-                  </td>
-                  <td>
-                    {order.isPaid ? (
-                      <p>
-                        <i
-                          className="fas fa-check"
-                          style={{ color: "green" }}
-                        ></i>{" "}
-                        {order.paidAt.substring(0, 10)}
-                      </p>
-                    ) : (
-                      <p>
-                        <i
-                          className="fas fa-times"
-                          style={{ color: "red" }}
-                        ></i>{" "}
-                        Not Paid
-                      </p>
-                    )}
-                  </td>
-                  <td>
-                    {order.isDelivered ? (
-                      <p>
-                        <i
-                          className="fas fa-check"
-                          style={{ color: "green" }}
-                        ></i>{" "}
-                        {order.deliveredAt.substring(0, 10)}
-                      </p>
-                    ) : (
-                      <p>
-                        <i
-                          className="fas fa-times"
-                          style={{ color: "red" }}
-                        ></i>{" "}
-                        Not Delivered
-                      </p>
-                    )}
-                  </td>
-                  <td>
-                    <Link
-                      href={"/orders/[orderId]"}
-                      as={`/orders/${order.id}`}
-                      passHref
-                    >
-                      <Button className="btn-sm" variant="light">
-                        <i className="fas fa-info-circle"></i> Details
-                      </Button>
-                    </Link>
-                  </td>
+            <Button type="submit" variant="dark" className="my-3">
+              Update
+            </Button>
+          </Form>
+        </Col>
+        <Col md={9}>
+          <h1>My Order</h1>
+          {loading ? (
+            <Loader />
+          ) : (
+            <Table striped bordered hover responsive className="table-sm">
+              <thead>
+                <tr>
+                  <th>ORDER ID</th>
+                  <th>DATE</th>
+                  <th>TOTAL</th>
+                  <th>METHOD</th>
+                  <th>EXPIRE</th>
+                  <th>PAID</th>
+                  <th>DELIVERED</th>
+                  <th>DETAILS</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Col>
-    </Row>
+              </thead>
+              <tbody>
+                {orders.map((order, index) => (
+                  <tr key={order.id}>
+                    <td>
+                      <CustomTooltip index={index} mongoId={order.id} />{" "}
+                    </td>
+                    <td>{order.createdAt.substring(0, 10)}</td>
+                    <td>$ {order.totalPrice}</td>
+                    <td>{order.paymentMethod}</td>
+                    <td>
+                      {order.status === "cancelled" ? (
+                        <p style={{ color: "red", fontWeight: "bolder" }}>
+                          Expired
+                        </p>
+                      ) : order.status === "completed" ? (
+                        <p style={{ color: "green", fontWeight: "bolder" }}>
+                          Completed
+                        </p>
+                      ) : (
+                        <>
+                          <ExpireTimer order={order} />
+                        </>
+                      )}
+                    </td>
+                    <td>
+                      {order.isPaid ? (
+                        <p>
+                          <i
+                            className="fas fa-check"
+                            style={{ color: "green" }}
+                          ></i>{" "}
+                          {order.paidAt.substring(0, 10)}
+                        </p>
+                      ) : (
+                        <p>
+                          <i
+                            className="fas fa-times"
+                            style={{ color: "red" }}
+                          ></i>{" "}
+                          Not Paid
+                        </p>
+                      )}
+                    </td>
+                    <td>
+                      {order.isDelivered ? (
+                        <p>
+                          <i
+                            className="fas fa-check"
+                            style={{ color: "green" }}
+                          ></i>{" "}
+                          {order.deliveredAt.substring(0, 10)}
+                        </p>
+                      ) : (
+                        <p>
+                          <i
+                            className="fas fa-times"
+                            style={{ color: "red" }}
+                          ></i>{" "}
+                          Not Delivered
+                        </p>
+                      )}
+                    </td>
+                    <td>
+                      <Link
+                        href={"/orders/[orderId]"}
+                        as={`/orders/${order.id}`}
+                        passHref
+                      >
+                        <Button className="btn-sm" variant="light">
+                          <i className="fas fa-info-circle"></i> Details
+                        </Button>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </Col>
+      </Row>
+    </div>
   );
 };
 
-Dashboard.getInitialProps = async (context, client) => {
-  let { data } = await client
-    .get(`/api/orders/myorders`)
-    .catch((err) => console.log(err));
+export async function getServerSideProps(context) {
+  const client = buildClient(context);
+  const { data } = await client.get("/api/orders/myorders");
 
-  return { orders: data };
-};
+  return { props: { orders: data } };
+}
 
 export default Dashboard;

@@ -7,6 +7,7 @@ import { currentUserRouter } from "./routes/current-user";
 import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";
 import { signupRouter } from "./routes/signup";
+import { showUserRouter } from "./routes/show-user";
 
 const app = express();
 app.set("trust proxy", true);
@@ -19,6 +20,7 @@ app.use(
 );
 
 app.use(currentUserRouter);
+app.use(showUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);

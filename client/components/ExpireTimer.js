@@ -21,7 +21,11 @@ const ExpireTimer = ({ order }) => {
     setTimeLeft(null);
   }
 
-  return timeLeft === null ? <>Expired</> : <>{timeLeft} minutes</>;
+  return timeLeft === null ? (
+    <p style={{ color: "red", fontWeight: "bolder" }}>Expired</p>
+  ) : (
+    <>{timeLeft} minutes</>
+  );
 };
 
 // ExpireCounter.getInitialProps = async (context, client) => {

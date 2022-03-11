@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { PayPalButton } from "react-paypal-button-v2";
-import { Col, ListGroup, Row, Card, Button } from "react-bootstrap";
+import { Col, ListGroup, Row, Card, Button, Container } from "react-bootstrap";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
 import StripeCheckout from "react-stripe-checkout";
+import { PayPalButton } from "react-paypal-button-v2";
 
 import NextImage from "../../components/NextImage";
 import Loader from "../../components/Loader";
@@ -16,22 +16,12 @@ const OrderPage = ({ currentUser, order }) => {
   const { orderId } = useRouter().query;
 
   const [sdkReady, setSdkReady] = useState(false);
-  //   const [clientId, setClientId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingPay, setLoadingPay] = useState(false);
+  const [loadingDeliver, setLoadingDeliver] = useState(false);
+  const [paypalLoaded, setPaypalLoaded] = useState(false);
 
-  // const { doRequest: fetchPaypalId, errors: fetchIdErrors } = useRequest({
-  //   url: "/api/paypal",
-  //   method: "get",
-  //   body: {},
-  //   onSuccess: ({ paypalClientId: data }) => {
-  //     console.log(data);
-  //     setClientId(data);
-  //     setLoading(false);
-  //   },
-  // });
-
-  const { doRequest: payStripeOrder, errors: paymentErrors } = useRequest({
+  const { doRequest: payOrder, errors: paymentErrors } = useRequest({
     url: `/api/payments`,
     method: "post",
     body: {
@@ -40,6 +30,17 @@ const OrderPage = ({ currentUser, order }) => {
     onSuccess: (payment) => {
       console.log(payment);
       setLoading(false);
+      Router.push(`/orders/${orderId}`);
+    },
+  });
+
+  const { doRequest: deliverOrder, errors: deliverErrors } = useRequest({
+    url: `/api/orders/${orderId}/deliver`,
+    method: "patch",
+    body: {},
+    onSuccess: (order) => {
+      console.log(order);
+      setLoadingDeliver(false);
       Router.push(`/orders/${orderId}`);
     },
   });
@@ -70,7 +71,7 @@ const OrderPage = ({ currentUser, order }) => {
     // Check if customer hasn't paid the order and chose to proceed with paypal
     if (order.paymentMethod === "paypal" && order.isPaid === false) {
       // Check if the page hasn't loaded with paypal, then
-      if (!window.paypal) {
+      if (!window.paypal && !paypalLoaded) {
         // just add the paypal script (and sdk ready)
         addPayPalScript();
       } else {
@@ -78,26 +79,24 @@ const OrderPage = ({ currentUser, order }) => {
         setSdkReady(true);
       }
     }
-  }, [loading, loadingPay, order]);
+  }, [loadingPay, loadingDeliver, order]);
 
-  const paypalPaymentHandler = (paymentResult) => {
+  const paypalPaymentHandler = () => {
     setLoadingPay(true);
-    updateOrder(orderId, paymentResult);
+    payOrder({ token: currentUser.id });
     setLoadingPay(false);
   };
 
-  //   const stripePaymentHandler = () => {
-  //     setLoadingPay(true);
-  //     payStripeOrder();
-  //     setLoadingPay(false);
-  //   };
-
-  const deliverHandler = () => {};
+  const deliverHandler = (e) => {
+    e.preventDefault();
+    setLoadingDeliver(true);
+    deliverOrder();
+  };
 
   return loading ? (
     <Loader />
   ) : (
-    <>
+    <Container className="app-container">
       <h1>Order {order.id}</h1>
       <Row>
         <Col>
@@ -238,6 +237,9 @@ const OrderPage = ({ currentUser, order }) => {
                         <PayPalButton
                           amount={order.totalPrice}
                           onSuccess={paypalPaymentHandler}
+                          onButtonReady={() => {
+                            setPaypalLoaded(true);
+                          }}
                         />
                       )}
                     </>
@@ -247,7 +249,7 @@ const OrderPage = ({ currentUser, order }) => {
                     <StripeCheckout
                       token={({ id }) => {
                         setLoading(true);
-                        payStripeOrder({ token: id });
+                        payOrder({ token: id });
                       }}
                       stripeKey="pk_test_51KYCbpCqypc6uabtXBYVwjkCQxYJ02VlTebqSllPb0Kei5mvKN1brmzIgEeZK371eoKkh7rJxX70lr7wet0VfZjb00PDUgCK7c"
                       amount={order.totalPrice * 100}
@@ -256,26 +258,20 @@ const OrderPage = ({ currentUser, order }) => {
                   )}
                 </ListGroup.Item>
               ) : null}
-              {/* {loadingDeliver && <Loader />} */}
-              {currentUser &&
-                currentUser.isAdmin &&
-                order.isPaid &&
-                !order.isDelivered && (
-                  <ListGroup.Item className="d-grid">
-                    <Button
-                      type="button"
-                      variant="dark"
-                      onClick={deliverHandler}
-                    >
-                      Mark As Delivered
-                    </Button>
-                  </ListGroup.Item>
-                )}
+              {loadingDeliver && <Loader />}
+              {deliverErrors}
+              {currentUser?.isAdmin && order?.isPaid && !order.isDelivered && (
+                <ListGroup.Item className="d-grid">
+                  <Button type="button" variant="dark" onClick={deliverHandler}>
+                    Mark As Delivered
+                  </Button>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
       </Row>
-    </>
+    </Container>
   );
 };
 

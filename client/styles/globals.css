@@ -30,6 +30,11 @@ footer {
   text-align: center;
 }
 
+/* general */
+.btn {
+  text-transform: uppercase;
+}
+
 /* home page */
 .product-card {
   border: 0px;
@@ -145,8 +150,38 @@ footer {
   left: 100%;
 }
 
-/* create-product-page */
-.create-product-page .carousel-item {
+/* dashboard */
+.app-container {
+  margin: 2rem auto 0;
+  max-width: 90vw;
+}
+
+.app-container h1 {
+  margin-bottom: 2rem;
+}
+
+.admin-dashboard .nav-link {
+  cursor: pointer;
+  color: #222;
+  text-transform: uppercase;
+}
+
+.admin-dashboard .nav-link:hover {
+  outline: 1px solid #222;
+}
+
+.admin-dashboard .nav-link.active {
+  cursor: pointer;
+  color: #fff;
+  background-color: #222;
+}
+
+.admin-dashboard .nav-pills .active {
+  cursor: pointer;
+  border: none;
+}
+
+.create-product-tab .carousel-item {
   position: relative;
   width: 100%;
   height: 100%;

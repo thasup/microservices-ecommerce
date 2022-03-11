@@ -46,7 +46,20 @@ router.post(
     if (order.paymentMethod === "paypal") {
       console.log("paypal!");
 
-      res.status(201).send({});
+      const payment = Payment.build({
+        orderId,
+        stripeId: "paypal is the best",
+      });
+
+      await payment.save();
+
+      await new PaymentCreatedPublisher(natsWrapper.client).publish({
+        id: payment.id,
+        orderId: payment.orderId,
+        stripeId: payment.stripeId,
+      });
+
+      res.status(201).send(payment);
     }
 
     const charge = await stripe.charges.create({
