@@ -56,11 +56,31 @@ const EditProduct = ({ products }) => {
 
   useEffect(() => {
     if (product) {
-      const images = Object.values(product.images);
-      const filterImages = images.filter((image) => image !== null);
+      setTitle(product.title);
+      setPrice(product.price);
+      setImage1(product.images.image1);
+      setImage2(product.images.image2);
+      setImage3(product.images.image3);
+      setImage4(product.images.image4);
+      setColors(product.colors);
+      setSizes(product.sizes);
+      setBrand(product.brand);
+      setCategory(product.category);
+      setMaterial(product.material);
+      setDescription(product.description);
+      setCountInStock(product.countInStock);
 
-      setLoading(false);
-      setImageArray(filterImages);
+      if (imageArray.length === 0) {
+        const images = Object.values(product.images);
+        console.log("one", images);
+        const filterImages = images.filter(
+          (image) => image !== null && image !== ""
+        );
+        console.log("two", filterImages);
+
+        setLoading(false);
+        setImageArray(filterImages);
+      }
     }
   }, []);
 

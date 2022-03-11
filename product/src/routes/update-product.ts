@@ -46,8 +46,8 @@ router.patch(
       throw new NotFoundError();
     }
 
-    if (product.orderId) {
-      throw new BadRequestError("Cannot edit a reserved ticket");
+    if (product.isReserved) {
+      throw new BadRequestError("Cannot edit a reserved product");
     }
 
     product.title = title ?? product.title;
