@@ -50,6 +50,10 @@ const CheckoutPage = ({ currentUser }) => {
       shippingData !== undefined &&
       paymentData !== undefined
     ) {
+      cartItemsData.map((item) => {
+        item.userId = currentUser?.id;
+      });
+
       // Set cart state to cartItems in localStorage
       setCart(cartItemsData);
       setShippingAddress(shippingData);

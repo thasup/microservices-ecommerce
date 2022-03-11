@@ -3,24 +3,12 @@ import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import Link from "next/link";
 import Image from "next/image";
 
-import useRequest from "../hooks/use-request";
+import buildClient from "../api/build-client";
 
 const Header = ({ currentUser, orders }) => {
   const [order, setOrder] = useState(null);
 
-  // const { doRequest, errors } = useRequest({
-  //   url: `/api/orders/myorders`,
-  //   method: "get",
-  //   body: {},
-  //   onSuccess: (orders) => {
-  //     console.log(orders);
-  //     setOrder(orders[`${orders.length - 1}`]);
-  //   },
-  // });
-
   useEffect(() => {
-    console.log("My orders :", orders);
-
     if (orders === undefined) {
       setOrder(null);
     } else {
@@ -29,9 +17,6 @@ const Header = ({ currentUser, orders }) => {
       const recentOrder = unPaidOrders[`${unPaidOrders?.length - 1}`];
 
       setOrder(recentOrder);
-
-      console.log("My unpaid orders :", unPaidOrders);
-      console.log("My recent order :", order);
     }
 
     // doRequest();
@@ -133,10 +118,19 @@ const Header = ({ currentUser, orders }) => {
   );
 };
 
-Header.getInitialProps = async (context, client) => {
-  let { data } = await client.get(`/api/orders/myorders`);
+// Header.getInitialProps = async (context, client) => {
+//   let { data } = await client.get(`/api/orders/myorders`);
 
-  return { orders: data };
-};
+//   return { orders: data };
+// };
+
+export async function getServerSideProps(context) {
+  const client = buildClient(context);
+  const { data: orderData } = await client.get("/api/orders");
+
+  return {
+    props: { orders: orderData },
+  };
+}
 
 export default Header;
