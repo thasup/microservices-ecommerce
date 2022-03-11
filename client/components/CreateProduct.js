@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Carousel, Col, Form, Row } from "react-bootstrap";
-import Image from "next/image";
 import Router from "next/router";
 
 import Loader from "./Loader";
 import useRequest from "../hooks/use-request";
+import Image from "next/image";
 
 const CreateProduct = () => {
   const [title, setTitle] = useState("");
@@ -49,16 +49,6 @@ const CreateProduct = () => {
     doRequest();
   };
 
-  // const onBlur = () => {
-  //   const value = parseFloat(price);
-
-  //   if (isNaN(value)) {
-  //     return;
-  //   }
-
-  //   setPrice(value.toFixed(2));
-  // };
-
   const myLoader = ({ src, width, quality }) => {
     return `https://www.dropbox.com/s/${src}?raw=1&w=${width}&q=${
       quality || 75
@@ -70,59 +60,53 @@ const CreateProduct = () => {
   };
 
   return (
-    <Row className="justify-content-md-center create-product-tab">
-      <Col xs={12} xl={6}>
-        <Carousel variant="dark" activeIndex={index} onSelect={handleSelect}>
-          <Carousel.Item>
+    <Row>
+      <Col xs={12} xl={6} className="d-flex justify-content-center">
+        <Carousel
+          className="carousel-product-parent"
+          variant="dark"
+          activeIndex={index}
+          interval={null}
+          onSelect={handleSelect}
+        >
+          <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={
-                image1 ||
-                "sf6t25da3113hl2/de2ea552-4ae1-42e6-a593-5cb80bd40056.jpg"
-              }
-              alt="Sample Product image 1"
+              src={image1 || "sf6t25da3113hl2/4te4tet.jpg"}
+              alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
               priority
             />
           </Carousel.Item>
 
-          <Carousel.Item>
+          <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={
-                image2 ||
-                "sf6t25da3113hl2/de2ea552-4ae1-42e6-a593-5cb80bd40056.jpg"
-              }
-              alt="Sample Product image 2"
+              src={image2 || "sf6t25da3113hl2/4te4tet.jpg"}
+              alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
               priority
             />
           </Carousel.Item>
 
-          <Carousel.Item>
+          <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={
-                image3 ||
-                "sf6t25da3113hl2/de2ea552-4ae1-42e6-a593-5cb80bd40056.jpg"
-              }
-              alt="Sample Product image 3"
+              src={image3 || "sf6t25da3113hl2/4te4tet.jpg"}
+              alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
               priority
             />
           </Carousel.Item>
 
-          <Carousel.Item>
+          <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={
-                image4 ||
-                "sf6t25da3113hl2/de2ea552-4ae1-42e6-a593-5cb80bd40056.jpg"
-              }
-              alt="Sample Product image 4"
+              src={image4 || "sf6t25da3113hl2/4te4tet.jpg"}
+              alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
               priority

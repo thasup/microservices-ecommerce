@@ -1,13 +1,7 @@
-import axios from "axios";
-import Link from "next/link";
-import Router from "next/router";
-import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Nav, Row, Tab, Table } from "react-bootstrap";
+import React from "react";
+import { Col, Container, Nav, Row, Tab } from "react-bootstrap";
 
 import buildClient from "../../api/build-client";
-import Loader from "../../components/Loader";
-import Message from "../../components/Message";
-import useRequest from "../../hooks/use-request";
 import CreateProduct from "../../components/CreateProduct";
 import ProductList from "../../components/ProductList";
 import UserList from "../../components/UserList";
@@ -40,9 +34,13 @@ const AdminDashboard = ({ products, users, orders, currentUser }) => {
   return (
     <Container className="app-container admin-dashboard">
       <h1>Admin Dashboard</h1>
-      <Tab.Container variant="light" defaultActiveKey="product-list">
+      <Tab.Container
+        variant="light"
+        defaultActiveKey="product-list"
+        forceRenderTabPanel={true}
+      >
         <Row>
-          <Col sm={2}>
+          <Col md={2} className="mb-5">
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
                 <Nav.Link eventKey="product-list">
@@ -66,7 +64,7 @@ const AdminDashboard = ({ products, users, orders, currentUser }) => {
               </Nav.Item>
             </Nav>
           </Col>
-          <Col sm={10}>
+          <Col md={10}>
             <Tab.Content>
               <Tab.Pane eventKey="product-list">
                 <ProductList products={products} />
