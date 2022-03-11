@@ -22,6 +22,8 @@ const productDetail = ({ products, currentUser }) => {
   const [reviewTitle, setReviewTitle] = useState("");
   const [comment, setComment] = useState("");
 
+  const [imageArray, setImageArray] = useState([]);
+  const [imageEvent, setImageEvent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [discountFactor, setDiscountFactor] = useState(1);
   const [couponSuccess, setCouponSuccess] = useState(false);
@@ -56,10 +58,33 @@ const productDetail = ({ products, currentUser }) => {
   });
 
   useEffect(() => {
-    if (initialSetImage === false) {
+    if (!initialSetImage) {
       const mainImage = document.getElementsByClassName("product-main-img");
       mainImage[0].classList.add("toggle-main-img");
       setInitialSetImage(true);
+    }
+
+    if (imageEvent) {
+      const mainImage = document.getElementsByClassName("product-main-img");
+      const sideImage = document.getElementsByClassName("product-side-img");
+
+      for (let i = 0; i < mainImage.length; i++) {
+        mainImage[i].classList.remove("toggle-main-img");
+      }
+
+      const currentId =
+        imageEvent.target.parentElement.parentElement.id.slice(-1);
+
+      mainImage[currentId].classList.add("toggle-main-img");
+
+      for (let i = 0; i < sideImage.length; i++) {
+        sideImage[i].classList.remove("toggle-side-img");
+      }
+
+      imageEvent.target.parentElement.parentElement.classList.add(
+        "toggle-side-img"
+      );
+      setImageEvent(null);
     }
 
     const cartItems = localStorage.getItem("cartItems")
@@ -97,9 +122,18 @@ const productDetail = ({ products, currentUser }) => {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnAdd(false);
     }
-  }, [onAdd, loading]);
+  }, [onAdd, loading, imageEvent]);
 
   const product = products.find((product) => product.id === productId);
+
+  if (imageArray.length === 0 && product) {
+    const filterImages = Object.values(product.images).filter(
+      (image) => image !== null && image !== ""
+    );
+
+    setLoading(false);
+    setImageArray(filterImages);
+  }
 
   const applyCoupon = (e) => {
     e.preventDefault();
@@ -154,33 +188,6 @@ const productDetail = ({ products, currentUser }) => {
     }
   };
 
-  let allImages = [];
-  for (const img in product.images) {
-    if (product.images[img] !== "" && typeof product.images[img] === "string") {
-      allImages.push(product.images[img]);
-    }
-  }
-
-  const imageHandler = (e) => {
-    e.preventDefault();
-    const mainImage = document.getElementsByClassName("product-main-img");
-    const sideImage = document.getElementsByClassName("product-side-img");
-
-    for (let i = 0; i < mainImage.length; i++) {
-      mainImage[i].classList.remove("toggle-main-img");
-    }
-
-    const currentId = e.target.parentElement.parentElement.id.slice(-1);
-
-    mainImage[currentId].classList.add("toggle-main-img");
-
-    for (let i = 0; i < sideImage.length; i++) {
-      sideImage[i].classList.remove("toggle-side-img");
-    }
-
-    e.target.parentElement.parentElement.classList.add("toggle-side-img");
-  };
-
   const myLoader = ({ src, width, quality }) => {
     return `${src}&w=${width}&q=${quality || 40}`;
   };
@@ -196,12 +203,12 @@ const productDetail = ({ products, currentUser }) => {
         <>
           <Row>
             <Col md={1} className="mb-3">
-              {allImages.map((img, index) => (
+              {imageArray.map((img, index) => (
                 <div
                   className="product-side-img"
                   id={`side-img-${index}`}
                   key={index}
-                  onClick={imageHandler}
+                  onClick={(e) => setImageEvent(e)}
                 >
                   <NextImage
                     src={img}
@@ -214,7 +221,7 @@ const productDetail = ({ products, currentUser }) => {
             </Col>
 
             <Col md={5} className="mb-3 position-relative">
-              {allImages.map((img, index) => (
+              {imageArray.map((img, index) => (
                 <div className="product-main-img" key={index}>
                   <NextImage
                     src={img}

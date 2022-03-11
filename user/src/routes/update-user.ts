@@ -43,7 +43,7 @@ router.patch(
 
     user.set({
       email: email ?? user.email,
-      password: password ?? user.password,
+      // password: password ?? user.password,
       isAdmin: isAdmin ?? user.isAdmin,
       name: name ?? user.name,
       image: image ?? user.image,
