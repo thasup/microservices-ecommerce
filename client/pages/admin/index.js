@@ -1,11 +1,25 @@
 import React from "react";
-import { Col, Container, Nav, Row, Tab } from "react-bootstrap";
+import dynamic from "next/dynamic";
+import { Col, Container, Nav, Row } from "react-bootstrap";
 
 import buildClient from "../../api/build-client";
 import CreateProduct from "../../components/CreateProduct";
-import ProductList from "../../components/ProductList";
 import UserList from "../../components/UserList";
 import OrderList from "../../components/OrderList";
+import ProductList from "../../components/ProductList";
+
+const DynamicTabContainer = dynamic(
+  () => import("react-bootstrap/TabContainer"),
+  {
+    ssr: false,
+  }
+);
+const DynamicTabContent = dynamic(() => import("react-bootstrap/TabContent"), {
+  ssr: false,
+});
+const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
+  ssr: false,
+});
 
 const AdminDashboard = ({ products, users, orders, currentUser }) => {
   // const [loading, setLoading] = useState(false);
@@ -34,7 +48,7 @@ const AdminDashboard = ({ products, users, orders, currentUser }) => {
   return (
     <Container className="app-container admin-dashboard">
       <h1>Admin Dashboard</h1>
-      <Tab.Container
+      <DynamicTabContainer
         variant="light"
         defaultActiveKey="product-list"
         forceRenderTabPanel={true}
@@ -65,23 +79,23 @@ const AdminDashboard = ({ products, users, orders, currentUser }) => {
             </Nav>
           </Col>
           <Col md={10}>
-            <Tab.Content>
-              <Tab.Pane eventKey="product-list">
+            <DynamicTabContent>
+              <DynamicTabPane eventKey="product-list">
                 <ProductList products={products} />
-              </Tab.Pane>
-              <Tab.Pane eventKey="user-list">
+              </DynamicTabPane>
+              <DynamicTabPane eventKey="user-list">
                 <UserList users={users} />
-              </Tab.Pane>
-              <Tab.Pane eventKey="order-list">
+              </DynamicTabPane>
+              <DynamicTabPane eventKey="order-list">
                 <OrderList orders={orders} />
-              </Tab.Pane>
-              <Tab.Pane eventKey="create-product">
+              </DynamicTabPane>
+              <DynamicTabPane eventKey="create-product">
                 <CreateProduct />
-              </Tab.Pane>
-            </Tab.Content>
+              </DynamicTabPane>
+            </DynamicTabContent>
           </Col>
         </Row>
-      </Tab.Container>
+      </DynamicTabContainer>
     </Container>
   );
 };
