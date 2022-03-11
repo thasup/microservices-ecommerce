@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Carousel, Col, Form, Row } from "react-bootstrap";
 import Router from "next/router";
 
-import Loader from "./Loader";
 import useRequest from "../hooks/use-request";
 import Image from "next/image";
 

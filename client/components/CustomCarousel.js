@@ -12,7 +12,7 @@ const CustomCarousol = ({ images, quality }) => {
   useEffect(() => {
     if (images || reload) {
       setImageArray(images);
-      console.log("wwww", images);
+
       setLoading(false);
     }
   }, [images]);

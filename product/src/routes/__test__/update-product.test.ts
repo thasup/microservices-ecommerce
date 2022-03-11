@@ -196,7 +196,7 @@ it("rejects updates if the product is reserved", async () => {
     });
 
   const product = await Product.findById(response.body.id);
-  product!.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+  product!.set({ isReserved: true });
   await product!.save();
 
   // Reject an update when product has an orderId (being reserved)

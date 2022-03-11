@@ -72,11 +72,10 @@ const EditProduct = ({ products }) => {
 
       if (imageArray.length === 0) {
         const images = Object.values(product.images);
-        console.log("one", images);
+
         const filterImages = images.filter(
           (image) => image !== null && image !== ""
         );
-        console.log("two", filterImages);
 
         setLoading(false);
         setImageArray(filterImages);
