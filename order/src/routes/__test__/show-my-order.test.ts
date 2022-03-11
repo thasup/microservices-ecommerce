@@ -114,7 +114,9 @@ it("fetches all orders for admin by himself", async () => {
   const response = await request(app)
     .get(`/api/orders/myorders`)
     .set("Cookie", admin)
-    .expect(404);
+    .expect(200);
+
+  expect(response.body.length).toEqual(0);
 });
 
 it("fetches all orders for an particular user by the user himself", async () => {
