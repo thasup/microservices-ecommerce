@@ -10,7 +10,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const MyApp = ({ Component, pageProps, currentUser }) => {
-  console.log("Current User: ", currentUser);
+  console.log("Current User : ", currentUser);
 
   return (
     <SSRProvider>
