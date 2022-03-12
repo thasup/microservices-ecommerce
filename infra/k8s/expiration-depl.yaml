@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: expiration
-          image: us.gcr.io/microservices-task/expiration
+          image: thasup/expiration
           env:
             - name: NATS_CLIENT_ID
               valueFrom:

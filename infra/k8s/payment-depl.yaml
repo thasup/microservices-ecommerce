@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: payment
-          image: us.gcr.io/microservices-task/payment
+          image: thasup/payment
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
