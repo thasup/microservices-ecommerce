@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: product
-          image: us.gcr.io/microservices-task/product
+          image: thasup/product
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
