@@ -6,7 +6,7 @@ import styles from "../styles/signup.module.css";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 
-const signup = ({ currentUser }) => {
+const signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { doRequest, errors } = useRequest({

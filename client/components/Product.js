@@ -61,7 +61,9 @@ const Product = ({ product, currentUser }) => {
           />
         </Card.Text>
 
-        <AddToCart product={product} currentUser={currentUser} />
+        {currentUser?.isAdmin ? (
+          <AddToCart product={product} currentUser={currentUser} />
+        ) : null}
       </Card.Body>
     </Card>
   );

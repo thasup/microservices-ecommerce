@@ -5,7 +5,7 @@ import useRequest from "../hooks/use-request";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 
-const signin = ({ currentUser }) => {
+const signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

@@ -1,6 +1,5 @@
-import React from "react";
-import Router, { useRouter } from "next/router";
-import Link from "next/link";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 // import Swiper core and required modules
 import { Navigation, Pagination, Scrollbar, Zoom } from "swiper";
 
@@ -16,18 +15,27 @@ import "swiper/css/zoom";
 
 import NextImage from "../components/NextImage";
 import buildClient from "../api/build-client";
+import Loader from "../components/Loader";
 
 const test = ({ products, currentUser }) => {
+  const [imageArray, setImageArray] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const { productId } = useRouter().query;
   const product = products.find((product) => product.id === productId);
 
-  let allImages = [];
-  for (const img in product.images) {
-    if (product.images[img] !== "" && typeof product.images[img] === "string") {
-      allImages.push(product.images[img]);
-    }
+  if (imageArray.length === 0 && product) {
+    const filterImages = Object.values(product.images).filter(
+      (image) => image !== null && image !== ""
+    );
+
+    setLoading(false);
+    setImageArray(filterImages);
   }
-  return (
+
+  return loading ? (
+    <Loader />
+  ) : (
     <Swiper
       // install Swiper modules
       modules={[Navigation, Pagination, Scrollbar, Zoom]}
@@ -42,7 +50,7 @@ const test = ({ products, currentUser }) => {
       onSwiper={(swiper) => console.log(swiper)}
       onSlideChange={() => console.log("slide change")}
     >
-      {allImages.map((img, index) => (
+      {imageArray.map((img, index) => (
         <SwiperSlide key={index}>
           <div
             className="product-main-img toggle-main-img"

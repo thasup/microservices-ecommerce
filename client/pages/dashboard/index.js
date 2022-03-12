@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Row, Col, Table } from "react-bootstrap";
-import Router from "next/router";
 import Link from "next/link";
 
 import Message from "../../components/Message";
@@ -54,10 +53,6 @@ const Dashboard = ({ currentUser, orders }) => {
   });
 
   useEffect(() => {
-    if (!currentUser) {
-      Router.push("/signin");
-    }
-
     if (currentUser.email) {
       setName(currentUser.name);
       setEmail(currentUser.email);
@@ -244,9 +239,21 @@ const Dashboard = ({ currentUser, orders }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { data } = await client.get("/api/orders/myorders");
+  const { data } = await client.get("/api/users/currentuser");
 
-  return { props: { orders: data } };
+  // Redirect to signin page if user do not authorized
+  if (data.currentUser === null) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  } else {
+    const { data } = await client.get("/api/orders/myorders");
+
+    return { props: { orders: data } };
+  }
 }
 
 export default Dashboard;
