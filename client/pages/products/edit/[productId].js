@@ -260,11 +260,30 @@ const EditProduct = ({ products }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { data: productData } = await client.get("/api/products");
+  const { data } = await client.get("/api/users/currentuser");
 
-  return {
-    props: { products: productData },
-  };
+  // Redirect to signin page or home if user do not authorized
+  if (data.currentUser?.isAdmin) {
+    const { data: productData } = await client.get("/api/products");
+
+    return {
+      props: { products: productData },
+    };
+  } else if (data.currentUser?.isAdmin === false) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  } else {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
 }
 
 export default EditProduct;

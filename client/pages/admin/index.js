@@ -81,21 +81,28 @@ export async function getServerSideProps(context) {
   const client = buildClient(context);
   const { data } = await client.get("/api/users/currentuser");
 
-  // Redirect to signin page if user do not authorized
-  if (data.currentUser === null) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  } else {
+  // Redirect to signin page or home if user do not authorized
+  if (data.currentUser?.isAdmin) {
     const { data: productData } = await client.get("/api/products");
     const { data: userData } = await client.get("/api/users");
     const { data: orderData } = await client.get("/api/orders");
 
     return {
       props: { products: productData, users: userData, orders: orderData },
+    };
+  } else if (data.currentUser?.isAdmin === false) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  } else {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
     };
   }
 }
