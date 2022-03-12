@@ -8,8 +8,6 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import NextImage from "../components/NextImage";
 
 const CartPage = ({ currentUser }) => {
-  // const { productId } = useRouter().query;
-
   const [productId, setProductId] = useState(null);
   const [qty, setQty] = useState(null);
   const [deletedItemId, setDeletedItemId] = useState(null);

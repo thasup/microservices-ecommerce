@@ -21,30 +21,7 @@ const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
   ssr: false,
 });
 
-const AdminDashboard = ({ products, users, orders, currentUser }) => {
-  // const [loading, setLoading] = useState(false);
-
-  console.log("products", products);
-  console.log("users", users);
-  console.log("orders", orders);
-
-  // useEffect(() => {
-  //   if (!currentUser || !currentUser.isAdmin) {
-  //     Router.push("/signin");
-  //   }
-  // }, []);
-
-  // const deleteHandler = async (id) => {
-  //   setLoading(true);
-  //   await axios.delete(`/api/products/${id}`);
-  //   setLoading(false);
-  // };
-
-  // const createProductHandler = (e) => {
-  //   e.preventDefault();
-  //   Router.push("/admin/create-product");
-  // };
-
+const AdminDashboard = ({ products, users, orders }) => {
   return (
     <Container className="app-container admin-dashboard">
       <h1>Admin Dashboard</h1>
@@ -102,13 +79,32 @@ const AdminDashboard = ({ products, users, orders, currentUser }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { data: productData } = await client.get("/api/products");
-  const { data: userData } = await client.get("/api/users");
-  const { data: orderData } = await client.get("/api/orders");
+  const { data } = await client.get("/api/users/currentuser");
 
-  return {
-    props: { products: productData, users: userData, orders: orderData },
-  };
+  // Redirect to signin page or home if user do not authorized
+  if (data.currentUser?.isAdmin) {
+    const { data: productData } = await client.get("/api/products");
+    const { data: userData } = await client.get("/api/users");
+    const { data: orderData } = await client.get("/api/orders");
+
+    return {
+      props: { products: productData, users: userData, orders: orderData },
+    };
+  } else if (data.currentUser?.isAdmin === false) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  } else {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
 }
 
 export default AdminDashboard;

@@ -5,11 +5,15 @@ import Router from "next/router";
 import CheckoutSteps from "../components/CheckoutSteps";
 import FormContainer from "../components/FormContainer";
 
-const PaymentPage = () => {
+const PaymentPage = ({ currentUser }) => {
   const [paymentMethod, setPaymentMethod] = useState("stripe");
   const [onSubmit, setOnSubmit] = useState(false);
 
   useEffect(() => {
+    if (!currentUser) {
+      Router.push("/signin");
+    }
+
     const shippingAddress = localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
       : [];

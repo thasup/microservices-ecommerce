@@ -118,12 +118,6 @@ const Header = ({ currentUser, orders }) => {
   );
 };
 
-// Header.getInitialProps = async (context, client) => {
-//   let { data } = await client.get(`/api/orders/myorders`);
-
-//   return { orders: data };
-// };
-
 export async function getServerSideProps(context) {
   const client = buildClient(context);
   const { data: orderData } = await client.get("/api/orders");

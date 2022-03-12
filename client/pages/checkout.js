@@ -7,6 +7,7 @@ import useRequest from "../hooks/use-request";
 import CheckoutSteps from "../components/CheckoutSteps";
 import NextImage from "../components/NextImage";
 import Message from "../components/Message";
+import buildClient from "../api/build-client";
 
 const CheckoutPage = ({ currentUser }) => {
   const [storageReady, setStorageReady] = useState(false);
@@ -51,7 +52,7 @@ const CheckoutPage = ({ currentUser }) => {
       paymentData !== undefined
     ) {
       cartItemsData.map((item) => {
-        item.userId = currentUser?.id;
+        item.userId = currentUser.id;
       });
 
       // Set cart state to cartItems in localStorage
@@ -210,5 +211,20 @@ const CheckoutPage = ({ currentUser }) => {
     </>
   ) : null;
 };
+
+export async function getServerSideProps(context) {
+  const client = buildClient(context);
+  const { data } = await client.get("/api/users/currentuser");
+
+  // Redirect to signin page if user do not authorized
+  if (data.currentUser === null) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+}
 
 export default CheckoutPage;
