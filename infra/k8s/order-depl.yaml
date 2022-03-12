@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: order
-          image: thasup/order
+          image: us.gcr.io/microservices-task/order
           env:
             - name: NATS_CLIENT_ID
               valueFrom:

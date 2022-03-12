@@ -1,10 +1,8 @@
-name: tests-user
+name: tests
 
 on:
-  pull_request:
-    paths:
-      - "user/**"
-
+  pull_request
+  
 jobs:
   build:
     runs-on: ubuntu-latest
