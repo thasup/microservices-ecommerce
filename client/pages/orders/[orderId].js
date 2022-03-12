@@ -46,13 +46,13 @@ const OrderPage = ({ currentUser, order }) => {
   });
 
   useEffect(async () => {
-    if (!currentUser) {
-      Router.push("/signin");
-    }
+    // if (!currentUser) {
+    //   await Router.push("/signin");
+    // }
 
-    if (currentUser.isAdmin !== true && currentUser.id !== order.userId) {
-      Router.push("/signin");
-    }
+    // if (currentUser.isAdmin !== true && currentUser.id !== order.userId) {
+    //   await Router.push("/");
+    // }
     setLoading(false);
 
     const addPayPalScript = async () => {
@@ -275,11 +275,36 @@ const OrderPage = ({ currentUser, order }) => {
   );
 };
 
-OrderPage.getInitialProps = async (context, client) => {
+export async function getServerSideProps(context) {
   const { orderId } = context.query;
-  let { data } = await client.get(`/api/orders/${orderId}`);
+  const client = buildClient(context);
+  const { data } = await client.get("/api/users/currentuser");
 
-  return { order: data };
-};
+  // Redirect to signin page if user do not authorized
+  if (data.currentUser === null) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  } else {
+    const { data: allMyOrder } = await client.get(`/api/orders/myorders`);
+
+    const existOrder = allMyOrder.find((order) => order.id === orderId);
+
+    // If userId not match with userId in the order AND user is not an admin
+    if (existOrder === undefined && data.currentUser.isAdmin === false) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+
+    return { props: { order: existOrder } };
+  }
+}
 
 export default OrderPage;

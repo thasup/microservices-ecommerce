@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Router from "next/router";
 
 import useRequest from "../hooks/use-request";
-import { Col, Row, Spinner } from "react-bootstrap";
+import Loader from "../components/Loader";
 
 const signout = () => {
   const { doRequest } = useRequest({
@@ -17,14 +17,9 @@ const signout = () => {
   }, []);
 
   return (
-    <Row>
-      <Col>
-        <div>
-          <h3>Signing you out</h3>
-          <Spinner animatioon="grow" />
-        </div>
-      </Col>
-    </Row>
+    <div className="d-flex justify-content-center align-items-center px-0">
+      <Loader />
+    </div>
   );
 };
 
