@@ -2,8 +2,11 @@ name: deploy-expiration
 
 on:
   push:
+    # watch for pull request into main branch
     branches:
       - main
+
+    # watch for changes in expiration folder
     paths:
       - "expiration/**"
 
@@ -12,9 +15,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      # build an image
       - run: cd expiration && docker build -t thasup/expiration .
+
+      # login on docker hub
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      # push an image to docker hub
       - run: docker push thasup/expiration
+
+      # use and cliententicate doctl
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      # give credential to k8s cluster
+      - run: doctl kubernetes cluster kubeconfig save not-a-covid-cluster
+
+      # restart deployment
+      - run: kubectl rollout restart deployment expiration-depl
