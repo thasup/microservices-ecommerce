@@ -12,6 +12,7 @@ export default ({ req }) => {
     });
   } else {
     // We must be on the browser
+    console.log("We must be on the browser");
     return axios.create({
       baseUrl: "/",
     });

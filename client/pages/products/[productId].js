@@ -92,7 +92,7 @@ const productDetail = ({ products, currentUser }) => {
       : [];
 
     const item = {
-      userId: currentUser.id,
+      userId: currentUser?.id || null,
       title: product.title,
       qty: Number(qty),
       image: product.images.image1,
@@ -180,7 +180,7 @@ const productDetail = ({ products, currentUser }) => {
   };
 
   const deleteReviewHandler = (review) => {
-    if (currentUser && review.userId === currentUser.id) {
+    if (currentUser && review.userId === currentUser?.id) {
       setLoading(true);
       removeReview();
     } else {
