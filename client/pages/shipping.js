@@ -15,6 +15,10 @@ const ShippingPage = ({ currentUser }) => {
   const [storageReady, setStorageReady] = useState(false);
 
   useEffect(() => {
+    if (!currentUser) {
+      Router.push("/signin");
+    }
+
     const data = localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
       : [];
