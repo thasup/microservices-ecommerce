@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: user
-          image: us.gcr.io/microservices-task/user
+          image: thasup/user
           env:
             - name: MONGO_URI_USER
               valueFrom:

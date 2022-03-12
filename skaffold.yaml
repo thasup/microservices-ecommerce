@@ -4,13 +4,12 @@ deploy:
   kubectl:
     manifests:
       - ./infra/k8s/*
+      - ./infra/k8s-dev/*
 build:
-  # local:
-  #   push: false
-  googleCloudBuild:
-    projectId: microservices-task
+  local:
+    push: false
   artifacts:
-    - image: us.gcr.io/microservices-task/user
+    - image: thasup/user
       context: user
       docker:
         dockerfile: Dockerfile
@@ -18,7 +17,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/microservices-task/client
+    - image: thasup/client
       context: client
       docker:
         dockerfile: Dockerfile
@@ -32,7 +31,7 @@ build:
             dest: .
           - src: "**/*.png"
             dest: .
-    - image: us.gcr.io/microservices-task/product
+    - image: thasup/product
       context: product
       docker:
         dockerfile: Dockerfile
@@ -40,7 +39,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/microservices-task/order
+    - image: thasup/order
       context: order
       docker:
         dockerfile: Dockerfile
@@ -48,7 +47,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/microservices-task/expiration
+    - image: thasup/expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -56,7 +55,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/microservices-task/payment
+    - image: thasup/payment
       context: payment
       docker:
         dockerfile: Dockerfile
