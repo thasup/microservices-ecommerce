@@ -15,7 +15,7 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
   return (
     <SSRProvider>
       <Head>
-        <title>Aurapan</title>
+        <title>Aurapan Shop</title>
         <meta name="description" content="Be your beautiful best." />
         <link rel="icon" href="/asset/favicon.ico" type="image/x-icon" />
         {/* Add Google Fonts */}
