@@ -184,7 +184,7 @@ const Dashboard = ({ currentUser, orders }) => {
                             className="fas fa-check"
                             style={{ color: "green" }}
                           ></i>{" "}
-                          {order.paidAt.substring(0, 10)}
+                          {order.paidAt?.substring(0, 10)}
                         </p>
                       ) : (
                         <p>

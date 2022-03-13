@@ -91,7 +91,7 @@ const CheckoutPage = ({ currentUser }) => {
 
   return storageReady ? (
     <>
-      <CheckoutSteps step1 step2 step3 step4 />
+      <CheckoutSteps step1 step2 step3 step4 currentStep={"/checkout"} />
       <Row>
         <Col>
           <ListGroup variant="flush">

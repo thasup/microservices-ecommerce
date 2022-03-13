@@ -244,13 +244,19 @@ const EditProduct = ({ products }) => {
 
             {errors}
             <Button type="submit" variant="dark" className="my-3">
+              {loadingUpdate ? (
+                <Spinner
+                  animation="border"
+                  role="status"
+                  as="span"
+                  size="sm"
+                  aria-hidden="true"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
+              ) : null}{" "}
               Update
             </Button>
-            {loadingUpdate ? (
-              <Spinner animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </Spinner>
-            ) : null}
           </Form>
         </Col>
       </Row>

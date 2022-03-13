@@ -1,7 +1,6 @@
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import buildClient from "../api/build-client";
 import Product from "../components/Product";
-import styles from "../styles/Home.module.css";
 
 const Home = ({ products, currentUser }) => {
   return (

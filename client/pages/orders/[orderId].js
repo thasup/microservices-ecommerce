@@ -122,8 +122,8 @@ const OrderPage = ({ currentUser, order }) => {
               </p>
               {order.isDelivered ? (
                 <Message variant="success">
-                  Delivered on {order.updatedAt.substring(0, 10)}{" "}
-                  {order.updatedAt.substring(11, 16)}
+                  Delivered on {order.updatedAt?.substring(0, 10)}{" "}
+                  {order.updatedAt?.substring(11, 16)}
                 </Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
@@ -144,7 +144,7 @@ const OrderPage = ({ currentUser, order }) => {
                   {order.paidAt?.substring(11, 16)}
                 </Message>
               ) : (
-                <Message variant="info">
+                <Message variant="secondary">
                   Order will expire in <ExpireTimer order={order} />
                 </Message>
               )}
@@ -258,6 +258,7 @@ const OrderPage = ({ currentUser, order }) => {
                   )}
                 </ListGroup.Item>
               ) : null}
+
               {loadingDeliver && <Loader />}
               {deliverErrors}
               {currentUser?.isAdmin && order?.isPaid && !order.isDelivered && (

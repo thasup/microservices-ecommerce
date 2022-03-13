@@ -2,13 +2,17 @@ import React from "react";
 import { Nav } from "react-bootstrap";
 import Link from "next/link";
 
-const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
+const CheckoutSteps = ({ step1, step2, step3, step4, currentStep }) => {
   return (
-    <Nav variant="pills" className="justify-content-center mb-4">
+    <Nav
+      variant="pills"
+      className="justify-content-center mb-4"
+      defaultActiveKey={currentStep}
+    >
       <Nav.Item>
         {step1 ? (
           <Link href="/signin" passHref>
-            <Nav.Link>Sign In</Nav.Link>
+            <Nav.Link activeKey="signin">Sign In</Nav.Link>
           </Link>
         ) : (
           <Nav.Link disabled>Sign In</Nav.Link>
@@ -18,7 +22,7 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
       <Nav.Item>
         {step2 ? (
           <Link href="/shipping" passHref>
-            <Nav.Link>Shipping</Nav.Link>
+            <Nav.Link activeKey="shipping">Shipping</Nav.Link>
           </Link>
         ) : (
           <Nav.Link disabled>Shipping</Nav.Link>
@@ -28,7 +32,7 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
       <Nav.Item>
         {step3 ? (
           <Link href="/payment" passHref>
-            <Nav.Link>Payment</Nav.Link>
+            <Nav.Link activeKey="payment">Payment</Nav.Link>
           </Link>
         ) : (
           <Nav.Link disabled>Payment</Nav.Link>
@@ -38,7 +42,7 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
       <Nav.Item>
         {step4 ? (
           <Link href="/checkout" passHref>
-            <Nav.Link>Checkout</Nav.Link>
+            <Nav.Link activeKey="checkout">Checkout</Nav.Link>
           </Link>
         ) : (
           <Link href="/checkout" passHref>
