@@ -53,7 +53,7 @@ const OrderList = ({ orders }) => {
                         className="fas fa-check"
                         style={{ color: "green" }}
                       ></i>{" "}
-                      {order.paidAt.substring(0, 10)}
+                      {order.paidAt?.substring(0, 10)}
                     </p>
                   ) : (
                     <p>
@@ -69,7 +69,7 @@ const OrderList = ({ orders }) => {
                         className="fas fa-check"
                         style={{ color: "green" }}
                       ></i>{" "}
-                      {order.deliveredAt.substring(0, 10)}
+                      {order.deliveredAt?.substring(0, 10)}
                     </p>
                   ) : (
                     <p>

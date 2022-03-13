@@ -83,10 +83,17 @@ export async function getServerSideProps(context) {
 
   // Redirect to signin page or home if user do not authorized
   if (data.currentUser?.isAdmin) {
-    const { data: productData } = await client.get("/api/products");
-    const { data: userData } = await client.get("/api/users");
-    const { data: orderData } = await client.get("/api/orders");
-
+    const { data: productData } = await client
+      .get("/api/products")
+      .catch((err) => {
+        console.log(err.message);
+      });
+    const { data: userData } = await client.get("/api/users").catch((err) => {
+      console.log(err.message);
+    });
+    const { data: orderData } = await client.get("/api/orders").catch((err) => {
+      console.log(err.message);
+    });
     return {
       props: { products: productData, users: userData, orders: orderData },
     };

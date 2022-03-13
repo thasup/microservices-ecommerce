@@ -140,8 +140,8 @@ const OrderPage = ({ currentUser, order }) => {
                 <Message variant="danger">Order Cancelled</Message>
               ) : order.isPaid ? (
                 <Message variant="success">
-                  Paid on {order.updatedAt.substring(0, 10)}{" "}
-                  {order.updatedAt.substring(11, 16)}
+                  Paid on {order.paidAt?.substring(0, 10)}{" "}
+                  {order.paidAt?.substring(11, 16)}
                 </Message>
               ) : (
                 <Message variant="info">
@@ -278,7 +278,9 @@ const OrderPage = ({ currentUser, order }) => {
 export async function getServerSideProps(context) {
   const { orderId } = context.query;
   const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser");
+  const { data } = await client.get("/api/users/currentuser").catch((err) => {
+    console.log(err.message);
+  });
 
   // Redirect to signin page if user do not authorized
   if (data.currentUser === null) {
@@ -289,12 +291,16 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    const { data: allMyOrder } = await client.get(`/api/orders/myorders`);
+    const { data: allMyOrder } = await client
+      .get(`/api/orders/myorders`)
+      .catch((err) => {
+        console.log(err.message);
+      });
 
     const existOrder = allMyOrder.find((order) => order.id === orderId);
 
     // If userId not match with userId in the order AND user is not an admin
-    if (existOrder === undefined && data.currentUser.isAdmin === false) {
+    if (!existOrder && data.currentUser.isAdmin === false) {
       return {
         redirect: {
           destination: "/",
@@ -303,7 +309,13 @@ export async function getServerSideProps(context) {
       };
     }
 
-    return { props: { order: existOrder } };
+    const { data: order } = await client
+      .get(`/api/orders/${orderId}`)
+      .catch((err) => {
+        console.log(err.message);
+      });
+
+    return { props: { order: order } };
   }
 }
 

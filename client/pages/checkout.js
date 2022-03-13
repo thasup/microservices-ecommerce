@@ -214,7 +214,9 @@ const CheckoutPage = ({ currentUser }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser");
+  const { data } = await client.get("/api/users/currentuser").catch((err) => {
+    console.log(err.message);
+  });
 
   // Redirect to signin page if user do not authorized
   if (data.currentUser === null) {
@@ -225,6 +227,8 @@ export async function getServerSideProps(context) {
       },
     };
   }
+
+  return { props: {} };
 }
 
 export default CheckoutPage;
