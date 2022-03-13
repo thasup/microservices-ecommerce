@@ -81,7 +81,6 @@ router.post(
       countInStock: product.countInStock,
       isReserved: false,
       version: product.version,
-      orderId: undefined,
     });
 
     res.status(201).send(product);

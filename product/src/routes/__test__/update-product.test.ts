@@ -199,7 +199,7 @@ it("rejects updates if the product is reserved", async () => {
   product!.set({ isReserved: true });
   await product!.save();
 
-  // Reject an update when product has an orderId (being reserved)
+  // Reject an update when product has isReserved equal to true
   await request(app)
     .patch(`/api/products/${response.body.id}`)
     .set("Cookie", cookie)

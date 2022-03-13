@@ -21,7 +21,7 @@ const Product = ({ product, currentUser }) => {
               src={product.images.image1 || product.image}
               layout="fill"
               objectFit="cover"
-              priority
+              // priority
               alt={`${product.title} image 1`}
             />
           </Card.Body>

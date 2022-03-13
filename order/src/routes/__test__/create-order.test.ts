@@ -16,7 +16,6 @@ const buildProduct = async () => {
     sizes: "S,M,L",
     countInStock: 1,
     isReserved: false,
-    orderId: undefined,
   });
   await product.save();
 
@@ -61,7 +60,6 @@ it("returns an error if some product in cart does not exist", async () => {
     sizes: "S,M,L",
     countInStock: 1,
     isReserved: false,
-    orderId: undefined,
   };
 
   const userId = new mongoose.Types.ObjectId().toHexString();
@@ -117,7 +115,6 @@ it("returns an error if the product is already reserved", async () => {
     isReserved: true,
     countInStock:
       product.countInStock - JSON.parse(jsonCartItemsUserOne)[0].qty,
-    orderId: userOneOrder.id,
   });
   await updatedProduct!.save();
 
@@ -135,7 +132,6 @@ it("returns an error if the product is already reserved", async () => {
 
   expect(updatedProduct?.isReserved).toEqual(true);
   expect(updatedProduct?.countInStock).toEqual(0);
-  expect(updatedProduct?.orderId).toEqual(userOneOrder.id);
 });
 
 it("reserves a product", async () => {

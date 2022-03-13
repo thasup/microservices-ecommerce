@@ -37,11 +37,13 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
 
       <Nav.Item>
         {step4 ? (
-          <Link href="/placeorder" passHref>
-            <Nav.Link>Place Order</Nav.Link>
+          <Link href="/checkout" passHref>
+            <Nav.Link>Checkout</Nav.Link>
           </Link>
         ) : (
-          <Nav.Link disabled>Place Order</Nav.Link>
+          <Link href="/checkout" passHref>
+            <Nav.Link disabled>Checkout</Nav.Link>
+          </Link>
         )}
       </Nav.Item>
     </Nav>

@@ -17,7 +17,6 @@ const buildProduct = async () => {
     sizes: "S,M,L",
     countInStock: 1,
     isReserved: false,
-    orderId: undefined,
   });
   await product.save();
 
