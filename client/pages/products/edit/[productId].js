@@ -260,16 +260,19 @@ const EditProduct = ({ products }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser");
+  const { data } = await client.get("/api/users/currentuser").catch((err) => {
+    console.log(err.message);
+  });
 
   // Redirect to signin page or home if user do not authorized
-  if (data.currentUser?.isAdmin) {
-    const { data: productData } = await client.get("/api/products");
-
+  if (data.currentUser === null) {
     return {
-      props: { products: productData },
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
     };
-  } else if (data.currentUser?.isAdmin === false) {
+  } else if (data.currentUser.isAdmin === false) {
     return {
       redirect: {
         destination: "/",
@@ -277,11 +280,14 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
+    const { data: productData } = await client
+      .get("/api/products")
+      .catch((err) => {
+        console.log(err.message);
+      });
+
     return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
+      props: { products: productData },
     };
   }
 }

@@ -239,7 +239,9 @@ const Dashboard = ({ currentUser, orders }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser");
+  const { data } = await client.get("/api/users/currentuser").catch((err) => {
+    console.log(err.message);
+  });
 
   // Redirect to signin page if user do not authorized
   if (data.currentUser === null) {
@@ -250,9 +252,13 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    const { data } = await client.get("/api/orders/myorders");
+    const { data: orderData } = await client
+      .get("/api/orders/myorders")
+      .catch((err) => {
+        console.log(err.message);
+      });
 
-    return { props: { orders: data } };
+    return { props: { orders: orderData } };
   }
 }
 

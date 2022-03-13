@@ -28,16 +28,4 @@ const ExpireTimer = ({ order }) => {
   );
 };
 
-// ExpireCounter.getInitialProps = async (context, client) => {
-//   let { data } = await client
-//     .get(`/api/orders/myorders`)
-//     .catch((err) => console.log(err));
-
-//   if (data === undefined) {
-//     data = [];
-//   }
-
-//   return { orders: data };
-// };
-
 export default ExpireTimer;

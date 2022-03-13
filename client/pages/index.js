@@ -19,7 +19,9 @@ const Home = ({ products, currentUser }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { data } = await client.get("/api/products");
+  const { data } = await client.get("/api/products").catch((err) => {
+    console.log(err.message);
+  });
 
   return { props: { products: data } };
 }
