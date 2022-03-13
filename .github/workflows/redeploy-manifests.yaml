@@ -8,7 +8,7 @@ on:
 
     # watch for changes in specific file
     paths:
-      - "order/src/index.ts"
+      - "trigger.txt"
 
 jobs:
   build:
