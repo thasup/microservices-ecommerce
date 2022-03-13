@@ -66,14 +66,14 @@ const setup = async () => {
   return { listener, product, data, msg };
 };
 
-it("sets the orderId of the product", async () => {
+it("sets isReserved property of the product", async () => {
   const { listener, product, data, msg } = await setup();
 
   await listener.onMessage(data, msg);
 
   const updatedProduct = await Product.findById(product.id);
 
-  expect(updatedProduct!.orderId).toEqual(data.id);
+  expect(updatedProduct!.isReserved).toEqual(true);
 });
 
 it("acks the message", async () => {
@@ -94,5 +94,5 @@ it("publishes a product updated event", async () => {
     (natsWrapper.client.publish as jest.Mock).mock.calls[0][1]
   );
 
-  expect(data.id).toEqual(productUpdatedData.orderId);
+  expect(productUpdatedData.isReserved).toEqual(true);
 });

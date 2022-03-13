@@ -28,7 +28,6 @@ const setup = async () => {
     rating: 0,
     countInStock: 1,
     isReserved: false,
-    orderId: undefined,
   };
 
   // create a fake message object

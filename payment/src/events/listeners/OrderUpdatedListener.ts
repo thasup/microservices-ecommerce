@@ -14,7 +14,6 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
   queueGroupName = QueueGroupNames.PAYMENT_SERVICE;
 
   async onMessage(data: OrderUpdatedEvent["data"], msg: Message) {
-    // Find the product that the order is reserving
     const order = await Order.findByEvent(data).catch((err) =>
       console.log(err)
     );
@@ -31,11 +30,11 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
         paidAt: data.paidAt,
       });
     } else {
-      // Mark the product as being reserved by setting its orderId property
+      // Mark the order as being cancelled by setting its status property
       order.set({ status: OrderStatus.Cancelled });
     }
 
-    // Save the product
+    // Save the order
     await order.save();
 
     // ack the message

@@ -39,9 +39,8 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 
       // If the product has been sold out of stock
       if (countInStock === 0) {
-        // Mark the product as being reserved by setting its orderId property
+        // Mark the product as being reserved by setting its isReserved property
         product.set({
-          orderId: data.id,
           countInStock: countInStock,
           isReserved: true,
         });
@@ -72,7 +71,6 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
         countInStock: product.countInStock,
         isReserved: product.isReserved,
         version: product.version,
-        orderId: data.id,
       });
     }
 

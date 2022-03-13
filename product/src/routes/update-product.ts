@@ -85,7 +85,6 @@ router.patch(
       rating: rating,
       countInStock: countInStock,
       isReserved: product.isReserved,
-      orderId: product.orderId,
       version: product.version,
     });
 

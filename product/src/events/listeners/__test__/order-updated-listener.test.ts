@@ -30,8 +30,7 @@ const setup = async () => {
     isReserved: true,
   });
 
-  const orderId = new mongoose.Types.ObjectId().toHexString();
-  product.set({ orderId: orderId });
+  product.set({ isReserved: true });
   await product.save();
 
   const itemsPrice = parseFloat(product.price.toFixed(2));
@@ -39,7 +38,7 @@ const setup = async () => {
 
   // Create the fake data event
   const data: OrderUpdatedEvent["data"] = {
-    id: orderId,
+    id: new mongoose.Types.ObjectId().toHexString(),
     version: 1,
     status: OrderStatus.Cancelled,
     userId: product.userId,
@@ -66,17 +65,16 @@ const setup = async () => {
     ack: jest.fn(),
   };
 
-  return { listener, product, orderId, data, msg };
+  return { listener, product, data, msg };
 };
 
 it("updates the order to updated status", async () => {
-  const { listener, product, orderId, data, msg } = await setup();
+  const { listener, product, data, msg } = await setup();
 
   await listener.onMessage(data, msg);
 
   const updatedProduct = await Product.findById(product.id);
 
-  expect(updatedProduct!.orderId).toEqual(undefined);
   expect(updatedProduct!.isReserved).toEqual(false);
   expect(updatedProduct!.countInStock).toEqual(2);
 });

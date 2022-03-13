@@ -38,18 +38,11 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
       // Increase the product quantity in stock by return quantity from the cancelled order
       const countInStock = product.countInStock + items[i].qty;
 
-      // Declare orderId variable outside the scope
-      let orderId = product.orderId;
-
       // If product already reserved
       if (product.countInStock === 0 && product.isReserved === true) {
-        // Cancelled reserved  product
-        orderId = undefined;
-
-        // Mark the product as avaliable by setting its orderId property
+        // Mark the product as avaliable by setting its isReserved property
         // and return quantity in stock to previous state
         product.set({
-          orderId: undefined,
           countInStock: countInStock,
           isReserved: false,
         });
@@ -83,7 +76,6 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
         countInStock: countInStock,
         isReserved: product.isReserved,
         version: product.version,
-        orderId: orderId,
       });
     }
 

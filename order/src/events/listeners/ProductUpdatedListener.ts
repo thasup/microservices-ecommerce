@@ -24,7 +24,6 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       sizes,
       countInStock,
       isReserved,
-      orderId,
     } = data;
 
     const product = await Product.findByEvent(data);
@@ -41,7 +40,6 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
         sizes,
         countInStock,
         isReserved,
-        orderId,
       });
       await product.save();
 
@@ -57,7 +55,6 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       sizes,
       countInStock,
       isReserved,
-      orderId,
     });
     await product.save();
 
