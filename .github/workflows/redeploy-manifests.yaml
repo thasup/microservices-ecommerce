@@ -1,0 +1,28 @@
+name: redeploy-manifests
+
+on:
+  push:
+    # watch for push event in main branch
+    branches:
+      - main
+
+    # watch for changes in specific file
+    paths:
+      - "order/src/index.ts"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # use and cliententicate doctl
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      # use and cliententicate doctl
+      - run: doctl kubernetes cluster kubeconfig save not-a-covid-cluster
+
+      # apply deployment yaml files (k8s-prod is for production!)
+      - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
