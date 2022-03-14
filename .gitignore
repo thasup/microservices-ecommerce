@@ -5,10 +5,3 @@ node_modules
 common
 
 # ignore google cloud relavent files
-infra
-infra/
-infra/k8s
-infra/k8s/
-client/api/build-client.js
-*.yaml
-infra/k8s/client-depl.yaml
