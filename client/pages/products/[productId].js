@@ -20,6 +20,7 @@ import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
 import NextImage from "../../components/NextImage";
 import SocialShare from "../../components/SocialShare";
+import ColorSelector from "../../components/ColorSelector";
 
 const productDetail = ({ products, currentUser }) => {
   const { productId } = useRouter().query;
@@ -195,7 +196,7 @@ const productDetail = ({ products, currentUser }) => {
       setLoading(true);
       removeReview();
     } else {
-      alert("Not allow");
+      alert("No authorized");
     }
   };
 
@@ -213,7 +214,7 @@ const productDetail = ({ products, currentUser }) => {
       ) : (
         <>
           <Row>
-            <Col md={1} className="mb-3">
+            <Col lg={1} className="mb-3">
               {imageArray.map((img, index) => (
                 <div
                   className="product-side-img"
@@ -231,7 +232,7 @@ const productDetail = ({ products, currentUser }) => {
               ))}
             </Col>
 
-            <Col md={5} className="mb-3 position-relative">
+            <Col lg={5} className="mb-3 position-relative">
               {imageArray.map((img, index) => (
                 <div className="product-main-img" key={index}>
                   <NextImage
@@ -244,18 +245,21 @@ const productDetail = ({ products, currentUser }) => {
               ))}
             </Col>
 
-            <Col md={3}>
+            <Col lg={6}>
               <ListGroup variant="flush" className="mb-3">
-                <ListGroup.Item>
-                  <h3>{product.title}</h3>
+                <ListGroup.Item className="py-0">
+                  <Rating value={product.rating} />
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <Rating
-                    value={product.rating}
-                    text={`${product.numReviews} reviews`}
-                  />
+                  <h1>{product.title}</h1>
                 </ListGroup.Item>
-                <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+                <ListGroup.Item>
+                  <h2>$ {product.price}</h2>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h3>Color</h3>
+                  <ColorSelector product={product} />
+                </ListGroup.Item>
                 <ListGroup.Item>
                   <div className="my-2">Description:</div>
                   <div>{product.description}</div>
@@ -265,9 +269,7 @@ const productDetail = ({ products, currentUser }) => {
                   <SocialShare product={product} />
                 </ListGroup.Item>
               </ListGroup>
-            </Col>
 
-            <Col md={3}>
               <Card>
                 <ListGroup>
                   <ListGroup.Item>

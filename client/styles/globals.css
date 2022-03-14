@@ -1,12 +1,3 @@
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  text-transform: uppercase;
-}
-
 #__next {
   min-height: 100vh;
   position: relative;
@@ -30,7 +21,22 @@ footer {
   text-align: center;
 }
 
-/* general */
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-transform: uppercase;
+}
+
+h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+}
+
+/* General */
 .btn {
   text-transform: uppercase;
 }
@@ -44,7 +50,7 @@ footer {
   margin-bottom: 2rem;
 }
 
-/* bootstrap component */
+/* Bootstrap Component */
 .nav-link {
   color: #000;
 }
@@ -62,7 +68,35 @@ footer {
   border-color: #000;
 }
 
-/* home page */
+.list-group-item {
+  border: 0px;
+}
+
+/* Custom Compoent */
+
+/* color selector */
+.color-selector-span {
+  border: solid #000;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  margin: 5px 15px 5px 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.color-selector {
+  border-radius: 50%;
+  width: 80%;
+  height: 80%;
+  display: block;
+  text-align: center;
+}
+
+/* Home page */
 .menu-tab {
   background-color: #ffffffb5;
   z-index: 4;
@@ -163,7 +197,7 @@ footer {
   font-family: "Open Sans";
 }
 
-/* product page */
+/* Product page */
 .product-main-img {
   position: absolute;
   width: 100%;
@@ -218,7 +252,7 @@ footer {
   left: 100%;
 }
 
-/* dashboard */
+/* Dashboard */
 .admin-dashboard .nav-link {
   cursor: pointer;
   color: #222;
@@ -249,7 +283,7 @@ footer {
   aspect-ratio: 6/9;
 }
 
-/* cart page */
+/* Cart page */
 .cart-img {
   position: relative;
   aspect-ratio: 6/9;

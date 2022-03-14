@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button, Col, Row, Table } from "react-bootstrap";
 
 import useRequest from "../hooks/use-request";
+import ColorSelector from "./ColorSelector";
 import CustomTooltip from "./CustomTooltip";
 
 const ProductList = ({ products }) => {
@@ -59,7 +60,9 @@ const ProductList = ({ products }) => {
                 </td>
                 <td>{product.countInStock}</td>
                 <td>${product.price}</td>
-                <td>{product.colors}</td>
+                <td>
+                  <ColorSelector product={product} />
+                </td>
                 <td>{product.sizes}</td>
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
