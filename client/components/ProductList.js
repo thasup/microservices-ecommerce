@@ -5,6 +5,7 @@ import { Button, Col, Row, Table } from "react-bootstrap";
 import useRequest from "../hooks/use-request";
 import ColorSelector from "./ColorSelector";
 import CustomTooltip from "./CustomTooltip";
+import SizeSelector from "./SizeSelector";
 
 const ProductList = ({ products }) => {
   const [deleteProductId, setDeleteProductId] = useState(null);
@@ -63,7 +64,9 @@ const ProductList = ({ products }) => {
                 <td>
                   <ColorSelector product={product} />
                 </td>
-                <td>{product.sizes}</td>
+                <td>
+                  <SizeSelector product={product} width={"15px"} />
+                </td>
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
                 <td>{product.material}</td>

@@ -21,6 +21,7 @@ import useRequest from "../../hooks/use-request";
 import NextImage from "../../components/NextImage";
 import SocialShare from "../../components/SocialShare";
 import ColorSelector from "../../components/ColorSelector";
+import SizeSelector from "../../components/SizeSelector";
 
 const productDetail = ({ products, currentUser }) => {
   const { productId } = useRouter().query;
@@ -259,6 +260,10 @@ const productDetail = ({ products, currentUser }) => {
                 <ListGroup.Item>
                   <h3>Color</h3>
                   <ColorSelector product={product} />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h3>Size</h3>
+                  <SizeSelector product={product} width={"35px"} />
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <div className="my-2">Description:</div>

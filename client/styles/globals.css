@@ -96,6 +96,25 @@ h1 {
   text-align: center;
 }
 
+/* size selector */
+.size-selector {
+  border: solid 1px #000;
+  display: inline-block;
+  margin: 5px 15px 5px 5px;
+  cursor: pointer;
+  display: flex;
+  background-color: #fff;
+  color: #000;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.size-selector:hover {
+  background-color: #000;
+  color: #fff;
+}
+
 /* Home page */
 .menu-tab {
   background-color: #ffffffb5;

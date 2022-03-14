@@ -39,7 +39,7 @@ const ColorSelector = ({ product }) => {
                 borderWidth: "1px",
               }}
             >
-              {color === "white" ? (
+              {color === "white" || color === "White" ? (
                 <i
                   className="color-selector"
                   style={{
@@ -73,7 +73,7 @@ const ColorSelector = ({ product }) => {
                 borderWidth: "0px",
               }}
             >
-              {color === "white" ? (
+              {color === "white" || color === "White" ? (
                 <i
                   className="color-selector"
                   style={{
