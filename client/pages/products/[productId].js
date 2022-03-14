@@ -22,6 +22,7 @@ import NextImage from "../../components/NextImage";
 import SocialShare from "../../components/SocialShare";
 import ColorSelector from "../../components/ColorSelector";
 import SizeSelector from "../../components/SizeSelector";
+import ProductDescription from "../../components/ProductDescription";
 
 const productDetail = ({ products, currentUser }) => {
   const { productId } = useRouter().query;
@@ -312,22 +313,41 @@ const productDetail = ({ products, currentUser }) => {
                 </ListGroup.Item>
               </ListGroup>
 
-              <Card>
+              <Card className="product-page-box">
                 <ListGroup>
                   <ListGroup.Item>
                     <Row>
-                      <Col>Price:</Col>
                       <Col>
-                        <strong>${product.price}</strong>
+                        <h5>Status:</h5>
+                      </Col>
+                      <Col>
+                        <h6>
+                          {product.countInStock > 0
+                            ? "In Stock"
+                            : "Out of Stock"}
+                        </h6>
                       </Col>
                     </Row>
                   </ListGroup.Item>
 
                   <ListGroup.Item>
                     <Row>
-                      <Col>Status:</Col>
                       <Col>
-                        {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                        <h5>Brand:</h5>
+                      </Col>
+                      <Col>
+                        <h6>{product.brand}</h6>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>
+                        <h5>Category:</h5>
+                      </Col>
+                      <Col>
+                        <h6>{product.category}</h6>
                       </Col>
                     </Row>
                   </ListGroup.Item>
@@ -347,10 +367,10 @@ const productDetail = ({ products, currentUser }) => {
                             <div className="px-0 py-2">{`${discount} is applied`}</div>
                           ) : (
                             <>
-                              <Form.Label className="px-0">Coupon:</Form.Label>
                               <Form.Control
                                 className="coupon-text text-uppercase"
                                 type="text"
+                                placeholder="Enter Coupon"
                                 value={discount}
                                 onChange={(e) => setDiscount(e.target.value)}
                               ></Form.Control>
@@ -407,13 +427,17 @@ const productDetail = ({ products, currentUser }) => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
+
+              <div className="px-0 mt-5">
+                <ProductDescription product={product} />
+              </div>
             </Col>
           </Row>
 
           {deleteReviewErrors}
           <Row className="mt-3 pb-5">
             <Col md={6}>
-              <h2>Reviews</h2>
+              <h1>Reviews</h1>
               {product.reviews.length === 0 && !loading && (
                 <Message variant="secondary">No Reviews</Message>
               )}
@@ -449,7 +473,7 @@ const productDetail = ({ products, currentUser }) => {
                             <Col className="trash-btn">
                               <button
                                 type="button"
-                                className="btn-sm mx-1 btn btn-danger"
+                                className="btn-sm mx-1 btn btn-dark"
                                 onClick={() => deleteReviewHandler(review)}
                               >
                                 <i className="fas fa-trash"></i>
@@ -530,7 +554,7 @@ const productDetail = ({ products, currentUser }) => {
                     )}
                   </>
                 ) : (
-                  <Message>
+                  <Message variant="secondary">
                     Please{" "}
                     <Link href="/signin">
                       <a>sign in</a>
