@@ -20,11 +20,14 @@ import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
 import NextImage from "../../components/NextImage";
 import SocialShare from "../../components/SocialShare";
+import ColorSelector from "../../components/ColorSelector";
+import SizeSelector from "../../components/SizeSelector";
+import ProductDescription from "../../components/ProductDescription";
 
 const productDetail = ({ products, currentUser }) => {
   const { productId } = useRouter().query;
 
-  const [qty, setQty] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const [discount, setDiscount] = useState("");
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState("");
@@ -102,13 +105,19 @@ const productDetail = ({ products, currentUser }) => {
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [];
 
+    if (quantity > product.countInStock) {
+      setQuantity(product.countInStock);
+    } else if (quantity < 1) {
+      setQuantity(1);
+    }
+
     const item = {
       userId: currentUser?.id || null,
       title: product.title,
-      qty: Number(qty),
+      qty: quantity,
       image: product.images.image1,
       price: product.price,
-      countInStock: product.countInStock - Number(qty),
+      countInStock: product.countInStock - quantity,
       discount: discountFactor,
       productId: productId,
     };
@@ -130,7 +139,7 @@ const productDetail = ({ products, currentUser }) => {
       setOnAdd(false);
       setLoadingUpdate(false);
     }
-  }, [onAdd, loading, imageEvent]);
+  }, [onAdd, loading, imageEvent, quantity]);
 
   const product = products.find((product) => product.id === productId);
 
@@ -195,7 +204,7 @@ const productDetail = ({ products, currentUser }) => {
       setLoading(true);
       removeReview();
     } else {
-      alert("Not allow");
+      alert("No authorized");
     }
   };
 
@@ -213,7 +222,7 @@ const productDetail = ({ products, currentUser }) => {
       ) : (
         <>
           <Row>
-            <Col md={1} className="mb-3">
+            <Col lg={1} className="mb-3">
               {imageArray.map((img, index) => (
                 <div
                   className="product-side-img"
@@ -231,7 +240,7 @@ const productDetail = ({ products, currentUser }) => {
               ))}
             </Col>
 
-            <Col md={5} className="mb-3 position-relative">
+            <Col lg={5} className="mb-3 position-relative">
               {imageArray.map((img, index) => (
                 <div className="product-main-img" key={index}>
                   <NextImage
@@ -244,18 +253,56 @@ const productDetail = ({ products, currentUser }) => {
               ))}
             </Col>
 
-            <Col md={3}>
-              <ListGroup variant="flush" className="mb-3">
-                <ListGroup.Item>
-                  <h3>{product.title}</h3>
+            <Col lg={6}>
+              <ListGroup variant="flush" className="mb-3 product-page">
+                <ListGroup.Item className="py-0">
+                  <Rating value={product.rating} />
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <Rating
-                    value={product.rating}
-                    text={`${product.numReviews} reviews`}
-                  />
+                  <h1>{product.title}</h1>
                 </ListGroup.Item>
-                <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+                <ListGroup.Item>
+                  <h1 id="price">$ {product.price}</h1>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h3>Color</h3>
+                  <div className="my-3 px-0">
+                    <ColorSelector product={product} />
+                  </div>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h3>Size</h3>
+                  <div className="my-3 px-0">
+                    <SizeSelector product={product} width={"35px"} />
+                  </div>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h3>QTY</h3>
+                  <div className="my-3 quantity-selector d-flex flex-row align-items-center">
+                    <div
+                      className="qty-btn decrease-btn"
+                      onClick={() => setQuantity(quantity - 1)}
+                    >
+                      -
+                    </div>
+                    <Form.Group
+                      controlId="countInStock"
+                      className="quantity-box"
+                    >
+                      <Form.Control
+                        type="number"
+                        value={quantity}
+                        onChange={(e) => setQuantity(Number(e.target.value))}
+                      ></Form.Control>
+                    </Form.Group>
+                    <div
+                      className="qty-btn increase-btn"
+                      onClick={() => setQuantity(quantity + 1)}
+                    >
+                      +
+                    </div>
+                  </div>
+                </ListGroup.Item>
                 <ListGroup.Item>
                   <div className="my-2">Description:</div>
                   <div>{product.description}</div>
@@ -265,53 +312,48 @@ const productDetail = ({ products, currentUser }) => {
                   <SocialShare product={product} />
                 </ListGroup.Item>
               </ListGroup>
-            </Col>
 
-            <Col md={3}>
-              <Card>
+              <Card className="product-page-box">
                 <ListGroup>
                   <ListGroup.Item>
                     <Row>
-                      <Col>Price:</Col>
                       <Col>
-                        <strong>${product.price}</strong>
+                        <h5>Status:</h5>
+                      </Col>
+                      <Col>
+                        <h6>
+                          {product.countInStock > 0
+                            ? "In Stock"
+                            : "Out of Stock"}
+                        </h6>
                       </Col>
                     </Row>
                   </ListGroup.Item>
 
                   <ListGroup.Item>
                     <Row>
-                      <Col>Status:</Col>
                       <Col>
-                        {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                        <h5>Brand:</h5>
+                      </Col>
+                      <Col>
+                        <h6>{product.brand}</h6>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>
+                        <h5>Category:</h5>
+                      </Col>
+                      <Col>
+                        <h6>{product.category}</h6>
                       </Col>
                     </Row>
                   </ListGroup.Item>
 
                   {product.countInStock > 0 && (
                     <>
-                      <ListGroup.Item>
-                        <Row>
-                          <Col>Qty:</Col>
-                          <Col>
-                            <Form.Control
-                              className="form-select"
-                              as="select"
-                              value={qty}
-                              onChange={(e) => setQty(e.target.value)}
-                            >
-                              {[...Array(product.countInStock).keys()].map(
-                                (obj) => (
-                                  <option key={obj + 1} value={obj + 1}>
-                                    {obj + 1}
-                                  </option>
-                                )
-                              )}
-                            </Form.Control>
-                          </Col>
-                        </Row>
-                      </ListGroup.Item>
-
                       <ListGroup.Item>
                         <Row className="px-3">
                           {couponError && (
@@ -325,10 +367,10 @@ const productDetail = ({ products, currentUser }) => {
                             <div className="px-0 py-2">{`${discount} is applied`}</div>
                           ) : (
                             <>
-                              <Form.Label className="px-0">Coupon:</Form.Label>
                               <Form.Control
                                 className="coupon-text text-uppercase"
                                 type="text"
+                                placeholder="Enter Coupon"
                                 value={discount}
                                 onChange={(e) => setDiscount(e.target.value)}
                               ></Form.Control>
@@ -385,13 +427,17 @@ const productDetail = ({ products, currentUser }) => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
+
+              <div className="px-0 mt-5">
+                <ProductDescription product={product} />
+              </div>
             </Col>
           </Row>
 
           {deleteReviewErrors}
           <Row className="mt-3 pb-5">
             <Col md={6}>
-              <h2>Reviews</h2>
+              <h1>Reviews</h1>
               {product.reviews.length === 0 && !loading && (
                 <Message variant="secondary">No Reviews</Message>
               )}
@@ -427,7 +473,7 @@ const productDetail = ({ products, currentUser }) => {
                             <Col className="trash-btn">
                               <button
                                 type="button"
-                                className="btn-sm mx-1 btn btn-danger"
+                                className="btn-sm mx-1 btn btn-dark"
                                 onClick={() => deleteReviewHandler(review)}
                               >
                                 <i className="fas fa-trash"></i>
@@ -508,7 +554,7 @@ const productDetail = ({ products, currentUser }) => {
                     )}
                   </>
                 ) : (
-                  <Message>
+                  <Message variant="secondary">
                     Please{" "}
                     <Link href="/signin">
                       <a>sign in</a>

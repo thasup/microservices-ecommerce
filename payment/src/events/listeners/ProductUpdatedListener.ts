@@ -46,7 +46,7 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       return msg.ack();
     }
 
-    product!.set({
+    product.set({
       id,
       title,
       price,
@@ -56,7 +56,7 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       countInStock,
       isReserved,
     });
-    await product!.save();
+    await product.save();
 
     // Acknowledge the message and tell NATS server it successfully processed
     msg.ack();
