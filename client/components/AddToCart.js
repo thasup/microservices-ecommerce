@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 
 const AddToCart = ({ product, currentUser }) => {
   const [onAdd, setOnAdd] = useState(false);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
 
   useEffect(() => {
     // Initial retrieve data from localStorage
@@ -23,7 +24,6 @@ const AddToCart = ({ product, currentUser }) => {
         productId: product.id,
       };
 
-      console.log("Started onAdd cartItems:", cartItems);
       // Check if the product exist in cart
       const existItem = cartItems.find((x) => x.productId === product.id);
 
@@ -34,27 +34,38 @@ const AddToCart = ({ product, currentUser }) => {
         );
       } else {
         cartItems.push(item);
-        console.log("push!!", cartItems);
       }
-
-      console.log("Finished onAdd cartItems:", cartItems);
 
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnAdd(false);
+      setLoadingUpdate(false);
     }
   }, [onAdd]);
 
   const addToCartHandler = (e) => {
     e.preventDefault();
+    setLoadingUpdate(true);
     setOnAdd(true);
   };
 
   return (
     <Button
-      variant="dark"
+      className="add-to-cart-btn"
+      variant="outline-dark"
       onClick={addToCartHandler}
       disabled={product.countInStock < 1}
     >
+      {loadingUpdate ? (
+        <Spinner
+          animation="border"
+          role="status"
+          as="span"
+          size="sm"
+          aria-hidden="true"
+        >
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : null}{" "}
       Add To Cart
     </Button>
   );

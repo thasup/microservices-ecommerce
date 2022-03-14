@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Card } from "react-bootstrap";
 
@@ -13,8 +13,8 @@ const Product = ({ product, currentUser }) => {
 
   return (
     <Card className="mb-3 product-card">
-      <Link href={`/products/[productId]`} as={`/products/${product.id}`}>
-        <div className="product-img">
+      <div className="product-img">
+        <Link href={`/products/[productId]`} as={`/products/${product.id}`}>
           <Card.Body className="product-img__cover">
             <Image
               loader={myLoader}
@@ -25,7 +25,9 @@ const Product = ({ product, currentUser }) => {
               alt={`${product.title} image 1`}
             />
           </Card.Body>
+        </Link>
 
+        <Link href={`/products/[productId]`} as={`/products/${product.id}`}>
           <Card.Body className="product-img__hover">
             <Image
               loader={myLoader}
@@ -38,8 +40,12 @@ const Product = ({ product, currentUser }) => {
               alt={`${product.title} image 2`}
             />
           </Card.Body>
+        </Link>
+
+        <div className="menu-tab">
+          <AddToCart product={product} currentUser={currentUser} />
         </div>
-      </Link>
+      </div>
 
       <Card.Body className="px-2">
         <div className="d-flex flex-row justify-content-between">
@@ -60,10 +66,6 @@ const Product = ({ product, currentUser }) => {
             text={`${product.numReviews} Reviews`}
           />
         </Card.Text>
-
-        {currentUser?.isAdmin ? (
-          <AddToCart product={product} currentUser={currentUser} />
-        ) : null}
       </Card.Body>
     </Card>
   );

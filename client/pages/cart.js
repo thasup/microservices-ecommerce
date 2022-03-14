@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, ListGroup, Form, Button, Card } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  ListGroup,
+  Form,
+  Button,
+  Card,
+  Container,
+} from "react-bootstrap";
 import Router from "next/router";
 import Link from "next/link";
 
@@ -97,13 +105,13 @@ const CartPage = ({ currentUser }) => {
   };
 
   return storageReady ? (
-    <>
-      <CheckoutSteps step1 />
+    <Container className="app-container">
+      <CheckoutSteps step1 currentStep={"/signin"} />
       <Row>
         <Col md={8}>
           <h1>Shopping Cart</h1>
           {cart.length === 0 ? (
-            <Message>
+            <Message variant="secondary">
               Your cart is empty. Keep shopping to find a cloth!{" "}
               <Link href="/">
                 <a>Keep Shopping</a>
@@ -210,7 +218,7 @@ const CartPage = ({ currentUser }) => {
           </Card>
         </Col>
       </Row>
-    </>
+    </Container>
   ) : null;
 };
 

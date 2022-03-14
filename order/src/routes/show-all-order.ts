@@ -15,15 +15,15 @@ router.get(
   requireAuth,
   adminUser,
   async (req: Request, res: Response) => {
-    const orders = await Order.find({});
-
-    if (!orders || orders.length === 0) {
-      throw new NotFoundError();
-    }
+    let orders = await Order.find({});
 
     // Only admin fetch all orders data
     if (req.currentUser!.isAdmin === false) {
       throw new NotAuthorizedError();
+    }
+
+    if (!orders || orders.length === 0) {
+      orders = [];
     }
 
     res.status(200).send(orders);

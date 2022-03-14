@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, ListGroup, Card, Button, Form } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  ListGroup,
+  Card,
+  Button,
+  Form,
+  Spinner,
+} from "react-bootstrap";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
@@ -25,10 +33,13 @@ const productDetail = ({ products, currentUser }) => {
   const [imageArray, setImageArray] = useState([]);
   const [imageEvent, setImageEvent] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [loadingApply, setLoadingApply] = useState(false);
+  const [loadingReview, setLoadingReview] = useState(false);
   const [discountFactor, setDiscountFactor] = useState(1);
   const [couponSuccess, setCouponSuccess] = useState(false);
   const [couponError, setCouponError] = useState(false);
-  const [initialSetImage, setInitialSetImage] = useState(false);
+  const [initialImage, setInitialImage] = useState(false);
   const [onAdd, setOnAdd] = useState(false);
 
   const { doRequest: addReview, errors: addReviewErrors } = useRequest({
@@ -41,7 +52,7 @@ const productDetail = ({ products, currentUser }) => {
     },
     onSuccess: (review) => {
       console.log(review);
-      setLoading(false);
+      setLoadingReview(false);
       Router.push(`/products/${productId}`);
     },
   });
@@ -58,10 +69,10 @@ const productDetail = ({ products, currentUser }) => {
   });
 
   useEffect(() => {
-    if (!initialSetImage) {
+    if (!initialImage) {
       const mainImage = document.getElementsByClassName("product-main-img");
       mainImage[0].classList.add("toggle-main-img");
-      setInitialSetImage(true);
+      setInitialImage(true);
     }
 
     if (imageEvent) {
@@ -103,7 +114,6 @@ const productDetail = ({ products, currentUser }) => {
     };
 
     if (onAdd) {
-      console.log("Started onAdd cartItems:", cartItems);
       // Check if the product exist in cart
       const existItem = cartItems.find((x) => x.productId === productId);
 
@@ -114,13 +124,11 @@ const productDetail = ({ products, currentUser }) => {
         );
       } else {
         cartItems.push(item);
-        console.log("push!!", cartItems);
       }
-
-      console.log("Finished onAdd cartItems:", cartItems);
 
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnAdd(false);
+      setLoadingUpdate(false);
     }
   }, [onAdd, loading, imageEvent]);
 
@@ -131,12 +139,12 @@ const productDetail = ({ products, currentUser }) => {
       (image) => image !== null && image !== ""
     );
 
-    setLoading(false);
     setImageArray(filterImages);
   }
 
   const applyCoupon = (e) => {
     e.preventDefault();
+    setLoadingApply(true);
 
     switch (discount) {
       case "free":
@@ -166,16 +174,19 @@ const productDetail = ({ products, currentUser }) => {
       setCouponSuccess(false);
       setCouponError(true);
     }
+
+    setLoadingApply(false);
   };
 
   const addToCartHandler = (e) => {
     e.preventDefault();
+    setLoadingUpdate(true);
     setOnAdd(true);
   };
 
   const submitReviewHandler = (e) => {
     e.preventDefault();
-    setLoading(true);
+    setLoadingReview(true);
     addReview();
   };
 
@@ -328,7 +339,21 @@ const productDetail = ({ products, currentUser }) => {
                                 variant="dark"
                                 placeholder="Enter Coupon"
                               >
-                                Apply
+                                {loadingApply ? (
+                                  <Spinner
+                                    animation="border"
+                                    role="status"
+                                    as="span"
+                                    size="sm"
+                                    aria-hidden="true"
+                                  >
+                                    <span className="visually-hidden">
+                                      Loading...
+                                    </span>
+                                  </Spinner>
+                                ) : (
+                                  <>Apply</>
+                                )}
                               </Button>
                             </>
                           )}
@@ -344,6 +369,17 @@ const productDetail = ({ products, currentUser }) => {
                       variant="dark"
                       disabled={product.countInStock < 1}
                     >
+                      {loadingUpdate ? (
+                        <Spinner
+                          animation="border"
+                          role="status"
+                          as="span"
+                          size="sm"
+                          aria-hidden="true"
+                        >
+                          <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                      ) : null}{" "}
                       Add To Cart
                     </Button>
                   </ListGroup.Item>
@@ -355,49 +391,55 @@ const productDetail = ({ products, currentUser }) => {
           {deleteReviewErrors}
           <Row className="mt-3 pb-5">
             <Col md={6}>
-              {loading && <Loader />}
               <h2>Reviews</h2>
-              {product.reviews.length === 0 && (
+              {product.reviews.length === 0 && !loading && (
                 <Message variant="secondary">No Reviews</Message>
               )}
               <ListGroup variant="flush">
-                {product.reviews.map((review) => (
-                  <ListGroup.Item key={review.id}>
-                    <Row className="">
-                      {currentUser?.image && (
-                        <Col xs={2} className="profile-img">
-                          <Image
-                            loader={myLoader}
-                            src={currentUser.image}
-                            alt="profile image"
-                            width={200}
-                            height={200}
-                            layout="responsive"
-                          />
-                        </Col>
-                      )}
+                {loading ? (
+                  <Loader />
+                ) : (
+                  <>
+                    {product.reviews.map((review) => (
+                      <ListGroup.Item key={review.id}>
+                        <Row>
+                          {currentUser?.image && (
+                            <Col xs={2} className="profile-img">
+                              <Image
+                                loader={myLoader}
+                                src={currentUser.image}
+                                alt="profile image"
+                                width={200}
+                                height={200}
+                                layout="responsive"
+                              />
+                            </Col>
+                          )}
 
-                      <Col xs={10}>
-                        <strong>{review.name}</strong>
-                        <Rating value={review.rating} />
-                        <p>{review.createdAt.substring(0, 10)}</p>
-                        <strong>{review.title}</strong>
-                        <p>{review.comment}</p>
-                      </Col>
-                      {review.userId === currentUser?.id && (
-                        <Col className="trash-btn">
-                          <button
-                            type="button"
-                            className="btn-sm mx-1 btn btn-danger"
-                            onClick={() => deleteReviewHandler(review)}
-                          >
-                            <i className="fas fa-trash"></i>
-                          </button>
-                        </Col>
-                      )}
-                    </Row>
-                  </ListGroup.Item>
-                ))}
+                          <Col xs={10}>
+                            <strong>{review.name}</strong>
+                            <Rating value={review.rating} />
+                            <p>{review.createdAt.substring(0, 10)}</p>
+                            <strong>{review.title}</strong>
+                            <p>{review.comment}</p>
+                          </Col>
+                          {review.userId === currentUser?.id && (
+                            <Col className="trash-btn">
+                              <button
+                                type="button"
+                                className="btn-sm mx-1 btn btn-danger"
+                                onClick={() => deleteReviewHandler(review)}
+                              >
+                                <i className="fas fa-trash"></i>
+                              </button>
+                            </Col>
+                          )}
+                        </Row>
+                      </ListGroup.Item>
+                    ))}
+                  </>
+                )}
+
                 {currentUser ? (
                   <>
                     {!product.reviews.some(
@@ -446,6 +488,19 @@ const productDetail = ({ products, currentUser }) => {
                           </Form.Group>
 
                           <Button type="submit" variant="dark">
+                            {loadingReview ? (
+                              <Spinner
+                                animation="border"
+                                role="status"
+                                as="span"
+                                size="sm"
+                                aria-hidden="true"
+                              >
+                                <span className="visually-hidden">
+                                  Loading...
+                                </span>
+                              </Spinner>
+                            ) : null}{" "}
                             Submit
                           </Button>
                         </Form>
