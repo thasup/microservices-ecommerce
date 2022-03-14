@@ -55,6 +55,7 @@ const AdminDashboard = ({ products, users, orders }) => {
               </Nav.Item>
             </Nav>
           </Col>
+
           <Col md={10}>
             <DynamicTabContent>
               <DynamicTabPane eventKey="product-list">
@@ -79,21 +80,30 @@ const AdminDashboard = ({ products, users, orders }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser");
+  let { data } = await client.get("/api/users/currentuser");
 
   // Redirect to signin page or home if user do not authorized
   if (data.currentUser?.isAdmin) {
-    const { data: productData } = await client
+    let { data: productData } = await client
       .get("/api/products")
       .catch((err) => {
         console.log(err.message);
       });
-    const { data: userData } = await client.get("/api/users").catch((err) => {
+    let { data: userData } = await client.get("/api/users").catch((err) => {
       console.log(err.message);
     });
-    const { data: orderData } = await client.get("/api/orders").catch((err) => {
+    let { data: orderData } = await client.get("/api/orders").catch((err) => {
       console.log(err.message);
     });
+
+    if (productData === (null || undefined)) {
+      return (productData = []);
+    } else if (userData === (null || undefined)) {
+      return (userData = []);
+    } else if (orderData === (null || undefined)) {
+      return (orderData = []);
+    }
+
     return {
       props: { products: productData, users: userData, orders: orderData },
     };

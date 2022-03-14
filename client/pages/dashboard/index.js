@@ -252,11 +252,15 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    const { data: orderData } = await client
+    let { data: orderData } = await client
       .get("/api/orders/myorders")
       .catch((err) => {
         console.log(err.message);
       });
+
+    if (orderData === (null || undefined)) {
+      return (orderData = []);
+    }
 
     return { props: { orders: orderData } };
   }

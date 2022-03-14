@@ -18,8 +18,6 @@ const Header = ({ currentUser, orders }) => {
 
       setOrder(recentOrder);
     }
-
-    // doRequest();
   }, [currentUser]);
 
   const myLoader = ({ src, width, quality }) => {
