@@ -27,6 +27,7 @@ const SizeSelector = ({ product, width }) => {
     <div className="px-0 d-flex flex-row">
       {sizeArray.map((size, i) => (
         <OverlayTrigger
+          key={i}
           placement="top"
           delay={{ show: 50, hide: 0 }}
           overlay={renderTooltip}
@@ -41,7 +42,6 @@ const SizeSelector = ({ product, width }) => {
                 width: `${width}`,
                 height: `${width}`,
               }}
-              key={i}
               onClick={() => setIndex(i)}
             >
               {size}
@@ -53,7 +53,6 @@ const SizeSelector = ({ product, width }) => {
                 width: `${width}`,
                 height: `${width}`,
               }}
-              key={i}
               onClick={() => setIndex(i)}
             >
               {size}

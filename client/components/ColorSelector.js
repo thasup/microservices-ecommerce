@@ -27,6 +27,7 @@ const ColorSelector = ({ product }) => {
     <div className="px-0 d-flex flex-row">
       {colorsArray.map((color, i) => (
         <OverlayTrigger
+          key={i}
           placement="top"
           delay={{ show: 50, hide: 0 }}
           overlay={renderTooltip}
@@ -47,7 +48,6 @@ const ColorSelector = ({ product }) => {
                     color: `${color}`,
                     border: "0px solid #000",
                   }}
-                  key={i}
                   onClick={() => setIndex(i)}
                 >
                   .
@@ -59,7 +59,6 @@ const ColorSelector = ({ product }) => {
                     backgroundColor: `${color}`,
                     color: `${color}`,
                   }}
-                  key={i}
                   onClick={() => setIndex(i)}
                 >
                   .
@@ -81,7 +80,6 @@ const ColorSelector = ({ product }) => {
                     color: `${color}`,
                     border: "1px solid #000",
                   }}
-                  key={i}
                   onClick={() => setIndex(i)}
                 >
                   .
@@ -93,7 +91,6 @@ const ColorSelector = ({ product }) => {
                     backgroundColor: `${color}`,
                     color: `${color}`,
                   }}
-                  key={i}
                   onClick={() => setIndex(i)}
                 >
                   .

@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Row,
-  Col,
-  ListGroup,
-  Form,
-  Button,
-  Card,
-  Container,
-} from "react-bootstrap";
+import { Row, Col, ListGroup, Button, Card, Container } from "react-bootstrap";
 import Router from "next/router";
 import Link from "next/link";
 
@@ -17,7 +9,8 @@ import NextImage from "../components/NextImage";
 
 const CartPage = ({ currentUser }) => {
   const [productId, setProductId] = useState(null);
-  const [qty, setQty] = useState(null);
+  const [onIncrease, setOnIncrease] = useState(false);
+  const [onDecrease, setOnDecrease] = useState(false);
   const [deletedItemId, setDeletedItemId] = useState(null);
 
   const [storageReady, setStorageReady] = useState(false);
@@ -29,13 +22,9 @@ const CartPage = ({ currentUser }) => {
     const cartItems = localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [];
-    console.log("initial storage cartItems:", cartItems);
 
     // Cart has items or empty
     if (cartItems !== undefined) {
-      cartItems.map((item) => {
-        item.countInStock += 1;
-      });
       // Set cart state to cartItems in localStorage
       setCart(cartItems);
 
@@ -44,16 +33,34 @@ const CartPage = ({ currentUser }) => {
     }
 
     if (onEdit) {
-      console.log("Started onEdit cartItems:", cartItems);
       const existItem = cartItems.find((x) => x.productId === productId);
+
+      let newQty;
+      if (onIncrease) {
+        // let xxx = Number(existItem.qty + 1);
+        // setQuantity(xxx);
+        newQty = existItem.qty + 1;
+      } else if (onDecrease) {
+        // let xxx = Number(existItem.qty - 1);
+        // setQuantity(xxx);
+        newQty = existItem.qty - 1;
+      }
+
+      if (newQty > existItem.countInStock + existItem.qty) {
+        // setQuantity(Number(existItem.countInStock) + Number(existItem.qty));
+        newQty = existItem.countInStock + existItem.qty;
+      } else if (newQty < 1) {
+        // setQuantity(1);
+        newQty = 1;
+      }
 
       const editedItem = {
         userId: existItem.userId,
         title: existItem.title,
-        qty: qty,
+        qty: Number(newQty),
         image: existItem.image,
         price: existItem.price,
-        countInStock: existItem.countInStock,
+        countInStock: Number(existItem.countInStock + existItem.qty - newQty),
         discount: existItem.discount,
         productId: existItem.productId,
       };
@@ -65,28 +72,25 @@ const CartPage = ({ currentUser }) => {
         );
       } else {
         cartItems.push(editedItem);
-        console.log("push!!", cartItems);
       }
 
-      console.log("Finished onEdit cartItems:", cartItems);
-
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+      setOnIncrease(false);
+      setOnDecrease(false);
       setOnEdit(false);
     }
 
     if (onRemove) {
-      console.log("Started onRemove cartItems:", cartItems);
       cartItems = cartItems.filter((item) => item.productId !== deletedItemId);
 
-      console.log("Finished onRemove cartItems:", cartItems);
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnRemove(false);
     }
-  }, [onEdit, onRemove]);
+  }, [onIncrease, onDecrease, onRemove]);
 
-  const editItemHandler = (id, qty) => {
+  const editItemHandler = (id) => {
     setProductId(id);
-    setQty(qty);
     setOnEdit(true);
   };
 
@@ -109,7 +113,7 @@ const CartPage = ({ currentUser }) => {
       <CheckoutSteps step1 currentStep={"/signin"} />
       <Row>
         <Col md={8}>
-          <h1>Shopping Cart</h1>
+          <h2>Shopping Cart</h2>
           {cart.length === 0 ? (
             <Message variant="secondary">
               Your cart is empty. Keep shopping to find a cloth!{" "}
@@ -132,7 +136,7 @@ const CartPage = ({ currentUser }) => {
                         />
                       </div>
                     </Col>
-                    <Col md>
+                    <Col md={4}>
                       <Link
                         href={`/products/[productId]`}
                         as={`/products/${item.productId}`}
@@ -153,24 +157,28 @@ const CartPage = ({ currentUser }) => {
                         <Col md={1}>{""}</Col>
                       </>
                     )}
-                    <Col md={2}>
-                      <Form.Control
-                        className="form-select"
-                        as="select"
-                        value={item.qty}
-                        onChange={(e) =>
-                          editItemHandler(
-                            item.productId,
-                            Number(e.target.value)
-                          )
-                        }
-                      >
-                        {[...Array(item.countInStock).keys()].map((obj) => (
-                          <option key={obj + 1} value={obj + 1}>
-                            {obj + 1}
-                          </option>
-                        ))}
-                      </Form.Control>
+                    <Col md={3}>
+                      <div className="quantity-selector d-flex flex-row align-items-center">
+                        <div
+                          className="qty-btn decrease-btn"
+                          onClick={() => {
+                            editItemHandler(item.productId);
+                            setOnDecrease(true);
+                          }}
+                        >
+                          -
+                        </div>
+                        <div className="quantity-box">{item.qty}</div>
+                        <div
+                          className="qty-btn increase-btn"
+                          onClick={() => {
+                            editItemHandler(item.productId);
+                            setOnIncrease(true);
+                          }}
+                        >
+                          +
+                        </div>
+                      </div>
                     </Col>
                     <Col md={1}>
                       <Button
@@ -192,10 +200,10 @@ const CartPage = ({ currentUser }) => {
           <Card>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <h2>
+                <h3>
                   Subtotal (
                   {cart.reduce((acc, item) => acc + Number(item.qty), 0)}) items
-                </h2>
+                </h3>
                 $
                 {cart
                   .reduce(

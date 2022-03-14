@@ -26,7 +26,7 @@ import SizeSelector from "../../components/SizeSelector";
 const productDetail = ({ products, currentUser }) => {
   const { productId } = useRouter().query;
 
-  const [qty, setQty] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const [discount, setDiscount] = useState("");
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState("");
@@ -104,13 +104,19 @@ const productDetail = ({ products, currentUser }) => {
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [];
 
+    if (quantity > product.countInStock) {
+      setQuantity(product.countInStock);
+    } else if (quantity < 1) {
+      setQuantity(1);
+    }
+
     const item = {
       userId: currentUser?.id || null,
       title: product.title,
-      qty: Number(qty),
+      qty: quantity,
       image: product.images.image1,
       price: product.price,
-      countInStock: product.countInStock - Number(qty),
+      countInStock: product.countInStock - quantity,
       discount: discountFactor,
       productId: productId,
     };
@@ -132,7 +138,7 @@ const productDetail = ({ products, currentUser }) => {
       setOnAdd(false);
       setLoadingUpdate(false);
     }
-  }, [onAdd, loading, imageEvent]);
+  }, [onAdd, loading, imageEvent, quantity]);
 
   const product = products.find((product) => product.id === productId);
 
@@ -247,7 +253,7 @@ const productDetail = ({ products, currentUser }) => {
             </Col>
 
             <Col lg={6}>
-              <ListGroup variant="flush" className="mb-3">
+              <ListGroup variant="flush" className="mb-3 product-page">
                 <ListGroup.Item className="py-0">
                   <Rating value={product.rating} />
                 </ListGroup.Item>
@@ -255,15 +261,46 @@ const productDetail = ({ products, currentUser }) => {
                   <h1>{product.title}</h1>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <h2>$ {product.price}</h2>
+                  <h1 id="price">$ {product.price}</h1>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <h3>Color</h3>
-                  <ColorSelector product={product} />
+                  <div className="my-3 px-0">
+                    <ColorSelector product={product} />
+                  </div>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <h3>Size</h3>
-                  <SizeSelector product={product} width={"35px"} />
+                  <div className="my-3 px-0">
+                    <SizeSelector product={product} width={"35px"} />
+                  </div>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h3>QTY</h3>
+                  <div className="my-3 quantity-selector d-flex flex-row align-items-center">
+                    <div
+                      className="qty-btn decrease-btn"
+                      onClick={() => setQuantity(quantity - 1)}
+                    >
+                      -
+                    </div>
+                    <Form.Group
+                      controlId="countInStock"
+                      className="quantity-box"
+                    >
+                      <Form.Control
+                        type="number"
+                        value={quantity}
+                        onChange={(e) => setQuantity(Number(e.target.value))}
+                      ></Form.Control>
+                    </Form.Group>
+                    <div
+                      className="qty-btn increase-btn"
+                      onClick={() => setQuantity(quantity + 1)}
+                    >
+                      +
+                    </div>
+                  </div>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <div className="my-2">Description:</div>
@@ -297,28 +334,6 @@ const productDetail = ({ products, currentUser }) => {
 
                   {product.countInStock > 0 && (
                     <>
-                      <ListGroup.Item>
-                        <Row>
-                          <Col>Qty:</Col>
-                          <Col>
-                            <Form.Control
-                              className="form-select"
-                              as="select"
-                              value={qty}
-                              onChange={(e) => setQty(e.target.value)}
-                            >
-                              {[...Array(product.countInStock).keys()].map(
-                                (obj) => (
-                                  <option key={obj + 1} value={obj + 1}>
-                                    {obj + 1}
-                                  </option>
-                                )
-                              )}
-                            </Form.Control>
-                          </Col>
-                        </Row>
-                      </ListGroup.Item>
-
                       <ListGroup.Item>
                         <Row className="px-3">
                           {couponError && (
