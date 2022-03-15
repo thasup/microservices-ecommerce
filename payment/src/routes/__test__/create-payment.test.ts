@@ -125,8 +125,8 @@ it("returns a 201 with valid inputs", async () => {
   });
   await product.save();
 
-  const itemsPrice = parseFloat(product.price.toFixed(2));
-  const taxPrice = parseFloat((product.price * 0.07).toFixed(2));
+  const itemsPrice = Math.floor(parseFloat(product.price.toFixed(2)));
+  const taxPrice = Math.floor(parseFloat((product.price * 0.07).toFixed(2)));
 
   // Create and save the order
   const order = Order.build({
@@ -135,9 +135,9 @@ it("returns a 201 with valid inputs", async () => {
     userId: userId,
     version: 0,
     paymentMethod: "stripe",
-    itemsPrice,
+    itemsPrice: itemsPrice,
     shippingPrice: 0,
-    taxPrice,
+    taxPrice: taxPrice,
     totalPrice: itemsPrice + taxPrice,
   });
   await order.save();

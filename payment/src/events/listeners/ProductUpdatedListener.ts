@@ -29,21 +29,7 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
     const product = await Product.findByEvent(data);
 
     if (!product) {
-      // throw new NotFoundError();
-      const product = Product.build({
-        id,
-        title,
-        price,
-        userId,
-        image,
-        colors,
-        sizes,
-        countInStock,
-        isReserved,
-      });
-      await product.save();
-
-      return msg.ack();
+      throw new NotFoundError();
     }
 
     product.set({
