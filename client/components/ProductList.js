@@ -62,7 +62,11 @@ const ProductList = ({ products }) => {
                 <td>{product.countInStock}</td>
                 <td>${product.price}</td>
                 <td>
-                  <ColorSelector product={product} />
+                  <ColorSelector
+                    product={product}
+                    margin={"0px"}
+                    size={"1rem"}
+                  />
                 </td>
                 <td>
                   <SizeSelector product={product} width={"15px"} />

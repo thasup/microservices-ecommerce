@@ -289,6 +289,8 @@ const productDetail = ({ products, currentUser }) => {
                     <ColorSelector
                       product={product}
                       callback={colorSelectedHandler}
+                      margin={"5px"}
+                      size={"2rem"}
                     />
                   </div>
                 </ListGroup.Item>

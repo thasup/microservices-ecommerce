@@ -79,7 +79,12 @@ const Product = ({ product, currentUser }) => {
           </Card.Text>
 
           <Card.Text className="card-product-color" as="div">
-            <ColorSelector product={product} callback={colorSelectedHandler} />
+            <ColorSelector
+              product={product}
+              callback={colorSelectedHandler}
+              margin={"0px"}
+              size={"1rem"}
+            />
           </Card.Text>
         </div>
       </Card.Body>

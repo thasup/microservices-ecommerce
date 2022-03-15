@@ -116,20 +116,27 @@ a::before {
 /* Custom Compoent */
 
 /* color selector */
-.color-selector-span {
-  border: solid #000;
+.color-selector-outer {
+  border: 0px solid #000;
   border-radius: 50%;
-  width: 25px;
-  height: 25px;
   display: inline-block;
   margin: 5px 15px 5px 5px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+  aspect-ratio: 1/1;
 }
 
-.color-selector {
+.color-selected {
+  border-width: 1px !important;
+}
+
+.color-selector-outer:hover {
+  border-width: 1px !important;
+}
+
+.color-selector-inner {
   border-radius: 50%;
   width: 80%;
   height: 80%;
