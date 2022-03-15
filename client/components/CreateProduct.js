@@ -21,7 +21,7 @@ const CreateProduct = () => {
   const [countInStock, setCountInStock] = useState(0);
 
   const [index, setIndex] = useState(0);
-  const [loadingCreate, setLoadingCreate] = useState(true);
+  const [loadingCreate, setLoadingCreate] = useState(false);
 
   const { doRequest, errors } = useRequest({
     url: "/api/products",

@@ -1,71 +1,88 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, ListGroup, Button, Card, Container } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  ListGroup,
+  Button,
+  Card,
+  Container,
+  Form,
+} from "react-bootstrap";
 import Router from "next/router";
 import Link from "next/link";
 
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import NextImage from "../components/NextImage";
+import buildClient from "../api/build-client";
 
-const CartPage = ({ currentUser }) => {
+const CartPage = ({ currentUser, products }) => {
+  const [cart, setCart] = useState(null);
+  const [color, setColor] = useState([]);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [size, setSize] = useState([]);
+  const [selectedSize, setSelectedSize] = useState(null);
   const [productId, setProductId] = useState(null);
-  const [onIncrease, setOnIncrease] = useState(false);
-  const [onDecrease, setOnDecrease] = useState(false);
   const [deletedItemId, setDeletedItemId] = useState(null);
 
   const [storageReady, setStorageReady] = useState(false);
-  const [cart, setCart] = useState(null);
   const [onEdit, setOnEdit] = useState(false);
+  const [onIncrease, setOnIncrease] = useState(false);
+  const [onDecrease, setOnDecrease] = useState(false);
   const [onRemove, setOnRemove] = useState(false);
-  const [hasOption, setHasOption] = useState(false);
-  // const [hasSize, sethasSize] = useState(false);
 
   useEffect(() => {
+    // Get cartItems from LocalStorage
     const cartItems = localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [];
 
-    // Cart has items or empty
-    if (cartItems !== undefined) {
+    // cartItems haves items
+    if (cartItems !== undefined && cartItems !== null) {
       // Set cart state to cartItems in localStorage
       setCart(cartItems);
 
-      // Check if item color or size is NULL
-      const newCheckArray = cartItems.map((item) =>
-        Object.values(item).includes(null)
-      );
-      const hasNullInArray = newCheckArray.includes(true);
-
-      if (hasNullInArray) {
-        setHasOption(false);
-      } else {
-        setHasOption(true);
-      }
+      // Set initial value of color and size in form-select
+      const emptyColorArray = [];
+      const emptySizeArray = [];
+      cartItems.forEach((item) => {
+        emptyColorArray.push(item.color);
+        emptySizeArray.push(item.size);
+      });
+      setColor(emptyColorArray);
+      setSize(emptySizeArray);
 
       // Start render the page
       setStorageReady(true);
     }
 
+    // Run when update an item
     if (onEdit) {
       const existItem = cartItems.find((x) => x.productId === productId);
 
-      let newQty;
+      let newQty = existItem.qty;
+
+      // Update new quantity
       if (onIncrease) {
         newQty = existItem.qty + 1;
       } else if (onDecrease) {
         newQty = existItem.qty - 1;
       }
 
+      // Limit maximun and minimum range
       if (newQty > existItem.countInStock + existItem.qty) {
         newQty = existItem.countInStock + existItem.qty;
       } else if (newQty < 1) {
         newQty = 1;
       }
 
+      // Update new Item
       const editedItem = {
         userId: existItem.userId,
         title: existItem.title,
         qty: Number(newQty),
+        color: selectedColor !== null ? selectedColor : existItem.color,
+        size: selectedSize !== null ? selectedSize : existItem.size,
         image: existItem.image,
         price: existItem.price,
         countInStock: Number(existItem.countInStock + existItem.qty - newQty),
@@ -82,20 +99,28 @@ const CartPage = ({ currentUser }) => {
         cartItems.push(editedItem);
       }
 
+      // Set cartItems with updated data in localStorage
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
 
+      // Set cart with updated data in client state
+      setCart(cartItems);
+
+      // Reset parameter to default
+      setSelectedColor(null);
+      setSelectedSize(null);
       setOnIncrease(false);
       setOnDecrease(false);
       setOnEdit(false);
     }
 
+    // Run when delete an item
     if (onRemove) {
       cartItems = cartItems.filter((item) => item.productId !== deletedItemId);
 
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnRemove(false);
     }
-  }, [onIncrease, onDecrease, onRemove]);
+  }, [onIncrease, onDecrease, onEdit, onRemove, currentUser]);
 
   const editItemHandler = (id) => {
     setProductId(id);
@@ -151,7 +176,7 @@ const CartPage = ({ currentUser }) => {
                       </Link>
                     </Col>
 
-                    <Col md={4} className="d-flex flex-column">
+                    <Col md={5} className="d-flex flex-column">
                       <Link
                         href={`/products/[productId]`}
                         as={`/products/${item.productId}`}
@@ -160,22 +185,77 @@ const CartPage = ({ currentUser }) => {
                         <a className="cart-product-title mb-1">{item.title}</a>
                       </Link>
 
-                      <h6>
-                        <strong>COLOR:</strong>{" "}
-                        {item.color === null ? (
-                          <p style={{ color: "red" }}>Color not selected</p>
-                        ) : (
-                          item.color
-                        )}
-                      </h6>
-                      <h6>
-                        <strong>SIZE:</strong>{" "}
-                        {item.size === null ? (
-                          <p style={{ color: "red" }}>Size not selected</p>
-                        ) : (
-                          item.size
-                        )}
-                      </h6>
+                      <div className="px-0 mt-2 d-flex justify-content-between align-items-center">
+                        <h6>
+                          <strong>COLOR:</strong>
+                        </h6>
+                        <Form.Select
+                          className="my-0"
+                          size="sm"
+                          value={color[index]}
+                          onChange={(e) => {
+                            let productColors = products
+                              .find((product) => product.id === item.productId)
+                              .colors.split(",");
+
+                            let selectedIndex = e.target.options.selectedIndex;
+
+                            let c = productColors[selectedIndex - 1];
+
+                            setSelectedColor(c);
+
+                            color[index] = c;
+                            setColor(color);
+                            editItemHandler(item.productId);
+                          }}
+                        >
+                          <option value="">Select Color</option>
+                          {products
+                            .find((product) => product.id === item.productId)
+                            .colors.split(",")
+                            .map((c, i) => (
+                              <option key={i} value={`${c}`}>
+                                {c.toLowerCase()}
+                              </option>
+                            ))}
+                        </Form.Select>
+                      </div>
+
+                      <div className="px-0 mt-2 d-flex justify-content-between align-items-center">
+                        <h6>
+                          <strong>Size:</strong>
+                        </h6>
+                        <Form.Select
+                          className="my-0"
+                          size="sm"
+                          value={size[index]}
+                          onChange={(e) => {
+                            let productSizes = products
+                              .find((product) => product.id === item.productId)
+                              .sizes.split(",");
+
+                            let selectedIndex = e.target.options.selectedIndex;
+
+                            let s = productSizes[selectedIndex - 1];
+
+                            setSelectedSize(s);
+
+                            size[index] = s;
+                            setSize(size);
+                            editItemHandler(item.productId);
+                          }}
+                        >
+                          <option value="">Select Size</option>
+                          {products
+                            .find((product) => product.id === item.productId)
+                            .sizes.split(",")
+                            .map((s, i) => (
+                              <option key={i} value={`${s}`}>
+                                {s}
+                              </option>
+                            ))}
+                        </Form.Select>
+                      </div>
                     </Col>
 
                     {item.discount !== 1 ? (
@@ -196,7 +276,10 @@ const CartPage = ({ currentUser }) => {
                         <p>${item.price}</p> <p>{""}</p>
                       </Col>
                     )}
-                    <Col md={3}>
+                    <Col
+                      md={3}
+                      className="px-0 d-flex flex-column align-items-end justify-content-between"
+                    >
                       <div className="quantity-selector d-flex flex-row align-items-center justify-content-center">
                         <div
                           className="qty-btn decrease-btn"
@@ -218,16 +301,17 @@ const CartPage = ({ currentUser }) => {
                           +
                         </div>
                       </div>
-                    </Col>
-                    <Col md={1}>
-                      <Button
-                        type="button"
-                        variant="dark"
-                        className="cart-trash-btn"
-                        onClick={() => removeFromCartHandler(item.productId)}
-                      >
-                        <i className="fas fa-trash"></i>
-                      </Button>
+
+                      <div className="px-0">
+                        <Button
+                          type="button"
+                          variant="dark"
+                          className="cart-trash-btn"
+                          onClick={() => removeFromCartHandler(item.productId)}
+                        >
+                          <i className="fas fa-trash"></i>
+                        </Button>
+                      </div>
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -253,15 +337,16 @@ const CartPage = ({ currentUser }) => {
                   .toFixed(2)}
               </ListGroup.Item>
               <ListGroup.Item className="d-grid gap-2">
-                {!hasOption ? (
+                {currentUser?.id ? null : (
                   <div className="px-0 py-2" style={{ color: "red" }}>
-                    {"Please select color and size option"}
+                    {"Please sign in before proceeding"}
                   </div>
-                ) : null}
+                )}
+
                 <Button
                   type="button"
                   variant="dark"
-                  disabled={cart.length === 0 || !hasOption}
+                  disabled={cart.length === 0}
                   onClick={checkoutHandler}
                 >
                   Proceed To Chackout
@@ -274,5 +359,14 @@ const CartPage = ({ currentUser }) => {
     </Container>
   ) : null;
 };
+
+export async function getServerSideProps(context) {
+  const client = buildClient(context);
+  const { data } = await client.get("/api/products").catch((err) => {
+    console.log(err.message);
+  });
+
+  return { props: { products: data } };
+}
 
 export default CartPage;

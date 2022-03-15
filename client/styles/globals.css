@@ -432,3 +432,7 @@ a::before {
   width: 35px;
   height: 35px;
 }
+
+#cart-items .form-select-sm {
+  width: 50%;
+}
