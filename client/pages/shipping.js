@@ -24,7 +24,7 @@ const ShippingPage = ({ currentUser }) => {
       : [];
     console.log("initial storage shippingAddress:", data);
 
-    if (currentUser?.shippingAddress.address) {
+    if (currentUser?.shippingAddress) {
       // Set state to shippingAddress data in profile information
       setAddress(currentUser?.shippingAddress.address);
       setCity(currentUser?.shippingAddress.city);
