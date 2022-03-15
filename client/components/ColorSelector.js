@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const ColorSelector = ({ product, callback }) => {
+const ColorSelector = ({ product, callback, margin, size }) => {
   const [index, setIndex] = useState(null);
   const [text, setText] = useState("");
   const [colorsArray, setColorsArray] = useState(null);
@@ -39,66 +39,60 @@ const ColorSelector = ({ product, callback }) => {
         >
           {i === index ? (
             <div
-              className="color-selector-span px-0"
+              className="color-selector-outer px-0 color-selected"
               style={{
-                borderWidth: "1px",
+                margin: `${margin}`,
+                width: `${size}`,
               }}
             >
               {color === "white" || color === "White" ? (
-                <i
-                  className="color-selector"
+                <span
+                  className="color-selector-inner"
                   style={{
                     backgroundColor: `${color}`,
                     color: `${color}`,
                     border: "0px solid #000",
                   }}
                   onClick={() => setIndex(i)}
-                >
-                  .
-                </i>
+                ></span>
               ) : (
-                <i
-                  className="color-selector"
+                <span
+                  className="color-selector-inner"
                   style={{
                     backgroundColor: `${color}`,
                     color: `${color}`,
                   }}
                   onClick={() => setIndex(i)}
-                >
-                  .
-                </i>
+                ></span>
               )}
             </div>
           ) : (
             <div
-              className="color-selector-span px-0"
+              className="color-selector-outer px-0"
               style={{
-                borderWidth: "0px",
+                margin: `${margin}`,
+                width: `${size}`,
               }}
             >
               {color === "white" || color === "White" ? (
-                <i
-                  className="color-selector"
+                <span
+                  className="color-selector-inner"
                   style={{
                     backgroundColor: `${color}`,
                     color: `${color}`,
                     border: "1px solid #000",
                   }}
                   onClick={() => setIndex(i)}
-                >
-                  .
-                </i>
+                ></span>
               ) : (
-                <i
-                  className="color-selector"
+                <span
+                  className="color-selector-inner"
                   style={{
                     backgroundColor: `${color}`,
                     color: `${color}`,
                   }}
                   onClick={() => setIndex(i)}
-                >
-                  .
-                </i>
+                ></span>
               )}
             </div>
           )}

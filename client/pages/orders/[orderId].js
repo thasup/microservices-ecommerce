@@ -92,13 +92,13 @@ const OrderPage = ({ currentUser, order }) => {
     <Container className="app-container">
       <h1>Order {order.id}</h1>
       <Row>
-        <Col>
+        <Col md={8} className="mb-3">
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h3>Shipping</h3>
               <p>
                 <strong>Name: </strong>{" "}
-                {currentUser.name ? currentUser?.name : currentUser?.id}
+                {currentUser?.name ? currentUser.name : currentUser.id}
               </p>
               <p>
                 <strong>Email: </strong>
@@ -107,7 +107,7 @@ const OrderPage = ({ currentUser, order }) => {
                   <a>{currentUser.email}</a>
                 </Link>
               </p>
-              <p>
+              <p className="mb-3">
                 <strong>Address: </strong>
                 {order.shippingAddress.address} {order.shippingAddress.city},{" "}
                 {order.shippingAddress.postalCode},{" "}
@@ -151,51 +151,67 @@ const OrderPage = ({ currentUser, order }) => {
               ) : (
                 <ListGroup variant="flush">
                   {order.cart.map((item, index) => (
-                    <ListGroup.Item key={index}>
-                      <Row id="cart-items">
-                        <Col md={2}>
-                          <div className="px-0 cart-img">
-                            <NextImage
-                              src={item.image}
-                              alt={item.title}
-                              priority={true}
-                              quality={50}
-                            />
-                          </div>
-                        </Col>
-
-                        <Col md={4} className="d-flex flex-column">
+                    <ListGroup.Item key={index} id="cart-items">
+                      <Row>
+                        <Col md={2} xs={4} className="px-0">
                           <Link
                             href={`/products/[productId]`}
                             as={`/products/${item.productId}`}
+                            passHref
                           >
-                            <a className="cart-product-title mb-1">
-                              {item.title}
-                            </a>
+                            <div className="px-0 cart-img">
+                              <NextImage
+                                src={item.image}
+                                alt={item.title}
+                                priority={true}
+                                quality={50}
+                              />
+                            </div>
                           </Link>
-
-                          <h6>
-                            <strong>COLOR:</strong>{" "}
-                            {item.color === null ? (
-                              <p style={{ color: "red" }}>Color not selected</p>
-                            ) : (
-                              item.color
-                            )}
-                          </h6>
-
-                          <h6>
-                            <strong>SIZE:</strong>{" "}
-                            {item.size === null ? (
-                              <p style={{ color: "red" }}>Size not selected</p>
-                            ) : (
-                              item.size
-                            )}
-                          </h6>
                         </Col>
 
-                        <Col md={4}>
-                          {item.qty} x ${item.price * item.discount} = $
-                          {(item.qty * item.price * item.discount).toFixed(2)}
+                        <Col md={10} xs={8}>
+                          <Row>
+                            <Col md={8} className="mb-3 d-flex flex-column">
+                              <Link
+                                href={`/products/[productId]`}
+                                as={`/products/${item.productId}`}
+                              >
+                                <a className="cart-product-title mb-1">
+                                  {item.title}
+                                </a>
+                              </Link>
+
+                              <h6>
+                                <strong>COLOR:</strong>{" "}
+                                {item.color === null ? (
+                                  <p style={{ color: "red" }}>
+                                    Color not selected
+                                  </p>
+                                ) : (
+                                  item.color
+                                )}
+                              </h6>
+
+                              <h6>
+                                <strong>SIZE:</strong>{" "}
+                                {item.size === null ? (
+                                  <p style={{ color: "red" }}>
+                                    Size not selected
+                                  </p>
+                                ) : (
+                                  item.size
+                                )}
+                              </h6>
+                            </Col>
+
+                            <Col md={4}>
+                              {item.qty} x ${item.price * item.discount} = $
+                              {(item.qty * item.price * item.discount).toFixed(
+                                2
+                              )}
+                            </Col>
+                          </Row>
                         </Col>
                       </Row>
                     </ListGroup.Item>

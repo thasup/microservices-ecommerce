@@ -109,27 +109,30 @@ a::before {
   border-color: #000;
 }
 
-.list-group-item {
-  border: 0px;
-}
-
 /* Custom Compoent */
 
 /* color selector */
-.color-selector-span {
-  border: solid #000;
+.color-selector-outer {
+  border: 0px solid #000;
   border-radius: 50%;
-  width: 25px;
-  height: 25px;
   display: inline-block;
   margin: 5px 15px 5px 5px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+  aspect-ratio: 1/1;
 }
 
-.color-selector {
+.color-selected {
+  border-width: 1px !important;
+}
+
+.color-selector-outer:hover {
+  border-width: 1px !important;
+}
+
+.color-selector-inner {
   border-radius: 50%;
   width: 80%;
   height: 80%;
@@ -276,6 +279,7 @@ a::before {
 }
 
 .card-product-title {
+  text-transform: uppercase;
   text-decoration: none;
   color: black;
   font-weight: 500;
@@ -290,6 +294,7 @@ a::before {
 .card-product-price {
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
+  text-align: end;
 }
 
 .card-product-reviews {
@@ -301,55 +306,59 @@ a::before {
 }
 
 /* Product page */
-.product-main-img {
+#product-page .list-group-item {
+  border: 0px;
+}
+
+#product-page .product-main-img {
   position: absolute;
   opacity: 0;
   visibility: visible;
   top: 0;
 }
 
-.toggle-main-img {
+#product-page .toggle-main-img {
   position: relative;
   opacity: 1;
   aspect-ratio: 6/9;
   transition: opacity 650ms ease-in-out;
 }
 
-.product-side-img {
+#product-page .product-side-img {
   aspect-ratio: 6/9;
   margin-bottom: 1rem;
   position: relative;
   width: 100%;
 }
 
-.product-side-img:hover {
+#product-page .product-side-img:hover {
   cursor: pointer;
   outline: 2px solid black;
 }
 
-.toggle-side-img {
+#product-page .toggle-side-img {
   outline: 2px solid black;
 }
 
-.product-page #price {
+#product-page #price {
   font-weight: 300;
 }
 
-.product-page-box {
+#product-page .product-page-box {
   font-family: "Poppins", sans-serif;
   padding: 0.5rem;
 }
 
-.product-page-box h5 {
+#product-page .product-page-box h5 {
   text-transform: uppercase;
   font-weight: 300;
 }
 
-.coupon-text {
+#product-page .coupon-text {
   width: 70%;
 }
 
-.coupon-button {
+#product-page .coupon-button {
   width: 30%;
 }
 
@@ -367,6 +376,18 @@ a::before {
   left: 95%;
   width: 35px;
   height: 35px;
+}
+
+.description-tabs {
+  cursor: pointer;
+}
+
+.description-panel {
+  padding: 0 1.5rem;
+}
+
+.description-section h6 {
+  font-family: "Lucida Sans", sans-serif;
 }
 
 /* Dashboard */
@@ -424,4 +445,8 @@ a::before {
 #cart-items .cart-trash-btn {
   width: 35px;
   height: 35px;
+}
+
+#cart-items .form-select-sm {
+  width: 50%;
 }

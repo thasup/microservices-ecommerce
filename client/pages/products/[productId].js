@@ -56,7 +56,6 @@ const productDetail = ({ products, currentUser }) => {
       comment,
     },
     onSuccess: (review) => {
-      console.log(review);
       setLoadingReview(false);
       Router.push(`/products/${productId}`);
     },
@@ -161,15 +160,12 @@ const productDetail = ({ products, currentUser }) => {
 
     switch (discount) {
       case "free":
-        console.log("free");
         setDiscountFactor(0);
         break;
       case "grandsale":
-        console.log("grandsale");
         setDiscountFactor(0.5);
         break;
       case "hotdeal":
-        console.log("hotdeal");
         setDiscountFactor(0.75);
         break;
       default:
@@ -220,7 +216,6 @@ const productDetail = ({ products, currentUser }) => {
 
   const sizeSelectedHandler = (size) => {
     if (size !== null) {
-      console.log("pa", size);
       setSize(size);
     }
   };
@@ -289,6 +284,8 @@ const productDetail = ({ products, currentUser }) => {
                     <ColorSelector
                       product={product}
                       callback={colorSelectedHandler}
+                      margin={"5px"}
+                      size={"2rem"}
                     />
                   </div>
                 </ListGroup.Item>
