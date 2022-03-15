@@ -45,6 +45,8 @@ const setup = async () => {
       {
         title: product.title,
         qty: 3,
+        color: "white",
+        size: "M",
         image: product.images.image1,
         price: product.price,
         discount: 1,
