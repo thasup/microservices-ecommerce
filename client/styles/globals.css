@@ -109,10 +109,6 @@ a::before {
   border-color: #000;
 }
 
-.list-group-item {
-  border: 0px;
-}
-
 /* Custom Compoent */
 
 /* color selector */
@@ -283,6 +279,7 @@ a::before {
 }
 
 .card-product-title {
+  text-transform: uppercase;
   text-decoration: none;
   color: black;
   font-weight: 500;
@@ -297,6 +294,7 @@ a::before {
 .card-product-price {
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
+  text-align: end;
 }
 
 .card-product-reviews {

@@ -145,7 +145,7 @@ const CartPage = ({ currentUser, products }) => {
     <Container className="app-container">
       <CheckoutSteps step1 currentStep={"/signin"} />
       <Row>
-        <Col md={8}>
+        <Col md={8} className="mb-3">
           <h3>Shopping Cart</h3>
           {cart.length === 0 ? (
             <Message variant="secondary">
@@ -157,9 +157,9 @@ const CartPage = ({ currentUser, products }) => {
           ) : (
             <ListGroup variant="flush">
               {cart.map((item, index) => (
-                <ListGroup.Item key={index}>
-                  <Row id="cart-items">
-                    <Col md={2}>
+                <ListGroup.Item key={index} id="cart-items">
+                  <Row>
+                    <Col md={2} xs={4}>
                       <Link
                         href={`/products/[productId]`}
                         as={`/products/${item.productId}`}
@@ -176,142 +176,160 @@ const CartPage = ({ currentUser, products }) => {
                       </Link>
                     </Col>
 
-                    <Col md={5} className="d-flex flex-column">
-                      <Link
-                        href={`/products/[productId]`}
-                        as={`/products/${item.productId}`}
-                        passHref
-                      >
-                        <a className="cart-product-title mb-1">{item.title}</a>
-                      </Link>
+                    <Col md={10} xs={8}>
+                      <Row>
+                        <Col md={6} className="mb-3 d-flex flex-column">
+                          <Link
+                            href={`/products/[productId]`}
+                            as={`/products/${item.productId}`}
+                            passHref
+                          >
+                            <a className="cart-product-title mb-1">
+                              {item.title}
+                            </a>
+                          </Link>
 
-                      <div className="px-0 mt-2 d-flex justify-content-between align-items-center">
-                        <h6>
-                          <strong>COLOR:</strong>
-                        </h6>
-                        <Form.Select
-                          className="my-0"
-                          size="sm"
-                          value={color[index]}
-                          onChange={(e) => {
-                            let productColors = products
-                              .find((product) => product.id === item.productId)
-                              .colors.split(",");
+                          <div className="px-0 mt-2 d-flex justify-content-between align-items-center">
+                            <h6>
+                              <strong>COLOR:</strong>
+                            </h6>
+                            <Form.Select
+                              className="my-0"
+                              size="sm"
+                              value={color[index]}
+                              onChange={(e) => {
+                                let productColors = products
+                                  .find(
+                                    (product) => product.id === item.productId
+                                  )
+                                  .colors.split(",");
 
-                            let selectedIndex = e.target.options.selectedIndex;
+                                let selectedIndex =
+                                  e.target.options.selectedIndex;
 
-                            let c = productColors[selectedIndex - 1];
+                                let c = productColors[selectedIndex - 1];
 
-                            setSelectedColor(c);
+                                setSelectedColor(c);
 
-                            color[index] = c;
-                            setColor(color);
-                            editItemHandler(item.productId);
-                          }}
-                        >
-                          <option value="">Select Color</option>
-                          {products
-                            .find((product) => product.id === item.productId)
-                            .colors.split(",")
-                            .map((c, i) => (
-                              <option key={i} value={`${c}`}>
-                                {c.toLowerCase()}
-                              </option>
-                            ))}
-                        </Form.Select>
-                      </div>
+                                color[index] = c;
+                                setColor(color);
+                                editItemHandler(item.productId);
+                              }}
+                            >
+                              <option value="">Select Color</option>
+                              {products
+                                .find(
+                                  (product) => product.id === item.productId
+                                )
+                                .colors.split(",")
+                                .map((c, i) => (
+                                  <option key={i} value={`${c}`}>
+                                    {c.toUpperCase()}
+                                  </option>
+                                ))}
+                            </Form.Select>
+                          </div>
 
-                      <div className="px-0 mt-2 d-flex justify-content-between align-items-center">
-                        <h6>
-                          <strong>Size:</strong>
-                        </h6>
-                        <Form.Select
-                          className="my-0"
-                          size="sm"
-                          value={size[index]}
-                          onChange={(e) => {
-                            let productSizes = products
-                              .find((product) => product.id === item.productId)
-                              .sizes.split(",");
+                          <div className="px-0 mt-2 d-flex justify-content-between align-items-center">
+                            <h6>
+                              <strong>Size:</strong>
+                            </h6>
+                            <Form.Select
+                              className="my-0"
+                              size="sm"
+                              value={size[index]}
+                              onChange={(e) => {
+                                let productSizes = products
+                                  .find(
+                                    (product) => product.id === item.productId
+                                  )
+                                  .sizes.split(",");
 
-                            let selectedIndex = e.target.options.selectedIndex;
+                                let selectedIndex =
+                                  e.target.options.selectedIndex;
 
-                            let s = productSizes[selectedIndex - 1];
+                                let s = productSizes[selectedIndex - 1];
 
-                            setSelectedSize(s);
+                                setSelectedSize(s);
 
-                            size[index] = s;
-                            setSize(size);
-                            editItemHandler(item.productId);
-                          }}
-                        >
-                          <option value="">Select Size</option>
-                          {products
-                            .find((product) => product.id === item.productId)
-                            .sizes.split(",")
-                            .map((s, i) => (
-                              <option key={i} value={`${s}`}>
-                                {s}
-                              </option>
-                            ))}
-                        </Form.Select>
-                      </div>
-                    </Col>
+                                size[index] = s;
+                                setSize(size);
+                                editItemHandler(item.productId);
+                              }}
+                            >
+                              <option value="">Select Size</option>
+                              {products
+                                .find(
+                                  (product) => product.id === item.productId
+                                )
+                                .sizes.split(",")
+                                .map((s, i) => (
+                                  <option key={i} value={`${s}`}>
+                                    {s}
+                                  </option>
+                                ))}
+                            </Form.Select>
+                          </div>
+                        </Col>
 
-                    {item.discount !== 1 ? (
-                      <Col
-                        md={2}
-                        className="d-flex flex-row flex-wrap justify-content-between"
-                      >
-                        <p className="text-decoration-line-through">
-                          ${item.price}
-                        </p>{" "}
-                        <p>${item.price * item.discount}</p>
-                      </Col>
-                    ) : (
-                      <Col
-                        md={2}
-                        className="d-flex flex-row flex-wrap justify-content-between"
-                      >
-                        <p>${item.price}</p> <p>{""}</p>
-                      </Col>
-                    )}
-                    <Col
-                      md={3}
-                      className="px-0 d-flex flex-column align-items-end justify-content-between"
-                    >
-                      <div className="quantity-selector d-flex flex-row align-items-center justify-content-center">
-                        <div
-                          className="qty-btn decrease-btn"
-                          onClick={() => {
-                            editItemHandler(item.productId);
-                            setOnDecrease(true);
-                          }}
-                        >
-                          -
-                        </div>
-                        <div className="cart-quantity">{item.qty}</div>
-                        <div
-                          className="qty-btn increase-btn"
-                          onClick={() => {
-                            editItemHandler(item.productId);
-                            setOnIncrease(true);
-                          }}
-                        >
-                          +
-                        </div>
-                      </div>
+                        {item.discount !== 1 ? (
+                          <Col
+                            md={2}
+                            className=" d-flex flex-row flex-wrap justify-content-between"
+                          >
+                            <p className="text-decoration-line-through">
+                              ${item.price}
+                            </p>{" "}
+                            <p>${item.price * item.discount}</p>
+                          </Col>
+                        ) : (
+                          <Col
+                            md={2}
+                            className="d-flex flex-row flex-wrap justify-content-between"
+                          >
+                            <p>${item.price}</p> <p>{""}</p>
+                          </Col>
+                        )}
 
-                      <div className="px-0">
-                        <Button
-                          type="button"
-                          variant="dark"
-                          className="cart-trash-btn"
-                          onClick={() => removeFromCartHandler(item.productId)}
-                        >
-                          <i className="fas fa-trash"></i>
-                        </Button>
-                      </div>
+                        <Col md={4}>
+                          <Row className="d-flex">
+                            <Col className="mb-3 quantity-selector d-flex flex-row align-items-center justify-content-end">
+                              <div
+                                className="qty-btn decrease-btn"
+                                onClick={() => {
+                                  editItemHandler(item.productId);
+                                  setOnDecrease(true);
+                                }}
+                              >
+                                -
+                              </div>
+                              <div className="cart-quantity">{item.qty}</div>
+                              <div
+                                className="qty-btn increase-btn"
+                                onClick={() => {
+                                  editItemHandler(item.productId);
+                                  setOnIncrease(true);
+                                }}
+                              >
+                                +
+                              </div>
+                            </Col>
+
+                            <Col className="d-flex justify-content-end">
+                              <Button
+                                type="button"
+                                variant="dark"
+                                className="cart-trash-btn"
+                                onClick={() =>
+                                  removeFromCartHandler(item.productId)
+                                }
+                              >
+                                <i className="fas fa-trash"></i>
+                              </Button>
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
                     </Col>
                   </Row>
                 </ListGroup.Item>
