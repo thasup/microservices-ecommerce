@@ -47,7 +47,6 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
     }
 
     product.set({
-      id,
       title,
       price,
       image,
