@@ -107,7 +107,7 @@ const OrderPage = ({ currentUser, order }) => {
                   <a>{currentUser.email}</a>
                 </Link>
               </p>
-              <p className="mb-0">
+              <p className="mb-3">
                 <strong>Address: </strong>
                 {order.shippingAddress.address} {order.shippingAddress.city},{" "}
                 {order.shippingAddress.postalCode},{" "}
