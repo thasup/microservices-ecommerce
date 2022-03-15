@@ -5,7 +5,12 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
+  tls:
+    - hosts:
+        - www.aurapan.com
+      secretName: echo-tls
   rules:
     - host: www.aurapan.com
       http:
@@ -53,10 +58,10 @@ metadata:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
     service.beta.kubernetes.io/do-loadbalancer-hostname: "www.aurapan.com"
   labels:
-    helm.sh/chart: ingress-nginx-2.0.3
+    helm.sh/chart: ingress-nginx-4.0.15
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx
-    app.kubernetes.io/version: 0.32.0
+    app.kubernetes.io/version: 1.1.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
   name: ingress-nginx-controller
