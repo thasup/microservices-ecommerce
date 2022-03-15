@@ -5,6 +5,7 @@ import { Card } from "react-bootstrap";
 import Rating from "./Rating";
 import Image from "next/image";
 import AddToCart from "./AddToCart";
+import ColorSelector from "./ColorSelector";
 
 const Product = ({ product, currentUser }) => {
   const myLoader = ({ src, width, quality }) => {
@@ -60,12 +61,15 @@ const Product = ({ product, currentUser }) => {
           </Card.Text>
         </div>
 
-        <Card.Text className="card-product-reviews" as="div">
-          <Rating
-            value={product.rating}
-            text={`${product.numReviews} Reviews`}
-          />
-        </Card.Text>
+        <div className="d-flex flex-row justify-content-between">
+          <Card.Text className="card-product-reviews" as="div">
+            <Rating value={product.rating} text={`(${product.numReviews})`} />
+          </Card.Text>
+
+          <Card.Text className="card-product-color" as="div">
+            <ColorSelector product={product} />
+          </Card.Text>
+        </div>
       </Card.Body>
     </Card>
   );

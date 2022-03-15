@@ -215,7 +215,9 @@ const productDetail = ({ products, currentUser }) => {
   return (
     <div className="px-5">
       <Link href="/" passHref>
-        <a className="btn btn-outline-dark mb-3">Back</a>
+        <Button variant="outline-dark" className="mb-3">
+          Back
+        </Button>
       </Link>
       {!product.id || product.id !== productId ? (
         <Loader />
@@ -266,19 +268,19 @@ const productDetail = ({ products, currentUser }) => {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <h3>Color</h3>
-                  <div className="my-3 px-0">
+                  <div className="my-1 px-0">
                     <ColorSelector product={product} />
                   </div>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <h3>Size</h3>
-                  <div className="my-3 px-0">
+                  <div className="my-1 px-0">
                     <SizeSelector product={product} width={"35px"} />
                   </div>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <h3>QTY</h3>
-                  <div className="my-3 quantity-selector d-flex flex-row align-items-center">
+                  <div className="my-1 quantity-selector d-flex flex-row align-items-center">
                     <div
                       className="qty-btn decrease-btn"
                       onClick={() => setQuantity(quantity - 1)}
@@ -303,9 +305,11 @@ const productDetail = ({ products, currentUser }) => {
                     </div>
                   </div>
                 </ListGroup.Item>
+
                 <ListGroup.Item>
-                  <div className="my-2">Description:</div>
-                  <div>{product.description}</div>
+                  <div className="my-1 px-0">
+                    <p>{product.description}</p>
+                  </div>
                 </ListGroup.Item>
 
                 <ListGroup.Item>
@@ -427,17 +431,13 @@ const productDetail = ({ products, currentUser }) => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
-
-              <div className="px-0 mt-5">
-                <ProductDescription product={product} />
-              </div>
             </Col>
           </Row>
 
           {deleteReviewErrors}
           <Row className="mt-3 pb-5">
             <Col md={6}>
-              <h1>Reviews</h1>
+              <h3>Reviews</h3>
               {product.reviews.length === 0 && !loading && (
                 <Message variant="secondary">No Reviews</Message>
               )}
@@ -492,7 +492,7 @@ const productDetail = ({ products, currentUser }) => {
                       (review) => review.userId === currentUser?.id
                     ) && (
                       <ListGroup className="mt-3">
-                        <h2>Write a Review</h2>
+                        <h3>Write a Review</h3>
                         {addReviewErrors}
                         <Form onSubmit={submitReviewHandler}>
                           <Form.Group className="my-3">
@@ -563,6 +563,12 @@ const productDetail = ({ products, currentUser }) => {
                   </Message>
                 )}
               </ListGroup>
+            </Col>
+
+            <Col md={6}>
+              <div className="px-0 mt-2">
+                <ProductDescription product={product} />
+              </div>
             </Col>
           </Row>
         </>

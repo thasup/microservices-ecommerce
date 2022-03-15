@@ -37,20 +37,14 @@ const CartPage = ({ currentUser }) => {
 
       let newQty;
       if (onIncrease) {
-        // let xxx = Number(existItem.qty + 1);
-        // setQuantity(xxx);
         newQty = existItem.qty + 1;
       } else if (onDecrease) {
-        // let xxx = Number(existItem.qty - 1);
-        // setQuantity(xxx);
         newQty = existItem.qty - 1;
       }
 
       if (newQty > existItem.countInStock + existItem.qty) {
-        // setQuantity(Number(existItem.countInStock) + Number(existItem.qty));
         newQty = existItem.countInStock + existItem.qty;
       } else if (newQty < 1) {
-        // setQuantity(1);
         newQty = 1;
       }
 
@@ -113,7 +107,7 @@ const CartPage = ({ currentUser }) => {
       <CheckoutSteps step1 currentStep={"/signin"} />
       <Row>
         <Col md={8}>
-          <h2>Shopping Cart</h2>
+          <h3>Shopping Cart</h3>
           {cart.length === 0 ? (
             <Message variant="secondary">
               Your cart is empty. Keep shopping to find a cloth!{" "}
@@ -125,23 +119,29 @@ const CartPage = ({ currentUser }) => {
             <ListGroup variant="flush">
               {cart.map((item, index) => (
                 <ListGroup.Item key={index}>
-                  <Row>
+                  <Row id="cart-items">
                     <Col md={2}>
-                      <div className="cart-img">
-                        <NextImage
-                          src={item.image}
-                          alt={item.title}
-                          priority={true}
-                          quality={50}
-                        />
-                      </div>
+                      <Link
+                        href={`/products/[productId]`}
+                        as={`/products/${item.productId}`}
+                        passHref
+                      >
+                        <div className="cart-img">
+                          <NextImage
+                            src={item.image}
+                            alt={item.title}
+                            priority={true}
+                            quality={50}
+                          />
+                        </div>
+                      </Link>
                     </Col>
                     <Col md={4}>
                       <Link
                         href={`/products/[productId]`}
                         as={`/products/${item.productId}`}
                       >
-                        <a>{item.title}</a>
+                        <a className="cart-product-title">{item.title}</a>
                       </Link>
                     </Col>
                     {item.discount !== 1 ? (
@@ -168,7 +168,7 @@ const CartPage = ({ currentUser }) => {
                         >
                           -
                         </div>
-                        <div className="quantity-box">{item.qty}</div>
+                        <div className="cart-quantity">{item.qty}</div>
                         <div
                           className="qty-btn increase-btn"
                           onClick={() => {
@@ -184,6 +184,7 @@ const CartPage = ({ currentUser }) => {
                       <Button
                         type="button"
                         variant="dark"
+                        className="cart-trash-btn"
                         onClick={() => removeFromCartHandler(item.productId)}
                       >
                         <i className="fas fa-trash"></i>
