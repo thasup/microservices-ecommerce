@@ -46,13 +46,6 @@ const OrderPage = ({ currentUser, order }) => {
   });
 
   useEffect(async () => {
-    // if (!currentUser) {
-    //   await Router.push("/signin");
-    // }
-
-    // if (currentUser.isAdmin !== true && currentUser.id !== order.userId) {
-    //   await Router.push("/");
-    // }
     setLoading(false);
 
     const addPayPalScript = async () => {
@@ -102,7 +95,7 @@ const OrderPage = ({ currentUser, order }) => {
         <Col>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Shipping</h2>
+              <h3>Shipping</h3>
               <p>
                 <strong>Name: </strong>{" "}
                 {currentUser.name ? currentUser?.name : currentUser?.id}
@@ -131,11 +124,12 @@ const OrderPage = ({ currentUser, order }) => {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>Payment Method</h2>
+              <h3>Payment Method</h3>
               <p>
                 <strong>Method: </strong>
-                {order.paymentMethod}
+                <span className="text-uppercase">{order.paymentMethod}</span>
               </p>
+
               {order.status === "cancelled" ? (
                 <Message variant="danger">Order Cancelled</Message>
               ) : order.isPaid ? (
@@ -151,14 +145,14 @@ const OrderPage = ({ currentUser, order }) => {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>Order Items</h2>
+              <h3>Order Items</h3>
               {order.cart.length === 0 ? (
                 <Message>Order is empty</Message>
               ) : (
                 <ListGroup variant="flush">
                   {order.cart.map((item, index) => (
                     <ListGroup.Item key={index}>
-                      <Row className="align-items-center">
+                      <Row id="cart-items">
                         <Col md={2}>
                           <div className="px-0 cart-img">
                             <NextImage
@@ -169,18 +163,39 @@ const OrderPage = ({ currentUser, order }) => {
                             />
                           </div>
                         </Col>
-                        <Col>
+
+                        <Col md={4} className="d-flex flex-column">
                           <Link
-                            href={"/products/[productId]"}
-                            as={`/products/${item.product}`}
-                            passHref
+                            href={`/products/[productId]`}
+                            as={`/products/${item.productId}`}
                           >
-                            <a>{item.title}</a>
+                            <a className="cart-product-title mb-1">
+                              {item.title}
+                            </a>
                           </Link>
+
+                          <h6>
+                            <strong>COLOR:</strong>{" "}
+                            {item.color === null ? (
+                              <p style={{ color: "red" }}>Color not selected</p>
+                            ) : (
+                              item.color
+                            )}
+                          </h6>
+
+                          <h6>
+                            <strong>SIZE:</strong>{" "}
+                            {item.size === null ? (
+                              <p style={{ color: "red" }}>Size not selected</p>
+                            ) : (
+                              item.size
+                            )}
+                          </h6>
                         </Col>
+
                         <Col md={4}>
-                          {item.qty} x ${item.price} = $
-                          {item.qty * item.price * item.discount}
+                          {item.qty} x ${item.price * item.discount} = $
+                          {(item.qty * item.price * item.discount).toFixed(2)}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -195,7 +210,7 @@ const OrderPage = ({ currentUser, order }) => {
           <Card>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <h2>Order Summary</h2>
+                <h3>Order Summary</h3>
               </ListGroup.Item>
 
               <ListGroup.Item>

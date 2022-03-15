@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, ListGroup, Row, Card } from "react-bootstrap";
+import { Button, Col, ListGroup, Row, Card, Container } from "react-bootstrap";
 import Router from "next/router";
 import Link from "next/link";
 
@@ -90,13 +90,13 @@ const CheckoutPage = ({ currentUser }) => {
   };
 
   return storageReady ? (
-    <>
+    <Container className="app-container">
       <CheckoutSteps step1 step2 step3 step4 currentStep={"/checkout"} />
       <Row>
-        <Col>
+        <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Shipping</h2>
+              <h3>Shipping</h3>
               <p>
                 <strong>Name: </strong>{" "}
                 {currentUser.name ? currentUser.name : currentUser.id}
@@ -105,7 +105,7 @@ const CheckoutPage = ({ currentUser }) => {
                 <strong>Email: </strong>
                 <a href={`mailto:${currentUser.email}`}>{currentUser.email}</a>
               </p>
-              <p>
+              <p className="mb-0">
                 <strong>Address: </strong>
                 {shippingAddress.address} {shippingAddress.city},{" "}
                 {shippingAddress.postalCode}, {shippingAddress.country}
@@ -113,20 +113,22 @@ const CheckoutPage = ({ currentUser }) => {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>Payment Method</h2>
-              <strong>Method: </strong>
-              {paymentMethod}
+              <h3>Payment Method</h3>
+              <p>
+                <strong>Method: </strong>
+                <span className="text-uppercase">{paymentMethod}</span>
+              </p>
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>Order Items</h2>
+              <h3>Order Items</h3>
               {cart.length === 0 ? (
                 <Message>Your cart is empty</Message>
               ) : (
                 <ListGroup variant="flush">
                   {cart.map((item, index) => (
                     <ListGroup.Item key={index}>
-                      <Row className="align-items-center">
+                      <Row id="cart-items">
                         <Col md={2}>
                           <div className="px-0 cart-img">
                             <NextImage
@@ -137,14 +139,36 @@ const CheckoutPage = ({ currentUser }) => {
                             />
                           </div>
                         </Col>
-                        <Col>
+
+                        <Col md={4} className="d-flex flex-column">
                           <Link
-                            href={"/products/[productId]"}
+                            href={`/products/[productId]`}
                             as={`/products/${item.productId}`}
                           >
-                            <a>{item.title}</a>
+                            <a className="cart-product-title mb-1">
+                              {item.title}
+                            </a>
                           </Link>
+
+                          <h6>
+                            <strong>COLOR:</strong>{" "}
+                            {item.color === null ? (
+                              <p style={{ color: "red" }}>Color not selected</p>
+                            ) : (
+                              item.color
+                            )}
+                          </h6>
+
+                          <h6>
+                            <strong>SIZE:</strong>{" "}
+                            {item.size === null ? (
+                              <p style={{ color: "red" }}>Size not selected</p>
+                            ) : (
+                              item.size
+                            )}
+                          </h6>
                         </Col>
+
                         <Col md={4}>
                           {item.qty} x ${item.price * item.discount} = $
                           {(item.qty * item.price * item.discount).toFixed(2)}
@@ -162,7 +186,7 @@ const CheckoutPage = ({ currentUser }) => {
           <Card>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <h2>Order Summary</h2>
+                <h3>Order Summary</h3>
               </ListGroup.Item>
 
               <ListGroup.Item>
@@ -208,7 +232,7 @@ const CheckoutPage = ({ currentUser }) => {
           </Card>
         </Col>
       </Row>
-    </>
+    </Container>
   ) : null;
 };
 

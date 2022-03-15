@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const SizeSelector = ({ product, width }) => {
+const SizeSelector = ({ product, width, callback }) => {
   const [index, setIndex] = useState(null);
   const [text, setText] = useState("");
   const [sizeArray, setSizeArray] = useState(null);
@@ -14,6 +14,11 @@ const SizeSelector = ({ product, width }) => {
 
       setSizeArray(sizes);
       setLoading(false);
+    }
+
+    if (sizeArray !== null) {
+      console.log("ch", sizeArray[index]);
+      callback(sizeArray[index]);
     }
   }, [product, index]);
 

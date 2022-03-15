@@ -17,6 +17,8 @@ const CartPage = ({ currentUser }) => {
   const [cart, setCart] = useState(null);
   const [onEdit, setOnEdit] = useState(false);
   const [onRemove, setOnRemove] = useState(false);
+  const [hasOption, setHasOption] = useState(false);
+  // const [hasSize, sethasSize] = useState(false);
 
   useEffect(() => {
     const cartItems = localStorage.getItem("cartItems")
@@ -28,6 +30,18 @@ const CartPage = ({ currentUser }) => {
       // Set cart state to cartItems in localStorage
       setCart(cartItems);
 
+      // Check if item color or size is NULL
+      const newCheckArray = cartItems.map((item) =>
+        Object.values(item).includes(null)
+      );
+      const hasNullInArray = newCheckArray.includes(true);
+
+      if (hasNullInArray) {
+        setHasOption(false);
+      } else {
+        setHasOption(true);
+      }
+
       // Start render the page
       setStorageReady(true);
     }
@@ -37,20 +51,14 @@ const CartPage = ({ currentUser }) => {
 
       let newQty;
       if (onIncrease) {
-        // let xxx = Number(existItem.qty + 1);
-        // setQuantity(xxx);
         newQty = existItem.qty + 1;
       } else if (onDecrease) {
-        // let xxx = Number(existItem.qty - 1);
-        // setQuantity(xxx);
         newQty = existItem.qty - 1;
       }
 
       if (newQty > existItem.countInStock + existItem.qty) {
-        // setQuantity(Number(existItem.countInStock) + Number(existItem.qty));
         newQty = existItem.countInStock + existItem.qty;
       } else if (newQty < 1) {
-        // setQuantity(1);
         newQty = 1;
       }
 
@@ -113,7 +121,7 @@ const CartPage = ({ currentUser }) => {
       <CheckoutSteps step1 currentStep={"/signin"} />
       <Row>
         <Col md={8}>
-          <h2>Shopping Cart</h2>
+          <h3>Shopping Cart</h3>
           {cart.length === 0 ? (
             <Message variant="secondary">
               Your cart is empty. Keep shopping to find a cloth!{" "}
@@ -125,40 +133,71 @@ const CartPage = ({ currentUser }) => {
             <ListGroup variant="flush">
               {cart.map((item, index) => (
                 <ListGroup.Item key={index}>
-                  <Row>
+                  <Row id="cart-items">
                     <Col md={2}>
-                      <div className="cart-img">
-                        <NextImage
-                          src={item.image}
-                          alt={item.title}
-                          priority={true}
-                          quality={50}
-                        />
-                      </div>
-                    </Col>
-                    <Col md={4}>
                       <Link
                         href={`/products/[productId]`}
                         as={`/products/${item.productId}`}
+                        passHref
                       >
-                        <a>{item.title}</a>
+                        <div className="cart-img">
+                          <NextImage
+                            src={item.image}
+                            alt={item.title}
+                            priority={true}
+                            quality={50}
+                          />
+                        </div>
                       </Link>
                     </Col>
+
+                    <Col md={4} className="d-flex flex-column">
+                      <Link
+                        href={`/products/[productId]`}
+                        as={`/products/${item.productId}`}
+                        passHref
+                      >
+                        <a className="cart-product-title mb-1">{item.title}</a>
+                      </Link>
+
+                      <h6>
+                        <strong>COLOR:</strong>{" "}
+                        {item.color === null ? (
+                          <p style={{ color: "red" }}>Color not selected</p>
+                        ) : (
+                          item.color
+                        )}
+                      </h6>
+                      <h6>
+                        <strong>SIZE:</strong>{" "}
+                        {item.size === null ? (
+                          <p style={{ color: "red" }}>Size not selected</p>
+                        ) : (
+                          item.size
+                        )}
+                      </h6>
+                    </Col>
+
                     {item.discount !== 1 ? (
-                      <>
-                        <Col md={1} className="text-decoration-line-through">
+                      <Col
+                        md={2}
+                        className="d-flex flex-row flex-wrap justify-content-between"
+                      >
+                        <p className="text-decoration-line-through">
                           ${item.price}
-                        </Col>
-                        <Col md={1}>${item.price * item.discount}</Col>
-                      </>
+                        </p>{" "}
+                        <p>${item.price * item.discount}</p>
+                      </Col>
                     ) : (
-                      <>
-                        <Col md={1}>${item.price}</Col>
-                        <Col md={1}>{""}</Col>
-                      </>
+                      <Col
+                        md={2}
+                        className="d-flex flex-row flex-wrap justify-content-between"
+                      >
+                        <p>${item.price}</p> <p>{""}</p>
+                      </Col>
                     )}
                     <Col md={3}>
-                      <div className="quantity-selector d-flex flex-row align-items-center">
+                      <div className="quantity-selector d-flex flex-row align-items-center justify-content-center">
                         <div
                           className="qty-btn decrease-btn"
                           onClick={() => {
@@ -168,7 +207,7 @@ const CartPage = ({ currentUser }) => {
                         >
                           -
                         </div>
-                        <div className="quantity-box">{item.qty}</div>
+                        <div className="cart-quantity">{item.qty}</div>
                         <div
                           className="qty-btn increase-btn"
                           onClick={() => {
@@ -184,6 +223,7 @@ const CartPage = ({ currentUser }) => {
                       <Button
                         type="button"
                         variant="dark"
+                        className="cart-trash-btn"
                         onClick={() => removeFromCartHandler(item.productId)}
                       >
                         <i className="fas fa-trash"></i>
@@ -213,10 +253,15 @@ const CartPage = ({ currentUser }) => {
                   .toFixed(2)}
               </ListGroup.Item>
               <ListGroup.Item className="d-grid gap-2">
+                {!hasOption ? (
+                  <div className="px-0 py-2" style={{ color: "red" }}>
+                    {"Please select color and size option"}
+                  </div>
+                ) : null}
                 <Button
                   type="button"
                   variant="dark"
-                  disabled={cart.length === 0}
+                  disabled={cart.length === 0 || !hasOption}
                   onClick={checkoutHandler}
                 >
                   Proceed To Chackout

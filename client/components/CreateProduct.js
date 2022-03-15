@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Carousel, Col, Form, Row } from "react-bootstrap";
+import { Button, Carousel, Col, Form, Row, Spinner } from "react-bootstrap";
 import Router from "next/router";
 
 import useRequest from "../hooks/use-request";
@@ -21,6 +21,7 @@ const CreateProduct = () => {
   const [countInStock, setCountInStock] = useState(0);
 
   const [index, setIndex] = useState(0);
+  const [loadingCreate, setLoadingCreate] = useState(true);
 
   const { doRequest, errors } = useRequest({
     url: "/api/products",
@@ -40,11 +41,15 @@ const CreateProduct = () => {
       description,
       countInStock,
     },
-    onSuccess: () => Router.push("/admin"),
+    onSuccess: () => {
+      setLoadingCreate(false);
+      Router.push("/");
+    },
   });
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoadingCreate(true);
     doRequest();
   };
 
@@ -258,6 +263,17 @@ const CreateProduct = () => {
           </Form.Group>
 
           <Button type="submit" variant="dark" className="my-3">
+            {loadingCreate ? (
+              <Spinner
+                animation="border"
+                role="status"
+                as="span"
+                size="sm"
+                aria-hidden="true"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            ) : null}{" "}
             Create
           </Button>
         </Form>

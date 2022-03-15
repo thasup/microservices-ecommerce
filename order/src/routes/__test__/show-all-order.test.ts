@@ -26,6 +26,8 @@ const buildJSON = (product: ProductDoc, userId: string) => {
       userId: userId,
       title: product.title,
       qty: 1,
+      color: "white",
+      size: "M",
       image: product.image,
       price: product.price,
       countInStock: product.countInStock,

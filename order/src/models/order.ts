@@ -2,10 +2,12 @@ import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "@thasup-dev/common";
 
-interface CartAttrs {
+export interface CartAttrs {
   userId: string;
   title: string;
   qty: number;
+  color: string;
+  size: string;
   image: string;
   price: number;
   countInStock: number;
@@ -88,6 +90,8 @@ const orderSchema = new mongoose.Schema(
         userId: { type: String, required: true },
         title: { type: String, required: true },
         qty: { type: Number, required: true },
+        color: { type: String, required: true },
+        size: { type: String, required: true },
         image: { type: String, required: true },
         price: { type: Number, required: true },
         countInStock: { type: Number, required: true },

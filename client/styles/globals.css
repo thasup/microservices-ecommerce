@@ -45,6 +45,35 @@ h3 {
 }
 
 /* General */
+a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+  position: relative;
+}
+
+a::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 2px;
+  background-color: #000;
+  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover::before {
+    left: 0;
+    right: auto;
+    width: 100%;
+  }
+  a:hover {
+    color: #555;
+  }
+}
+
 .btn {
   text-transform: uppercase;
 }
@@ -61,6 +90,10 @@ h3 {
 /* Bootstrap Component */
 .nav-link {
   color: #000;
+}
+
+.nav-link:hover {
+  color: #555;
 }
 
 .nav-pills .nav-link.active {
@@ -263,11 +296,13 @@ h3 {
   font-family: "Open Sans";
 }
 
+.card-product-color {
+  font-family: "Open Sans";
+}
+
 /* Product page */
 .product-main-img {
   position: absolute;
-  width: 100%;
-  height: 100%;
   opacity: 0;
   visibility: visible;
   top: 0;
@@ -337,18 +372,18 @@ h3 {
 /* Dashboard */
 .admin-dashboard .nav-link {
   cursor: pointer;
-  color: #222;
+  color: #000;
   text-transform: uppercase;
 }
 
 .admin-dashboard .nav-link:hover {
-  outline: 1px solid #222;
+  outline: 1px solid #000;
 }
 
 .admin-dashboard .nav-link.active {
   cursor: pointer;
   color: #fff;
-  background-color: #222;
+  background-color: #000;
 }
 
 .admin-dashboard .nav-pills .active {
@@ -366,12 +401,27 @@ h3 {
 }
 
 /* Cart page */
+#cart-items {
+  font-size: 1.2rem;
+}
+
 .cart-img {
   position: relative;
   aspect-ratio: 6/9;
+  cursor: pointer;
 }
 
-.cart-trash-btn {
+#cart-items .cart-product-title {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+#cart-items .cart-quantity {
+  width: 10px;
+  margin-right: 15px;
+}
+
+#cart-items .cart-trash-btn {
   width: 35px;
   height: 35px;
 }

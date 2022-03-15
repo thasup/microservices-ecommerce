@@ -42,7 +42,7 @@ router.post(
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
     let cartItems;
-    // Check if ti is JSON type, them convrt to javascript object
+    // Check if it is JSON type, them convrt to javascript object
     if (typeof jsonCartItems === "string") {
       cartItems = await JSON.parse(jsonCartItems);
     } else if (typeof jsonCartItems === "object") {

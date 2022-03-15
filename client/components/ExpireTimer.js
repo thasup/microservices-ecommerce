@@ -22,9 +22,13 @@ const ExpireTimer = ({ order }) => {
   }
 
   return timeLeft === null ? (
-    <p style={{ color: "red", fontWeight: "bolder" }}>Expired</p>
+    <p style={{ color: "red", fontWeight: "bolder" }}>
+      <strong>Expired</strong>
+    </p>
   ) : (
-    <>{timeLeft} minutes</>
+    <>
+      <strong>{timeLeft}</strong> minutes
+    </>
   );
 };
 

@@ -1,21 +1,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
-import { Col, Nav, Row } from "react-bootstrap";
-
-const DynamicTabContainer = dynamic(
-  () => import("react-bootstrap/TabContainer"),
-  {
-    ssr: false,
-  }
-);
-
-const DynamicTabContent = dynamic(() => import("react-bootstrap/TabContent"), {
-  ssr: false,
-});
-
-const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
-  ssr: false,
-});
+import { Col, Row } from "react-bootstrap";
 
 const DynamicTab = dynamic(() => import("react-bootstrap/Tab"), {
   ssr: false,
@@ -27,39 +12,14 @@ const DynamicTabs = dynamic(() => import("react-bootstrap/Tabs"), {
 
 const ProductDescription = ({ product }) => {
   return (
-    // <DynamicTabContainer
-    //   variant="light"
-    //   defaultActiveKey="product-list"
-    //   className="mb-3"
-    //   forceRenderTabPanel={true}
-    // >
-    //   <Row>
-    //     <Col>
-    //       <Nav justify variant="tabs" defaultActiveKey="decription">
-    //         <Nav.Item>
-    //           <Nav.Link eventkey="decription">Decription</Nav.Link>
-    //         </Nav.Item>
-    //         <Nav.Item>
-    //           <Nav.Link eventkey="material">Material</Nav.Link>
-    //         </Nav.Item>
-    //         <Nav.Item>
-    //           <Nav.Link eventkey="size-chart">Size Chart</Nav.Link>
-    //         </Nav.Item>
-    //         <Nav.Item>
-    //           <Nav.Link eventkey="wash-care">Wash and care</Nav.Link>
-    //         </Nav.Item>
-    //       </Nav>
-    //     </Col>
-    //   </Row>
-
     <Row>
       <Col>
         <DynamicTabs
-          defaultActiveKey="decription"
+          defaultActiveKey="description"
           id="uncontrolled-tab-example"
           className="mb-3"
         >
-          <DynamicTab eventKey="decription" title="Decription">
+          <DynamicTab eventKey="description" title="Description">
             <p>{product.description}</p>
           </DynamicTab>
 
@@ -88,7 +48,6 @@ const ProductDescription = ({ product }) => {
         </DynamicTabs>
       </Col>
     </Row>
-    // </DynamicTabContainer>
   );
 };
 

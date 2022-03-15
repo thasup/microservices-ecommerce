@@ -61,10 +61,10 @@ const Dashboard = ({ currentUser, orders }) => {
       setGender(currentUser.gender);
       setAge(currentUser.age);
       setBio(currentUser.bio);
-      setAddress(currentUser.shippingAddress.address);
-      setCity(currentUser.shippingAddress.city);
-      setPostalCode(currentUser.shippingAddress.postalCode);
-      setCountry(currentUser.shippingAddress.country);
+      setAddress(currentUser.shippingAddress?.address);
+      setCity(currentUser.shippingAddress?.city);
+      setPostalCode(currentUser.shippingAddress?.postalCode);
+      setCountry(currentUser.shippingAddress?.country);
     }
   }, [currentUser, loading, orders]);
 
