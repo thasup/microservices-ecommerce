@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 
-const AddToCart = ({ product, currentUser }) => {
+const AddToCart = ({ product, currentUser, color }) => {
   const [onAdd, setOnAdd] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
 
@@ -17,6 +17,8 @@ const AddToCart = ({ product, currentUser }) => {
         userId: currentUser?.id || null,
         title: product.title,
         qty: 1,
+        color: color || null,
+        size: null,
         image: product.images.image1,
         price: product.price,
         countInStock: product.countInStock - 1,

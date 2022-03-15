@@ -48,7 +48,7 @@ h3 {
 a {
   text-decoration: none;
   color: #000;
-  font-weight: 400;
+  font-weight: 500;
   position: relative;
 }
 
@@ -70,7 +70,7 @@ a::before {
     width: 100%;
   }
   a:hover {
-    color: rgb(80, 80, 80);
+    color: #555;
   }
 }
 
@@ -90,6 +90,10 @@ a::before {
 /* Bootstrap Component */
 .nav-link {
   color: #000;
+}
+
+.nav-link:hover {
+  color: #555;
 }
 
 .nav-pills .nav-link.active {
@@ -368,18 +372,18 @@ a::before {
 /* Dashboard */
 .admin-dashboard .nav-link {
   cursor: pointer;
-  color: #222;
+  color: #000;
   text-transform: uppercase;
 }
 
 .admin-dashboard .nav-link:hover {
-  outline: 1px solid #222;
+  outline: 1px solid #000;
 }
 
 .admin-dashboard .nav-link.active {
   cursor: pointer;
   color: #fff;
-  background-color: #222;
+  background-color: #000;
 }
 
 .admin-dashboard .nav-pills .active {
@@ -401,7 +405,7 @@ a::before {
   font-size: 1.2rem;
 }
 
-#cart-items .cart-img {
+.cart-img {
   position: relative;
   aspect-ratio: 6/9;
   cursor: pointer;
@@ -413,7 +417,7 @@ a::before {
 }
 
 #cart-items .cart-quantity {
-  width: 5px;
+  width: 10px;
   margin-right: 15px;
 }
 

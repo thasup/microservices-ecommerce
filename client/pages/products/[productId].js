@@ -28,6 +28,8 @@ const productDetail = ({ products, currentUser }) => {
   const { productId } = useRouter().query;
 
   const [quantity, setQuantity] = useState(1);
+  const [color, setColor] = useState(null);
+  const [size, setSize] = useState(null);
   const [discount, setDiscount] = useState("");
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState("");
@@ -115,6 +117,8 @@ const productDetail = ({ products, currentUser }) => {
       userId: currentUser?.id || null,
       title: product.title,
       qty: quantity,
+      color: color,
+      size: size,
       image: product.images.image1,
       price: product.price,
       countInStock: product.countInStock - quantity,
@@ -208,6 +212,19 @@ const productDetail = ({ products, currentUser }) => {
     }
   };
 
+  const colorSelectedHandler = (color) => {
+    if (color !== null) {
+      setColor(color);
+    }
+  };
+
+  const sizeSelectedHandler = (size) => {
+    if (size !== null) {
+      console.log("pa", size);
+      setSize(size);
+    }
+  };
+
   const myLoader = ({ src, width, quality }) => {
     return `${src}&w=${width}&q=${quality || 40}`;
   };
@@ -269,13 +286,20 @@ const productDetail = ({ products, currentUser }) => {
                 <ListGroup.Item>
                   <h3>Color</h3>
                   <div className="my-1 px-0">
-                    <ColorSelector product={product} />
+                    <ColorSelector
+                      product={product}
+                      callback={colorSelectedHandler}
+                    />
                   </div>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <h3>Size</h3>
                   <div className="my-1 px-0">
-                    <SizeSelector product={product} width={"35px"} />
+                    <SizeSelector
+                      product={product}
+                      width={"35px"}
+                      callback={sizeSelectedHandler}
+                    />
                   </div>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -409,11 +433,30 @@ const productDetail = ({ products, currentUser }) => {
                   )}
 
                   <ListGroup.Item className="d-grid">
+                    {color === null && size === null ? (
+                      <div className="px-0 py-2" style={{ color: "red" }}>
+                        {"Please select color and size option"}
+                      </div>
+                    ) : color === null && size !== null ? (
+                      <div className="px-0 py-2" style={{ color: "red" }}>
+                        {"Please select color option"}
+                      </div>
+                    ) : color !== null && size === null ? (
+                      <div className="px-0 py-2" style={{ color: "red" }}>
+                        {"Please select size option"}
+                      </div>
+                    ) : null}
                     <Button
-                      onClick={addToCartHandler}
+                      onClick={
+                        color !== null && size !== null && addToCartHandler
+                      }
                       type="button"
                       variant="dark"
-                      disabled={product.countInStock < 1}
+                      disabled={
+                        color === null ||
+                        size === null ||
+                        product.countInStock < 1
+                      }
                     >
                       {loadingUpdate ? (
                         <Spinner

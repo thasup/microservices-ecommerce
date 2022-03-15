@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const ColorSelector = ({ product }) => {
+const ColorSelector = ({ product, callback }) => {
   const [index, setIndex] = useState(null);
   const [text, setText] = useState("");
   const [colorsArray, setColorsArray] = useState(null);
@@ -14,6 +14,10 @@ const ColorSelector = ({ product }) => {
 
       setColorsArray(colors);
       setLoading(false);
+    }
+
+    if (colorsArray !== null) {
+      callback(colorsArray[index]);
     }
   }, [product, index]);
 

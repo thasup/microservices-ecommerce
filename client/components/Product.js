@@ -8,6 +8,14 @@ import AddToCart from "./AddToCart";
 import ColorSelector from "./ColorSelector";
 
 const Product = ({ product, currentUser }) => {
+  const [color, setColor] = useState(null);
+
+  const colorSelectedHandler = (color) => {
+    if (color !== null) {
+      setColor(color);
+    }
+  };
+
   const myLoader = ({ src, width, quality }) => {
     return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 20}`;
   };
@@ -44,7 +52,11 @@ const Product = ({ product, currentUser }) => {
         </Link>
 
         <div className="menu-tab">
-          <AddToCart product={product} currentUser={currentUser} />
+          <AddToCart
+            product={product}
+            currentUser={currentUser}
+            color={color}
+          />
         </div>
       </div>
 
@@ -67,7 +79,7 @@ const Product = ({ product, currentUser }) => {
           </Card.Text>
 
           <Card.Text className="card-product-color" as="div">
-            <ColorSelector product={product} />
+            <ColorSelector product={product} callback={colorSelectedHandler} />
           </Card.Text>
         </div>
       </Card.Body>

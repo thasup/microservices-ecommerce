@@ -17,6 +17,8 @@ const CartPage = ({ currentUser }) => {
   const [cart, setCart] = useState(null);
   const [onEdit, setOnEdit] = useState(false);
   const [onRemove, setOnRemove] = useState(false);
+  const [hasOption, setHasOption] = useState(false);
+  // const [hasSize, sethasSize] = useState(false);
 
   useEffect(() => {
     const cartItems = localStorage.getItem("cartItems")
@@ -27,6 +29,18 @@ const CartPage = ({ currentUser }) => {
     if (cartItems !== undefined) {
       // Set cart state to cartItems in localStorage
       setCart(cartItems);
+
+      // Check if item color or size is NULL
+      const newCheckArray = cartItems.map((item) =>
+        Object.values(item).includes(null)
+      );
+      const hasNullInArray = newCheckArray.includes(true);
+
+      if (hasNullInArray) {
+        setHasOption(false);
+      } else {
+        setHasOption(true);
+      }
 
       // Start render the page
       setStorageReady(true);
@@ -136,29 +150,54 @@ const CartPage = ({ currentUser }) => {
                         </div>
                       </Link>
                     </Col>
-                    <Col md={4}>
+
+                    <Col md={4} className="d-flex flex-column">
                       <Link
                         href={`/products/[productId]`}
                         as={`/products/${item.productId}`}
+                        passHref
                       >
-                        <a className="cart-product-title">{item.title}</a>
+                        <a className="cart-product-title mb-1">{item.title}</a>
                       </Link>
+
+                      <h6>
+                        <strong>COLOR:</strong>{" "}
+                        {item.color === null ? (
+                          <p style={{ color: "red" }}>Color not selected</p>
+                        ) : (
+                          item.color
+                        )}
+                      </h6>
+                      <h6>
+                        <strong>SIZE:</strong>{" "}
+                        {item.size === null ? (
+                          <p style={{ color: "red" }}>Size not selected</p>
+                        ) : (
+                          item.size
+                        )}
+                      </h6>
                     </Col>
+
                     {item.discount !== 1 ? (
-                      <>
-                        <Col md={1} className="text-decoration-line-through">
+                      <Col
+                        md={2}
+                        className="d-flex flex-row flex-wrap justify-content-between"
+                      >
+                        <p className="text-decoration-line-through">
                           ${item.price}
-                        </Col>
-                        <Col md={1}>${item.price * item.discount}</Col>
-                      </>
+                        </p>{" "}
+                        <p>${item.price * item.discount}</p>
+                      </Col>
                     ) : (
-                      <>
-                        <Col md={1}>${item.price}</Col>
-                        <Col md={1}>{""}</Col>
-                      </>
+                      <Col
+                        md={2}
+                        className="d-flex flex-row flex-wrap justify-content-between"
+                      >
+                        <p>${item.price}</p> <p>{""}</p>
+                      </Col>
                     )}
                     <Col md={3}>
-                      <div className="quantity-selector d-flex flex-row align-items-center">
+                      <div className="quantity-selector d-flex flex-row align-items-center justify-content-center">
                         <div
                           className="qty-btn decrease-btn"
                           onClick={() => {
@@ -214,10 +253,15 @@ const CartPage = ({ currentUser }) => {
                   .toFixed(2)}
               </ListGroup.Item>
               <ListGroup.Item className="d-grid gap-2">
+                {!hasOption ? (
+                  <div className="px-0 py-2" style={{ color: "red" }}>
+                    {"Please select color and size option"}
+                  </div>
+                ) : null}
                 <Button
                   type="button"
                   variant="dark"
-                  disabled={cart.length === 0}
+                  disabled={cart.length === 0 || !hasOption}
                   onClick={checkoutHandler}
                 >
                   Proceed To Chackout
