@@ -42,6 +42,7 @@ const ProductList = ({ products }) => {
               <th>BRAND</th>
               <th>MATERIAL</th>
               <th>REVIEW</th>
+              <th>VER.</th>
               <th>DETAILS</th>
             </tr>
           </thead>
@@ -76,6 +77,7 @@ const ProductList = ({ products }) => {
                 <td>{product.brand}</td>
                 <td>{product.material}</td>
                 <td>{product.numReviews}</td>
+                <td>{product.version}</td>
                 <td>
                   <Link
                     href={`/products/edit/[productId]`}
