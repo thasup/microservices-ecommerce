@@ -38,6 +38,7 @@ router.patch(
       numReviews,
       rating,
       countInStock,
+      isReserved,
     } = req.body;
 
     const product = await Product.findById(req.params.id);
@@ -47,7 +48,8 @@ router.patch(
     }
 
     if (product.isReserved) {
-      throw new BadRequestError("Cannot edit a reserved product");
+      // throw new BadRequestError("Cannot edit a reserved product");
+      product.isReserved = isReserved;
     }
 
     product.title = title ?? product.title;
