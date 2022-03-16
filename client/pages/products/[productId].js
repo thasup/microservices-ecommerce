@@ -80,7 +80,18 @@ const productDetail = ({ products, currentUser }) => {
   });
 
   useEffect(() => {
-    if (!initialImage || !onMobile) {
+    // Update window innerWidth every 0.1 second
+    const interval = setInterval(() => {
+      if (window.innerWidth <= 576) {
+        setOnMobile(true);
+      } else {
+        setInitialImage(false);
+        setOnMobile(false);
+      }
+    }, 100);
+
+    // Toggle initial main image to show
+    if (!initialImage) {
       const mainImage = document.getElementsByClassName("product-main-img");
       mainImage[0].classList.add("toggle-main-img");
       setInitialImage(true);
@@ -157,14 +168,6 @@ const productDetail = ({ products, currentUser }) => {
       }, 2000);
     }
 
-    // Update window innerWidth every 0.1 second
-    const interval = setInterval(() => {
-      if (window.innerWidth <= 576) {
-        setOnMobile(true);
-      } else {
-        setOnMobile(false);
-      }
-    }, 100);
     return () => clearInterval(interval);
   }, [onAdd, loading, imageEvent, quantity, onMobile]);
 
