@@ -44,15 +44,12 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
           countInStock: countInStock,
           isReserved: true,
         });
-
-        // Save the product
-        await product.save();
       } else {
         product.set({ countInStock: countInStock });
-
-        // Save the product
-        await product.save();
       }
+
+      // Save the product
+      await product.save();
 
       await new ProductUpdatedPublisher(this.client).publish({
         id: product.id,

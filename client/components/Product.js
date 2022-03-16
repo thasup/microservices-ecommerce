@@ -1,14 +1,26 @@
-import React, { useState } from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
+import Link from "next/link";
+import Image from "next/image";
 
 import Rating from "./Rating";
-import Image from "next/image";
 import AddToCart from "./AddToCart";
 import ColorSelector from "./ColorSelector";
 
 const Product = ({ product, currentUser }) => {
   const [color, setColor] = useState(null);
+  const [onMobile, setOnMobile] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (window.innerWidth <= 576) {
+        setOnMobile(true);
+      } else {
+        setOnMobile(false);
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   const colorSelectedHandler = (color) => {
     if (color !== null) {
@@ -77,21 +89,31 @@ const Product = ({ product, currentUser }) => {
           </Col>
 
           <Col xs={12} sm={3}>
-            <h4 className="card-product-price">${product.price}</h4>
+            <h4
+              className="card-product-price"
+              style={{ textAlign: onMobile ? "start" : "end" }}
+            >
+              ${product.price}
+            </h4>
           </Col>
         </Row>
 
-        <Row className="d-flex flex-row justify-content-end">
-          <Col xs={12} sm={5} className="card-product-reviews" as="div">
-            <Rating value={product.rating} text={`(${product.numReviews})`} />
+        <Row className="d-flex flex-row justify-content-end align-items-center">
+          <Col xs={5} className="card-product-reviews" as="div">
+            <Rating
+              value={product.rating}
+              text={`(${product.numReviews})`}
+              mobile={true}
+            />
           </Col>
 
-          <Col xs={12} sm={7} className="card-product-color" as="div">
+          <Col xs={7} className="card-product-color" as="div">
             <ColorSelector
               product={product}
               callback={colorSelectedHandler}
-              margin={"0px"}
-              size={"1.5rem"}
+              margin={"2px"}
+              size={onMobile ? "15px" : "25px"}
+              flex={"end"}
             />
           </Col>
         </Row>

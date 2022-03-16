@@ -41,22 +41,22 @@ router.post(
     const expiration = new Date();
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
-    let cartItems;
     // Check if it is JSON type, them convrt to javascript object
+    let cartItems; //่JSON
     if (typeof jsonCartItems === "string") {
       cartItems = await JSON.parse(jsonCartItems);
     } else if (typeof jsonCartItems === "object") {
       cartItems = jsonCartItems;
     }
 
-    let shippingAddress;
+    let shippingAddress; //่JSON
     if (typeof jsonShippingAddress === "string") {
       shippingAddress = await JSON.parse(jsonShippingAddress);
     } else if (typeof jsonShippingAddress === "object") {
       shippingAddress = jsonShippingAddress;
     }
 
-    let paymentMethod;
+    let paymentMethod; //่javascript
     if (typeof jsonPaymentMethod === "string") {
       paymentMethod = await JSON.parse(jsonPaymentMethod);
     } else if (typeof jsonPaymentMethod === "object") {
@@ -71,6 +71,7 @@ router.post(
         isReserved: true,
       });
 
+      // Find the product if it exists in database
       const existedProduct = await Product.findById(cartItems[i].productId);
 
       // If reservedProduct existed, throw an error
@@ -110,6 +111,7 @@ router.post(
       taxPrice: parseFloat(taxPrice.toFixed(2)),
       totalPrice: parseFloat(totalPrice.toFixed(2)),
     });
+
     await order.save();
 
     // Publish an event saying that an order was created

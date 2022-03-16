@@ -19,6 +19,7 @@ import Message from "../../components/Message";
 import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
 import NextImage from "../../components/NextImage";
+import ImageSwiper from "../../components/ImageSwiper";
 import SocialShare from "../../components/SocialShare";
 import ColorSelector from "../../components/ColorSelector";
 import SizeSelector from "../../components/SizeSelector";
@@ -35,17 +36,22 @@ const productDetail = ({ products, currentUser }) => {
   const [reviewTitle, setReviewTitle] = useState("");
   const [comment, setComment] = useState("");
 
+  const [initialImage, setInitialImage] = useState(false);
   const [imageArray, setImageArray] = useState([]);
   const [imageEvent, setImageEvent] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [loadingApply, setLoadingApply] = useState(false);
   const [loadingReview, setLoadingReview] = useState(false);
+
   const [discountFactor, setDiscountFactor] = useState(1);
   const [couponSuccess, setCouponSuccess] = useState(false);
   const [couponError, setCouponError] = useState(false);
-  const [initialImage, setInitialImage] = useState(false);
+
   const [onAdd, setOnAdd] = useState(false);
+
+  const [onMobile, setOnMobile] = useState(false);
 
   const { doRequest: addReview, errors: addReviewErrors } = useRequest({
     url: `/api/products/${productId}/reviews`,
@@ -55,7 +61,7 @@ const productDetail = ({ products, currentUser }) => {
       rating,
       comment,
     },
-    onSuccess: (review) => {
+    onSuccess: () => {
       setLoadingReview(false);
       Router.push(`/products/${productId}`);
     },
@@ -73,7 +79,7 @@ const productDetail = ({ products, currentUser }) => {
   });
 
   useEffect(() => {
-    if (!initialImage) {
+    if (!initialImage || !onMobile) {
       const mainImage = document.getElementsByClassName("product-main-img");
       mainImage[0].classList.add("toggle-main-img");
       setInitialImage(true);
@@ -142,7 +148,17 @@ const productDetail = ({ products, currentUser }) => {
       setOnAdd(false);
       setLoadingUpdate(false);
     }
-  }, [onAdd, loading, imageEvent, quantity]);
+
+    // Update window innerWidth every 0.1 second
+    const interval = setInterval(() => {
+      if (window.innerWidth <= 576) {
+        setOnMobile(true);
+      } else {
+        setOnMobile(false);
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, [onAdd, loading, imageEvent, quantity, onMobile]);
 
   const product = products.find((product) => product.id === productId);
 
@@ -235,42 +251,50 @@ const productDetail = ({ products, currentUser }) => {
         <Loader />
       ) : (
         <>
-          <Row>
-            <Col lg={1} className="mb-3">
-              {imageArray.map((img, index) => (
-                <div
-                  className="product-side-img"
-                  id={`side-img-${index}`}
-                  key={index}
-                  onClick={(e) => setImageEvent(e)}
-                >
-                  <NextImage
-                    src={img}
-                    alt={`product_image_${index}`}
-                    priority={true}
-                    quality={30}
-                  />
-                </div>
-              ))}
-            </Col>
+          <Row id="product-page">
+            {onMobile ? (
+              <Col className="mb-3">
+                <ImageSwiper product={product} />
+              </Col>
+            ) : (
+              <>
+                <Col sm={1} className="mb-3">
+                  {imageArray.map((img, index) => (
+                    <div
+                      className="product-side-img"
+                      id={`side-img-${index}`}
+                      key={index}
+                      onClick={(e) => setImageEvent(e)}
+                    >
+                      <NextImage
+                        src={img}
+                        alt={`product_image_${index}`}
+                        priority={true}
+                        quality={30}
+                      />
+                    </div>
+                  ))}
+                </Col>
 
-            <Col lg={5} className="mb-3 position-relative">
-              {imageArray.map((img, index) => (
-                <div className="product-main-img" key={index}>
-                  <NextImage
-                    src={img}
-                    alt={`product_image_${index}`}
-                    priority={true}
-                    quality={75}
-                  />
-                </div>
-              ))}
-            </Col>
+                <Col sm={5} className="mb-3 position-relative">
+                  {imageArray.map((img, index) => (
+                    <div className="product-main-img" key={index}>
+                      <NextImage
+                        src={img}
+                        alt={`product_image_${index}`}
+                        priority={true}
+                        quality={75}
+                      />
+                    </div>
+                  ))}
+                </Col>
+              </>
+            )}
 
-            <Col lg={6}>
-              <ListGroup variant="flush" className="mb-3 product-page">
+            <Col sm={6}>
+              <ListGroup variant="flush" className="mb-3">
                 <ListGroup.Item className="py-0">
-                  <Rating value={product.rating} />
+                  <Rating value={product.rating} mobile={false} />
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <h1>{product.title}</h1>
@@ -286,6 +310,7 @@ const productDetail = ({ products, currentUser }) => {
                       callback={colorSelectedHandler}
                       margin={"5px"}
                       size={"2rem"}
+                      flex={"start"}
                     />
                   </div>
                 </ListGroup.Item>
@@ -445,7 +470,11 @@ const productDetail = ({ products, currentUser }) => {
                     ) : null}
                     <Button
                       onClick={
-                        color !== null && size !== null && addToCartHandler
+                        color !== null
+                          ? size !== null
+                            ? addToCartHandler
+                            : null
+                          : null
                       }
                       type="button"
                       variant="dark"
@@ -476,7 +505,13 @@ const productDetail = ({ products, currentUser }) => {
 
           {deleteReviewErrors}
           <Row className="mt-3 pb-5">
-            <Col md={6}>
+            <Col sm={6} className="mb-3">
+              <div className="px-0 mt-2">
+                <ProductDescription product={product} />
+              </div>
+            </Col>
+
+            <Col sm={6}>
               <h3>Reviews</h3>
               {product.reviews.length === 0 && !loading && (
                 <Message variant="secondary">No Reviews</Message>
@@ -603,12 +638,6 @@ const productDetail = ({ products, currentUser }) => {
                   </Message>
                 )}
               </ListGroup>
-            </Col>
-
-            <Col md={6}>
-              <div className="px-0 mt-2">
-                <ProductDescription product={product} />
-              </div>
             </Col>
           </Row>
         </>

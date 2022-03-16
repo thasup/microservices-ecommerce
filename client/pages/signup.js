@@ -10,8 +10,8 @@ const signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [gender, setGender] = useState(null);
-  const [age, setAge] = useState(null);
+  const [gender, setGender] = useState("");
+  const [age, setAge] = useState(undefined);
 
   const [loading, setLoading] = useState(false);
 

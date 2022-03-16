@@ -42,6 +42,7 @@ const ProductList = ({ products }) => {
               <th>BRAND</th>
               <th>MATERIAL</th>
               <th>REVIEW</th>
+              <th>VER.</th>
               <th>DETAILS</th>
             </tr>
           </thead>
@@ -64,17 +65,19 @@ const ProductList = ({ products }) => {
                 <td>
                   <ColorSelector
                     product={product}
-                    margin={"0px"}
-                    size={"1rem"}
+                    margin={"2px"}
+                    size={"1.5rem"}
+                    flex={"start"}
                   />
                 </td>
                 <td>
-                  <SizeSelector product={product} width={"15px"} />
+                  <SizeSelector product={product} width={"1.2rem"} />
                 </td>
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
                 <td>{product.material}</td>
                 <td>{product.numReviews}</td>
+                <td>{product.version}</td>
                 <td>
                   <Link
                     href={`/products/edit/[productId]`}

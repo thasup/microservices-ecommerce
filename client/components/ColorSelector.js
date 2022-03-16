@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const ColorSelector = ({ product, callback, margin, size }) => {
+const ColorSelector = ({ product, callback, margin, size, flex }) => {
   const [index, setIndex] = useState(null);
   const [text, setText] = useState("");
   const [colorsArray, setColorsArray] = useState(null);
@@ -28,7 +28,7 @@ const ColorSelector = ({ product, callback, margin, size }) => {
   );
 
   return loading ? null : (
-    <div className="px-0 d-flex flex-row">
+    <div className={`px-0 d-flex flex-row justify-content-${flex}`}>
       {colorsArray.map((color, i) => (
         <OverlayTrigger
           key={i}
