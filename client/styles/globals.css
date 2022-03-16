@@ -415,6 +415,11 @@ a::before {
 
 .description-tabs {
   cursor: pointer;
+  outline: 1px solid #000;
+}
+
+#size-chart {
+  display: inline-flex;
 }
 
 .description-panel {

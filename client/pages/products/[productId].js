@@ -36,16 +36,17 @@ const productDetail = ({ products, currentUser }) => {
   const [reviewTitle, setReviewTitle] = useState("");
   const [comment, setComment] = useState("");
 
+  const [text, setText] = useState("Add To Cart");
   const [initialImage, setInitialImage] = useState(false);
   const [imageArray, setImageArray] = useState([]);
   const [imageEvent, setImageEvent] = useState(null);
+  const [discountFactor, setDiscountFactor] = useState(1);
 
   const [loading, setLoading] = useState(false);
-  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [loadingAddToCart, setLoadingAddToCart] = useState(false);
   const [loadingApply, setLoadingApply] = useState(false);
   const [loadingReview, setLoadingReview] = useState(false);
 
-  const [discountFactor, setDiscountFactor] = useState(1);
   const [couponSuccess, setCouponSuccess] = useState(false);
   const [couponError, setCouponError] = useState(false);
 
@@ -146,7 +147,14 @@ const productDetail = ({ products, currentUser }) => {
 
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnAdd(false);
-      setLoadingUpdate(false);
+      setTimeout(() => {
+        setLoadingAddToCart(false);
+        setText("Added!");
+      }, 500);
+
+      setTimeout(() => {
+        setText("Add To Cart");
+      }, 2000);
     }
 
     // Update window innerWidth every 0.1 second
@@ -205,7 +213,7 @@ const productDetail = ({ products, currentUser }) => {
 
   const addToCartHandler = (e) => {
     e.preventDefault();
-    setLoadingUpdate(true);
+    setLoadingAddToCart(true);
     setOnAdd(true);
   };
 
@@ -484,7 +492,7 @@ const productDetail = ({ products, currentUser }) => {
                         product.countInStock < 1
                       }
                     >
-                      {loadingUpdate ? (
+                      {loadingAddToCart ? (
                         <Spinner
                           animation="border"
                           role="status"
@@ -495,7 +503,7 @@ const productDetail = ({ products, currentUser }) => {
                           <span className="visually-hidden">Loading...</span>
                         </Spinner>
                       ) : null}{" "}
-                      Add To Cart
+                      {text}
                     </Button>
                   </ListGroup.Item>
                 </ListGroup>
@@ -503,7 +511,6 @@ const productDetail = ({ products, currentUser }) => {
             </Col>
           </Row>
 
-          {deleteReviewErrors}
           <Row className="mt-3 pb-5">
             <Col sm={6} className="mb-3">
               <div className="px-0 mt-2">
@@ -513,6 +520,7 @@ const productDetail = ({ products, currentUser }) => {
 
             <Col sm={6}>
               <h3>Reviews</h3>
+              {deleteReviewErrors}
               {product.reviews.length === 0 && !loading && (
                 <Message variant="secondary">No Reviews</Message>
               )}
@@ -544,6 +552,7 @@ const productDetail = ({ products, currentUser }) => {
                             <strong>{review.title}</strong>
                             <p>{review.comment}</p>
                           </Col>
+
                           {review.userId === currentUser?.id && (
                             <Col className="trash-btn">
                               <button
@@ -568,7 +577,7 @@ const productDetail = ({ products, currentUser }) => {
                     ) && (
                       <ListGroup className="mt-3">
                         <h3>Write a Review</h3>
-                        {addReviewErrors}
+
                         <Form onSubmit={submitReviewHandler}>
                           <Form.Group className="my-3">
                             <Form.Label>Rating</Form.Label>
@@ -608,7 +617,8 @@ const productDetail = ({ products, currentUser }) => {
                             ></Form.Control>
                           </Form.Group>
 
-                          <Button type="submit" variant="dark">
+                          {addReviewErrors}
+                          <Button type="submit" variant="dark" className="mt-3">
                             {loadingReview ? (
                               <Spinner
                                 animation="border"
