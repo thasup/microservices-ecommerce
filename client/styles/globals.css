@@ -374,6 +374,21 @@ a::before {
   font-weight: 300;
 }
 
+#product-page .swiper-pagination-bullet-active {
+  background: #000;
+}
+
+#product-page .swiper-button-next,
+#product-page .swiper-button-prev {
+  color: #000;
+}
+
+#product-page
+  .swiper-pagination-progressbar
+  .swiper-pagination-progressbar-fill {
+  background: #000;
+}
+
 #product-page .coupon-text {
   width: 70%;
 }

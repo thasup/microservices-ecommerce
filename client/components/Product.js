@@ -111,7 +111,7 @@ const Product = ({ product, currentUser }) => {
             <ColorSelector
               product={product}
               callback={colorSelectedHandler}
-              margin={"0px"}
+              margin={"2px"}
               size={onMobile ? "15px" : "25px"}
               flex={"end"}
             />
