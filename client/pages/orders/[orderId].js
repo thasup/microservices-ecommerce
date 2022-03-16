@@ -334,16 +334,8 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    const { data: allMyOrder } = await client
-      .get(`/api/orders/myorders`)
-      .catch((err) => {
-        console.log(err.message);
-      });
-
-    const existOrder = allMyOrder.find((order) => order.id === orderId);
-
-    // If userId not match with userId in the order AND user is not an admin
-    if (!existOrder && data.currentUser.isAdmin === false) {
+    // If user is not an admin redirect to home page
+    if (data.currentUser.isAdmin === false) {
       return {
         redirect: {
           destination: "/",

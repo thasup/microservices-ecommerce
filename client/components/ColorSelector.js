@@ -16,7 +16,7 @@ const ColorSelector = ({ product, callback, margin, size, flex }) => {
       setLoading(false);
     }
 
-    if (colorsArray !== null) {
+    if (colorsArray !== null && callback) {
       callback(colorsArray[index]);
     }
   }, [product, index]);
