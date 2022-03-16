@@ -79,7 +79,7 @@ const productDetail = ({ products, currentUser }) => {
   });
 
   useEffect(() => {
-    if (!initialImage) {
+    if (!initialImage || !onMobile) {
       const mainImage = document.getElementsByClassName("product-main-img");
       mainImage[0].classList.add("toggle-main-img");
       setInitialImage(true);
@@ -158,7 +158,7 @@ const productDetail = ({ products, currentUser }) => {
       }
     }, 100);
     return () => clearInterval(interval);
-  }, [onAdd, loading, imageEvent, quantity]);
+  }, [onAdd, loading, imageEvent, quantity, onMobile]);
 
   const product = products.find((product) => product.id === productId);
 
