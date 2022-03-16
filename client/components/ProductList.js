@@ -64,12 +64,13 @@ const ProductList = ({ products }) => {
                 <td>
                   <ColorSelector
                     product={product}
-                    margin={"0px"}
-                    size={"1rem"}
+                    margin={"2px"}
+                    size={"1.5rem"}
+                    flex={"start"}
                   />
                 </td>
                 <td>
-                  <SizeSelector product={product} width={"15px"} />
+                  <SizeSelector product={product} width={"1.2rem"} />
                 </td>
                 <td>{product.category}</td>
                 <td>{product.brand}</td>

@@ -17,7 +17,6 @@ const SizeSelector = ({ product, width, callback }) => {
     }
 
     if (sizeArray !== null) {
-      console.log("ch", sizeArray[index]);
       callback(sizeArray[index]);
     }
   }, [product, index]);
