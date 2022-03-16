@@ -516,4 +516,14 @@ a::before {
   .cart-price {
     font-size: 1rem;
   }
+
+  #checkout-step .nav-item {
+    font-size: 0.65rem;
+    width: 55px;
+  }
+
+  #checkout-step .nav-item a {
+    padding: 5px 8px;
+    text-align: center;
+  }
 }

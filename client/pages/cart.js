@@ -7,6 +7,8 @@ import {
   Card,
   Container,
   Form,
+  Tooltip,
+  OverlayTrigger,
 } from "react-bootstrap";
 import Router from "next/router";
 import Link from "next/link";
@@ -24,6 +26,8 @@ const CartPage = ({ currentUser, products }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [productId, setProductId] = useState(null);
   const [deletedItemId, setDeletedItemId] = useState(null);
+  const [toolTipText, setToolTipText] = useState("");
+  const [onMobile, setOnMobile] = useState(false);
 
   const [storageReady, setStorageReady] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
@@ -120,6 +124,16 @@ const CartPage = ({ currentUser, products }) => {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnRemove(false);
     }
+
+    // Update window innerWidth every 0.1 second
+    const interval = setInterval(() => {
+      if (window.innerWidth <= 576) {
+        setOnMobile(true);
+      } else {
+        setOnMobile(false);
+      }
+    }, 100);
+    return () => clearInterval(interval);
   }, [onIncrease, onDecrease, onEdit, onRemove, currentUser]);
 
   const editItemHandler = (id) => {
@@ -141,9 +155,19 @@ const CartPage = ({ currentUser, products }) => {
     }
   };
 
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {toolTipText}
+    </Tooltip>
+  );
+
   return storageReady ? (
     <Container className="app-container">
-      <CheckoutSteps step1 currentStep={"/signin"} />
+      <CheckoutSteps
+        step1
+        currentStep={currentUser?.id ? "/cart" : "/signin"}
+        currentUser={currentUser}
+      />
       <Row>
         <Col md={8} className="mb-3">
           <h3>Shopping Cart</h3>
@@ -177,8 +201,8 @@ const CartPage = ({ currentUser, products }) => {
                     </Col>
 
                     <Col md={10} xs={8}>
-                      <Row>
-                        <Col md={6} className="mb-3 d-flex flex-column">
+                      <Row className="justify-content-between">
+                        <Col md={5} className="mb-3 d-flex flex-column">
                           <Link
                             href={`/products/[productId]`}
                             as={`/products/${item.productId}`}
@@ -274,26 +298,57 @@ const CartPage = ({ currentUser, products }) => {
 
                         {item.discount !== 1 ? (
                           <Col
-                            md={2}
+                            md={3}
                             className=" d-flex flex-row flex-wrap justify-content-between"
+                            style={{ width: onMobile ? "100%" : "25%" }}
                           >
-                            <p className="text-decoration-line-through">
-                              ${item.price}
-                            </p>{" "}
-                            <p>${item.price * item.discount}</p>
+                            <OverlayTrigger
+                              placement="top"
+                              delay={{ show: 250, hide: 100 }}
+                              overlay={renderTooltip}
+                              onEnter={() => setToolTipText("Original Price")}
+                            >
+                              <p className="text-decoration-line-through">
+                                ${item.price}
+                              </p>
+                            </OverlayTrigger>{" "}
+                            <OverlayTrigger
+                              placement="top"
+                              delay={{ show: 250, hide: 100 }}
+                              overlay={renderTooltip}
+                              onEnter={() => setToolTipText("Discount Price")}
+                            >
+                              <p>${item.price * item.discount}</p>
+                            </OverlayTrigger>
                           </Col>
                         ) : (
                           <Col
                             md={2}
                             className="d-flex flex-row flex-wrap justify-content-between"
+                            style={{ width: onMobile ? "100%" : "25%" }}
                           >
-                            <p>${item.price}</p> <p>{""}</p>
+                            <OverlayTrigger
+                              placement="top"
+                              delay={{ show: 250, hide: 100 }}
+                              overlay={renderTooltip}
+                              onEnter={() => setToolTipText("Original Price")}
+                            >
+                              <p>${item.price}</p>
+                            </OverlayTrigger>
+                            <OverlayTrigger
+                              placement="top"
+                              delay={{ show: 250, hide: 100 }}
+                              overlay={renderTooltip}
+                              onEnter={() => setToolTipText("Discount Price")}
+                            >
+                              <p>{""}</p>
+                            </OverlayTrigger>
                           </Col>
                         )}
 
                         <Col md={4}>
                           <Row className="d-flex">
-                            <Col className="mb-3 quantity-selector d-flex flex-row align-items-center justify-content-end">
+                            <Col className="mb-3 quantity-selector d-flex flex-row align-items-center justify-content-between">
                               <div
                                 className="qty-btn decrease-btn"
                                 onClick={() => {
@@ -346,28 +401,34 @@ const CartPage = ({ currentUser, products }) => {
                   Subtotal (
                   {cart.reduce((acc, item) => acc + Number(item.qty), 0)}) items
                 </h3>
-                $
-                {cart
-                  .reduce(
-                    (acc, item) => acc + item.qty * item.price * item.discount,
-                    0
-                  )
-                  .toFixed(2)}
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>
+                    <strong>Total</strong>
+                  </Col>
+                  <Col>
+                    $
+                    {cart
+                      .reduce(
+                        (acc, item) =>
+                          acc + item.qty * item.price * item.discount,
+                        0
+                      )
+                      .toFixed(2)}
+                  </Col>
+                </Row>
               </ListGroup.Item>
               <ListGroup.Item className="d-grid gap-2">
-                {currentUser?.id ? null : (
-                  <div className="px-0 py-2" style={{ color: "red" }}>
-                    {"Please sign in before proceeding"}
-                  </div>
-                )}
-
                 <Button
                   type="button"
                   variant="dark"
                   disabled={cart.length === 0}
                   onClick={checkoutHandler}
                 >
-                  Proceed To Chackout
+                  {currentUser?.id
+                    ? "Proceed To Chackout"
+                    : "Proceed To Sign In"}
                 </Button>
               </ListGroup.Item>
             </ListGroup>
