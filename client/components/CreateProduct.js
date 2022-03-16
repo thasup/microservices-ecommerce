@@ -54,7 +54,7 @@ const CreateProduct = () => {
   };
 
   const myLoader = ({ src, width, quality }) => {
-    return `https://www.dropbox.com/s/${src}?raw=1&w=${width}&q=${
+    return `https://www.dropbox.com/s/${src}.webp?raw=1&w=${width}&q=${
       quality || 75
     }`;
   };
@@ -76,7 +76,7 @@ const CreateProduct = () => {
           <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={image1 || "sf6t25da3113hl2/4te4tet.jpg"}
+              src={image1.slice(0, -4) || "sf6t25da3113hl2/4te4tet.jpg"}
               alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
@@ -87,7 +87,7 @@ const CreateProduct = () => {
           <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={image2 || "sf6t25da3113hl2/4te4tet.jpg"}
+              src={image2.slice(0, -4) || "sf6t25da3113hl2/4te4tet.jpg"}
               alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
@@ -98,7 +98,7 @@ const CreateProduct = () => {
           <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={image3 || "sf6t25da3113hl2/4te4tet.jpg"}
+              src={image3.slice(0, -4) || "sf6t25da3113hl2/4te4tet.jpg"}
               alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
@@ -109,7 +109,7 @@ const CreateProduct = () => {
           <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={image4 || "sf6t25da3113hl2/4te4tet.jpg"}
+              src={image4.slice(0, -4) || "sf6t25da3113hl2/4te4tet.jpg"}
               alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"

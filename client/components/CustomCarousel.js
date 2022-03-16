@@ -18,7 +18,7 @@ const CustomCarousol = ({ images, quality }) => {
   }, [images]);
 
   const myLoader = ({ src, quality }) => {
-    return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 50}`;
+    return `https://www.dropbox.com/s/${src}.webp?raw=1&q=${quality || 50}`;
   };
 
   const handleSelect = (selectedIndex) => {
@@ -41,7 +41,9 @@ const CustomCarousol = ({ images, quality }) => {
         <Carousel.Item key={index} className="carousel-product-item">
           <Image
             loader={myLoader}
-            src={image === "" ? "sf6t25da3113hl2/4te4tet.jpg" : image}
+            src={
+              image === "" ? "sf6t25da3113hl2/4te4tet.jpg" : image.slice(0, -4)
+            }
             alt={`product image ${index}`}
             layout="fill"
             objectFit="cover"
