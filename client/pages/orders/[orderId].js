@@ -12,7 +12,7 @@ import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
 import ExpireTimer from "../../components/ExpireTimer";
 
-const OrderPage = ({ currentUser, order }) => {
+const OrderPage = ({ currentUser, order, user }) => {
   const { orderId } = useRouter().query;
 
   const [sdkReady, setSdkReady] = useState(false);
@@ -90,21 +90,24 @@ const OrderPage = ({ currentUser, order }) => {
     <Loader />
   ) : (
     <Container className="app-container">
-      <h1>Order {order.id}</h1>
+      <div className="px-0">
+        <h3>
+          Order <span className="order-id">{order.id}</span>
+        </h3>
+      </div>
       <Row>
         <Col md={8} className="mb-3">
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h3>Shipping</h3>
               <p>
-                <strong>Name: </strong>{" "}
-                {currentUser?.name ? currentUser.name : currentUser.id}
+                <strong>Name: </strong> {user?.name.toUpperCase()}
               </p>
               <p>
                 <strong>Email: </strong>
 
-                <Link href={`mailto:${currentUser.email}`} passHref>
-                  <a>{currentUser.email}</a>
+                <Link href={`mailto:${user?.email}`} passHref>
+                  <a>{user?.email}</a>
                 </Link>
               </p>
               <p className="mb-3">
@@ -205,7 +208,7 @@ const OrderPage = ({ currentUser, order }) => {
                               </h6>
                             </Col>
 
-                            <Col md={4}>
+                            <Col md={4} className="cart-price">
                               {item.qty} x ${item.price * item.discount} = $
                               {(item.qty * item.price * item.discount).toFixed(
                                 2
@@ -231,28 +234,36 @@ const OrderPage = ({ currentUser, order }) => {
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Items</Col>
+                  <Col>
+                    <strong>Items</strong>
+                  </Col>
                   <Col>${order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping</Col>
+                  <Col>
+                    <strong>Shipping</strong>
+                  </Col>
                   <Col>${order.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax</Col>
+                  <Col>
+                    <strong>Tax</strong>
+                  </Col>
                   <Col>${order.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
+                  <Col>
+                    <strong>Total</strong>
+                  </Col>
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
@@ -347,7 +358,13 @@ export async function getServerSideProps(context) {
         console.log(err.message);
       });
 
-    return { props: { order: order } };
+    const { data: users } = await client.get(`/api/users/`).catch((err) => {
+      console.log(err.message);
+    });
+
+    const user = users.find((user) => user.id === order.userId);
+
+    return { props: { order: order, user: user } };
   }
 }
 
