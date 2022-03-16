@@ -3,7 +3,6 @@ import { param } from "express-validator";
 import {
   validateRequest,
   NotFoundError,
-  requireAuth,
   NotAuthorizedError,
 } from "@thasup-dev/common";
 import { User } from "../models/user";
@@ -12,7 +11,6 @@ const router = express.Router();
 
 router.patch(
   "/api/users/:userId",
-  requireAuth,
   [param("userId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -34,23 +32,23 @@ router.patch(
       throw new NotFoundError();
     }
 
-    if (
-      req.params.userId !== req.currentUser!.id &&
-      req.currentUser!.isAdmin !== true
-    ) {
-      throw new NotAuthorizedError();
+    let shippingAddress; //่JSON
+    if (typeof jsonShippingAddress === "string") {
+      shippingAddress = await JSON.parse(jsonShippingAddress);
+    } else if (typeof jsonShippingAddress === "object") {
+      shippingAddress = jsonShippingAddress;
     }
 
     user.set({
       email: email ?? user.email,
-      // password: password ?? user.password,
+      password: password ?? user.password,
       isAdmin: isAdmin ?? user.isAdmin,
       name: name ?? user.name,
       image: image ?? user.image,
       gender: gender ?? user.gender,
       age: age ?? user.age,
       bio: bio ?? user.bio,
-      shippingAddress: jsonShippingAddress ?? user.shippingAddress,
+      shippingAddress: shippingAddress ?? user.shippingAddress,
     });
 
     await user.save();
