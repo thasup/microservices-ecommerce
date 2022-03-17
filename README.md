@@ -28,22 +28,22 @@ Aurapan is the beautiful women's clothes e-commerce website built with **microse
 
 [(Back to top)](#table-of-contents)
 
-- Fully operated microservices-architecture website with user, product, order, payment, and expiration services completely separated
-- Stored all user, product, order, payment data in separated MongoDB collections
-- Login with user authentication secured by encrypting password in JWT and cookie
+- Fully operated **microservices-architecture** website with user, product, order, payment, and expiration services completely separated
+- Stored all user, product, order, payment data in separated **MongoDB** collections
+- Login with user authentication secured by encrypting password in **JWT** and **cookie**
 - Account setting dashboard for a customer to update profile information or see all orders
 - Admin management dashboard with authority to add, edit, delete a product, user, or order
 - Rich detail of product information and multiple options that you can choose such as color, size
-- Image display in a more fashionable design to attract attention
+- Image display in a more fashionable design with **Swiper** library
 - Full-featured shopping cart (add, edit, remove an item with ease!)
 - Fully checkout process (login, add a shipping address, select payment method)
-- Accept both PayPal and Stripe integration payment method
+- Accept both **PayPal** and **Stripe** integration payment method
 - Mark orders as a delivered option for admin
 - Make a product review and rating and calculate new rating instantly
 - Accept coupon promotion input
 - Easily navigate with a cool navigation bar and footer
-- Optimize Next.js feature to maximize better performance and quality
-- Safely secure HTTPS protocol with let's encrypt certificate
+- Optimize **Next.js** feature to maximize better performance and quality
+- Safely secure **HTTPS** protocol with let's encrypt certificate
 <!-- - Integrate wishlist in user data (work in process...) -->
 <!-- - Product search feature (work in process...) -->
 
