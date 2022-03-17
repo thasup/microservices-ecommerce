@@ -252,7 +252,7 @@ const productDetail = ({ products, currentUser }) => {
   };
 
   return (
-    <div className="px-5">
+    <div className={onMobile ? "px-3" : "px-5"}>
       <Link href="/" passHref>
         <Button variant="outline-dark" className="mb-3">
           Back

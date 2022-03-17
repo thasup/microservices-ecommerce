@@ -10,6 +10,7 @@ import { updateProductRouter } from "./routes/update-product";
 import { deleteProductRouter } from "./routes/delete-product";
 import { deleteReviewRouter } from "./routes/delete-review";
 import { createReviewRouter } from "./routes/create-review";
+import { showBestProductRouter } from "./routes/bestseller";
 
 const app = express();
 app.set("trust proxy", true);
@@ -29,6 +30,7 @@ app.use(updateProductRouter);
 app.use(deleteProductRouter);
 app.use(createReviewRouter);
 app.use(deleteReviewRouter);
+app.use(showBestProductRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
