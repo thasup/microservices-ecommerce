@@ -2,20 +2,42 @@ import React from "react";
 import { Nav } from "react-bootstrap";
 import Link from "next/link";
 
-const CheckoutSteps = ({ step1, step2, step3, step4, currentStep }) => {
+const CheckoutSteps = ({
+  step1,
+  step2,
+  step3,
+  step4,
+  currentStep,
+  currentUser,
+}) => {
   return (
     <Nav
       variant="pills"
       className="justify-content-center mb-4"
+      id="checkout-step"
       defaultActiveKey={currentStep}
     >
       <Nav.Item>
-        {step1 ? (
-          <Link href="/signin" passHref>
-            <Nav.Link activekey="signin">Sign In</Nav.Link>
-          </Link>
+        {currentUser.id ? (
+          <>
+            {step1 ? (
+              <Link href="/cart" passHref>
+                <Nav.Link activekey="cart">Cart</Nav.Link>
+              </Link>
+            ) : (
+              <Nav.Link disabled>Cart</Nav.Link>
+            )}
+          </>
         ) : (
-          <Nav.Link disabled>Sign In</Nav.Link>
+          <>
+            {step1 ? (
+              <Link href="/signin" passHref>
+                <Nav.Link activekey="signin">Sign In</Nav.Link>
+              </Link>
+            ) : (
+              <Nav.Link disabled>Sign In</Nav.Link>
+            )}
+          </>
         )}
       </Nav.Item>
 

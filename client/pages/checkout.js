@@ -210,28 +210,36 @@ const CheckoutPage = ({ currentUser }) => {
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Items</Col>
+                  <Col>
+                    <strong>Items</strong>
+                  </Col>
                   <Col>${itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping</Col>
+                  <Col>
+                    <strong>Shipping</strong>
+                  </Col>
                   <Col>${shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax</Col>
+                  <Col>
+                    <strong>Tax</strong>
+                  </Col>
                   <Col>${taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
+                  <Col>
+                    <strong>Total</strong>
+                  </Col>
                   <Col>${totalPrice}</Col>
                 </Row>
               </ListGroup.Item>

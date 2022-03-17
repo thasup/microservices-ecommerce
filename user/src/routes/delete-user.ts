@@ -1,11 +1,6 @@
 import express, { Request, Response } from "express";
 import { param } from "express-validator";
-import {
-  adminUser,
-  NotFoundError,
-  requireAuth,
-  validateRequest,
-} from "@thasup-dev/common";
+import { NotFoundError, validateRequest } from "@thasup-dev/common";
 
 import { User } from "../models/user";
 
@@ -13,8 +8,6 @@ const router = express.Router();
 
 router.delete(
   "/api/users/:userId",
-  requireAuth,
-  adminUser,
   [param("userId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
   validateRequest,
   async (req: Request, res: Response) => {

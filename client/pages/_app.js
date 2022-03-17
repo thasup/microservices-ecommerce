@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import { Container, SSRProvider } from "react-bootstrap";
+import Script from "next/script";
 
 import "../styles/bootstrap.min.css";
 import "../styles/globals.css";
@@ -15,7 +16,8 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
   return (
     <SSRProvider>
       <Head>
-        <title>Aurapan | Women's Clothes Shop</title>
+        <title>Aurapan | Women's Clothing Online Shop</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Header currentUser={currentUser} {...pageProps} />
       <main className="pb-5">

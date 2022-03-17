@@ -16,7 +16,7 @@ const SizeSelector = ({ product, width, callback }) => {
       setLoading(false);
     }
 
-    if (sizeArray !== null) {
+    if (sizeArray !== null && callback) {
       callback(sizeArray[index]);
     }
   }, [product, index]);

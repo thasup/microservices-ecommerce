@@ -20,7 +20,7 @@ const signin = () => {
       password,
     },
     onSuccess: () => {
-      Router.push("/");
+      Router.back();
       setLoading(false);
     },
   });

@@ -41,7 +41,7 @@ const CustomCarousol = ({ images, quality }) => {
         <Carousel.Item key={index} className="carousel-product-item">
           <Image
             loader={myLoader}
-            src={image === "" ? "sf6t25da3113hl2/4te4tet.jpg" : image}
+            src={image === "" ? "gatmu67f52etjy2/4te4tet.webp" : image}
             alt={`product image ${index}`}
             layout="fill"
             objectFit="cover"

@@ -61,12 +61,15 @@ const AdminDashboard = ({ products, users, orders }) => {
               <DynamicTabPane eventKey="product-list">
                 <ProductList products={products} />
               </DynamicTabPane>
+
               <DynamicTabPane eventKey="user-list">
                 <UserList users={users} />
               </DynamicTabPane>
+
               <DynamicTabPane eventKey="order-list">
-                <OrderList orders={orders} />
+                <OrderList orders={orders} users={users} />
               </DynamicTabPane>
+
               <DynamicTabPane eventKey="create-product">
                 <CreateProduct />
               </DynamicTabPane>
