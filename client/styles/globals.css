@@ -286,6 +286,7 @@ a::before {
   color: black;
   font-weight: 500;
   font-family: "Open Sans", sans-serif;
+  padding: 0;
 }
 
 .card-product-title a {
@@ -294,15 +295,21 @@ a::before {
 }
 
 .card-product-price {
+  padding: 0;
+}
+
+.card-product-price h4 {
   font-weight: 400;
 }
 
 .card-product-reviews {
   font-size: 0.9rem;
+  padding: 0;
 }
 
 .card-product-color {
   font-size: 0.9rem;
+  padding: 0;
 }
 
 /* Tablet Screen */

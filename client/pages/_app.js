@@ -17,6 +17,7 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
     <SSRProvider>
       <Head>
         <title>Aurapan | Women's Clothing Online Shop</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Header currentUser={currentUser} {...pageProps} />
       <main className="pb-5">

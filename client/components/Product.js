@@ -77,28 +77,25 @@ const Product = ({ product, currentUser }) => {
       </div>
 
       <Card.Body className="px-2">
-        <Row className="d-flex flex-row justify-content-between ">
-          <Col xs={12} sm={9} as="h4">
+        <Row className="d-flex flex-row justify-content-between px-0 mx-0">
+          <Col xs={12} sm={9} className="card-product-title" as="h4">
             <Link
               href={`/products/[productId]`}
               as={`/products/${product.id}`}
               passHref
             >
-              <a className="card-product-title">{product.title}</a>
+              <a>{product.title}</a>
             </Link>
           </Col>
 
-          <Col xs={12} sm={3}>
-            <h4
-              className="card-product-price"
-              style={{ textAlign: onMobile ? "start" : "end" }}
-            >
+          <Col xs={12} sm={3} className="card-product-price">
+            <h4 style={{ textAlign: onMobile ? "start" : "end" }}>
               ${product.price}
             </h4>
           </Col>
         </Row>
 
-        <Row className="d-flex flex-row justify-content-end align-items-center">
+        <Row className="d-flex flex-row justify-content-end align-items-center px-0 mx-0">
           <Col xs={5} className="card-product-reviews" as="div">
             <Rating
               value={product.rating}
