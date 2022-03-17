@@ -1,6 +1,6 @@
 import { Col, Row } from "react-bootstrap";
-import buildClient from "../api/build-client";
-import Product from "../components/Product";
+import buildClient from "../../api/build-client";
+import Product from "../../components/Product";
 
 const BestSeller = ({ products, currentUser }) => {
   return (

@@ -23,14 +23,14 @@ app.use(
 );
 app.use(currentUser);
 
-app.use(createProductRouter);
-app.use(getProductRouter);
 app.use(showProductRouter);
+app.use(createProductRouter);
+app.use(showBestProductRouter);
 app.use(updateProductRouter);
 app.use(deleteProductRouter);
+app.use(getProductRouter);
 app.use(createReviewRouter);
 app.use(deleteReviewRouter);
-app.use(showBestProductRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
