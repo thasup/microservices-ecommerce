@@ -21,10 +21,19 @@ const EditAddress = ({ user }) => {
     url: `/api/users/${user.id}`,
     method: "patch",
     body: {
-      address,
-      city,
-      postalCode,
-      country,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      name: user.name,
+      image: user.image,
+      gender: user.gender,
+      age: user.age,
+      bio: user.bio,
+      jsonShippingAddress: JSON.stringify({
+        address: address,
+        city: city,
+        postalCode: postalCode,
+        country: country,
+      }),
     },
     onSuccess: (user) => {
       console.log(user);
@@ -34,11 +43,11 @@ const EditAddress = ({ user }) => {
   });
 
   useEffect(() => {
-    if (user || updateSuccess) {
-      setAddress(user.address);
-      setCity(user.city);
-      setPostalCode(user.postalCode);
-      setCountry(user.country);
+    if (user.shippingAddress || updateSuccess) {
+      setAddress(user.shippingAddress.address);
+      setCity(user.shippingAddress.city);
+      setPostalCode(user.shippingAddress.postalCode);
+      setCountry(user.shippingAddress.country);
     }
 
     if (errors) {
@@ -49,7 +58,7 @@ const EditAddress = ({ user }) => {
     setTimeout(() => {
       setUpdateSuccess(false);
       setLoadingUpdate(false);
-    }, 3000);
+    }, 5000);
   }, [user, updateSuccess, errors]);
 
   const submitHandler = (e) => {

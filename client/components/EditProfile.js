@@ -7,12 +7,9 @@ import useRequest from "../hooks/use-request";
 import Message from "./Message";
 
 const EditProfile = ({ user }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-  const [gender, setGender] = useState(undefined);
+  const [gender, setGender] = useState("");
   const [age, setAge] = useState(undefined);
   const [bio, setBio] = useState("");
 
@@ -25,13 +22,14 @@ const EditProfile = ({ user }) => {
     url: `/api/users/${user.id}`,
     method: "patch",
     body: {
-      email,
-      password,
+      email: user.email,
+      isAdmin: user.isAdmin,
       name,
       image,
       gender,
       age,
       bio,
+      jsonShippingAddress: user.shippingAddress,
     },
     onSuccess: (user) => {
       console.log(user);
@@ -42,14 +40,11 @@ const EditProfile = ({ user }) => {
 
   useEffect(() => {
     if (user || updateSuccess) {
-      setEmail(user.email);
       setName(user.name);
       setImage(user.image);
       setGender(user.gender);
       setAge(user.age);
       setBio(user.bio);
-      setPassword("");
-      setConfirmPassword("");
     }
 
     if (errors) {
@@ -60,7 +55,7 @@ const EditProfile = ({ user }) => {
     setTimeout(() => {
       setUpdateSuccess(false);
       setLoadingUpdate(false);
-    }, 3000);
+    }, 5000);
   }, [user, updateSuccess, errors]);
 
   const submitHandler = (e) => {
@@ -69,12 +64,7 @@ const EditProfile = ({ user }) => {
     setShowErrors(false);
     setLoadingUpdate(true);
 
-    if (password !== confirmPassword) {
-      setMessage("Password do not match");
-      setLoadingUpdate(false);
-    } else {
-      doRequest();
-    }
+    doRequest();
   };
 
   const myLoader = ({ src, width, quality }) => {
@@ -88,41 +78,39 @@ const EditProfile = ({ user }) => {
         {showErrors ? errors : null}
         {updateSuccess && <Message variant="success">Profile Updated</Message>}
 
-        <Col xs={12} xl={6}>
-          <div className="px-0 mt-3 d-flex flex-row justify-content-between align-items-center">
-            <div className="dashboard-profile-img m-3">
-              <Image
-                loader={myLoader}
-                src={image || user.image}
-                alt="profile image"
-                layout="fill"
-                objectFit="cover"
-                priority
-              />
-            </div>
-
-            <div className="name-image-box px-0 d-flex flex-column">
-              <Form.Group controlId="name">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group controlId="image" className="my-3">
-                <Form.Label>Image URL</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter image URL"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-            </div>
+        <Col xs={12} md={6}>
+          <div className="dashboard-profile-img">
+            <Image
+              loader={myLoader}
+              src={user.image}
+              layout="fill"
+              objectFit="cover"
+              priority={true}
+              alt={"profile image"}
+            />
           </div>
+        </Col>
+
+        <Col xs={12} md={6}>
+          <Form.Group controlId="name">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="image" className="my-3">
+            <Form.Label>Image URL</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter image URL"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
 
           <div className="px-0 d-flex flex-row justify-content-between align-items-center age-gender-box">
             <Form.Group controlId="gender">
@@ -160,48 +148,6 @@ const EditProfile = ({ user }) => {
               onChange={(e) => setBio(e.target.value)}
             ></Form.Control>
           </Form.Group>
-        </Col>
-
-        <Col xs={12} xl={6}>
-          <Form.Group controlId="email" className="my-3">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="password" className="my-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="confirmPassword" className="my-3">
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          {password === "" && confirmPassword === "" ? (
-            <div className="px-0 py-2" style={{ color: "red" }}>
-              {"Please enter password"}
-            </div>
-          ) : password !== "" && confirmPassword === "" ? (
-            <div className="px-0 py-2" style={{ color: "red" }}>
-              {"Please confirm password"}
-            </div>
-          ) : null}
           <Button type="submit" variant="dark">
             {loadingUpdate ? (
               <Spinner

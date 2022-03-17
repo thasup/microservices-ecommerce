@@ -30,19 +30,6 @@ router.patch(
       jsonShippingAddress,
     } = req.body;
 
-    console.log("USER DATA!", {
-      email,
-      password,
-      newPassword,
-      isAdmin,
-      name,
-      image,
-      gender,
-      age,
-      bio,
-      jsonShippingAddress,
-    });
-
     const user = await User.findById(req.params.userId);
 
     if (!user) {

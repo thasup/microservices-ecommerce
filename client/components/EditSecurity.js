@@ -53,7 +53,7 @@ const EditSecurity = ({ user }) => {
     setTimeout(() => {
       setUpdateSuccess(false);
       setLoadingUpdate(false);
-    }, 6000);
+    }, 5000);
   }, [user, updateSuccess, errors]);
 
   const submitHandler = (e) => {

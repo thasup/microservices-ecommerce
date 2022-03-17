@@ -471,11 +471,6 @@ a::before {
 .dashboard-profile-img {
   position: relative;
   aspect-ratio: 1/1;
-  width: 25%;
-}
-
-.name-image-box {
-  width: 70%;
 }
 
 /* Cart page */
