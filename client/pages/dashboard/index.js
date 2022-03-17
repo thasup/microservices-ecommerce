@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 
 import buildClient from "../../api/build-client";
 import EditProfile from "../../components/EditProfile";
+import EditSecurity from "../../components/EditSecurity";
 import EditAddress from "../../components/EditAddress";
 import UserOrderList from "../../components/UserOrderList";
 import WishList from "../../components/WishList";
@@ -44,6 +45,12 @@ const Dashboard = ({ currentUser, users, orders, products }) => {
               </Nav.Item>
 
               <Nav.Item>
+                <Nav.Link eventKey="security">
+                  <i class="fas fa-shield-halved"></i> Security
+                </Nav.Link>
+              </Nav.Item>
+
+              <Nav.Item>
                 <Nav.Link eventKey="address">
                   <i class="fas fa-map-location-dot"></i> Address
                 </Nav.Link>
@@ -73,6 +80,10 @@ const Dashboard = ({ currentUser, users, orders, products }) => {
             <DynamicTabContent>
               <DynamicTabPane eventKey="profile">
                 <EditProfile user={user} />
+              </DynamicTabPane>
+
+              <DynamicTabPane eventKey="security">
+                <EditSecurity user={user} />
               </DynamicTabPane>
 
               <DynamicTabPane eventKey="address">

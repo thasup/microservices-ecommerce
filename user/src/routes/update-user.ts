@@ -20,6 +20,7 @@ router.patch(
     const {
       email,
       password,
+      newPassword,
       isAdmin,
       name,
       image,
@@ -28,6 +29,19 @@ router.patch(
       bio,
       jsonShippingAddress,
     } = req.body;
+
+    console.log("USER DATA!", {
+      email,
+      password,
+      newPassword,
+      isAdmin,
+      name,
+      image,
+      gender,
+      age,
+      bio,
+      jsonShippingAddress,
+    });
 
     const user = await User.findById(req.params.userId);
 
@@ -60,15 +74,15 @@ router.patch(
     }
 
     user.set({
-      email: email ?? user.email,
-      password: password ?? user.password,
-      isAdmin: isAdmin ?? user.isAdmin,
-      name: name ?? user.name,
-      image: image ?? user.image,
-      gender: gender ?? user.gender,
-      age: age ?? user.age,
-      bio: bio ?? user.bio,
-      shippingAddress: shippingAddress ?? user.shippingAddress,
+      email: email !== "" ? email : user.email,
+      password: newPassword ? newPassword : password ?? user.password,
+      isAdmin: isAdmin !== undefined ? isAdmin : user.isAdmin,
+      name: name !== "" ? name : user.name,
+      image: image !== "" ? image : user.image,
+      gender: gender !== "" ? gender : user.gender,
+      age: age !== undefined ? age : user.age,
+      bio: bio !== "" ? bio : user.bio,
+      shippingAddress: shippingAddress ? shippingAddress : user.shippingAddress,
     });
 
     await user.save();
@@ -77,14 +91,14 @@ router.patch(
     const userJWT = jwt.sign(
       {
         id: user.id,
-        email,
-        isAdmin,
-        name,
-        image,
-        gender,
-        age,
-        bio,
-        shippingAddress,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        name: user.name,
+        image: user.image,
+        gender: user.gender,
+        age: user.age,
+        bio: user.bio,
+        shippingAddress: user.shippingAddress,
       },
       process.env.JWT_KEY!
     );
