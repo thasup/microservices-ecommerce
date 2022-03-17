@@ -5,8 +5,10 @@ import {
   validateRequest,
   NotFoundError,
   NotAuthorizedError,
+  BadRequestError,
 } from "@thasup-dev/common";
 import { User } from "../models/user";
+import { Password } from "../services/Password";
 
 const router = express.Router();
 
@@ -31,6 +33,23 @@ router.patch(
 
     if (!user) {
       throw new NotFoundError();
+    }
+
+    if (password && password !== "") {
+      const existingUser = await User.findOne({ email });
+
+      if (!existingUser) {
+        throw new BadRequestError("Invalid credentials");
+      }
+
+      const passwordMatch = await Password.compare(
+        existingUser.password,
+        password
+      );
+
+      if (!passwordMatch) {
+        throw new BadRequestError("Invalid credentials");
+      }
     }
 
     let shippingAddress; //่JSON

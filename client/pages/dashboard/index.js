@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Row, Col, Container, Nav } from "react-bootstrap";
 import dynamic from "next/dynamic";
 
 import buildClient from "../../api/build-client";
 import EditProfile from "../../components/EditProfile";
+import EditAddress from "../../components/EditAddress";
 import UserOrderList from "../../components/UserOrderList";
+import WishList from "../../components/WishList";
 import Support from "../../components/Support";
 
 const DynamicTabContainer = dynamic(
@@ -20,12 +22,7 @@ const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
   ssr: false,
 });
 
-const Dashboard = ({ currentUser, users, orders }) => {
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [country, setCountry] = useState("");
-
+const Dashboard = ({ currentUser, users, orders, products }) => {
   const user = users.find((user) => user.id === currentUser?.id);
 
   return (
@@ -43,12 +40,6 @@ const Dashboard = ({ currentUser, users, orders }) => {
               <Nav.Item>
                 <Nav.Link eventKey="profile">
                   <i class="far fa-user"></i> Profile
-                </Nav.Link>
-              </Nav.Item>
-
-              <Nav.Item>
-                <Nav.Link eventKey="security">
-                  <i class="fas fa-shield-halved"></i> Security
                 </Nav.Link>
               </Nav.Item>
 
@@ -84,12 +75,8 @@ const Dashboard = ({ currentUser, users, orders }) => {
                 <EditProfile user={user} />
               </DynamicTabPane>
 
-              <DynamicTabPane eventKey="security">
-                <p>Work in process...</p>
-              </DynamicTabPane>
-
               <DynamicTabPane eventKey="address">
-                <p>Work in process...</p>
+                <EditAddress user={user} />
               </DynamicTabPane>
 
               <DynamicTabPane eventKey="orders">
@@ -97,7 +84,7 @@ const Dashboard = ({ currentUser, users, orders }) => {
               </DynamicTabPane>
 
               <DynamicTabPane eventKey="wishlist">
-                <p>Work in process...</p>
+                <WishList products={products} />
               </DynamicTabPane>
 
               <DynamicTabPane eventKey="support">
@@ -134,6 +121,11 @@ export async function getServerSideProps(context) {
       .catch((err) => {
         console.log(err.message);
       });
+    let { data: productData } = await client
+      .get("/api/products")
+      .catch((err) => {
+        console.log(err.message);
+      });
 
     if (userData === (null || undefined)) {
       return (userData = []);
@@ -141,8 +133,13 @@ export async function getServerSideProps(context) {
     if (orderData === (null || undefined)) {
       return (orderData = []);
     }
+    if (productData === (null || undefined)) {
+      return (productData = []);
+    }
 
-    return { props: { users: userData, orders: orderData } };
+    return {
+      props: { users: userData, orders: orderData, products: productData },
+    };
   }
 }
 
