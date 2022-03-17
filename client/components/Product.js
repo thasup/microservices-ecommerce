@@ -29,7 +29,7 @@ const Product = ({ product, currentUser }) => {
   };
 
   const myLoader = ({ src, width, quality }) => {
-    return `https://www.dropbox.com/s/${src}.webp?raw=1&q=${quality || 20}`;
+    return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 20}`;
   };
 
   return (
@@ -43,7 +43,7 @@ const Product = ({ product, currentUser }) => {
           <Card.Body className="product-img__cover">
             <Image
               loader={myLoader}
-              src={product.images.image1.slice(0, -4)}
+              src={product.images.image1}
               layout="fill"
               objectFit="cover"
               alt={`${product.title} image 1`}
@@ -59,7 +59,7 @@ const Product = ({ product, currentUser }) => {
           <Card.Body className="product-img__hover">
             <Image
               loader={myLoader}
-              src={product.images.image2.slice(0, -4)}
+              src={product.images.image2}
               layout="fill"
               objectFit="cover"
               alt={`${product.title} image 2`}
