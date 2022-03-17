@@ -32,7 +32,6 @@ router.patch(
     if (!user) {
       throw new NotFoundError();
     }
-    console.log("json address!!", jsonShippingAddress);
 
     let shippingAddress; //่JSON
     if (typeof jsonShippingAddress === "string") {
@@ -40,8 +39,6 @@ router.patch(
     } else if (typeof jsonShippingAddress === "object") {
       shippingAddress = jsonShippingAddress;
     }
-
-    console.log("address!!", shippingAddress);
 
     user.set({
       email: email ?? user.email,

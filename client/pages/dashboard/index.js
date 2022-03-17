@@ -1,239 +1,113 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Row, Col, Table } from "react-bootstrap";
-import Link from "next/link";
+import { Row, Col, Container, Nav } from "react-bootstrap";
+import dynamic from "next/dynamic";
 
-import Message from "../../components/Message";
-import Loader from "../../components/Loader";
-import useRequest from "../../hooks/use-request";
-import ExpireTimer from "../../components/ExpireTimer";
 import buildClient from "../../api/build-client";
-import CustomTooltip from "../../components/CustomTooltip";
+import EditProfile from "../../components/EditProfile";
+import UserOrderList from "../../components/UserOrderList";
+import Support from "../../components/Support";
 
-const Dashboard = ({ currentUser, orders }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isAdmin, setIsAdmin] = useState(null);
-  const [image, setImage] = useState("");
-  const [gender, setGender] = useState("");
-  const [age, setAge] = useState("");
-  const [bio, setBio] = useState("");
+const DynamicTabContainer = dynamic(
+  () => import("react-bootstrap/TabContainer"),
+  {
+    ssr: false,
+  }
+);
+const DynamicTabContent = dynamic(() => import("react-bootstrap/TabContent"), {
+  ssr: false,
+});
+const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
+  ssr: false,
+});
+
+const Dashboard = ({ currentUser, users, orders }) => {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [country, setCountry] = useState("");
 
-  const [message, setMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [updateSuccess, setUpdateSuccess] = useState(false);
-
-  const { doRequest: updateProfile, errors: updateErrors } = useRequest({
-    url: "/api/users/profile",
-    method: "patch",
-    body: {
-      email,
-      password,
-      isAdmin,
-      name,
-      image,
-      gender,
-      age,
-      bio,
-      address,
-      city,
-      postalCode,
-      country,
-    },
-    onSuccess: (user) => {
-      console.log(user);
-      setLoading(false);
-      setUpdateSuccess(true);
-    },
-  });
-
-  useEffect(() => {
-    if (currentUser.email) {
-      setName(currentUser.name);
-      setEmail(currentUser.email);
-      setIsAdmin(currentUser.isAdmin);
-      setImage(currentUser.image);
-      setGender(currentUser.gender);
-      setAge(currentUser.age);
-      setBio(currentUser.bio);
-      setAddress(currentUser.shippingAddress?.address);
-      setCity(currentUser.shippingAddress?.city);
-      setPostalCode(currentUser.shippingAddress?.postalCode);
-      setCountry(currentUser.shippingAddress?.country);
-    }
-  }, [currentUser, loading, orders]);
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    if (password !== confirmPassword) {
-      setMessage("Password do not match");
-    } else {
-      updateProfile();
-    }
-  };
+  const user = users.find((user) => user.id === currentUser?.id);
 
   return (
-    <div className="app-container">
-      <Row>
-        <Col md={3}>
-          <h1>User Profile</h1>
-          {message && <Message variant="danger">{message}</Message>}
-          {updateErrors}
-          {updateSuccess && (
-            <Message variant="updateSuccess">Profile Updated</Message>
-          )}
-          {loading && <Loader />}
-          <Form onSubmit={submitHandler}>
-            <Form.Group controlId="name" className="my-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="name"
-                placeholder="Enter name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+    <Container className="app-container admin-dashboard">
+      <h1>Account Setting</h1>
 
-            <Form.Group controlId="email" className="my-3">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+      <DynamicTabContainer
+        variant="light"
+        defaultActiveKey="profile"
+        forceRenderTabPanel={true}
+      >
+        <Row>
+          <Col md={2} className="mb-5">
+            <Nav variant="pills" className="flex-column">
+              <Nav.Item>
+                <Nav.Link eventKey="profile">
+                  <i class="far fa-user"></i> Profile
+                </Nav.Link>
+              </Nav.Item>
 
-            <Form.Group controlId="password" className="my-3">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+              <Nav.Item>
+                <Nav.Link eventKey="security">
+                  <i class="fas fa-shield-halved"></i> Security
+                </Nav.Link>
+              </Nav.Item>
 
-            <Form.Group controlId="confirmPassword" className="my-3">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Confirm password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+              <Nav.Item>
+                <Nav.Link eventKey="address">
+                  <i class="fas fa-map-location-dot"></i> Address
+                </Nav.Link>
+              </Nav.Item>
 
-            <Button type="submit" variant="dark" className="my-3">
-              Update
-            </Button>
-          </Form>
-        </Col>
-        <Col md={9}>
-          <h1>My Order</h1>
-          {loading ? (
-            <Loader />
-          ) : (
-            <Table striped bordered hover responsive className="table-sm">
-              <thead>
-                <tr>
-                  <th>ORDER ID</th>
-                  <th>DATE</th>
-                  <th>TOTAL</th>
-                  <th>METHOD</th>
-                  <th>EXPIRE</th>
-                  <th>PAID</th>
-                  <th>DELIVERED</th>
-                  <th>DETAILS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order, index) => (
-                  <tr key={order.id}>
-                    <td>
-                      <CustomTooltip index={index} mongoId={order.id} />{" "}
-                    </td>
-                    <td>{order.createdAt.substring(0, 10)}</td>
-                    <td>$ {order.totalPrice}</td>
-                    <td>{order.paymentMethod}</td>
-                    <td>
-                      {order.status === "cancelled" ? (
-                        <p style={{ color: "red", fontWeight: "bolder" }}>
-                          Expired
-                        </p>
-                      ) : order.status === "completed" ? (
-                        <p style={{ color: "green", fontWeight: "bolder" }}>
-                          Completed
-                        </p>
-                      ) : (
-                        <>
-                          <ExpireTimer order={order} />
-                        </>
-                      )}
-                    </td>
-                    <td>
-                      {order.isPaid ? (
-                        <p>
-                          <i
-                            className="fas fa-check"
-                            style={{ color: "green" }}
-                          ></i>{" "}
-                          {order.paidAt?.substring(0, 10)}
-                        </p>
-                      ) : (
-                        <p>
-                          <i
-                            className="fas fa-times"
-                            style={{ color: "red" }}
-                          ></i>{" "}
-                          Not Paid
-                        </p>
-                      )}
-                    </td>
-                    <td>
-                      {order.isDelivered ? (
-                        <p>
-                          <i
-                            className="fas fa-check"
-                            style={{ color: "green" }}
-                          ></i>{" "}
-                          {order.deliveredAt.substring(0, 10)}
-                        </p>
-                      ) : (
-                        <p>
-                          <i
-                            className="fas fa-times"
-                            style={{ color: "red" }}
-                          ></i>{" "}
-                          Not Delivered
-                        </p>
-                      )}
-                    </td>
-                    <td>
-                      <Link
-                        href={"/orders/[orderId]"}
-                        as={`/orders/${order.id}`}
-                        passHref
-                      >
-                        <Button className="btn-sm" variant="light">
-                          <i className="fas fa-info-circle"></i> Details
-                        </Button>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
-        </Col>
-      </Row>
-    </div>
+              <Nav.Item>
+                <Nav.Link eventKey="orders">
+                  <i class="fas fa-basket-shopping"></i> Orders
+                </Nav.Link>
+              </Nav.Item>
+
+              <Nav.Item>
+                <Nav.Link eventKey="wishlist">
+                  <i class="fas fa-heart"></i> Wishlist
+                </Nav.Link>
+              </Nav.Item>
+
+              <Nav.Item>
+                <Nav.Link eventKey="support">
+                  <i class="fas fa-circle-info"></i> Support
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Col>
+
+          <Col md={10}>
+            <DynamicTabContent>
+              <DynamicTabPane eventKey="profile">
+                <EditProfile user={user} />
+              </DynamicTabPane>
+
+              <DynamicTabPane eventKey="security">
+                <p>Work in process...</p>
+              </DynamicTabPane>
+
+              <DynamicTabPane eventKey="address">
+                <p>Work in process...</p>
+              </DynamicTabPane>
+
+              <DynamicTabPane eventKey="orders">
+                <UserOrderList orders={orders} />
+              </DynamicTabPane>
+
+              <DynamicTabPane eventKey="wishlist">
+                <p>Work in process...</p>
+              </DynamicTabPane>
+
+              <DynamicTabPane eventKey="support">
+                <Support />
+              </DynamicTabPane>
+            </DynamicTabContent>
+          </Col>
+        </Row>
+      </DynamicTabContainer>
+    </Container>
   );
 };
 
@@ -252,17 +126,23 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
+    let { data: userData } = await client.get("/api/users").catch((err) => {
+      console.log(err.message);
+    });
     let { data: orderData } = await client
       .get("/api/orders/myorders")
       .catch((err) => {
         console.log(err.message);
       });
 
+    if (userData === (null || undefined)) {
+      return (userData = []);
+    }
     if (orderData === (null || undefined)) {
       return (orderData = []);
     }
 
-    return { props: { orders: orderData } };
+    return { props: { users: userData, orders: orderData } };
   }
 }
 
