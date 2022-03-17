@@ -99,7 +99,7 @@ const Dashboard = ({ currentUser, users, orders, products }) => {
               </DynamicTabPane>
 
               <DynamicTabPane eventKey="support">
-                <Support />
+                <Support user={user} />
               </DynamicTabPane>
             </DynamicTabContent>
           </Col>

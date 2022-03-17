@@ -80,7 +80,7 @@ const EditSecurity = ({ user }) => {
         {updateSuccess && <Message variant="success">Profile Updated</Message>}
 
         <Col>
-          <Form.Group controlId="email" className="my-3">
+          <Form.Group controlId="email" className="mb-3">
             <Form.Label>Email address</Form.Label>
             <Form.Control
               type="email"

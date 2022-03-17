@@ -2,6 +2,10 @@ module.exports = {
   reactStrictMode: true,
   images: {
     domains: ["www.dropbox.com"],
-    minimumCacheTTL: 3600,
+    minimumCacheTTL: 86400,
+  },
+  webpackDevMiddleware: (config) => {
+    config.watchOptions.poll = 300;
+    return config;
   },
 };
