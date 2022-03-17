@@ -286,6 +286,7 @@ a::before {
   color: black;
   font-weight: 500;
   font-family: "Open Sans", sans-serif;
+  padding: 0;
 }
 
 .card-product-title a {
@@ -294,15 +295,25 @@ a::before {
 }
 
 .card-product-price {
+  padding: 0;
+}
+
+.card-product-price h4 {
   font-weight: 400;
 }
 
 .card-product-reviews {
   font-size: 0.9rem;
+  padding: 0;
 }
 
 .card-product-color {
   font-size: 0.9rem;
+  padding: 0;
+}
+
+/* Tablet Screen */
+@media only screen and (max-width: 768px) {
 }
 
 /* Mobile Screen */
@@ -319,10 +330,6 @@ a::before {
   .card-product-price {
     font-size: 1.1rem;
   }
-}
-
-/* Tablet Screen */
-@media only screen and (max-width: 768px) {
 }
 
 /* Product page */
@@ -415,6 +422,11 @@ a::before {
 
 .description-tabs {
   cursor: pointer;
+  outline: 1px solid #000;
+}
+
+#size-chart {
+  display: inline-flex;
 }
 
 .description-panel {
@@ -484,4 +496,41 @@ a::before {
 
 #cart-items .form-select-sm {
   width: 50%;
+}
+
+.order-id {
+  max-width: 80%;
+}
+
+/* Tablet Screen */
+@media only screen and (max-width: 768px) {
+  .order-id {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile Screen */
+@media only screen and (max-width: 425px) {
+  .order-id {
+    font-size: 1.2rem;
+  }
+
+  #cart-items .cart-product-title {
+    font-size: 1rem;
+  }
+
+  #cart-items h6,
+  .cart-price {
+    font-size: 1rem;
+  }
+
+  #checkout-step .nav-item {
+    font-size: 0.65rem;
+    width: 55px;
+  }
+
+  #checkout-step .nav-item a {
+    padding: 5px 8px;
+    text-align: center;
+  }
 }

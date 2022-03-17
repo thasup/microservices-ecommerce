@@ -16,7 +16,7 @@ const ColorSelector = ({ product, callback, margin, size, flex }) => {
       setLoading(false);
     }
 
-    if (colorsArray !== null) {
+    if (colorsArray !== null && callback) {
       callback(colorsArray[index]);
     }
   }, [product, index]);
@@ -26,6 +26,9 @@ const ColorSelector = ({ product, callback, margin, size, flex }) => {
       {text.toLowerCase()}
     </Tooltip>
   );
+
+  // Defined set of light color that want to has outer border
+  const lightColors = ["White", "Beige", "Lemonchiffon"];
 
   return loading ? null : (
     <div className={`px-0 d-flex flex-row justify-content-${flex}`}>
@@ -45,7 +48,8 @@ const ColorSelector = ({ product, callback, margin, size, flex }) => {
                 width: `${size}`,
               }}
             >
-              {color === "white" || color === "White" ? (
+              {lightColors.find((lightColor) => lightColor === color) !==
+              undefined ? (
                 <span
                   className="color-selector-inner"
                   style={{
@@ -74,7 +78,8 @@ const ColorSelector = ({ product, callback, margin, size, flex }) => {
                 width: `${size}`,
               }}
             >
-              {color === "white" || color === "White" ? (
+              {lightColors.find((lightColor) => lightColor === color) !==
+              undefined ? (
                 <span
                   className="color-selector-inner"
                   style={{

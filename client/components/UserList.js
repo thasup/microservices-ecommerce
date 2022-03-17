@@ -1,19 +1,39 @@
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
-import React, { useState } from "react";
-import { Button, Col, Row, Table } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Row, Spinner, Table } from "react-bootstrap";
 
 import CustomTooltip from "./CustomTooltip";
 import profilePic from "../public/asset/sample.jpg";
+import useRequest from "../hooks/use-request";
 
 const UserList = ({ users }) => {
-  // const deleteHandler = async (id) => {
-  //   setLoading(true);
-  //   await axios.delete(`/api/products/${id}`);
-  //   setLoading(false);
-  // };
+  const [userId, setUserId] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const { doRequest, errors } = useRequest({
+    url: `/api/users/${userId}`,
+    method: "delete",
+    body: {},
+    onSuccess: () => {
+      setLoading(false);
+      Router.push("/admin");
+    },
+  });
+
+  useEffect(() => {
+    if (loading) {
+      if (window.confirm("Are you sure?")) {
+        doRequest();
+      }
+    }
+  }, [loading]);
+
+  const deleteHandler = async (id) => {
+    setLoading(true);
+    setUserId(id);
+  };
 
   const myLoader = ({ src, width, quality }) => {
     return `${src}&w=${width}&q=${quality || 20}`;
@@ -22,6 +42,7 @@ const UserList = ({ users }) => {
   return (
     <Row className="align-items-center">
       <Col>
+        {errors}
         <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
@@ -137,8 +158,9 @@ const UserList = ({ users }) => {
                 </td>
                 <td>
                   <Link
-                    href={"/admin/user/[userId]"}
-                    as={`/admin/user/${user.id}`}
+                    href={"/dashboard/edit/[userId]"}
+                    as={`/dashboard/edit/${user.id}`}
+                    passHref
                   >
                     <Button variant="dark" className="btn-sm mx-1">
                       <i className="fas fa-edit"></i>
@@ -147,9 +169,21 @@ const UserList = ({ users }) => {
                   <Button
                     variant="danger"
                     className="btn-sm mx-1"
-                    onClick={() => deleteHandler(user._id)}
+                    onClick={() => deleteHandler(user.id)}
                   >
-                    <i className="fas fa-trash"></i>
+                    {loading ? (
+                      <Spinner
+                        animation="border"
+                        role="status"
+                        as="span"
+                        size="sm"
+                        aria-hidden="true"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </Spinner>
+                    ) : (
+                      <i className="fas fa-trash"></i>
+                    )}
                   </Button>
                 </td>
               </tr>

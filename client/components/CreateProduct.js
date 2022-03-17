@@ -76,7 +76,7 @@ const CreateProduct = () => {
           <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={image1 || "sf6t25da3113hl2/4te4tet.jpg"}
+              src={image1 || "gatmu67f52etjy2/4te4tet.webp"}
               alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
@@ -87,7 +87,7 @@ const CreateProduct = () => {
           <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={image2 || "sf6t25da3113hl2/4te4tet.jpg"}
+              src={image2 || "gatmu67f52etjy2/4te4tet.webp"}
               alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
@@ -98,7 +98,7 @@ const CreateProduct = () => {
           <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={image3 || "sf6t25da3113hl2/4te4tet.jpg"}
+              src={image3 || "gatmu67f52etjy2/4te4tet.webp"}
               alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"
@@ -109,7 +109,7 @@ const CreateProduct = () => {
           <Carousel.Item className="carousel-product-item">
             <Image
               loader={myLoader}
-              src={image4 || "sf6t25da3113hl2/4te4tet.jpg"}
+              src={image4 || "gatmu67f52etjy2/4te4tet.webp"}
               alt={`Sample Product image`}
               layout="fill"
               objectFit="cover"

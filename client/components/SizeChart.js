@@ -23,6 +23,7 @@ const SizeChart = () => {
           <Nav
             variant="pills"
             className="description-tabs "
+            id="size-chart"
             defaultActiveKey="inch"
           >
             <Nav.Item>

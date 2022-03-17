@@ -17,7 +17,7 @@ router.post(
       .withMessage("Password must be between 4 and 20 characters"),
     body("name").not().isEmpty().withMessage("Name is required"),
     body("gender").not().isEmpty().withMessage("Gender is required"),
-    body("age").isInt().not().isEmpty().withMessage("Age is required"),
+    body("age").isInt({ gt: 0 }).not().isEmpty().withMessage("Age is required"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {

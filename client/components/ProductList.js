@@ -1,6 +1,7 @@
 import Link from "next/link";
-import React, { useState } from "react";
-import { Button, Col, Row, Table } from "react-bootstrap";
+import Router from "next/router";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Row, Spinner, Table } from "react-bootstrap";
 
 import useRequest from "../hooks/use-request";
 import ColorSelector from "./ColorSelector";
@@ -9,6 +10,7 @@ import SizeSelector from "./SizeSelector";
 
 const ProductList = ({ products }) => {
   const [deleteProductId, setDeleteProductId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { doRequest, errors } = useRequest({
     url: `/api/products/${deleteProductId}`,
@@ -20,15 +22,23 @@ const ProductList = ({ products }) => {
     },
   });
 
+  useEffect(() => {
+    if (loading) {
+      if (window.confirm("Are you sure?")) {
+        doRequest();
+      }
+    }
+  }, [loading]);
+
   const deleteHandler = (id) => {
-    setLoading(true);
     setDeleteProductId(id);
-    doRequest();
+    setLoading(true);
   };
 
   return (
     <Row className="align-items-center">
       <Col>
+        {errors}
         <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
@@ -93,14 +103,25 @@ const ProductList = ({ products }) => {
                     className="btn-sm mx-1"
                     onClick={() => deleteHandler(product.id)}
                   >
-                    <i className="fas fa-trash"></i>
+                    {loading ? (
+                      <Spinner
+                        animation="border"
+                        role="status"
+                        as="span"
+                        size="sm"
+                        aria-hidden="true"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </Spinner>
+                    ) : (
+                      <i className="fas fa-trash"></i>
+                    )}
                   </Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
-        {errors}
       </Col>
     </Row>
   );

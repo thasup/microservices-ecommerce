@@ -5,15 +5,17 @@ import Link from "next/link";
 import CustomTooltip from "./CustomTooltip";
 import ExpireTimer from "./ExpireTimer";
 
-const OrderList = ({ orders }) => {
+const OrderList = ({ orders, users }) => {
   return (
     <Row className="align-items-center">
       <Col>
         <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
-              <th>ORDER ID</th>
+              <th>ID</th>
+              <th>USER</th>
               <th>DATE</th>
+              <th>TIME</th>
               <th>TOTAL</th>
               <th>METHOD</th>
               <th>EXPIRE</th>
@@ -28,9 +30,23 @@ const OrderList = ({ orders }) => {
                 <td>
                   <CustomTooltip index={index} mongoId={order.id} />{" "}
                 </td>
+                <td>{users.find((user) => user.id === order.userId).name}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
+                <td>{order.createdAt.substring(11, 16)}</td>
                 <td>$ {order.totalPrice}</td>
-                <td>{order.paymentMethod}</td>
+                <td>
+                  <p style={{ fontSize: "1rem" }}>
+                    {order.paymentMethod === "paypal" ? (
+                      <>
+                        <i class="fa-brands fa-paypal"></i> PayPal
+                      </>
+                    ) : (
+                      <>
+                        <i class="fa-brands fa-stripe-s"></i> Stripe
+                      </>
+                    )}
+                  </p>
+                </td>
                 <td>
                   {order.status === "cancelled" ? (
                     <p style={{ color: "red", fontWeight: "bolder" }}>
