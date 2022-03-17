@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { param } from "express-validator";
+import jwt from "jsonwebtoken";
 import {
   validateRequest,
   NotFoundError,
@@ -31,6 +32,7 @@ router.patch(
     if (!user) {
       throw new NotFoundError();
     }
+    console.log("json address!!", jsonShippingAddress);
 
     let shippingAddress; //่JSON
     if (typeof jsonShippingAddress === "string") {
@@ -38,6 +40,8 @@ router.patch(
     } else if (typeof jsonShippingAddress === "object") {
       shippingAddress = jsonShippingAddress;
     }
+
+    console.log("address!!", shippingAddress);
 
     user.set({
       email: email ?? user.email,
@@ -52,6 +56,27 @@ router.patch(
     });
 
     await user.save();
+
+    // Generate JWT
+    const userJWT = jwt.sign(
+      {
+        id: user.id,
+        email,
+        isAdmin,
+        name,
+        image,
+        gender,
+        age,
+        bio,
+        shippingAddress,
+      },
+      process.env.JWT_KEY!
+    );
+
+    // Store it on session object
+    req.session = {
+      jwt: userJWT,
+    };
 
     res.send(user);
   }
