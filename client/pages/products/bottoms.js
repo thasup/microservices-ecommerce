@@ -16,7 +16,12 @@ const Bottoms = ({ products, currentUser }) => {
   const bottoms = products.filter((product) => product.category === "Bottom");
 
   return loading ? (
-    <Loader />
+    <div
+      className="d-flex justify-content-center align-items-center px-0"
+      style={{ marginTop: "80px" }}
+    >
+      <Loader />
+    </div>
   ) : (
     <>
       <Row className="mx-0">

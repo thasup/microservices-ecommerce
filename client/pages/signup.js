@@ -39,7 +39,10 @@ const signup = () => {
   };
 
   return loading ? (
-    <div className="d-flex justify-content-center align-items-center px-0">
+    <div
+      className="d-flex justify-content-center align-items-center px-0"
+      style={{ marginTop: "80px" }}
+    >
       <Loader />
     </div>
   ) : (

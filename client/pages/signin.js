@@ -5,6 +5,7 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import useRequest from "../hooks/use-request";
 import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
+import Link from "next/link";
 
 const signin = () => {
   const [email, setEmail] = useState("");
@@ -41,7 +42,10 @@ const signin = () => {
   };
 
   return loading ? (
-    <div className="d-flex justify-content-center align-items-center px-0">
+    <div
+      className="d-flex justify-content-center align-items-center px-0"
+      style={{ marginTop: "80px" }}
+    >
       <Loader />
     </div>
   ) : (
@@ -76,6 +80,15 @@ const signin = () => {
                 Sign In
               </Button>
             </Form>
+
+            <Row className="py-3">
+              <Col>
+                New here ?{" "}
+                <Link href="/signup">
+                  <a>Create an Account</a>
+                </Link>
+              </Col>
+            </Row>
           </FormContainer>
         </Col>
       </Row>

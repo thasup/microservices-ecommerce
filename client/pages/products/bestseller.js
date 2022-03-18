@@ -15,7 +15,12 @@ const BestSeller = ({ products, currentUser }) => {
   }, []);
 
   return loading ? (
-    <Loader />
+    <div
+      className="d-flex justify-content-center align-items-center px-0"
+      style={{ marginTop: "80px" }}
+    >
+      <Loader />
+    </div>
   ) : (
     <Row className="mx-0">
       {products.map((item) => (
