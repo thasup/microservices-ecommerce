@@ -28,7 +28,7 @@ const ColorSelector = ({ product, callback, margin, size, flex }) => {
   );
 
   // Defined set of light color that want to has outer border
-  const lightColors = ["White", "Beige", "Lemonchiffon", "LightYellow"];
+  const lightColors = ["White", "Beige", "Lemonchiffon", "Lightyellow"];
 
   return loading ? null : (
     <div className={`px-0 d-flex flex-row justify-content-${flex}`}>

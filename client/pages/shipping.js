@@ -22,7 +22,6 @@ const ShippingPage = ({ currentUser }) => {
     const data = localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
       : [];
-    console.log("initial storage shippingAddress:", data);
 
     if (currentUser?.shippingAddress) {
       // Set state to shippingAddress data in profile information

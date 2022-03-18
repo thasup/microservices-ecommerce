@@ -25,7 +25,6 @@ const PaymentPage = ({ currentUser }) => {
     const data = localStorage.getItem("paymentMethod")
       ? JSON.parse(localStorage.getItem("paymentMethod"))
       : [];
-    console.log("initial storage paymentMethod:", data);
 
     if (data !== undefined) {
       // Set state to paymentMethod data in localStorage

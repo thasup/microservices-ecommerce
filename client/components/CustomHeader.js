@@ -138,15 +138,14 @@ const CustomHeader = ({ currentUser, orders }) => {
             <Link href="/cart" passHref>
               <Nav.Link className="position-relative cart-icon">
                 <i className="fas fa-basket-shopping"></i>
-                {showNotification && (
-                  <span
-                    id="notification"
-                    className="position-absolute  badge border border-light rounded-circle bg-danger"
-                  >
-                    <span className="visually-hidden">unread messages</span>
-                    {numItems}
-                  </span>
-                )}
+                <span
+                  id="notification"
+                  className="position-absolute  badge border border-light rounded-circle bg-danger"
+                  style={{ display: showNotification ? "block" : "none" }}
+                >
+                  <span className="visually-hidden">unread messages</span>
+                  {numItems}
+                </span>
               </Nav.Link>
             </Link>
           </Nav>
@@ -202,15 +201,14 @@ const CustomHeader = ({ currentUser, orders }) => {
             <Link href="/cart" passHref>
               <Nav.Link className="position-relative cart-icon">
                 <i className="fas fa-basket-shopping"></i>
-                {showNotification && (
-                  <span
-                    id="notification"
-                    className="position-absolute  badge border border-light rounded-circle bg-danger"
-                  >
-                    <span className="visually-hidden">unread messages</span>
-                    {numItems}
-                  </span>
-                )}
+                <span
+                  id="notification"
+                  className="position-absolute  badge border border-light rounded-circle bg-danger"
+                  style={{ display: showNotification ? "block" : "none" }}
+                >
+                  <span className="visually-hidden">unread messages</span>
+                  {numItems}
+                </span>
               </Nav.Link>
             </Link>
 
@@ -230,11 +228,16 @@ const CustomHeader = ({ currentUser, orders }) => {
               style={{ display: showDropDown ? "block" : "none" }}
               onMouseLeave={() => setShowDropDown(false)}
             >
+              <div className="account-dropdown-item account-dropdown-title d-flex justify-content-center">
+                {currentUser.name}
+              </div>
+
               <Link href="/dashboard" passHref>
                 <a className="account-dropdown-item">
                   <i className="fas fa-user"></i> Account
                 </a>
               </Link>
+
               {currentUser?.isAdmin && (
                 <Link href="/admin" passHref>
                   <a className="account-dropdown-item">
@@ -242,6 +245,7 @@ const CustomHeader = ({ currentUser, orders }) => {
                   </a>
                 </Link>
               )}
+
               <Link href="/signout" passHref>
                 <a className="account-dropdown-item">
                   <i className="fa-solid fa-right-from-bracket"></i> Sign Out

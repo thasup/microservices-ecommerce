@@ -28,12 +28,12 @@ header {
 
 .icon-menu .cart-icon #notification {
   font-size: 0.5rem;
-  font-weight: 600;
-  padding: 0.3rem;
+  font-weight: 900;
+  padding: 12%;
   opacity: 1;
   visibility: visible;
   transition: opacity 250ms ease-in-out;
-  top: 10%;
+  top: 15%;
   left: 60%;
 }
 
@@ -76,12 +76,13 @@ header {
   background: rgba(0, 0, 0, 0.1);
 }
 
-/* a.account-icon.nav-link:hover div#account-dropdown-menu {
-  visibility: visible;
-  opacity: 1;
-  display: block !important;
-  background-color: aqua;
-} */
+.account-dropdown-menu .account-dropdown-title {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.5rem;
+  user-select: none;
+}
 
 .sub-menu {
   text-transform: uppercase;
