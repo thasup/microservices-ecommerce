@@ -22,11 +22,11 @@ app.use(
 app.use(currentUser);
 
 app.use(showMyOrderRouter);
-app.use(showAllOrderRouter);
-app.use(cancelOrderRouter);
 app.use(getOrderRouter);
-app.use(createOrderRouter);
 app.use(deliverOrderRouter);
+app.use(cancelOrderRouter);
+app.use(showAllOrderRouter);
+app.use(createOrderRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
