@@ -3,18 +3,45 @@
   position: relative;
 }
 
+header {
+  background-color: white;
+  font-family: "Open Sans", sans-serif;
+}
+
+.navbar {
+  background-color: #fff;
+}
+
 .header-logo {
   font-family: "Italiana", serif;
   font-size: 2rem;
 }
 
-header {
-  background-color: white;
-  font-family: "Italiana", serif;
+.icon-menu {
+  display: flex;
+  flex-direction: row;
+}
+
+.icon-menu a {
+  margin-right: 1rem;
+}
+
+.sub-menu {
+  text-transform: uppercase;
+}
+
+#dropdown-menu {
+  right: 0;
 }
 
 body {
   font-family: "Open Sans", sans-serif;
+}
+
+.toast-add-item {
+  position: absolute;
+  top: 100%;
+  right: 0;
 }
 
 footer {
@@ -96,6 +123,7 @@ a::before {
 }
 
 /* Bootstrap Component */
+
 .nav-link {
   color: #000;
 }
