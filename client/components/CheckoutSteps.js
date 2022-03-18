@@ -18,17 +18,7 @@ const CheckoutSteps = ({
       defaultActiveKey={currentStep}
     >
       <Nav.Item>
-        {currentUser.id ? (
-          <>
-            {step1 ? (
-              <Link href="/cart" passHref>
-                <Nav.Link activekey="cart">Cart</Nav.Link>
-              </Link>
-            ) : (
-              <Nav.Link disabled>Cart</Nav.Link>
-            )}
-          </>
-        ) : (
+        {!currentUser ? (
           <>
             {step1 ? (
               <Link href="/signin" passHref>
@@ -36,6 +26,16 @@ const CheckoutSteps = ({
               </Link>
             ) : (
               <Nav.Link disabled>Sign In</Nav.Link>
+            )}
+          </>
+        ) : (
+          <>
+            {step1 ? (
+              <Link href="/cart" passHref>
+                <Nav.Link activekey="cart">Cart</Nav.Link>
+              </Link>
+            ) : (
+              <Nav.Link disabled>Cart</Nav.Link>
             )}
           </>
         )}

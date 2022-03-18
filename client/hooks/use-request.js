@@ -16,7 +16,6 @@ export default ({ url, method, body, onSuccess }) => {
 
       return response.data;
     } catch (err) {
-      console.log("Error : ", err.response.data);
       setErrors(
         <Alert variant="danger" className="mt-3 mb-0">
           <Alert.Heading>Ooops....</Alert.Heading>

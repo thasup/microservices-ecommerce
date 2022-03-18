@@ -5,8 +5,10 @@ import {
   validateRequest,
   NotFoundError,
   NotAuthorizedError,
+  BadRequestError,
 } from "@thasup-dev/common";
 import { User } from "../models/user";
+import { Password } from "../services/Password";
 
 const router = express.Router();
 
@@ -18,6 +20,7 @@ router.patch(
     const {
       email,
       password,
+      newPassword,
       isAdmin,
       name,
       image,
@@ -32,7 +35,23 @@ router.patch(
     if (!user) {
       throw new NotFoundError();
     }
-    console.log("json address!!", jsonShippingAddress);
+
+    if (password && password !== "") {
+      const existingUser = await User.findOne({ email });
+
+      if (!existingUser) {
+        throw new BadRequestError("Invalid credentials");
+      }
+
+      const passwordMatch = await Password.compare(
+        existingUser.password,
+        password
+      );
+
+      if (!passwordMatch) {
+        throw new BadRequestError("Invalid credentials");
+      }
+    }
 
     let shippingAddress; //่JSON
     if (typeof jsonShippingAddress === "string") {
@@ -41,18 +60,16 @@ router.patch(
       shippingAddress = jsonShippingAddress;
     }
 
-    console.log("address!!", shippingAddress);
-
     user.set({
-      email: email ?? user.email,
-      password: password ?? user.password,
-      isAdmin: isAdmin ?? user.isAdmin,
-      name: name ?? user.name,
-      image: image ?? user.image,
-      gender: gender ?? user.gender,
-      age: age ?? user.age,
-      bio: bio ?? user.bio,
-      shippingAddress: shippingAddress ?? user.shippingAddress,
+      email: email !== "" ? email : user.email,
+      password: newPassword ? newPassword : password ?? user.password,
+      isAdmin: isAdmin !== undefined ? isAdmin : user.isAdmin,
+      name: name !== "" ? name : user.name,
+      image: image !== "" ? image : user.image,
+      gender: gender !== "" ? gender : user.gender,
+      age: age !== undefined ? age : user.age,
+      bio: bio !== "" ? bio : user.bio,
+      shippingAddress: shippingAddress ? shippingAddress : user.shippingAddress,
     });
 
     await user.save();
@@ -61,14 +78,14 @@ router.patch(
     const userJWT = jwt.sign(
       {
         id: user.id,
-        email,
-        isAdmin,
-        name,
-        image,
-        gender,
-        age,
-        bio,
-        shippingAddress,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        name: user.name,
+        image: user.image,
+        gender: user.gender,
+        age: user.age,
+        bio: user.bio,
+        shippingAddress: user.shippingAddress,
       },
       process.env.JWT_KEY!
     );

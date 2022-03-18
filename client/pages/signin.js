@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Router from "next/router";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
@@ -11,6 +11,7 @@ const signin = () => {
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
 
   const { doRequest, errors } = useRequest({
     url: "/api/users/signin",
@@ -24,6 +25,13 @@ const signin = () => {
       setLoading(false);
     },
   });
+
+  useEffect(() => {
+    if (errors) {
+      setLoading(false);
+      setShowErrors(true);
+    }
+  }, [errors]);
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -63,7 +71,7 @@ const signin = () => {
                 ></Form.Control>
               </Form.Group>
 
-              {errors}
+              {showErrors ? errors : null}
               <Button className="mt-3" type="submit" variant="dark">
                 Sign In
               </Button>

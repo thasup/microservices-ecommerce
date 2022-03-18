@@ -18,7 +18,6 @@ const UserEdit = ({ users }) => {
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(undefined);
   const [bio, setBio] = useState("");
-  const [shippingAddress, setShippingAddress] = useState(undefined);
 
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -72,31 +71,12 @@ const UserEdit = ({ users }) => {
         setPostalCode(user.shippingAddress.postalCode);
         setCountry(user.shippingAddress.country);
       }
-
-      console.log("all user info", {
-        email,
-        isAdmin,
-        name,
-        image,
-        gender,
-        age,
-        bio,
-        address,
-        city,
-        postalCode,
-        country,
-      });
     }
   }, []);
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    console.log("SUBMIT!!");
     setLoading(true);
-
-    setShippingAddress();
-
-    console.log("subnit handler", shippingAddress);
 
     doRequest();
   };

@@ -3,7 +3,8 @@ import { Button, Spinner } from "react-bootstrap";
 
 const AddToCart = ({ product, currentUser, color }) => {
   const [onAdd, setOnAdd] = useState(false);
-  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [loadingAddToCart, setLoadingAddToCart] = useState(false);
+  const [text, setText] = useState("Add To Cart");
 
   useEffect(() => {
     // Initial retrieve data from localStorage
@@ -40,13 +41,18 @@ const AddToCart = ({ product, currentUser, color }) => {
 
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnAdd(false);
-      setLoadingUpdate(false);
+      setTimeout(() => {
+        setLoadingAddToCart(false);
+        setText("Added!");
+      }, 500);
     }
+
+    return () => setText("Add To Cart");
   }, [onAdd]);
 
   const addToCartHandler = (e) => {
     e.preventDefault();
-    setLoadingUpdate(true);
+    setLoadingAddToCart(true);
     setOnAdd(true);
   };
 
@@ -57,7 +63,7 @@ const AddToCart = ({ product, currentUser, color }) => {
       onClick={addToCartHandler}
       disabled={product.countInStock < 1}
     >
-      {loadingUpdate ? (
+      {loadingAddToCart ? (
         <Spinner
           animation="border"
           role="status"
@@ -68,7 +74,7 @@ const AddToCart = ({ product, currentUser, color }) => {
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       ) : null}{" "}
-      Add To Cart
+      {text}
     </Button>
   );
 };
