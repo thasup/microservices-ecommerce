@@ -22,7 +22,7 @@ import SizeSelector from "../../components/SizeSelector";
 import ProductDescription from "../../components/ProductDescription";
 import Review from "../../components/Review";
 
-const productDetail = ({ products, currentUser }) => {
+const productDetail = ({ products, users, currentUser }) => {
   const { productId } = useRouter().query;
 
   const [quantity, setQuantity] = useState(1);
@@ -472,7 +472,11 @@ const productDetail = ({ products, currentUser }) => {
             </Col>
 
             <Col sm={6}>
-              <Review product={product} />
+              <Review
+                product={product}
+                users={users}
+                currentUser={currentUser}
+              />
             </Col>
           </Row>
         </>
@@ -483,11 +487,17 @@ const productDetail = ({ products, currentUser }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
-  const { data } = await client.get("/api/products").catch((err) => {
+  const { data: productData } = await client
+    .get("/api/products")
+    .catch((err) => {
+      console.log(err.message);
+    });
+
+  const { data: userData } = await client.get("/api/users").catch((err) => {
     console.log(err.message);
   });
 
-  return { props: { products: data } };
+  return { props: { products: productData, users: userData } };
 }
 
 export default productDetail;

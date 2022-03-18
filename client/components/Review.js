@@ -10,7 +10,7 @@ import Loader from "./Loader";
 import Message from "./Message";
 import Rating from "./Rating";
 
-const Review = ({ currentUser, product }) => {
+const Review = ({ currentUser, product, users }) => {
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState("");
   const [comment, setComment] = useState("");
@@ -75,11 +75,13 @@ const Review = ({ currentUser, product }) => {
             {product.reviews.map((review) => (
               <ListGroup.Item key={review.id}>
                 <Row>
-                  {currentUser?.image && (
+                  {users.find((user) => user.id === review.userId)?.image && (
                     <Col xs={2} className="profile-img">
                       <Image
                         loader={myLoader}
-                        src={currentUser.image}
+                        src={
+                          users.find((user) => user.id === review.userId)?.image
+                        }
                         alt="profile image"
                         width={200}
                         height={200}
@@ -89,11 +91,18 @@ const Review = ({ currentUser, product }) => {
                   )}
 
                   <Col xs={10}>
-                    <strong>{review.name}</strong>
-                    <Rating value={review.rating} />
-                    <p>{review.createdAt.substring(0, 10)}</p>
-                    <strong>{review.title}</strong>
-                    <p>{review.comment}</p>
+                    <p className="review-name">
+                      {users.find((user) => user.id === review.userId).name}
+                    </p>
+                    <div className="d-flex flex-row align-items-center mb-3">
+                      <Rating value={review.rating} />
+                      <div className="ms-3">
+                        {review.createdAt.substring(0, 10)}
+                      </div>
+                    </div>
+
+                    <p className="review-title">{review.title}</p>
+                    <p className="review-comment">{review.comment}</p>
                   </Col>
 
                   {review.userId === currentUser?.id && (

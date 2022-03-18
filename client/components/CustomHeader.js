@@ -229,7 +229,7 @@ const CustomHeader = ({ currentUser, orders }) => {
               onMouseLeave={() => setShowDropDown(false)}
             >
               <div className="account-dropdown-item account-dropdown-title d-flex justify-content-center">
-                {currentUser.name}
+                {currentUser?.name}
               </div>
 
               <Link href="/dashboard" passHref>
