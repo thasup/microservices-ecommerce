@@ -9,6 +9,7 @@ import "../styles/globals.css";
 import buildClient from "../api/build-client";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import CustomHeader from "../components/CustomHeader";
 
 const MyApp = ({ Component, pageProps, currentUser }) => {
   console.log("Current User : ", currentUser);
@@ -19,7 +20,7 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
         <title>Aurapan | Women's Clothing Online Shop</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Header currentUser={currentUser} {...pageProps} />
+      <CustomHeader currentUser={currentUser} {...pageProps} />
       <main className="pb-5">
         <Container fluid className="px-0">
           <Component currentUser={currentUser} {...pageProps} />
