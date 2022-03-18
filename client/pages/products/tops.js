@@ -1,11 +1,23 @@
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import buildClient from "../../api/build-client";
+import Loader from "../../components/Loader";
 import Product from "../../components/Product";
 
 const Tops = ({ products, currentUser }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (products) {
+      setLoading(false);
+    }
+  }, []);
+
   const tops = products.filter((product) => product.category === "Top");
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <>
       <Row className="mx-0">
         {tops.map((item) => (

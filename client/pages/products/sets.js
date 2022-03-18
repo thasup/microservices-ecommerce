@@ -1,11 +1,23 @@
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import buildClient from "../../api/build-client";
+import Loader from "../../components/Loader";
 import Product from "../../components/Product";
 
 const Sets = ({ products, currentUser }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (products) {
+      setLoading(false);
+    }
+  }, []);
+
   const sets = products.filter((product) => product.category === "Set");
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <>
       <Row className="mx-0">
         {sets.map((item) => (
