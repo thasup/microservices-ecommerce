@@ -12,22 +12,27 @@ import Image from "next/image";
 import buildClient from "../api/build-client";
 
 const CustomHeader = ({ currentUser, orders }) => {
-  const [order, setOrder] = useState(null);
+  const [showDropDown, setShowDropDown] = useState(false);
+  const [numItems, setNumItems] = useState(0);
+  const [showNotification, setShowNotification] = useState(false);
   const [onMobile, setOnMobile] = useState(false);
 
   useEffect(() => {
-    if (orders === undefined) {
-      setOrder(null);
-    } else {
-      const unPaidOrders = orders?.filter((order) => order.isPaid === false);
-
-      const recentOrder = unPaidOrders[`${unPaidOrders?.length - 1}`];
-
-      setOrder(recentOrder);
-    }
-
     // Update window innerWidth every 0.1 second
     const interval = setInterval(() => {
+      // Initial retrieve data from localStorage
+      const cartItems = localStorage.getItem("cartItems")
+        ? JSON.parse(localStorage.getItem("cartItems"))
+        : [];
+
+      if (cartItems.length !== 0) {
+        setShowNotification(true);
+        setNumItems(cartItems.length);
+      } else if (cartItems.length === 0 || !cartItems) {
+        setShowNotification(false);
+        setNumItems(0);
+      }
+
       if (window.innerWidth <= 992) {
         setOnMobile(true);
       } else {
@@ -57,7 +62,7 @@ const CustomHeader = ({ currentUser, orders }) => {
           <Navbar.Offcanvas
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
-            placement="end"
+            placement="start"
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id="offcanvasNavbarLabel">
@@ -69,8 +74,8 @@ const CustomHeader = ({ currentUser, orders }) => {
               </Offcanvas.Title>
             </Offcanvas.Header>
 
-            <Offcanvas.Body>
-              <Nav className="d-flex flex-column justify-content-end flex-grow-1 pe-3">
+            <Offcanvas.Body className="d-flex flex-column justify-content-between ">
+              <Nav className="d-flex flex-column justify-content-start  pe-3">
                 <Link href="/products/bestseller" passHref>
                   <Nav.Link>Bestseller</Nav.Link>
                 </Link>
@@ -95,6 +100,36 @@ const CustomHeader = ({ currentUser, orders }) => {
                   <Nav.Link>Coat</Nav.Link>
                 </Link>
               </Nav>
+
+              {currentUser ? (
+                <Nav className="d-flex flex-row justify-content-evenly ">
+                  <Link href="/dashboard" passHref>
+                    <Nav.Link>
+                      <i className="fas fa-user"></i> Account
+                    </Nav.Link>
+                  </Link>
+                  {currentUser?.isAdmin && (
+                    <Link href="/admin" passHref>
+                      <Nav.Link>
+                        <i class="fas fa-list-check"></i> Management
+                      </Nav.Link>
+                    </Link>
+                  )}
+                  <Link href="/signout" passHref>
+                    <Nav.Link>
+                      <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                    </Nav.Link>
+                  </Link>
+                </Nav>
+              ) : (
+                <Nav className="mx-3 d-flex flex-row justify-content-end ">
+                  <Link href="/signin" passHref>
+                    <Nav.Link>
+                      <i class="fa-solid fa-right-to-bracket"></i> Sign In
+                    </Nav.Link>
+                  </Link>
+                </Nav>
+              )}
             </Offcanvas.Body>
           </Navbar.Offcanvas>
 
@@ -104,77 +139,21 @@ const CustomHeader = ({ currentUser, orders }) => {
             </Navbar.Brand>
           </Link>
 
-          <Nav className="icon-menu">
-            {order ? (
-              <Link
-                href="/orders/[orderId]"
-                as={`/orders/${order.id}`}
-                passHref
-              >
-                <Nav.Link className="position-relative">
-                  <i className="fas fa-shopping-cart"></i>
-                  <span className="position-absolute  badge border border-light rounded-circle bg-danger p-1">
+          <Nav className="icon-menu d-flex flex-row">
+            <Link href="/cart" passHref>
+              <Nav.Link className="position-relative cart-icon">
+                <i class="fas fa-basket-shopping"></i>
+                {showNotification && (
+                  <span
+                    id="notification"
+                    className="position-absolute  badge border border-light rounded-circle bg-danger"
+                  >
                     <span className="visually-hidden">unread messages</span>
+                    {numItems}
                   </span>
-                </Nav.Link>
-              </Link>
-            ) : (
-              <Link href="/cart" passHref>
-                <Nav.Link className="position-relative">
-                  <i className="fas fa-shopping-cart"></i>
-                  <span className="position-absolute  badge border border-light rounded-circle bg-danger p-1">
-                    <span className="visually-hidden">unread messages</span>
-                  </span>
-                </Nav.Link>
-              </Link>
-            )}
-
-            {currentUser ? (
-              <NavDropdown
-                title={<i class="fa-solid fa-circle-user"></i>}
-                id="username"
-              >
-                {currentUser?.image && (
-                  <div className="profile-img">
-                    <Image
-                      loader={myLoader}
-                      src={currentUser.image}
-                      alt="profile image"
-                      width={150}
-                      height={150}
-                      layout="responsive"
-                    />
-                  </div>
                 )}
-                <Link href="/dashboard" passHref>
-                  <NavDropdown.Item>Dashboard</NavDropdown.Item>
-                </Link>
-                {currentUser?.isAdmin && (
-                  <>
-                    <Link href="/admin" passHref>
-                      <NavDropdown.Item>Admin Dashboard</NavDropdown.Item>
-                    </Link>
-                  </>
-                )}
-                <Link href="/signout" passHref>
-                  <NavDropdown.Item>Logout</NavDropdown.Item>
-                </Link>
-              </NavDropdown>
-            ) : (
-              <>
-                <Link href="/signup" passHref>
-                  <Nav.Link>
-                    <i className="fas fa-user"></i> Sign Up
-                  </Nav.Link>
-                </Link>
-
-                <Link href="/signin" passHref>
-                  <Nav.Link>
-                    <i className="fas fa-key"></i> Sign In
-                  </Nav.Link>
-                </Link>
-              </>
-            )}
+              </Nav.Link>
+            </Link>
           </Nav>
         </Container>
       </Navbar>
@@ -221,77 +200,56 @@ const CustomHeader = ({ currentUser, orders }) => {
             </Link>
           </Nav>
 
-          <Nav>
-            {order ? (
-              <Link
-                href="/orders/[orderId]"
-                as={`/orders/${order.id}`}
-                passHref
-              >
-                <Nav.Link className="position-relative">
-                  <i className="fas fa-shopping-cart"></i>
-                  <span className="position-absolute  badge border border-light rounded-circle bg-danger p-1">
+          <Nav className="icon-menu d-flex flex-row position-relative">
+            <Link href="/cart" passHref>
+              <Nav.Link className="position-relative cart-icon">
+                <i class="fas fa-basket-shopping"></i>
+                {showNotification && (
+                  <span
+                    id="notification"
+                    className="position-absolute  badge border border-light rounded-circle bg-danger"
+                  >
                     <span className="visually-hidden">unread messages</span>
+                    {numItems}
                   </span>
-                </Nav.Link>
-              </Link>
-            ) : (
-              <Link href="/cart" passHref>
-                <Nav.Link className="position-relative">
-                  <i className="fas fa-shopping-cart"></i>
-                  <span className="position-absolute  badge border border-light rounded-circle bg-danger p-1">
-                    <span className="visually-hidden">unread messages</span>
-                  </span>
-                </Nav.Link>
-              </Link>
-            )}
+                )}
+              </Nav.Link>
+            </Link>
 
-            {currentUser ? (
-              <NavDropdown
-                title={<i class="fa-solid fa-circle-user"></i>}
-                id="username"
+            <Link href={currentUser ? "/dashboard" : "/signin"} passHref>
+              <Nav.Link
+                className="account-icon"
+                onMouseEnter={() =>
+                  currentUser ? setShowDropDown(true) : setShowDropDown(false)
+                }
               >
-                {currentUser?.image && (
-                  <div className="profile-img">
-                    <Image
-                      loader={myLoader}
-                      src={currentUser.image}
-                      alt="profile image"
-                      width={150}
-                      height={150}
-                      layout="responsive"
-                    />
-                  </div>
-                )}
-                <Link href="/dashboard" passHref>
-                  <NavDropdown.Item>Dashboard</NavDropdown.Item>
-                </Link>
-                {currentUser?.isAdmin && (
-                  <>
-                    <Link href="/admin" passHref>
-                      <NavDropdown.Item>Admin Dashboard</NavDropdown.Item>
-                    </Link>
-                  </>
-                )}
-                <Link href="/signout" passHref>
-                  <NavDropdown.Item>Logout</NavDropdown.Item>
-                </Link>
-              </NavDropdown>
-            ) : (
-              <>
-                <Link href="/signup" passHref>
-                  <Nav.Link>
-                    <i className="fas fa-user"></i> Sign Up
-                  </Nav.Link>
-                </Link>
+                <i class="fa-regular fa-circle-user"></i>
+              </Nav.Link>
+            </Link>
 
-                <Link href="/signin" passHref>
-                  <Nav.Link>
-                    <i className="fas fa-key"></i> Sign In
-                  </Nav.Link>
+            <div
+              className="account-dropdown-menu"
+              style={{ display: showDropDown ? "block" : "none" }}
+              onMouseLeave={() => setShowDropDown(false)}
+            >
+              <Link href="/dashboard" passHref>
+                <a className="account-dropdown-item">
+                  <i className="fas fa-user"></i> Account
+                </a>
+              </Link>
+              {currentUser?.isAdmin && (
+                <Link href="/admin" passHref>
+                  <a className="account-dropdown-item">
+                    <i class="fas fa-list-check"></i> Management
+                  </a>
                 </Link>
-              </>
-            )}
+              )}
+              <Link href="/signout" passHref>
+                <a className="account-dropdown-item">
+                  <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                </a>
+              </Link>
+            </div>
           </Nav>
         </Container>
       </Navbar>
