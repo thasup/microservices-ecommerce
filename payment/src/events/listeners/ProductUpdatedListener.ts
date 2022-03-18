@@ -14,8 +14,17 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
   queueGroupName = QueueGroupNames.PAYMENT_SERVICE;
 
   async onMessage(data: ProductUpdatedEvent["data"], msg: Message) {
-    const { title, price, image, colors, sizes, countInStock, isReserved } =
-      data;
+    const {
+      title,
+      price,
+      image,
+      colors,
+      sizes,
+      countInStock,
+      numReviews,
+      rating,
+      isReserved,
+    } = data;
 
     const product = await Product.findByEvent(data);
 
@@ -30,6 +39,8 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       colors,
       sizes,
       countInStock,
+      numReviews,
+      rating,
       isReserved,
     });
 

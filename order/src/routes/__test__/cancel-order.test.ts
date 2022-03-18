@@ -16,6 +16,8 @@ const buildProduct = async () => {
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    numReviews: 0,
+    rating: 0,
     isReserved: false,
   });
   await product.save();

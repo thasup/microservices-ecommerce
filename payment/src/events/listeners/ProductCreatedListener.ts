@@ -22,6 +22,8 @@ export class ProductCreatedListener extends Listener<ProductCreatedEvent> {
       colors,
       sizes,
       countInStock,
+      numReviews,
+      rating,
       isReserved,
     } = data;
 
@@ -34,6 +36,8 @@ export class ProductCreatedListener extends Listener<ProductCreatedEvent> {
       colors,
       sizes,
       countInStock,
+      numReviews,
+      rating,
       isReserved,
     });
     await product.save();
