@@ -43,7 +43,7 @@ const EditAddress = ({ user }) => {
   });
 
   useEffect(() => {
-    if (user.shippingAddress || updateSuccess) {
+    if (user.shippingAddress !== undefined || updateSuccess) {
       setAddress(user.shippingAddress.address);
       setCity(user.shippingAddress.city);
       setPostalCode(user.shippingAddress.postalCode);
@@ -58,7 +58,7 @@ const EditAddress = ({ user }) => {
     setTimeout(() => {
       setUpdateSuccess(false);
       setLoadingUpdate(false);
-    }, 5000);
+    }, 1000);
   }, [user, updateSuccess, errors]);
 
   const submitHandler = (e) => {

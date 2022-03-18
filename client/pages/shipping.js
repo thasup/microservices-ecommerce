@@ -65,7 +65,12 @@ const ShippingPage = ({ currentUser }) => {
 
   return storageReady ? (
     <FormContainer>
-      <CheckoutSteps step1 step2 currentStep={"/shipping"} />
+      <CheckoutSteps
+        step1
+        step2
+        currentStep={"/shipping"}
+        currentUser={currentUser}
+      />
       <h1>Shipping</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="address" className="my-3">

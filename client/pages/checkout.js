@@ -91,7 +91,14 @@ const CheckoutPage = ({ currentUser }) => {
 
   return storageReady ? (
     <Container className="app-container">
-      <CheckoutSteps step1 step2 step3 step4 currentStep={"/checkout"} />
+      <CheckoutSteps
+        step1
+        step2
+        step3
+        step4
+        currentStep={"/checkout"}
+        currentUser={currentUser}
+      />
       <Row>
         <Col md={8} className="mb-3">
           <ListGroup variant="flush">
