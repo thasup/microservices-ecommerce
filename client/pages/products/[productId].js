@@ -593,11 +593,11 @@ const productDetail = ({ products, currentUser }) => {
                               count={5}
                               size={40}
                               isHalf={true}
-                              emptyIcon={<i class="fa-light fa-star"></i>}
+                              emptyIcon={<i className="fa-light fa-star"></i>}
                               halfIcon={
                                 <i className="fa-solid fa-star-half-alt"></i>
                               }
-                              fullIcon={<i class="fa-solid fa-star"></i>}
+                              fullIcon={<i className="fa-solid fa-star"></i>}
                               activeColor="#000"
                               value={rating}
                               onChange={(newValue) => setRating(newValue)}

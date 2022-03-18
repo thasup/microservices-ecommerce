@@ -38,11 +38,11 @@ const OrderList = ({ orders, users }) => {
                   <p style={{ fontSize: "1rem" }}>
                     {order.paymentMethod === "paypal" ? (
                       <>
-                        <i class="fa-brands fa-paypal"></i> PayPal
+                        <i className="fa-brands fa-paypal"></i> PayPal
                       </>
                     ) : (
                       <>
-                        <i class="fa-brands fa-stripe-s"></i> Stripe
+                        <i className="fa-brands fa-stripe-s"></i> Stripe
                       </>
                     )}
                   </p>

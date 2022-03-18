@@ -40,37 +40,37 @@ const Dashboard = ({ currentUser, users, orders, products }) => {
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
                 <Nav.Link eventKey="profile">
-                  <i class="far fa-user"></i> Profile
+                  <i className="far fa-user"></i> Profile
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item>
                 <Nav.Link eventKey="security">
-                  <i class="fas fa-shield-halved"></i> Security
+                  <i className="fas fa-shield-halved"></i> Security
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item>
                 <Nav.Link eventKey="address">
-                  <i class="fas fa-map-location-dot"></i> Address
+                  <i className="fas fa-map-location-dot"></i> Address
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item>
                 <Nav.Link eventKey="orders">
-                  <i class="fas fa-basket-shopping"></i> Orders
+                  <i className="fas fa-basket-shopping"></i> Orders
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item>
                 <Nav.Link eventKey="wishlist">
-                  <i class="fas fa-heart"></i> Wishlist
+                  <i className="fas fa-heart"></i> Wishlist
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item>
                 <Nav.Link eventKey="support">
-                  <i class="fas fa-circle-info"></i> Support
+                  <i className="fas fa-circle-info"></i> Support
                 </Nav.Link>
               </Nav.Item>
             </Nav>
