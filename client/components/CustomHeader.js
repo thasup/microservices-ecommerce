@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Navbar,
-  Nav,
-  Container,
-  NavDropdown,
-  Offcanvas,
-} from "react-bootstrap";
+import { Navbar, Nav, Container, Offcanvas } from "react-bootstrap";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -43,9 +37,9 @@ const CustomHeader = ({ currentUser, orders }) => {
     return () => clearInterval(interval);
   }, [currentUser, onMobile]);
 
-  const myLoader = ({ src, width, quality }) => {
-    return `${src}&w=${width}&q=${quality || 40}`;
-  };
+  // const myLoader = ({ src, width, quality }) => {
+  //   return `${src}&w=${width}&q=${quality || 40}`;
+  // };
 
   return onMobile ? (
     <header>
@@ -111,13 +105,14 @@ const CustomHeader = ({ currentUser, orders }) => {
                   {currentUser?.isAdmin && (
                     <Link href="/admin" passHref>
                       <Nav.Link>
-                        <i class="fas fa-list-check"></i> Management
+                        <i className="fas fa-list-check"></i> Management
                       </Nav.Link>
                     </Link>
                   )}
                   <Link href="/signout" passHref>
                     <Nav.Link>
-                      <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                      <i className="fa-solid fa-right-from-bracket"></i> Sign
+                      Out
                     </Nav.Link>
                   </Link>
                 </Nav>
@@ -125,7 +120,7 @@ const CustomHeader = ({ currentUser, orders }) => {
                 <Nav className="mx-3 d-flex flex-row justify-content-end ">
                   <Link href="/signin" passHref>
                     <Nav.Link>
-                      <i class="fa-solid fa-right-to-bracket"></i> Sign In
+                      <i className="fa-solid fa-right-to-bracket"></i> Sign In
                     </Nav.Link>
                   </Link>
                 </Nav>
@@ -142,7 +137,7 @@ const CustomHeader = ({ currentUser, orders }) => {
           <Nav className="icon-menu d-flex flex-row">
             <Link href="/cart" passHref>
               <Nav.Link className="position-relative cart-icon">
-                <i class="fas fa-basket-shopping"></i>
+                <i className="fas fa-basket-shopping"></i>
                 {showNotification && (
                   <span
                     id="notification"
@@ -167,7 +162,10 @@ const CustomHeader = ({ currentUser, orders }) => {
         collapseOnSelect="true"
         className="menu"
       >
-        <Container className="menu-container d-flex flex-row">
+        <Container
+          className="menu-container d-flex flex-row"
+          onMouseLeave={() => setShowDropDown(false)}
+        >
           <Link href="/" passHref>
             <Navbar.Brand className="header-logo text-uppercase">
               Aurapan
@@ -203,7 +201,7 @@ const CustomHeader = ({ currentUser, orders }) => {
           <Nav className="icon-menu d-flex flex-row position-relative">
             <Link href="/cart" passHref>
               <Nav.Link className="position-relative cart-icon">
-                <i class="fas fa-basket-shopping"></i>
+                <i className="fas fa-basket-shopping"></i>
                 {showNotification && (
                   <span
                     id="notification"
@@ -223,7 +221,7 @@ const CustomHeader = ({ currentUser, orders }) => {
                   currentUser ? setShowDropDown(true) : setShowDropDown(false)
                 }
               >
-                <i class="fa-regular fa-circle-user"></i>
+                <i className="fa-regular fa-circle-user"></i>
               </Nav.Link>
             </Link>
 
@@ -240,13 +238,13 @@ const CustomHeader = ({ currentUser, orders }) => {
               {currentUser?.isAdmin && (
                 <Link href="/admin" passHref>
                   <a className="account-dropdown-item">
-                    <i class="fas fa-list-check"></i> Management
+                    <i className="fas fa-list-check"></i> Management
                   </a>
                 </Link>
               )}
               <Link href="/signout" passHref>
                 <a className="account-dropdown-item">
-                  <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                  <i className="fa-solid fa-right-from-bracket"></i> Sign Out
                 </a>
               </Link>
             </div>
