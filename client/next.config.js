@@ -8,4 +8,8 @@ module.exports = {
     config.watchOptions.poll = 300;
     return config;
   },
+  i18n: {
+    locales: ["en"],
+    defaultLocale: "en",
+  },
 };

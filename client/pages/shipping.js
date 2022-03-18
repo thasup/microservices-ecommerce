@@ -22,7 +22,6 @@ const ShippingPage = ({ currentUser }) => {
     const data = localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
       : [];
-    console.log("initial storage shippingAddress:", data);
 
     if (currentUser?.shippingAddress) {
       // Set state to shippingAddress data in profile information
@@ -65,7 +64,12 @@ const ShippingPage = ({ currentUser }) => {
 
   return storageReady ? (
     <FormContainer>
-      <CheckoutSteps step1 step2 currentStep={"/shipping"} />
+      <CheckoutSteps
+        step1
+        step2
+        currentStep={"/shipping"}
+        currentUser={currentUser}
+      />
       <h1>Shipping</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="address" className="my-3">

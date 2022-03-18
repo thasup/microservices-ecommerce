@@ -8,6 +8,8 @@ import {
 
 import { Product } from "../models/product";
 import { Review } from "../models/review";
+import { ProductUpdatedPublisher } from "../events/publishers/ProductUpdatedPublisher";
+import { natsWrapper } from "../NatsWrapper";
 
 const router = express.Router();
 
@@ -53,6 +55,25 @@ router.delete(
         if (err) {
           console.log(err);
         }
+      });
+
+      new ProductUpdatedPublisher(natsWrapper.client).publish({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        userId: product.userId,
+        image: product.images.image1,
+        colors: product.colors,
+        sizes: product.sizes,
+        brand: product.brand,
+        category: product.category,
+        material: product.material,
+        description: product.description,
+        numReviews: product.numReviews,
+        rating: product.rating,
+        countInStock: product.countInStock,
+        isReserved: product.isReserved,
+        version: product.version,
       });
 
       const review = await Review.findOne({ userId: req.currentUser!.id });

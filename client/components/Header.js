@@ -223,7 +223,7 @@ const Header = ({ currentUser, orders }) => {
 
             {currentUser ? (
               <NavDropdown
-                title={<i class="fa-solid fa-circle-user"></i>}
+                title={<i className="fa-solid fa-circle-user"></i>}
                 id="dropdown-menu"
               >
                 {currentUser?.image && (

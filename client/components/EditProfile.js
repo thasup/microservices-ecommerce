@@ -55,7 +55,7 @@ const EditProfile = ({ user }) => {
     setTimeout(() => {
       setUpdateSuccess(false);
       setLoadingUpdate(false);
-    }, 5000);
+    }, 1000);
   }, [user, updateSuccess, errors]);
 
   const submitHandler = (e) => {

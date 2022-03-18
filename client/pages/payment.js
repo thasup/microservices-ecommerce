@@ -25,7 +25,6 @@ const PaymentPage = ({ currentUser }) => {
     const data = localStorage.getItem("paymentMethod")
       ? JSON.parse(localStorage.getItem("paymentMethod"))
       : [];
-    console.log("initial storage paymentMethod:", data);
 
     if (data !== undefined) {
       // Set state to paymentMethod data in localStorage
@@ -47,7 +46,13 @@ const PaymentPage = ({ currentUser }) => {
 
   return (
     <FormContainer>
-      <CheckoutSteps step1 step2 step3 currentStep={"/payment"} />
+      <CheckoutSteps
+        step1
+        step2
+        step3
+        currentStep={"/payment"}
+        currentUser={currentUser}
+      />
       <h1>Payment Method</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group>

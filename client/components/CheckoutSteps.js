@@ -18,59 +18,38 @@ const CheckoutSteps = ({
       defaultActiveKey={currentStep}
     >
       <Nav.Item>
-        {!currentUser ? (
-          <>
-            {step1 ? (
-              <Link href="/signin" passHref>
-                <Nav.Link activekey="signin">Sign In</Nav.Link>
-              </Link>
-            ) : (
-              <Nav.Link disabled>Sign In</Nav.Link>
-            )}
-          </>
-        ) : (
-          <>
-            {step1 ? (
-              <Link href="/cart" passHref>
-                <Nav.Link activekey="cart">Cart</Nav.Link>
-              </Link>
-            ) : (
-              <Nav.Link disabled>Cart</Nav.Link>
-            )}
-          </>
-        )}
+        <Link href={currentUser !== null ? "/cart" : "/signin"} passHref>
+          <Nav.Link
+            activekey={currentUser !== null ? "/cart" : "/signin"}
+            disabled={step1 ? false : true}
+          >
+            {currentUser !== null ? "Cart" : "Sign In"}
+          </Nav.Link>
+        </Link>
       </Nav.Item>
 
       <Nav.Item>
-        {step2 ? (
-          <Link href="/shipping" passHref>
-            <Nav.Link activekey="shipping">Shipping</Nav.Link>
-          </Link>
-        ) : (
-          <Nav.Link disabled>Shipping</Nav.Link>
-        )}
+        <Link href="/shipping" passHref>
+          <Nav.Link activekey="shipping" disabled={step2 ? false : true}>
+            Shipping
+          </Nav.Link>
+        </Link>
       </Nav.Item>
 
       <Nav.Item>
-        {step3 ? (
-          <Link href="/payment" passHref>
-            <Nav.Link activekey="payment">Payment</Nav.Link>
-          </Link>
-        ) : (
-          <Nav.Link disabled>Payment</Nav.Link>
-        )}
+        <Link href="/payment" passHref>
+          <Nav.Link activekey="payment" disabled={step3 ? false : true}>
+            Payment
+          </Nav.Link>
+        </Link>
       </Nav.Item>
 
       <Nav.Item>
-        {step4 ? (
-          <Link href="/checkout" passHref>
-            <Nav.Link activekey="checkout">Checkout</Nav.Link>
-          </Link>
-        ) : (
-          <Link href="/checkout" passHref>
-            <Nav.Link disabled>Checkout</Nav.Link>
-          </Link>
-        )}
+        <Link href="/checkout" passHref>
+          <Nav.Link activekey="checkout" disabled={step4 ? false : true}>
+            Checkout
+          </Nav.Link>
+        </Link>
       </Nav.Item>
     </Nav>
   );
