@@ -90,9 +90,12 @@ const EditProduct = ({ products }) => {
   };
 
   return loading ? (
-    <>
+    <div
+      className="d-flex justify-content-center align-items-center px-0"
+      style={{ marginTop: "80px" }}
+    >
       <Loader />
-    </>
+    </div>
   ) : (
     <Container className="app-container">
       <Row>

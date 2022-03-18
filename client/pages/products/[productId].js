@@ -259,7 +259,12 @@ const productDetail = ({ products, currentUser }) => {
         </Button>
       </Link>
       {!product.id || product.id !== productId ? (
-        <Loader />
+        <div
+          className="d-flex justify-content-center align-items-center px-0"
+          style={{ marginTop: "80px" }}
+        >
+          <Loader />
+        </div>
       ) : (
         <>
           <Row id="product-page">

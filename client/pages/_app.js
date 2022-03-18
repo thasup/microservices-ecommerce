@@ -21,7 +21,7 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <CustomHeader currentUser={currentUser} {...pageProps} />
-      <main className="pb-5">
+      <main className="pb-5" style={{ marginTop: "74px" }}>
         <Container fluid className="px-0">
           <Component currentUser={currentUser} {...pageProps} />
         </Container>

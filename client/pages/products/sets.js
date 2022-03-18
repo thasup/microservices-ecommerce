@@ -16,7 +16,12 @@ const Sets = ({ products, currentUser }) => {
   const sets = products.filter((product) => product.category === "Set");
 
   return loading ? (
-    <Loader />
+    <div
+      className="d-flex justify-content-center align-items-center px-0"
+      style={{ marginTop: "80px" }}
+    >
+      <Loader />
+    </div>
   ) : (
     <>
       <Row className="mx-0">

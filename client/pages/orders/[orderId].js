@@ -87,7 +87,12 @@ const OrderPage = ({ currentUser, order, user }) => {
   };
 
   return loading ? (
-    <Loader />
+    <div
+      className="d-flex justify-content-center align-items-center px-0"
+      style={{ marginTop: "80px" }}
+    >
+      <Loader />
+    </div>
   ) : (
     <Container className="app-container">
       <div className="px-0">
@@ -334,16 +339,6 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    // If user is not an admin redirect to home page
-    if (data.currentUser.isAdmin === false) {
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
-
     const { data: order } = await client
       .get(`/api/orders/${orderId}`)
       .catch((err) => {
