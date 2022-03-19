@@ -1,13 +1,11 @@
 import React from "react";
 import Head from "next/head";
 import { Container, SSRProvider } from "react-bootstrap";
-import Script from "next/script";
 
 import "../styles/bootstrap.min.css";
 import "../styles/globals.css";
 
 import buildClient from "../api/build-client";
-import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CustomHeader from "../components/CustomHeader";
 
@@ -33,7 +31,7 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
 
 MyApp.getInitialProps = async (appContext) => {
   const client = buildClient(appContext.ctx);
-  const { data: data } = await client.get("/api/users/currentuser");
+  const { data } = await client.get("/api/users/currentuser");
 
   let pageProps = {};
   if (appContext.Component.getInitialProps) {

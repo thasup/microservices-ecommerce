@@ -4,16 +4,13 @@ import Router from "next/router";
 
 import CheckoutSteps from "../components/CheckoutSteps";
 import FormContainer from "../components/FormContainer";
+import buildClient from "../api/build-client";
 
 const PaymentPage = ({ currentUser }) => {
   const [paymentMethod, setPaymentMethod] = useState("stripe");
   const [onSubmit, setOnSubmit] = useState(false);
 
   useEffect(() => {
-    if (!currentUser) {
-      Router.push("/signin");
-    }
-
     const shippingAddress = localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
       : [];
@@ -91,5 +88,24 @@ const PaymentPage = ({ currentUser }) => {
     </FormContainer>
   );
 };
+
+export async function getServerSideProps(context) {
+  const client = buildClient(context);
+  const { data } = await client.get("/api/users/currentuser").catch((err) => {
+    console.log(err.message);
+  });
+
+  // Redirect to signin page if user do not authorized
+  if (data.currentUser === null) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+}
 
 export default PaymentPage;
