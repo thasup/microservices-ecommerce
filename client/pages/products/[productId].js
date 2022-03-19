@@ -7,6 +7,7 @@ import {
   Button,
   Form,
   Spinner,
+  Breadcrumb,
 } from "react-bootstrap";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -198,11 +199,6 @@ const productDetail = ({ products, users, currentUser }) => {
 
   return (
     <div className={onMobile ? "px-3" : "px-5"}>
-      <Link href="/" passHref>
-        <Button variant="outline-dark" className="mb-3">
-          Back
-        </Button>
-      </Link>
       {!product.id || product.id !== productId ? (
         <div
           className="d-flex justify-content-center align-items-center px-0"
@@ -212,6 +208,20 @@ const productDetail = ({ products, users, currentUser }) => {
         </div>
       ) : (
         <>
+          <Breadcrumb>
+            <Link href="/" passHref>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+            </Link>
+
+            <Link
+              href="/products/[productId]"
+              as={`/products/${product.id}`}
+              passHref
+            >
+              <Breadcrumb.Item>{product.title}</Breadcrumb.Item>
+            </Link>
+          </Breadcrumb>
+
           <Row id="product-page">
             {onMobile ? (
               <Col className="mb-3">
@@ -464,7 +474,7 @@ const productDetail = ({ products, users, currentUser }) => {
             </Col>
           </Row>
 
-          <Row className="mt-3 pb-5">
+          <Row className="mt-4 pb-5">
             <Col sm={6} className="mb-3">
               <div className="px-0 mt-2">
                 <ProductDescription product={product} />

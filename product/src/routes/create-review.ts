@@ -77,11 +77,7 @@ router.post(
       product.numReviews = numReviews ?? product.numReviews;
       product.rating = parseFloat(productRating.toFixed(1)) ?? product.rating;
 
-      product.save(function (err) {
-        if (err) {
-          console.log(err);
-        }
-      });
+      await product.save();
 
       new ProductUpdatedPublisher(natsWrapper.client).publish({
         id: product.id,
