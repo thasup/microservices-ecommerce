@@ -21,9 +21,14 @@ header {
   font-size: 1.25rem;
 }
 
-.icon-menu .cart-icon,
-.icon-menu .account-icon {
+.icon-menu a {
   color: #000 !important;
+  font-size: 0;
+}
+
+.icon-menu .fa-circle-user,
+.icon-menu .fa-basket-shopping {
+  font-size: 1.25rem;
 }
 
 .icon-menu .cart-icon #notification {
@@ -175,6 +180,7 @@ a::before {
 .app-container {
   margin: 2rem auto 0;
   max-width: 90vw;
+  padding-top: 2rem;
 }
 
 .app-container h1 {
@@ -202,6 +208,12 @@ a::before {
 .form-check-input:checked {
   background-color: #000;
   border-color: #000;
+}
+
+.breadcrumb {
+  border: 0;
+  padding-top: 2rem;
+  padding-left: 0px;
 }
 
 /* Custom Compoent */
@@ -442,6 +454,11 @@ a::before {
 }
 
 /* Product page */
+#product-page {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
 #product-page .list-group-item {
   border: 0px;
 }
@@ -524,7 +541,7 @@ a::before {
 
 .trash-btn {
   position: absolute;
-  left: 95%;
+  left: 85%;
   width: 35px;
   height: 35px;
 }

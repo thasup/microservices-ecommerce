@@ -43,11 +43,11 @@ const EditAddress = ({ user }) => {
   });
 
   useEffect(() => {
-    if (user.shippingAddress !== undefined || updateSuccess) {
-      setAddress(user.shippingAddress.address);
-      setCity(user.shippingAddress.city);
-      setPostalCode(user.shippingAddress.postalCode);
-      setCountry(user.shippingAddress.country);
+    if (user.shippingAddress || updateSuccess) {
+      setAddress(user.shippingAddress?.address);
+      setCity(user.shippingAddress?.city);
+      setPostalCode(user.shippingAddress?.postalCode);
+      setCountry(user.shippingAddress?.country);
     }
 
     if (errors) {

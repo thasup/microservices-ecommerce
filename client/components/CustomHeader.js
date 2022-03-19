@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Nav, Container, Offcanvas } from "react-bootstrap";
 import Link from "next/link";
-import Image from "next/image";
 
-import buildClient from "../api/build-client";
-
-const CustomHeader = ({ currentUser, orders }) => {
+const CustomHeader = ({ currentUser }) => {
   const [showDropDown, setShowDropDown] = useState(false);
   const [numItems, setNumItems] = useState(0);
   const [showNotification, setShowNotification] = useState(false);
@@ -36,10 +33,6 @@ const CustomHeader = ({ currentUser, orders }) => {
 
     return () => clearInterval(interval);
   }, [currentUser, onMobile]);
-
-  // const myLoader = ({ src, width, quality }) => {
-  //   return `${src}&w=${width}&q=${quality || 40}`;
-  // };
 
   return onMobile ? (
     <header>
@@ -137,7 +130,7 @@ const CustomHeader = ({ currentUser, orders }) => {
           <Nav className="icon-menu d-flex flex-row">
             <Link href="/cart" passHref>
               <Nav.Link className="position-relative cart-icon">
-                <i className="fas fa-basket-shopping"></i>
+                <i className="fas fa-basket-shopping"></i> Cart
                 <span
                   id="notification"
                   className="position-absolute  badge border border-light rounded-circle bg-danger"
@@ -200,7 +193,7 @@ const CustomHeader = ({ currentUser, orders }) => {
           <Nav className="icon-menu d-flex flex-row position-relative">
             <Link href="/cart" passHref>
               <Nav.Link className="position-relative cart-icon">
-                <i className="fas fa-basket-shopping"></i>
+                <i className="fas fa-basket-shopping"></i> Cart
                 <span
                   id="notification"
                   className="position-absolute  badge border border-light rounded-circle bg-danger"
@@ -219,7 +212,7 @@ const CustomHeader = ({ currentUser, orders }) => {
                   currentUser ? setShowDropDown(true) : setShowDropDown(false)
                 }
               >
-                <i className="fa-regular fa-circle-user"></i>
+                <i className="fa-regular fa-circle-user"></i> Account
               </Nav.Link>
             </Link>
 
@@ -258,14 +251,5 @@ const CustomHeader = ({ currentUser, orders }) => {
     </header>
   );
 };
-
-export async function getServerSideProps(context) {
-  const client = buildClient(context);
-  const { data: orderData } = await client.get("/api/orders");
-
-  return {
-    props: { orders: orderData },
-  };
-}
 
 export default CustomHeader;

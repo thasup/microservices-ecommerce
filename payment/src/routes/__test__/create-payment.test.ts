@@ -31,6 +31,8 @@ it("returns a 401 when purchasing an order that doesnt belong to the user", asyn
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    numReviews: 0,
+    rating: 0,
     isReserved: false,
   });
   await product.save();
@@ -76,6 +78,8 @@ it("returns a 400 when purchasing a cancelled order", async () => {
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    numReviews: 0,
+    rating: 0,
     isReserved: false,
   });
   await product.save();
@@ -121,6 +125,8 @@ it("returns a 201 with valid inputs", async () => {
     colors: "White,Black",
     sizes: "S,M,L",
     countInStock: 1,
+    numReviews: 0,
+    rating: 0,
     isReserved: false,
   });
   await product.save();
