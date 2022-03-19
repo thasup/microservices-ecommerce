@@ -18,23 +18,21 @@ const Rating = ({ value, text, color, mobile }) => {
   }, []);
 
   return onMobile ? (
-    <>
-      <div className="rating">
-        <span>
-          <i
-            style={{ color }}
-            className={
-              value >= 5
-                ? "fa-solid fa-star"
-                : value >= 0.5
-                ? "fa-solid fa-star-half-alt"
-                : "fa-regular fa-star"
-            }
-          ></i>
-        </span>
-        <span> {value}</span>
-      </div>
-    </>
+    <div className="rating">
+      <span>
+        <i
+          style={{ color }}
+          className={
+            value >= 5
+              ? "fa-solid fa-star"
+              : value >= 0.5
+              ? "fa-solid fa-star-half-alt"
+              : "fa-regular fa-star"
+          }
+        ></i>
+      </span>
+      <span> {value}</span>
+    </div>
   ) : (
     <div className="rating">
       <span>
