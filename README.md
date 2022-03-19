@@ -1,10 +1,11 @@
 <!-- Add banner here -->
 
-<!-- ![Project Preview](https://www.dropbox.com/s/2u3s4up6rukd7fk/entire_page.png?raw=1) -->
+![Project Preview](docs/aurapan-shop-banner-2.png)
 
 # microservices-ecommerce
 
 <!-- Describe your project in brief -->
+
 Aurapan is the beautiful women's clothes e-commerce website built with **microservices** architecture, perform server-side rendering by **Next.js**, developing on **Google Cloud Platform** environment, integrated some CI/CD process by running automation test with **GitHub Action** workflow and deploy on **DigitalOcean** cluster with let's encrypt certificate.
 
 # Table of contents
@@ -44,8 +45,8 @@ Aurapan is the beautiful women's clothes e-commerce website built with **microse
 - Easily navigate with a cool navigation bar and footer
 - Optimize **Next.js** feature to maximize better performance and quality
 - Safely secure **HTTPS** protocol with let's encrypt certificate
-<!-- - Integrate wishlist in user data (work in process...) -->
-<!-- - Product search feature (work in process...) -->
+  <!-- - Integrate wishlist in user data (work in process...) -->
+  <!-- - Product search feature (work in process...) -->
 
 Something might be a bit exaggerated but one certain thing is that I put all my heart into creating this project. happy browsing! :D
 
@@ -54,6 +55,7 @@ Something might be a bit exaggerated but one certain thing is that I put all my 
 [(Back to top)](#table-of-contents)
 
 **Running on Google Cloud Platform**
+
 1. clone `google-cloud` branch on your computer
 2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/), [kubectl](https://kubernetes.io/docs/tasks/tools/)
 3. sign up free account with $100 on google cloud and sign up docker hub account
@@ -72,10 +74,10 @@ Something might be a bit exaggerated but one certain thing is that I put all my 
 16. create all [kubernetes secrets](#setup-env)
 17. run `skaffold dev` in this project root directory, make sure to use correct context before run command
 18. check all pods in a cluster by running `kubectl get pods`
-19. open a web browser enter your example URL to see this project come to live! 
-
+19. open a web browser enter your example URL to see this project come to live!
 
 **Running on Docker Desktop**
+
 1. work in process...
 
 # Setup ENV
@@ -99,6 +101,7 @@ Create all these secrets in kubernetes secret by run this command line
 [(Back to top)](#table-of-contents)
 
 **Deploy on DigitalOcean**
+
 1. sign up free account with $100 and 60 days trial
 2. create a Kubernetes cluster in new project
 3. generate new token, install [doctl](https://docs.digitalocean.com/reference/doctl/how-to/install/) and [kubectl](https://kubernetes.io/docs/tasks/tools/)
@@ -109,6 +112,7 @@ Create all these secrets in kubernetes secret by run this command line
 8. purchase a domain name with a promotion that can be very cheap as $1 for 1st year
 9. Separate k8s folder to k8s-dev and k8s-prod then copy `ingress-srv.yaml` file to both folders and edit host URL to a new domain name
 10. create `github workflow` for telling kubernetes cluster to use images we built by adding this
+
 ```
 - uses: digitalocean/action-doctl@v2
   with:
@@ -116,9 +120,11 @@ Create all these secrets in kubernetes secret by run this command line
 - run: doctl kubernetes cluster kubeconfig save <YOUR_CLUSTER_NAME>
 - run: kubectl rollout restart deployment <YOUR_DEPLOYMENT_NAME>
 ```
+
 11. add github action secret for digitalocean token key
 12. config domain name nameserver with your domain name registor website by custom add `ns1.digitalocean.com`, `ns2.digitalocean.com`. `ns3.digitalocean.com`
 13. add domain name in digital ocean at networking tab then create new record
+
 ```
 // A record
 HOSTNAME: @
@@ -130,6 +136,7 @@ HOSTNAME: www
 IN AN ALIAS OF: @
 TTL: 30
 ```
+
 14. waiting for 5-10 minutes for websie to setup
 15. browsing to your website with `HTTP` protocal
 16. if you want to browse with `HTTPS` this link is for you to follow [How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean Kubernetes](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes)
