@@ -21,9 +21,14 @@ header {
   font-size: 1.25rem;
 }
 
-.icon-menu .cart-icon,
-.icon-menu .account-icon {
+.icon-menu a {
   color: #000 !important;
+  font-size: 0;
+}
+
+.icon-menu .fa-circle-user,
+.icon-menu .fa-basket-shopping {
+  font-size: 1.25rem;
 }
 
 .icon-menu .cart-icon #notification {
