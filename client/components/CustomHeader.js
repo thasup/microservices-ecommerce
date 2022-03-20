@@ -62,7 +62,7 @@ const CustomHeader = ({ currentUser }) => {
             </Offcanvas.Header>
 
             <Offcanvas.Body className="d-flex flex-column justify-content-between ">
-              <Nav className="d-flex flex-column justify-content-start  pe-3">
+              <Nav className="offcanvas-body-upper d-flex flex-column justify-content-start  pe-3 ">
                 <Link href="/products/bestseller" passHref>
                   <Nav.Link>Bestseller</Nav.Link>
                 </Link>
@@ -89,7 +89,7 @@ const CustomHeader = ({ currentUser }) => {
               </Nav>
 
               {currentUser ? (
-                <Nav className="d-flex flex-row justify-content-evenly ">
+                <Nav className="offcanvas-body-lower d-flex flex-row justify-content-evenly ">
                   <Link href="/dashboard" passHref>
                     <Nav.Link>
                       <i className="fas fa-user"></i> Account
