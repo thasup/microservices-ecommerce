@@ -23,7 +23,7 @@ import SizeSelector from "../../components/SizeSelector";
 import ProductDescription from "../../components/ProductDescription";
 import Review from "../../components/Review";
 
-const productDetail = ({ products, users, currentUser }) => {
+const productDetail = ({ products, users, currentUser, isPurchase }) => {
   const { productId } = useRouter().query;
 
   const [quantity, setQuantity] = useState(1);
@@ -485,6 +485,7 @@ const productDetail = ({ products, users, currentUser }) => {
               <Review
                 product={product}
                 users={users}
+                isPurchase={isPurchase}
                 currentUser={currentUser}
               />
             </Col>
@@ -507,7 +508,38 @@ export async function getServerSideProps(context) {
     console.log(err.message);
   });
 
-  return { props: { products: productData, users: userData } };
+  const { data: myOrdersData } = await client
+    .get("/api/orders/myorders")
+    .catch((err) => {
+      console.log(err.message);
+    });
+
+  const { productId } = context.query;
+
+  // Check if user can write a review after purchased the product
+  const newArray = await myOrdersData.map((order) => {
+    if (order.isPaid === true) {
+      return order.cart.some((item) => item.productId === productId);
+    } else {
+      return false;
+    }
+  });
+
+  let isPurchase = false;
+  if (newArray.includes(true)) {
+    isPurchase = true;
+  } else {
+    isPurchase = false;
+  }
+
+  return {
+    props: {
+      products: productData,
+      users: userData,
+      myOrders: myOrdersData,
+      isPurchase,
+    },
+  };
 }
 
 export default productDetail;

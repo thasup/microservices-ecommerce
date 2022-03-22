@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Form, ListGroup, Row, Spinner } from "react-bootstrap";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import Loader from "./Loader";
 import Message from "./Message";
 import Rating from "./Rating";
 
-const Review = ({ currentUser, product, users }) => {
+const Review = ({ currentUser, product, users, isPurchase }) => {
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState("");
   const [comment, setComment] = useState("");
@@ -126,7 +126,7 @@ const Review = ({ currentUser, product, users }) => {
           <>
             {!product.reviews.some(
               (review) => review.userId === currentUser?.id
-            ) && (
+            ) && isPurchase ? (
               <ListGroup className="mt-3">
                 <h3>Write a Review</h3>
 
@@ -184,6 +184,10 @@ const Review = ({ currentUser, product, users }) => {
                   </Button>
                 </Form>
               </ListGroup>
+            ) : (
+              <Message variant="secondary">
+                You must purchase the product to write a review
+              </Message>
             )}
           </>
         ) : (
