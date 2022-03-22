@@ -47,7 +47,6 @@ const productDetail = ({ products, users, currentUser, isPurchase }) => {
       if (window.innerWidth <= 576) {
         setOnMobile(true);
       } else {
-        setInitialImage(false);
         setOnMobile(false);
       }
     }, 100);
