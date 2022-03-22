@@ -22,25 +22,22 @@ import ColorSelector from "../../components/ColorSelector";
 import SizeSelector from "../../components/SizeSelector";
 import ProductDescription from "../../components/ProductDescription";
 import Review from "../../components/Review";
+import Coupon from "../../components/Coupon";
 
-const productDetail = ({ products, users, currentUser }) => {
+const productDetail = ({ products, users, currentUser, isPurchase }) => {
   const { productId } = useRouter().query;
 
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
-  const [discount, setDiscount] = useState("");
-
   const [text, setText] = useState("Add To Cart");
+  const [discountFactor, setDiscountFactor] = useState(1);
+
   const [initialImage, setInitialImage] = useState(false);
   const [imageArray, setImageArray] = useState([]);
   const [imageEvent, setImageEvent] = useState(null);
-  const [discountFactor, setDiscountFactor] = useState(1);
 
   const [loadingAddToCart, setLoadingAddToCart] = useState(false);
-  const [loadingApply, setLoadingApply] = useState(false);
-  const [couponSuccess, setCouponSuccess] = useState(false);
-  const [couponError, setCouponError] = useState(false);
   const [onAdd, setOnAdd] = useState(false);
   const [onMobile, setOnMobile] = useState(false);
 
@@ -50,7 +47,6 @@ const productDetail = ({ products, users, currentUser }) => {
       if (window.innerWidth <= 576) {
         setOnMobile(true);
       } else {
-        setInitialImage(false);
         setOnMobile(false);
       }
     }, 100);
@@ -104,7 +100,7 @@ const productDetail = ({ products, users, currentUser }) => {
       image: product.images.image1,
       price: product.price,
       countInStock: product.countInStock - quantity,
-      discount: discountFactor,
+      discount: discountFactor || 1,
       productId: productId,
     };
 
@@ -146,39 +142,6 @@ const productDetail = ({ products, users, currentUser }) => {
     setImageArray(filterImages);
   }
 
-  const applyCoupon = (e) => {
-    e.preventDefault();
-    setLoadingApply(true);
-
-    switch (discount) {
-      case "free":
-        setDiscountFactor(0);
-        break;
-      case "grandsale":
-        setDiscountFactor(0.5);
-        break;
-      case "hotdeal":
-        setDiscountFactor(0.75);
-        break;
-      default:
-        setDiscountFactor(1);
-    }
-
-    if (
-      discount === "free" ||
-      discount === "grandsale" ||
-      discount === "hotdeal"
-    ) {
-      setCouponSuccess(true);
-      setCouponError(false);
-    } else {
-      setCouponSuccess(false);
-      setCouponError(true);
-    }
-
-    setLoadingApply(false);
-  };
-
   const addToCartHandler = (e) => {
     e.preventDefault();
     setLoadingAddToCart(true);
@@ -194,6 +157,12 @@ const productDetail = ({ products, users, currentUser }) => {
   const sizeSelectedHandler = (size) => {
     if (size !== null) {
       setSize(size);
+    }
+  };
+
+  const couponHandler = (factor) => {
+    if (factor) {
+      setDiscountFactor(factor);
     }
   };
 
@@ -376,51 +345,7 @@ const productDetail = ({ products, users, currentUser }) => {
                   {product.countInStock > 0 && (
                     <>
                       <ListGroup.Item>
-                        <Row className="px-3">
-                          {couponError && (
-                            <div className="px-0 py-2" style={{ color: "red" }}>
-                              {
-                                "The coupon code entered is not valid for this product"
-                              }
-                            </div>
-                          )}
-                          {couponSuccess ? (
-                            <div className="px-0 py-2">{`${discount} is applied`}</div>
-                          ) : (
-                            <>
-                              <Form.Control
-                                className="coupon-text text-uppercase"
-                                type="text"
-                                placeholder="Enter Coupon"
-                                value={discount}
-                                onChange={(e) => setDiscount(e.target.value)}
-                              ></Form.Control>
-                              <Button
-                                className="coupon-button"
-                                onClick={applyCoupon}
-                                type="button"
-                                variant="dark"
-                                placeholder="Enter Coupon"
-                              >
-                                {loadingApply ? (
-                                  <Spinner
-                                    animation="border"
-                                    role="status"
-                                    as="span"
-                                    size="sm"
-                                    aria-hidden="true"
-                                  >
-                                    <span className="visually-hidden">
-                                      Loading...
-                                    </span>
-                                  </Spinner>
-                                ) : (
-                                  <>Apply</>
-                                )}
-                              </Button>
-                            </>
-                          )}
-                        </Row>
+                        <Coupon callback={couponHandler} />
                       </ListGroup.Item>
                     </>
                   )}
@@ -441,11 +366,7 @@ const productDetail = ({ products, users, currentUser }) => {
                     ) : null}
                     <Button
                       onClick={
-                        color !== null
-                          ? size !== null
-                            ? addToCartHandler
-                            : null
-                          : null
+                        color !== null && size !== null && addToCartHandler
                       }
                       type="button"
                       variant="dark"
@@ -485,6 +406,7 @@ const productDetail = ({ products, users, currentUser }) => {
               <Review
                 product={product}
                 users={users}
+                isPurchase={isPurchase}
                 currentUser={currentUser}
               />
             </Col>
@@ -507,7 +429,38 @@ export async function getServerSideProps(context) {
     console.log(err.message);
   });
 
-  return { props: { products: productData, users: userData } };
+  const { data: myOrdersData } = await client
+    .get("/api/orders/myorders")
+    .catch((err) => {
+      console.log(err.message);
+    });
+
+  const { productId } = context.query;
+
+  // Check if user can write a review after purchased the product
+  const newArray = await myOrdersData.map((order) => {
+    if (order.isPaid === true) {
+      return order.cart.some((item) => item.productId === productId);
+    } else {
+      return false;
+    }
+  });
+
+  let isPurchase = false;
+  if (newArray.includes(true)) {
+    isPurchase = true;
+  } else {
+    isPurchase = false;
+  }
+
+  return {
+    props: {
+      products: productData,
+      users: userData,
+      myOrders: myOrdersData,
+      isPurchase,
+    },
+  };
 }
 
 export default productDetail;

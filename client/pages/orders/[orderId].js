@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Col, ListGroup, Row, Card, Button, Container } from "react-bootstrap";
+import {
+  Col,
+  ListGroup,
+  Row,
+  Card,
+  Button,
+  Container,
+  Spinner,
+} from "react-bootstrap";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
 import StripeCheckout from "react-stripe-checkout";
@@ -306,11 +314,21 @@ const OrderPage = ({ currentUser, order, user }) => {
                 </ListGroup.Item>
               ) : null}
 
-              {loadingDeliver && <Loader />}
               {deliverErrors}
               {currentUser?.isAdmin && order?.isPaid && !order.isDelivered && (
                 <ListGroup.Item className="d-grid">
                   <Button type="button" variant="dark" onClick={deliverHandler}>
+                    {loadingDeliver ? (
+                      <Spinner
+                        animation="border"
+                        role="status"
+                        as="span"
+                        size="sm"
+                        aria-hidden="true"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </Spinner>
+                    ) : null}{" "}
                     Mark As Delivered
                   </Button>
                 </ListGroup.Item>
