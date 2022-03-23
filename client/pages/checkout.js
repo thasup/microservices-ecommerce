@@ -26,7 +26,6 @@ const CheckoutPage = ({ currentUser }) => {
       jsonPaymentMethod: JSON.stringify(paymentMethod),
     },
     onSuccess: (order) => {
-      console.log(order);
       setOnSuccess(true);
       Router.push(`/orders/${order.id}`);
     },

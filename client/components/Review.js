@@ -35,7 +35,6 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
     method: "delete",
     body: {},
     onSuccess: () => {
-      console.log("successfully deleted a review");
       setLoading(false);
       Router.push(`/products/${product.id}`);
     },

@@ -36,7 +36,6 @@ const EditAddress = ({ user }) => {
       }),
     },
     onSuccess: (user) => {
-      console.log(user);
       setUpdateSuccess(true);
       Router.push("/dashboard");
     },
