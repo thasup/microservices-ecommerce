@@ -366,7 +366,11 @@ const productDetail = ({ products, users, currentUser, isPurchase }) => {
                     ) : null}
                     <Button
                       onClick={
-                        color !== null && size !== null && addToCartHandler
+                        color !== null
+                          ? size !== null
+                            ? addToCartHandler
+                            : null
+                          : null
                       }
                       type="button"
                       variant="dark"
@@ -419,6 +423,7 @@ const productDetail = ({ products, users, currentUser, isPurchase }) => {
 
 export async function getServerSideProps(context) {
   const client = buildClient(context);
+
   const { data: productData } = await client
     .get("/api/products")
     .catch((err) => {
@@ -429,35 +434,38 @@ export async function getServerSideProps(context) {
     console.log(err.message);
   });
 
-  const { data: myOrdersData } = await client
-    .get("/api/orders/myorders")
-    .catch((err) => {
-      console.log(err.message);
-    });
-
-  const { productId } = context.query;
-
-  // Check if user can write a review after purchased the product
-  const newArray = await myOrdersData.map((order) => {
-    if (order.isPaid === true) {
-      return order.cart.some((item) => item.productId === productId);
-    } else {
-      return false;
-    }
+  const { data } = await client.get("/api/users/currentuser").catch((err) => {
+    console.log(err.message);
   });
 
   let isPurchase = false;
-  if (newArray.includes(true)) {
-    isPurchase = true;
-  } else {
-    isPurchase = false;
+  if (data.currentUser !== null) {
+    const { data: myOrdersData } = await client
+      .get("/api/orders/myorders")
+      .catch((err) => {
+        console.log(err.message);
+      });
+
+    const { productId } = context.query;
+
+    // Check if user can write a review after purchased the product
+    const newArray = await myOrdersData.map((order) => {
+      if (order.isPaid === true) {
+        return order.cart.some((item) => item.productId === productId);
+      } else {
+        return false;
+      }
+    });
+
+    if (newArray.includes(true)) {
+      isPurchase = true;
+    }
   }
 
   return {
     props: {
       products: productData,
       users: userData,
-      myOrders: myOrdersData,
       isPurchase,
     },
   };
