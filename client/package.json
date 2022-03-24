@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@thasup-dev/common": "^1.0.35",
     "axios": "^0.26.0",
     "next": "12.0.10",
     "react": "17.0.2",
