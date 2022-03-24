@@ -16,7 +16,6 @@ import Link from "next/link";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import NextImage from "../components/NextImage";
-import buildClient from "../api/build-client";
 
 const CartPage = ({ currentUser, products }) => {
   const [cart, setCart] = useState(null);
@@ -438,14 +437,5 @@ const CartPage = ({ currentUser, products }) => {
     </Container>
   ) : null;
 };
-
-export async function getServerSideProps(context) {
-  const client = buildClient(context);
-  const { data } = await client.get("/api/products").catch((err) => {
-    console.log(err.message);
-  });
-
-  return { props: { products: data } };
-}
 
 export default CartPage;

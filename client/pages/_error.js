@@ -1,6 +1,9 @@
 function Error({ statusCode }) {
   return (
-    <p>
+    <p
+      className="d-flex justify-content-center align-items-center"
+      style={{ height: "90vh" }}
+    >
       {statusCode
         ? `An error ${statusCode} occurred on server`
         : "An error occurred on client"}

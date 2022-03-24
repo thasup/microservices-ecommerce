@@ -2,7 +2,6 @@ import React from "react";
 import { Row, Col, Container, Nav } from "react-bootstrap";
 import dynamic from "next/dynamic";
 
-import buildClient from "../../api/build-client";
 import EditProfile from "../../components/EditProfile";
 import EditSecurity from "../../components/EditSecurity";
 import EditAddress from "../../components/EditAddress";
@@ -23,7 +22,7 @@ const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
   ssr: false,
 });
 
-const Dashboard = ({ currentUser, users, orders, products }) => {
+const Dashboard = ({ currentUser, users, myOrders, products }) => {
   const user = users.find((user) => user.id === currentUser?.id);
 
   return (
@@ -91,7 +90,7 @@ const Dashboard = ({ currentUser, users, orders, products }) => {
               </DynamicTabPane>
 
               <DynamicTabPane eventKey="orders">
-                <UserOrderList orders={orders} />
+                <UserOrderList myOrders={myOrders} />
               </DynamicTabPane>
 
               <DynamicTabPane eventKey="wishlist">
@@ -108,50 +107,5 @@ const Dashboard = ({ currentUser, users, orders, products }) => {
     </Container>
   );
 };
-
-export async function getServerSideProps(context) {
-  const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser").catch((err) => {
-    console.log(err.message);
-  });
-
-  // Redirect to signin page if user do not authorized
-  if (data.currentUser === null) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  } else {
-    let { data: userData } = await client.get("/api/users").catch((err) => {
-      console.log(err.message);
-    });
-    let { data: orderData } = await client
-      .get("/api/orders/myorders")
-      .catch((err) => {
-        console.log(err.message);
-      });
-    let { data: productData } = await client
-      .get("/api/products")
-      .catch((err) => {
-        console.log(err.message);
-      });
-
-    if (userData === (null || undefined)) {
-      return (userData = []);
-    }
-    if (orderData === (null || undefined)) {
-      return (orderData = []);
-    }
-    if (productData === (null || undefined)) {
-      return (productData = []);
-    }
-
-    return {
-      props: { users: userData, orders: orderData, products: productData },
-    };
-  }
-}
 
 export default Dashboard;

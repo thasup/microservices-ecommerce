@@ -16,11 +16,10 @@ import { PayPalButton } from "react-paypal-button-v2";
 import NextImage from "../../components/NextImage";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import buildClient from "../../api/build-client";
 import useRequest from "../../hooks/use-request";
 import ExpireTimer from "../../components/ExpireTimer";
 
-const OrderPage = ({ currentUser, order, user }) => {
+const OrderPage = ({ currentUser, orders, users }) => {
   const { orderId } = useRouter().query;
 
   const [sdkReady, setSdkReady] = useState(false);
@@ -28,6 +27,9 @@ const OrderPage = ({ currentUser, order, user }) => {
   const [loadingPay, setLoadingPay] = useState(false);
   const [loadingDeliver, setLoadingDeliver] = useState(false);
   const [paypalLoaded, setPaypalLoaded] = useState(false);
+
+  const order = orders.find((order) => order.id === orderId);
+  const user = users.find((user) => user.id === order.userId);
 
   const { doRequest: payOrder, errors: paymentErrors } = useRequest({
     url: `/api/payments`,
@@ -340,37 +342,5 @@ const OrderPage = ({ currentUser, order, user }) => {
     </Container>
   );
 };
-
-export async function getServerSideProps(context) {
-  const { orderId } = context.query;
-  const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser").catch((err) => {
-    console.log(err.message);
-  });
-
-  // Redirect to signin page if user do not authorized
-  if (data.currentUser === null) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  } else {
-    const { data: order } = await client
-      .get(`/api/orders/${orderId}`)
-      .catch((err) => {
-        console.log(err.message);
-      });
-
-    const { data: users } = await client.get(`/api/users/`).catch((err) => {
-      console.log(err.message);
-    });
-
-    const user = users.find((user) => user.id === order.userId);
-
-    return { props: { order: order, user: user } };
-  }
-}
 
 export default OrderPage;

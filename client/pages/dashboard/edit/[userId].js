@@ -4,7 +4,6 @@ import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 
 import useRequest from "../../../hooks/use-request";
 import Loader from "../../../components/Loader";
-import buildClient from "../../../api/build-client";
 
 const UserEdit = ({ users }) => {
   const { userId } = useRouter().query;
@@ -244,37 +243,5 @@ const UserEdit = ({ users }) => {
     </Container>
   );
 };
-
-export async function getServerSideProps(context) {
-  const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser").catch((err) => {
-    console.log(err.message);
-  });
-
-  // Redirect to signin page or home if user do not authorized
-  if (data.currentUser === null) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  } else if (data.currentUser.isAdmin === false) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  } else {
-    const { data: userData } = await client.get("/api/users").catch((err) => {
-      console.log(err.message);
-    });
-
-    return {
-      props: { users: userData },
-    };
-  }
-}
 
 export default UserEdit;

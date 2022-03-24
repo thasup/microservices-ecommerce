@@ -5,7 +5,7 @@ import { Button, Col, Row, Table } from "react-bootstrap";
 import CustomTooltip from "./CustomTooltip";
 import ExpireTimer from "./ExpireTimer";
 
-const UserOrderList = ({ orders }) => {
+const UserOrderList = ({ myOrders }) => {
   return (
     <Row className="align-items-center">
       <Col>
@@ -24,7 +24,7 @@ const UserOrderList = ({ orders }) => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order, index) => (
+            {myOrders.map((order, index) => (
               <tr key={order.id}>
                 <td>
                   <CustomTooltip index={index} mongoId={order.id} />{" "}
