@@ -15,18 +15,18 @@ import { deleteUserRouter } from "./routes/delete-user";
 const app = express();
 app.set("trust proxy", true);
 app.use(express.json());
-app.use(
-  cors({
-    origin: ["https://www.aurapan.com", "https://localhost:3000"],
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["https://www.aurapan.com", "https://localhost:3000"],
+//     methods: ["GET", "POST", "PATCH", "DELETE"],
+//     credentials: true,
+//     exposedHeaders: ["set-cookie"],
+//   })
+// );
 app.use(
   cookieSession({
     signed: false,
-    secure: process.env.NODE_ENV === "production",
+    secure: false,
   })
 );
 

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --legacy-watch ./src/index.ts",
     "prod": "set NODE_ENV=production && ts-node-dev --poll ./src/index.ts",
-    "test": "set NODE_ENV=development && jest --watchAll --no-cache",
+    "test": "jest --watchAll --no-cache",
     "test:ci": "jest"
   },
   "jest": {
