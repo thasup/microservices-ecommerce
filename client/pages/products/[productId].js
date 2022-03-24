@@ -14,7 +14,6 @@ import Link from "next/link";
 
 import Loader from "../../components/Loader";
 import Rating from "../../components/Rating";
-import buildClient from "../../api/build-client";
 import NextImage from "../../components/NextImage";
 import ImageSwiper from "../../components/ImageSwiper";
 import SocialShare from "../../components/SocialShare";
@@ -24,7 +23,7 @@ import ProductDescription from "../../components/ProductDescription";
 import Review from "../../components/Review";
 import Coupon from "../../components/Coupon";
 
-const productDetail = ({ products, users, currentUser, isPurchase }) => {
+const productDetail = ({ products, users, currentUser, myOrders }) => {
   const { productId } = useRouter().query;
 
   const [quantity, setQuantity] = useState(1);
@@ -37,11 +36,27 @@ const productDetail = ({ products, users, currentUser, isPurchase }) => {
   const [imageArray, setImageArray] = useState([]);
   const [imageEvent, setImageEvent] = useState(null);
 
+  const [isPurchase, setIsPurchase] = useState(false);
   const [loadingAddToCart, setLoadingAddToCart] = useState(false);
   const [onAdd, setOnAdd] = useState(false);
   const [onMobile, setOnMobile] = useState(false);
 
-  useEffect(() => {
+  useEffect(async () => {
+    if (myOrders) {
+      // Check if user can write a review after purchased the product
+      const newArray = await myOrdersData.map((order) => {
+        if (order.isPaid === true) {
+          return order.cart.some((item) => item.productId === productId);
+        } else {
+          return false;
+        }
+      });
+
+      if (newArray.includes(true)) {
+        setIsPurchase(true);
+      }
+    }
+
     // Update window innerWidth every 0.1 second
     const interval = setInterval(() => {
       if (window.innerWidth <= 576) {
@@ -420,55 +435,5 @@ const productDetail = ({ products, users, currentUser, isPurchase }) => {
     </div>
   );
 };
-
-export async function getServerSideProps(context) {
-  const client = buildClient(context);
-
-  const { data: productData } = await client
-    .get("/api/products")
-    .catch((err) => {
-      console.log(err.message);
-    });
-
-  const { data: userData } = await client.get("/api/users").catch((err) => {
-    console.log(err.message);
-  });
-
-  const { data } = await client.get("/api/users/currentuser").catch((err) => {
-    console.log(err.message);
-  });
-
-  let isPurchase = false;
-  if (data.currentUser !== null) {
-    const { data: myOrdersData } = await client
-      .get("/api/orders/myorders")
-      .catch((err) => {
-        console.log(err.message);
-      });
-
-    const { productId } = context.query;
-
-    // Check if user can write a review after purchased the product
-    const newArray = await myOrdersData.map((order) => {
-      if (order.isPaid === true) {
-        return order.cart.some((item) => item.productId === productId);
-      } else {
-        return false;
-      }
-    });
-
-    if (newArray.includes(true)) {
-      isPurchase = true;
-    }
-  }
-
-  return {
-    props: {
-      products: productData,
-      users: userData,
-      isPurchase,
-    },
-  };
-}
 
 export default productDetail;
