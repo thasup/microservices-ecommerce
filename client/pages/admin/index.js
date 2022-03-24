@@ -2,7 +2,6 @@ import React from "react";
 import dynamic from "next/dynamic";
 import { Col, Container, Nav, Row } from "react-bootstrap";
 
-import buildClient from "../../api/build-client";
 import CreateProduct from "../../components/CreateProduct";
 import UserList from "../../components/UserList";
 import OrderList from "../../components/OrderList";
@@ -80,51 +79,5 @@ const AdminDashboard = ({ products, users, orders }) => {
     </Container>
   );
 };
-
-export async function getServerSideProps(context) {
-  const client = buildClient(context);
-  let { data } = await client.get("/api/users/currentuser");
-
-  // Redirect to signin page or home if user do not authorized
-  if (data.currentUser?.isAdmin) {
-    let { data: productData } = await client
-      .get("/api/products")
-      .catch((err) => {
-        console.log(err.message);
-      });
-    let { data: userData } = await client.get("/api/users").catch((err) => {
-      console.log(err.message);
-    });
-    let { data: orderData } = await client.get("/api/orders").catch((err) => {
-      console.log(err.message);
-    });
-
-    if (productData === (null || undefined)) {
-      return (productData = []);
-    } else if (userData === (null || undefined)) {
-      return (userData = []);
-    } else if (orderData === (null || undefined)) {
-      return (orderData = []);
-    }
-
-    return {
-      props: { products: productData, users: userData, orders: orderData },
-    };
-  } else if (data.currentUser?.isAdmin === false) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  } else {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
-}
 
 export default AdminDashboard;

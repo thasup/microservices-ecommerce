@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 
-import buildClient from "../../api/build-client";
 import Loader from "../../components/Loader";
 import Product from "../../components/Product";
 
@@ -35,14 +34,5 @@ const Coats = ({ products, currentUser }) => {
     </>
   );
 };
-
-export async function getServerSideProps(context) {
-  const client = buildClient(context);
-  const { data } = await client.get("/api/products").catch((err) => {
-    console.log(err.message);
-  });
-
-  return { props: { products: data } };
-}
 
 export default Coats;

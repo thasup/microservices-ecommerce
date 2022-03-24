@@ -3,7 +3,6 @@ import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import Router, { useRouter } from "next/router";
 
 import CustomCarousol from "../../../components/CustomCarousel";
-import buildClient from "../../../api/build-client";
 import useRequest from "../../../hooks/use-request";
 import Loader from "../../../components/Loader";
 
@@ -266,39 +265,5 @@ const EditProduct = ({ products }) => {
     </Container>
   );
 };
-
-export async function getServerSideProps(context) {
-  const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser").catch((err) => {
-    console.log(err.message);
-  });
-
-  // Redirect to signin page or home if user do not authorized
-  if (data.currentUser === null) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  } else if (data.currentUser.isAdmin === false) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  } else {
-    const { data: productData } = await client
-      .get("/api/products")
-      .catch((err) => {
-        console.log(err.message);
-      });
-
-    return {
-      props: { products: productData },
-    };
-  }
-}
 
 export default EditProduct;
