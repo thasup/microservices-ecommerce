@@ -32,7 +32,6 @@ const EditProfile = ({ user }) => {
       jsonShippingAddress: user.shippingAddress,
     },
     onSuccess: (user) => {
-      console.log(user);
       setUpdateSuccess(true);
       Router.push("/dashboard");
     },

@@ -46,7 +46,6 @@ const UserEdit = ({ users }) => {
       }),
     },
     onSuccess: (user) => {
-      console.log(user);
       Router.push("/admin");
       setLoading(false);
     },

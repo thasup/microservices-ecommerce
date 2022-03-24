@@ -38,7 +38,6 @@ const OrderPage = ({ currentUser, orders, users }) => {
       orderId: orderId,
     },
     onSuccess: (payment) => {
-      console.log(payment);
       setLoading(false);
       Router.push(`/orders/${orderId}`);
     },
@@ -49,7 +48,6 @@ const OrderPage = ({ currentUser, orders, users }) => {
     method: "patch",
     body: {},
     onSuccess: (order) => {
-      console.log(order);
       setLoadingDeliver(false);
       Router.push(`/orders/${orderId}`);
     },

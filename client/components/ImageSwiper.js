@@ -59,8 +59,6 @@ const ImageSwiper = ({ product }) => {
       }}
       // scrollbar={{ draggable: true }}
       zoom={{}}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
     >
       {imageArray.map((img, index) => (
         <SwiperSlide key={index}>

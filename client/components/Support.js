@@ -33,26 +33,6 @@ const Support = ({ user }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    // axios
-    //   .post("/contact", {
-    //     name,
-    //     email,
-    //     subject,
-    //     message,
-    //   })
-    //   .then(function (response) {
-    //     setLoading(false);
-    //     setText("Thank you for submit comment!");
-    //     setShowMessage(true);
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     setLoading(false);
-    //     setText(error);
-    //     setShowMessage(true);
-    //     console.log(error);
-    //   });
   };
 
   return (

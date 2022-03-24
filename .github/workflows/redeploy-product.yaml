@@ -27,3 +27,14 @@ jobs:
 
       # push an image to docker hub
       - run: docker push thasup/product
+
+      # use and cliententicate doctl
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      # give credential to k8s cluster
+      - run: doctl kubernetes cluster kubeconfig save not-a-covid-cluster
+
+      # restart deployment
+      - run: kubectl rollout restart deployment product-depl
