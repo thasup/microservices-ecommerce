@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import "express-async-errors";
 import cookieSession from "cookie-session";
 import { NotFoundError, errorHandler } from "@thasup-dev/common";
