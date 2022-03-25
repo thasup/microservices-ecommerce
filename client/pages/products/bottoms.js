@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 
@@ -15,22 +16,29 @@ const Bottoms = ({ products, currentUser }) => {
 
   const bottoms = products.filter((product) => product.category === "Bottom");
 
-  return loading ? (
-    <div
-      className="d-flex justify-content-center align-items-center px-0"
-      style={{ marginTop: "80px" }}
-    >
-      <Loader />
-    </div>
-  ) : (
+  return (
     <>
-      <Row className="mx-0">
-        {bottoms.map((item) => (
-          <Col key={item.id} xs={6} md={4} xl={3} className="p-0">
-            <Product product={item} currentUser={currentUser} />
-          </Col>
-        ))}
-      </Row>
+      <Head>
+        <title>Bottoms | Aurapan</title>
+      </Head>
+      {loading ? (
+        <div
+          className="d-flex justify-content-center align-items-center px-0"
+          style={{ marginTop: "80px" }}
+        >
+          <Loader />
+        </div>
+      ) : (
+        <>
+          <Row className="mx-0">
+            {bottoms.map((item) => (
+              <Col key={item.id} xs={6} md={4} xl={3} className="p-0">
+                <Product product={item} currentUser={currentUser} />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
     </>
   );
 };
