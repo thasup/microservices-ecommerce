@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import Router from "next/router";
+import Head from "next/head";
 
 import FormContainer from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
@@ -58,66 +59,73 @@ const ShippingPage = ({ currentUser }) => {
     setOnSubmit(true);
   };
 
-  return storageReady ? (
-    <FormContainer>
-      <CheckoutSteps
-        step1
-        step2
-        currentStep={"/shipping"}
-        currentUser={currentUser}
-      />
-      <h1>Shipping</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId="address" className="my-3">
-          <Form.Label>Address</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter address"
-            value={address}
-            required
-            onChange={(e) => setAddress(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+  return (
+    <>
+      <Head>
+        <title>Shipping Address | Aurapan</title>
+      </Head>
+      {storageReady ? (
+        <FormContainer>
+          <CheckoutSteps
+            step1
+            step2
+            currentStep={"/shipping"}
+            currentUser={currentUser}
+          />
+          <h1>Shipping</h1>
+          <Form onSubmit={submitHandler}>
+            <Form.Group controlId="address" className="my-3">
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter address"
+                value={address}
+                required
+                onChange={(e) => setAddress(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-        <Form.Group controlId="city" className="my-3">
-          <Form.Label>City</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter city"
-            value={city}
-            required
-            onChange={(e) => setCity(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+            <Form.Group controlId="city" className="my-3">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter city"
+                value={city}
+                required
+                onChange={(e) => setCity(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-        <Form.Group controlId="postalCode" className="my-3">
-          <Form.Label>Postal Code</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter postal code"
-            value={postalCode}
-            required
-            onChange={(e) => setPostalCode(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+            <Form.Group controlId="postalCode" className="my-3">
+              <Form.Label>Postal Code</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter postal code"
+                value={postalCode}
+                required
+                onChange={(e) => setPostalCode(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-        <Form.Group controlId="country" className="my-3">
-          <Form.Label>Country</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter country"
-            value={country}
-            required
-            onChange={(e) => setCountry(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+            <Form.Group controlId="country" className="my-3">
+              <Form.Label>Country</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter country"
+                value={country}
+                required
+                onChange={(e) => setCountry(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-        <Button type="submit" variant="dark">
-          Continue
-        </Button>
-      </Form>
-    </FormContainer>
-  ) : null;
+            <Button type="submit" variant="dark">
+              Continue
+            </Button>
+          </Form>
+        </FormContainer>
+      ) : null}
+    </>
+  );
 };
 
 export default ShippingPage;

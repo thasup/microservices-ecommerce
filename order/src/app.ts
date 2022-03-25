@@ -9,6 +9,7 @@ import { cancelOrderRouter } from "./routes/cancel-order";
 import { getOrderRouter } from "./routes/get-order";
 import { createOrderRouter } from "./routes/create-order";
 import { deliverOrderRouter } from "./routes/deliver-order";
+import { showProductRouter } from "./routes/show-product";
 
 const app = express();
 app.set("trust proxy", true);
@@ -21,6 +22,7 @@ app.use(
 );
 app.use(currentUser);
 
+app.use(showProductRouter);
 app.use(showMyOrderRouter);
 app.use(getOrderRouter);
 app.use(deliverOrderRouter);

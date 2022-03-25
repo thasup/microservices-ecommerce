@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Head from "next/head";
 
 import Loader from "../../components/Loader";
 import Rating from "../../components/Rating";
@@ -42,9 +43,9 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   const [onMobile, setOnMobile] = useState(false);
 
   useEffect(async () => {
-    if (myOrders) {
+    if (myOrders && myOrders.length !== 0) {
       // Check if user can write a review after purchased the product
-      const newArray = await myOrdersData.map((order) => {
+      const newArray = await myOrders.map((order) => {
         if (order.isPaid === true) {
           return order.cart.some((item) => item.productId === productId);
         } else {
@@ -182,257 +183,262 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   };
 
   return (
-    <div className={onMobile ? "px-3" : "px-5"}>
-      {!product.id || product.id !== productId ? (
-        <div
-          className="d-flex justify-content-center align-items-center px-0"
-          style={{ marginTop: "80px" }}
-        >
-          <Loader />
-        </div>
-      ) : (
-        <>
-          <Breadcrumb>
-            <Link href="/" passHref>
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
-            </Link>
+    <>
+      <Head>
+        <title>{product.title} | Aurapan</title>
+      </Head>
+      <div className={onMobile ? "px-3" : "px-5"}>
+        {!product.id || product.id !== productId ? (
+          <div
+            className="d-flex justify-content-center align-items-center px-0"
+            style={{ marginTop: "80px" }}
+          >
+            <Loader />
+          </div>
+        ) : (
+          <>
+            <Breadcrumb>
+              <Link href="/" passHref>
+                <Breadcrumb.Item>Home</Breadcrumb.Item>
+              </Link>
 
-            <Link
-              href="/products/[productId]"
-              as={`/products/${product.id}`}
-              passHref
-            >
-              <Breadcrumb.Item>{product.title}</Breadcrumb.Item>
-            </Link>
-          </Breadcrumb>
+              <Link
+                href="/products/[productId]"
+                as={`/products/${product.id}`}
+                passHref
+              >
+                <Breadcrumb.Item>{product.title}</Breadcrumb.Item>
+              </Link>
+            </Breadcrumb>
 
-          <Row id="product-page">
-            {onMobile ? (
-              <Col className="mb-3">
-                <ImageSwiper product={product} />
-              </Col>
-            ) : (
-              <>
-                <Col sm={1} className="mb-3">
-                  {imageArray.map((img, index) => (
-                    <div
-                      className="product-side-img"
-                      id={`side-img-${index}`}
-                      key={index}
-                      onClick={(e) => setImageEvent(e)}
-                    >
-                      <NextImage
-                        src={img}
-                        alt={`product_image_${index}`}
-                        priority={true}
-                        quality={30}
+            <Row id="product-page">
+              {onMobile ? (
+                <Col className="mb-3">
+                  <ImageSwiper product={product} />
+                </Col>
+              ) : (
+                <>
+                  <Col sm={1} className="mb-3">
+                    {imageArray.map((img, index) => (
+                      <div
+                        className="product-side-img"
+                        id={`side-img-${index}`}
+                        key={index}
+                        onClick={(e) => setImageEvent(e)}
+                      >
+                        <NextImage
+                          src={img}
+                          alt={`product_image_${index}`}
+                          priority={true}
+                          quality={30}
+                        />
+                      </div>
+                    ))}
+                  </Col>
+
+                  <Col sm={5} className="mb-3 position-relative">
+                    {imageArray.map((img, index) => (
+                      <div className="product-main-img" key={index}>
+                        <NextImage
+                          src={img}
+                          alt={`product_image_${index}`}
+                          priority={true}
+                          quality={75}
+                        />
+                      </div>
+                    ))}
+                  </Col>
+                </>
+              )}
+
+              <Col sm={6}>
+                <ListGroup variant="flush" className="mb-3">
+                  <ListGroup.Item className="py-0">
+                    <Rating value={product.rating} mobile={false} />
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <h1>{product.title}</h1>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <h1 id="price">$ {product.price}</h1>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <h3>Color</h3>
+                    <div className="my-1 px-0">
+                      <ColorSelector
+                        product={product}
+                        callback={colorSelectedHandler}
+                        margin={"5px"}
+                        size={"2rem"}
+                        flex={"start"}
                       />
                     </div>
-                  ))}
-                </Col>
-
-                <Col sm={5} className="mb-3 position-relative">
-                  {imageArray.map((img, index) => (
-                    <div className="product-main-img" key={index}>
-                      <NextImage
-                        src={img}
-                        alt={`product_image_${index}`}
-                        priority={true}
-                        quality={75}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <h3>Size</h3>
+                    <div className="my-1 px-0">
+                      <SizeSelector
+                        product={product}
+                        width={"35px"}
+                        callback={sizeSelectedHandler}
                       />
                     </div>
-                  ))}
-                </Col>
-              </>
-            )}
-
-            <Col sm={6}>
-              <ListGroup variant="flush" className="mb-3">
-                <ListGroup.Item className="py-0">
-                  <Rating value={product.rating} mobile={false} />
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <h1>{product.title}</h1>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <h1 id="price">$ {product.price}</h1>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <h3>Color</h3>
-                  <div className="my-1 px-0">
-                    <ColorSelector
-                      product={product}
-                      callback={colorSelectedHandler}
-                      margin={"5px"}
-                      size={"2rem"}
-                      flex={"start"}
-                    />
-                  </div>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <h3>Size</h3>
-                  <div className="my-1 px-0">
-                    <SizeSelector
-                      product={product}
-                      width={"35px"}
-                      callback={sizeSelectedHandler}
-                    />
-                  </div>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <h3>QTY</h3>
-                  <div className="my-1 quantity-selector d-flex flex-row align-items-center">
-                    <div
-                      className="qty-btn decrease-btn"
-                      onClick={() => setQuantity(quantity - 1)}
-                    >
-                      -
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <h3>QTY</h3>
+                    <div className="my-1 quantity-selector d-flex flex-row align-items-center">
+                      <div
+                        className="qty-btn decrease-btn"
+                        onClick={() => setQuantity(quantity - 1)}
+                      >
+                        -
+                      </div>
+                      <Form.Group
+                        controlId="countInStock"
+                        className="quantity-box"
+                      >
+                        <Form.Control
+                          type="number"
+                          value={quantity}
+                          onChange={(e) => setQuantity(Number(e.target.value))}
+                        ></Form.Control>
+                      </Form.Group>
+                      <div
+                        className="qty-btn increase-btn"
+                        onClick={() => setQuantity(quantity + 1)}
+                      >
+                        +
+                      </div>
                     </div>
-                    <Form.Group
-                      controlId="countInStock"
-                      className="quantity-box"
-                    >
-                      <Form.Control
-                        type="number"
-                        value={quantity}
-                        onChange={(e) => setQuantity(Number(e.target.value))}
-                      ></Form.Control>
-                    </Form.Group>
-                    <div
-                      className="qty-btn increase-btn"
-                      onClick={() => setQuantity(quantity + 1)}
-                    >
-                      +
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    <div className="my-1 px-0">
+                      <p>{product.description}</p>
                     </div>
-                  </div>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <div className="my-1 px-0">
-                    <p>{product.description}</p>
-                  </div>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <SocialShare product={product} />
-                </ListGroup.Item>
-              </ListGroup>
-
-              <Card className="product-page-box">
-                <ListGroup>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>
-                        <h5>Status:</h5>
-                      </Col>
-                      <Col>
-                        <h6>
-                          {product.countInStock > 0
-                            ? "In Stock"
-                            : "Out of Stock"}
-                        </h6>
-                      </Col>
-                    </Row>
                   </ListGroup.Item>
 
                   <ListGroup.Item>
-                    <Row>
-                      <Col>
-                        <h5>Brand:</h5>
-                      </Col>
-                      <Col>
-                        <h6>{product.brand}</h6>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>
-                        <h5>Category:</h5>
-                      </Col>
-                      <Col>
-                        <h6>{product.category}</h6>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-
-                  {product.countInStock > 0 && (
-                    <>
-                      <ListGroup.Item>
-                        <Coupon callback={couponHandler} />
-                      </ListGroup.Item>
-                    </>
-                  )}
-
-                  <ListGroup.Item className="d-grid">
-                    {color === null && size === null ? (
-                      <div className="px-0 py-2" style={{ color: "red" }}>
-                        {"Please select color and size option"}
-                      </div>
-                    ) : color === null && size !== null ? (
-                      <div className="px-0 py-2" style={{ color: "red" }}>
-                        {"Please select color option"}
-                      </div>
-                    ) : color !== null && size === null ? (
-                      <div className="px-0 py-2" style={{ color: "red" }}>
-                        {"Please select size option"}
-                      </div>
-                    ) : null}
-                    <Button
-                      onClick={
-                        color !== null
-                          ? size !== null
-                            ? addToCartHandler
-                            : null
-                          : null
-                      }
-                      type="button"
-                      variant="dark"
-                      disabled={
-                        color === null ||
-                        size === null ||
-                        product.countInStock < 1
-                      }
-                    >
-                      {loadingAddToCart ? (
-                        <Spinner
-                          animation="border"
-                          role="status"
-                          as="span"
-                          size="sm"
-                          aria-hidden="true"
-                        >
-                          <span className="visually-hidden">Loading...</span>
-                        </Spinner>
-                      ) : null}{" "}
-                      {text}
-                    </Button>
+                    <SocialShare product={product} />
                   </ListGroup.Item>
                 </ListGroup>
-              </Card>
-            </Col>
-          </Row>
 
-          <Row className="mt-4 pb-5">
-            <Col sm={6} className="mb-3">
-              <div className="px-0 mt-2">
-                <ProductDescription product={product} />
-              </div>
-            </Col>
+                <Card className="product-page-box">
+                  <ListGroup>
+                    <ListGroup.Item>
+                      <Row>
+                        <Col>
+                          <h5>Status:</h5>
+                        </Col>
+                        <Col>
+                          <h6>
+                            {product.countInStock > 0
+                              ? "In Stock"
+                              : "Out of Stock"}
+                          </h6>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
 
-            <Col sm={6}>
-              <Review
-                product={product}
-                users={users}
-                isPurchase={isPurchase}
-                currentUser={currentUser}
-              />
-            </Col>
-          </Row>
-        </>
-      )}
-    </div>
+                    <ListGroup.Item>
+                      <Row>
+                        <Col>
+                          <h5>Brand:</h5>
+                        </Col>
+                        <Col>
+                          <h6>{product.brand}</h6>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+
+                    <ListGroup.Item>
+                      <Row>
+                        <Col>
+                          <h5>Category:</h5>
+                        </Col>
+                        <Col>
+                          <h6>{product.category}</h6>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+
+                    {product.countInStock > 0 && (
+                      <>
+                        <ListGroup.Item>
+                          <Coupon callback={couponHandler} />
+                        </ListGroup.Item>
+                      </>
+                    )}
+
+                    <ListGroup.Item className="d-grid">
+                      {color === null && size === null ? (
+                        <div className="px-0 py-2" style={{ color: "red" }}>
+                          {"Please select color and size option"}
+                        </div>
+                      ) : color === null && size !== null ? (
+                        <div className="px-0 py-2" style={{ color: "red" }}>
+                          {"Please select color option"}
+                        </div>
+                      ) : color !== null && size === null ? (
+                        <div className="px-0 py-2" style={{ color: "red" }}>
+                          {"Please select size option"}
+                        </div>
+                      ) : null}
+                      <Button
+                        onClick={
+                          color !== null
+                            ? size !== null
+                              ? addToCartHandler
+                              : null
+                            : null
+                        }
+                        type="button"
+                        variant="dark"
+                        disabled={
+                          color === null ||
+                          size === null ||
+                          product.countInStock < 1
+                        }
+                      >
+                        {loadingAddToCart ? (
+                          <Spinner
+                            animation="border"
+                            role="status"
+                            as="span"
+                            size="sm"
+                            aria-hidden="true"
+                          >
+                            <span className="visually-hidden">Loading...</span>
+                          </Spinner>
+                        ) : null}{" "}
+                        {text}
+                      </Button>
+                    </ListGroup.Item>
+                  </ListGroup>
+                </Card>
+              </Col>
+            </Row>
+
+            <Row className="mt-4 pb-5">
+              <Col sm={6} className="mb-3">
+                <div className="px-0 mt-2">
+                  <ProductDescription product={product} />
+                </div>
+              </Col>
+
+              <Col sm={6}>
+                <Review
+                  product={product}
+                  users={users}
+                  isPurchase={isPurchase}
+                  currentUser={currentUser}
+                />
+              </Col>
+            </Row>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

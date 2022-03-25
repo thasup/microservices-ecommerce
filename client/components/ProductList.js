@@ -8,7 +8,7 @@ import ColorSelector from "./ColorSelector";
 import CustomTooltip from "./CustomTooltip";
 import SizeSelector from "./SizeSelector";
 
-const ProductList = ({ products }) => {
+const ProductList = ({ products, orderProducts, paymentProducts }) => {
   const [deleteProductId, setDeleteProductId] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -52,7 +52,9 @@ const ProductList = ({ products }) => {
               <th>BRAND</th>
               <th>MATERIAL</th>
               <th>REVIEW</th>
-              <th>VER.</th>
+              <th>PRO VER.</th>
+              <th>ORD VER.</th>
+              <th>PAY VER.</th>
               <th>DETAILS</th>
             </tr>
           </thead>
@@ -88,6 +90,36 @@ const ProductList = ({ products }) => {
                 <td>{product.material}</td>
                 <td>{product.numReviews}</td>
                 <td>{product.version}</td>
+                <td>
+                  {orderProducts.find(
+                    (orderProduct) => orderProduct.id === product.id
+                  ).version === product.version ? (
+                    <span style={{ color: "green" }}>OK</span>
+                  ) : (
+                    <span style={{ color: "red" }}>
+                      {
+                        orderProducts.find(
+                          (orderProduct) => orderProduct.id === product.id
+                        ).version
+                      }
+                    </span>
+                  )}
+                </td>
+                <td>
+                  {paymentProducts.find(
+                    (paymentProduct) => paymentProduct.id === product.id
+                  ).version === product.version ? (
+                    <span style={{ color: "green" }}>OK</span>
+                  ) : (
+                    <span style={{ color: "red" }}>
+                      {
+                        paymentProducts.find(
+                          (paymentProduct) => paymentProduct.id === product.id
+                        ).version
+                      }
+                    </span>
+                  )}
+                </td>
                 <td>
                   <Link
                     href={`/products/edit/[productId]`}

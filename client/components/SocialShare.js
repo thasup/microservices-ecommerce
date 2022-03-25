@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, ListGroup, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -19,7 +19,7 @@ const SocialShare = ({ product }) => {
       product.title
     }" product on Aurapan Shop! \n visit this lovely shop here! ${
       window.location.protocol !== "https" ? "http" : "https"
-    }://${window.location.host}/products/${product.id}`;
+    }://www.aurapan.com/products/${product.id}`;
 
     setShareMsg(message);
   }, []);
@@ -31,7 +31,7 @@ const SocialShare = ({ product }) => {
         className="ps-0 d-flex flex-row align-items-center justify-content-flex-start"
       >
         <FacebookShareButton
-          url={`${shareMsg}`}
+          url={`https://www.aurapan.com/products/${product.id}`}
           quote={"Be your beautiful best."}
           className="me-2"
         >
@@ -47,7 +47,7 @@ const SocialShare = ({ product }) => {
         </TwitterShareButton>
 
         <LineShareButton
-          url={`${shareMsg}`}
+          url={`https://www.aurapan.com/products/${product.id}`}
           title={"Be your beautiful best."}
           className="me-2"
         >
