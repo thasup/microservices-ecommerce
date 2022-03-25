@@ -42,7 +42,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   const [onMobile, setOnMobile] = useState(false);
 
   useEffect(async () => {
-    if (myOrders) {
+    if (myOrders && myOrders.length !== 0) {
       // Check if user can write a review after purchased the product
       const newArray = await myOrdersData.map((order) => {
         if (order.isPaid === true) {

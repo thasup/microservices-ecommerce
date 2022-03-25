@@ -20,7 +20,13 @@ const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
   ssr: false,
 });
 
-const AdminDashboard = ({ products, users, orders }) => {
+const AdminDashboard = ({
+  products,
+  users,
+  orders,
+  orderProducts,
+  paymentProducts,
+}) => {
   return (
     <Container className="app-container admin-dashboard">
       <h1>Admin Dashboard</h1>
@@ -58,7 +64,11 @@ const AdminDashboard = ({ products, users, orders }) => {
           <Col md={10}>
             <DynamicTabContent>
               <DynamicTabPane eventKey="product-list">
-                <ProductList products={products} />
+                <ProductList
+                  products={products}
+                  orderProducts={orderProducts}
+                  paymentProducts={paymentProducts}
+                />
               </DynamicTabPane>
 
               <DynamicTabPane eventKey="user-list">

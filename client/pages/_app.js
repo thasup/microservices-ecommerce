@@ -10,8 +10,8 @@ import Footer from "../components/Footer";
 import CustomHeader from "../components/CustomHeader";
 
 const MyApp = ({ Component, pageProps, currentUser }) => {
-  console.log("Current User (_app) : ", currentUser);
-  console.log("All props (_app) : ", { ...pageProps });
+  // console.log("Current User (_app) : ", currentUser);
+  // console.log("All props (_app) : ", { ...pageProps });
 
   return (
     <SSRProvider>
@@ -35,18 +35,34 @@ MyApp.getInitialProps = async (appContext) => {
   const { data } = await client.get("/api/users/currentuser");
 
   const { data: products } = await client.get("/api/products");
+  const { data: orderProducts } = await client.get("/api/orders/products");
+  const { data: paymentProducts } = await client.get("/api/payments/products");
 
   const { data: users } = await client.get("/api/users");
 
   const { data: bestseller } = await client.get("/api/products/bestseller");
 
-  let pageProps = { products, users, bestseller };
+  let pageProps = {
+    products,
+    orderProducts,
+    paymentProducts,
+    users,
+    bestseller,
+  };
   if (data.currentUser !== null) {
     const { data: myOrders } = await client.get("/api/orders/myorders");
 
     const { data: orders } = await client.get("/api/orders");
 
-    pageProps = { products, users, bestseller, myOrders, orders };
+    pageProps = {
+      products,
+      orderProducts,
+      paymentProducts,
+      users,
+      bestseller,
+      myOrders,
+      orders,
+    };
   }
 
   return {
