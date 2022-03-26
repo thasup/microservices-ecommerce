@@ -30,7 +30,9 @@ const UserOrderList = ({ myOrders }) => {
                   <CustomTooltip index={index} mongoId={order.id} />{" "}
                 </td>
                 <td>{order.createdAt.substring(0, 10)}</td>
-                <td>{order.createdAt.substring(11, 16)}</td>
+                <td>
+                  {new Date(`${order.createdAt}`).toString().substring(16, 21)}
+                </td>
                 <td>$ {order.totalPrice}</td>
                 <td>
                   <p style={{ fontSize: "1rem" }}>
