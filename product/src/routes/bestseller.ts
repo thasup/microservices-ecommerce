@@ -4,7 +4,7 @@ import { Product } from "../models/product";
 const router = express.Router();
 
 router.get("/api/products/bestseller", async (req: Request, res: Response) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(12);
+  const products = await Product.find({}).sort({ rating: -1 });
 
   res.send(products);
 });

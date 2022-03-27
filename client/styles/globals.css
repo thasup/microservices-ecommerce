@@ -117,7 +117,6 @@ a::before {
 
 .breadcrumb {
   border: 0;
-  padding-top: 2rem;
   padding-left: 0px;
 }
 
@@ -457,6 +456,14 @@ header {
   .card-product-price {
     font-size: 1.1rem;
   }
+}
+
+/* Category Page */
+.category-header {
+  font-family: "Italiana", serif;
+  padding-top: 2rem;
+  margin: 0 0 1rem 0;
+  text-align: center;
 }
 
 /* Product page */
