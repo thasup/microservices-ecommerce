@@ -50,7 +50,7 @@ const ImageSwiper = ({ product }) => {
       navigation={{}}
       pagination={{
         clickable: true,
-        type: "progressbar",
+        type: "bullets",
       }}
       mousewheel={true}
       keyboard={{
