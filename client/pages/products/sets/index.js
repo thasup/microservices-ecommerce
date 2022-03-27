@@ -1,6 +1,7 @@
 import Head from "next/head";
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Breadcrumb, Col, Row } from "react-bootstrap";
 
 import Loader from "../../../components/Loader";
 import Product from "../../../components/Product";
