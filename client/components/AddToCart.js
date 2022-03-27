@@ -54,12 +54,10 @@ const AddToCart = ({ product, currentUser, color, lg = false }) => {
   }, [onAdd]);
 
   const addToCartHandler = (e) => {
+    setQuery(e.target.value);
     e.preventDefault();
     setLoadingAddToCart(true);
     setOnAdd(true);
-  };
-
-  const addToCartEvent = () => {
     ga.event({
       action: "add_to_cart",
       params: {
@@ -73,10 +71,7 @@ const AddToCart = ({ product, currentUser, color, lg = false }) => {
       as="div"
       className={lg ? "add-to-cart-btn-lg" : "add-to-cart-btn"}
       variant="outline-dark"
-      onClick={(event) => {
-        setQuery(event.target.value);
-        addToCartHandler;
-      }}
+      onClick={addToCartHandler}
       disabled={product.countInStock < 1}
     >
       {loadingAddToCart ? (
