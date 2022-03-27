@@ -9,6 +9,7 @@ import ColorSelector from "./ColorSelector";
 
 const Product = ({ product, currentUser }) => {
   const [color, setColor] = useState(null);
+  const [toggle, setToggle] = useState(false);
   const [onMobile, setOnMobile] = useState(false);
 
   useEffect(() => {
@@ -28,19 +29,34 @@ const Product = ({ product, currentUser }) => {
     }
   };
 
-  const myLoader = ({ src, width, quality }) => {
+  const myLoader = ({ src, quality }) => {
     return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 20}`;
   };
 
   return (
     <Card className="mb-3 product-card">
-      <div className="product-img">
+      <div
+        className="product-img"
+        onMouseEnter={() => setToggle(true)}
+        onMouseLeave={() => setToggle(false)}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          setToggle(true);
+        }}
+        onTouchEnd={(e) => {
+          e.preventDefault();
+          setToggle(false);
+        }}
+      >
         <Link
-          href={`/products/[productId]`}
-          as={`/products/${product.id}`}
+          href={onMobile ? "" : `/products/[productId]`}
+          as={onMobile ? "" : `/products/${product.id}`}
           passHref
         >
-          <Card.Body className="product-img__cover">
+          <Card.Body
+            className="product-img__cover"
+            style={{ opacity: toggle ? "0" : "1" }}
+          >
             <Image
               loader={myLoader}
               src={product.images.image1}
@@ -56,7 +72,10 @@ const Product = ({ product, currentUser }) => {
           as={`/products/${product.id}`}
           passHref
         >
-          <Card.Body className="product-img__hover">
+          <Card.Body
+            className="product-img__hover"
+            style={{ opacity: toggle ? "1" : "0" }}
+          >
             <Image
               loader={myLoader}
               src={product.images.image2}
@@ -67,17 +86,22 @@ const Product = ({ product, currentUser }) => {
           </Card.Body>
         </Link>
 
-        <div className="menu-tab">
-          <AddToCart
-            product={product}
-            currentUser={currentUser}
-            color={color}
-          />
-        </div>
+        {!onMobile && (
+          <div className="menu-tab" style={{ opacity: toggle ? "1" : "0" }}>
+            <AddToCart
+              product={product}
+              currentUser={currentUser}
+              color={color}
+            />
+          </div>
+        )}
       </div>
 
-      <Card.Body className="px-2">
-        <Row className="d-flex flex-row justify-content-between px-0 mx-0">
+      <Card.Body className="px-2 pb-0">
+        <Row
+          className="d-flex flex-row justify-content-between px-0 mx-0"
+          style={{ minHeight: onMobile ? "6rem" : "auto" }}
+        >
           <Col xs={12} sm={9} className="card-product-title" as="h4">
             <Link
               href={`/products/[productId]`}
@@ -114,6 +138,18 @@ const Product = ({ product, currentUser }) => {
             />
           </Col>
         </Row>
+
+        {onMobile && (
+          // <div className="menu-tab-mobile d-flex justify-content-center">
+          <AddToCart
+            className="d-flex justify-content-center"
+            product={product}
+            currentUser={currentUser}
+            color={color}
+            lg={true}
+          />
+          // </div>
+        )}
       </Card.Body>
     </Card>
   );

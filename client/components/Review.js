@@ -183,11 +183,13 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
                   </Button>
                 </Form>
               </ListGroup>
-            ) : (
+            ) : !product.reviews.some(
+                (review) => review.userId === currentUser?.id
+              ) && !isPurchase ? (
               <Message variant="secondary">
                 You must purchase the product to write a review
               </Message>
-            )}
+            ) : null}
           </>
         ) : (
           <Message variant="secondary">

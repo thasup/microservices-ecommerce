@@ -197,7 +197,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
           </div>
         ) : (
           <>
-            <Breadcrumb>
+            <Breadcrumb className="pt-4">
               <Link href="/" passHref>
                 <Breadcrumb.Item>Home</Breadcrumb.Item>
               </Link>

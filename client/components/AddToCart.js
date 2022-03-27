@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 
-const AddToCart = ({ product, currentUser, color }) => {
+import * as ga from "../lib/ga";
+
+const AddToCart = ({ product, currentUser, color, lg = false }) => {
   const [onAdd, setOnAdd] = useState(false);
   const [loadingAddToCart, setLoadingAddToCart] = useState(false);
   const [text, setText] = useState("Add To Cart");
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     // Initial retrieve data from localStorage
@@ -51,14 +54,22 @@ const AddToCart = ({ product, currentUser, color }) => {
   }, [onAdd]);
 
   const addToCartHandler = (e) => {
+    setQuery(e.target.value);
     e.preventDefault();
     setLoadingAddToCart(true);
     setOnAdd(true);
+    ga.event({
+      action: "add_to_cart",
+      params: {
+        add_to_cart_term: query,
+      },
+    });
   };
 
   return (
     <Button
-      className="add-to-cart-btn"
+      as="div"
+      className={lg ? "add-to-cart-btn-lg" : "add-to-cart-btn"}
       variant="outline-dark"
       onClick={addToCartHandler}
       disabled={product.countInStock < 1}
@@ -73,8 +84,9 @@ const AddToCart = ({ product, currentUser, color }) => {
         >
           <span className="visually-hidden">Loading...</span>
         </Spinner>
-      ) : null}{" "}
-      {text}
+      ) : (
+        <>{text}</>
+      )}
     </Button>
   );
 };

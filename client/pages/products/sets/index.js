@@ -1,14 +1,22 @@
 import Head from "next/head";
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Breadcrumb, Col, Row } from "react-bootstrap";
 
-import Loader from "../../components/Loader";
-import Product from "../../components/Product";
+import Loader from "../../../components/Loader";
+import Product from "../../../components/Product";
 
 const Sets = ({ products, currentUser }) => {
+  const [onMobile, setOnMobile] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (window.innerWidth <= 576) {
+      setOnMobile(true);
+    } else {
+      setOnMobile(false);
+    }
+
     if (products) {
       setLoading(false);
     }
@@ -30,6 +38,17 @@ const Sets = ({ products, currentUser }) => {
         </div>
       ) : (
         <>
+          <h1 className="category-header">Sets</h1>
+          <Breadcrumb className={onMobile ? "px-3" : "px-5"}>
+            <Link href="/" passHref>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+            </Link>
+
+            <Link href="/products/sets" passHref>
+              <Breadcrumb.Item>Sets</Breadcrumb.Item>
+            </Link>
+          </Breadcrumb>
+
           <Row className="mx-0">
             {sets.map((item) => (
               <Col key={item.id} xs={6} md={4} xl={3} className="p-0">
