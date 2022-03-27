@@ -6,7 +6,7 @@ const CustomHeader = ({ currentUser }) => {
   const [showDropDown, setShowDropDown] = useState(false);
   const [numItems, setNumItems] = useState(0);
   const [showNotification, setShowNotification] = useState(false);
-  const [onMobile, setOnMobile] = useState(false);
+  const [onMobile, setOnMobile] = useState(true);
 
   useEffect(() => {
     // Update window innerWidth every 0.1 second
@@ -62,34 +62,46 @@ const CustomHeader = ({ currentUser }) => {
             </Offcanvas.Header>
 
             <Offcanvas.Body className="d-flex flex-column justify-content-between ">
-              <Nav className="offcanvas-body-upper d-flex flex-column justify-content-start  pe-3 ">
+              <Nav className="offcanvas-body-upper d-flex flex-column justify-content-start">
                 <Link href="/products/bestseller" passHref>
-                  <Nav.Link>Bestseller</Nav.Link>
+                  <Nav.Link className="offcanvas-link">
+                    Bestseller <i class="fas fa-chevron-right"></i>
+                  </Nav.Link>
                 </Link>
 
                 <Link href="/products/tops" passHref>
-                  <Nav.Link>Top</Nav.Link>
+                  <Nav.Link className="offcanvas-link">
+                    Top <i class="fas fa-chevron-right"></i>
+                  </Nav.Link>
                 </Link>
 
                 <Link href="/products/bottoms" passHref>
-                  <Nav.Link>Bottom</Nav.Link>
+                  <Nav.Link className="offcanvas-link">
+                    Bottom <i class="fas fa-chevron-right"></i>
+                  </Nav.Link>
                 </Link>
 
                 <Link href="/products/dresses" passHref>
-                  <Nav.Link>Dress</Nav.Link>
+                  <Nav.Link className="offcanvas-link">
+                    Dress <i class="fas fa-chevron-right"></i>
+                  </Nav.Link>
                 </Link>
 
                 <Link href="/products/sets" passHref>
-                  <Nav.Link>Set</Nav.Link>
+                  <Nav.Link className="offcanvas-link">
+                    Set <i class="fas fa-chevron-right"></i>
+                  </Nav.Link>
                 </Link>
 
                 <Link href="/products/coats" passHref>
-                  <Nav.Link>Coat</Nav.Link>
+                  <Nav.Link className="offcanvas-link">
+                    Coat <i class="fas fa-chevron-right"></i>
+                  </Nav.Link>
                 </Link>
               </Nav>
 
               {currentUser ? (
-                <Nav className="offcanvas-body-lower d-flex flex-row justify-content-evenly ">
+                <Nav className="offcanvas-body-lower mb-2 d-flex flex-row justify-content-around">
                   <Link href="/dashboard" passHref>
                     <Nav.Link>
                       <i className="fas fa-user"></i> Account
