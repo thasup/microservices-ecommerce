@@ -3,7 +3,15 @@ import { Button, Spinner } from "react-bootstrap";
 
 import * as ga from "../lib/ga";
 
-const AddToCart = ({ product, currentUser, color, lg = false }) => {
+const AddToCart = ({
+  product,
+  currentUser,
+  color,
+  size,
+  quantity = 1,
+  discountFactor = 1,
+  lg = false,
+}) => {
   const [onAdd, setOnAdd] = useState(false);
   const [loadingAddToCart, setLoadingAddToCart] = useState(false);
   const [text, setText] = useState("Add To Cart");
@@ -20,13 +28,13 @@ const AddToCart = ({ product, currentUser, color, lg = false }) => {
       const item = {
         userId: currentUser?.id || null,
         title: product.title,
-        qty: 1,
+        qty: quantity,
         color: color || null,
-        size: null,
+        size: size || null,
         image: product.images.image1,
         price: product.price,
-        countInStock: product.countInStock - 1,
-        discount: 1,
+        countInStock: product.countInStock - quantity,
+        discount: discountFactor,
         productId: product.id,
       };
 
@@ -44,10 +52,15 @@ const AddToCart = ({ product, currentUser, color, lg = false }) => {
 
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnAdd(false);
+
       setTimeout(() => {
         setLoadingAddToCart(false);
         setText("Added!");
       }, 500);
+
+      setTimeout(() => {
+        setText("Add To Cart");
+      }, 2000);
     }
 
     return () => setText("Add To Cart");

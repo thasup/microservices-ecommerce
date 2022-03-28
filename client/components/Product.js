@@ -39,14 +39,6 @@ const Product = ({ product, currentUser }) => {
         className="product-img"
         onMouseEnter={() => setToggle(true)}
         onMouseLeave={() => setToggle(false)}
-        onTouchStart={(e) => {
-          e.preventDefault();
-          setToggle(true);
-        }}
-        onTouchEnd={(e) => {
-          e.preventDefault();
-          setToggle(false);
-        }}
       >
         <Link
           href={onMobile ? "" : `/products/[productId]`}

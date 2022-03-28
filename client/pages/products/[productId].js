@@ -23,6 +23,7 @@ import SizeSelector from "../../components/SizeSelector";
 import ProductDescription from "../../components/ProductDescription";
 import Review from "../../components/Review";
 import Coupon from "../../components/Coupon";
+import AddToCart from "../../components/AddToCart";
 
 const productDetail = ({ products, users, currentUser, myOrders }) => {
   const { productId } = useRouter().query;
@@ -38,14 +39,12 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   const [imageEvent, setImageEvent] = useState(null);
 
   const [isPurchase, setIsPurchase] = useState(false);
-  const [loadingAddToCart, setLoadingAddToCart] = useState(false);
-  const [onAdd, setOnAdd] = useState(false);
   const [onMobile, setOnMobile] = useState(false);
 
   useEffect(async () => {
     if (myOrders && myOrders.length !== 0) {
       // Check if user can write a review after purchased the product
-      const newArray = await myOrders.map((order) => {
+      const hasPurchasedItem = await myOrders.map((order) => {
         if (order.isPaid === true) {
           return order.cart.some((item) => item.productId === productId);
         } else {
@@ -53,7 +52,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
         }
       });
 
-      if (newArray.includes(true)) {
+      if (hasPurchasedItem.includes(true)) {
         setIsPurchase(true);
       }
     }
@@ -97,56 +96,14 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
       setImageEvent(null);
     }
 
-    const cartItems = localStorage.getItem("cartItems")
-      ? JSON.parse(localStorage.getItem("cartItems"))
-      : [];
-
     if (quantity > product.countInStock) {
       setQuantity(product.countInStock);
     } else if (quantity < 1) {
       setQuantity(1);
     }
 
-    const item = {
-      userId: currentUser?.id || null,
-      title: product.title,
-      qty: quantity,
-      color: color,
-      size: size,
-      image: product.images.image1,
-      price: product.price,
-      countInStock: product.countInStock - quantity,
-      discount: discountFactor || 1,
-      productId: productId,
-    };
-
-    if (onAdd) {
-      // Check if the product exist in cart
-      const existItem = cartItems.find((x) => x.productId === productId);
-
-      // If it existed, replace it with new data
-      if (existItem) {
-        cartItems = cartItems.map((x) =>
-          x.productId === existItem.productId ? item : x
-        );
-      } else {
-        cartItems.push(item);
-      }
-
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      setOnAdd(false);
-      setTimeout(() => {
-        setLoadingAddToCart(false);
-        setText("Added!");
-      }, 500);
-
-      setTimeout(() => {
-        setText("Add To Cart");
-      }, 2000);
-    }
-
     return () => clearInterval(interval);
-  }, [onAdd, imageEvent, quantity, onMobile]);
+  }, [imageEvent, quantity, onMobile]);
 
   const product = products.find((product) => product.id === productId);
 
@@ -157,12 +114,6 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
     setImageArray(filterImages);
   }
-
-  const addToCartHandler = (e) => {
-    e.preventDefault();
-    setLoadingAddToCart(true);
-    setOnAdd(true);
-  };
 
   const colorSelectedHandler = (color) => {
     if (color !== null) {
@@ -293,6 +244,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
                       >
                         -
                       </div>
+
                       <Form.Group
                         controlId="countInStock"
                         className="quantity-box"
@@ -303,6 +255,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
                           onChange={(e) => setQuantity(Number(e.target.value))}
                         ></Form.Control>
                       </Form.Group>
+
                       <div
                         className="qty-btn increase-btn"
                         onClick={() => setQuantity(quantity + 1)}
@@ -384,35 +337,15 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
                           {"Please select size option"}
                         </div>
                       ) : null}
-                      <Button
-                        onClick={
-                          color !== null
-                            ? size !== null
-                              ? addToCartHandler
-                              : null
-                            : null
-                        }
-                        type="button"
-                        variant="dark"
-                        disabled={
-                          color === null ||
-                          size === null ||
-                          product.countInStock < 1
-                        }
-                      >
-                        {loadingAddToCart ? (
-                          <Spinner
-                            animation="border"
-                            role="status"
-                            as="span"
-                            size="sm"
-                            aria-hidden="true"
-                          >
-                            <span className="visually-hidden">Loading...</span>
-                          </Spinner>
-                        ) : null}{" "}
-                        {text}
-                      </Button>
+
+                      <AddToCart
+                        product={product}
+                        currentUser={currentUser}
+                        color={color}
+                        size={size}
+                        quantity={quantity}
+                        discountFactor={discountFactor}
+                      />
                     </ListGroup.Item>
                   </ListGroup>
                 </Card>
