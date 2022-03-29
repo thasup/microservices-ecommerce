@@ -22,8 +22,11 @@ router.post(
   requireAuth,
   [
     body("token").not().isEmpty(),
-    body("orderId").not().isEmpty(),
-    body("orderId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
+    body("orderId")
+      .not()
+      .isEmpty()
+      .isMongoId()
+      .withMessage("Invalid MongoDB ObjectId"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -44,11 +47,9 @@ router.post(
     }
 
     if (order.paymentMethod === "paypal") {
-      console.log("paypal!");
-
       const payment = Payment.build({
         orderId,
-        stripeId: "paypal is the best",
+        stripeId: token,
       });
 
       await payment.save();
