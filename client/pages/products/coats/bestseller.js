@@ -1,24 +1,17 @@
 import { useEffect, useState } from "react";
 import { Breadcrumb, Col, Row } from "react-bootstrap";
+import Link from "next/link";
+import Head from "next/head";
 
 import Product from "../../../components/Product";
 import Loader from "../../../components/Loader";
-import Head from "next/head";
-import Link from "next/link";
 
 const CoatsBestseller = ({ bestseller, currentUser }) => {
-  const [onMobile, setOnMobile] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const coatsBestseller = bestseller.filter((coat) => coat.category === "Coat");
 
   useEffect(() => {
-    if (window.innerWidth <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
-
     if (bestseller && coatsBestseller) {
       setLoading(false);
     }
@@ -39,7 +32,7 @@ const CoatsBestseller = ({ bestseller, currentUser }) => {
       ) : (
         <>
           <h1 className="category-header">Bestseller Coats</h1>
-          <Breadcrumb className={onMobile ? "px-3" : "px-5"}>
+          <Breadcrumb className="breadcrumb-label">
             <Link href="/" passHref>
               <Breadcrumb.Item>Home</Breadcrumb.Item>
             </Link>

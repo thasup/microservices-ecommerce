@@ -464,8 +464,15 @@ header {
   padding: 0;
 }
 
+.breadcrumb-label {
+  padding: 0 3rem;
+}
+
 /* Tablet Screen */
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 576px) {
+  .breadcrumb-label {
+    padding: 0 1rem;
+  }
 }
 
 /* Mobile Screen */

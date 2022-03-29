@@ -10,12 +10,6 @@ const BestSeller = ({ bestseller, currentUser }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (window.innerWidth <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
-
     if (bestseller) {
       setLoading(false);
     }
@@ -36,7 +30,7 @@ const BestSeller = ({ bestseller, currentUser }) => {
       ) : (
         <>
           <h1 className="category-header">BestSeller</h1>
-          <Breadcrumb className={onMobile ? "px-3" : "px-5"}>
+          <Breadcrumb className="breadcrumb-label">
             <Link href="/" passHref>
               <Breadcrumb.Item>Home</Breadcrumb.Item>
             </Link>

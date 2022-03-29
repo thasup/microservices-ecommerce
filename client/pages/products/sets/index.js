@@ -7,16 +7,9 @@ import Loader from "../../../components/Loader";
 import Product from "../../../components/Product";
 
 const Sets = ({ products, currentUser }) => {
-  const [onMobile, setOnMobile] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (window.innerWidth <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
-
     if (products) {
       setLoading(false);
     }
@@ -39,7 +32,7 @@ const Sets = ({ products, currentUser }) => {
       ) : (
         <>
           <h1 className="category-header">Sets</h1>
-          <Breadcrumb className={onMobile ? "px-3" : "px-5"}>
+          <Breadcrumb className="breadcrumb-label">
             <Link href="/" passHref>
               <Breadcrumb.Item>Home</Breadcrumb.Item>
             </Link>
