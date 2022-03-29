@@ -31,7 +31,6 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
-  const [text, setText] = useState("Add To Cart");
   const [discountFactor, setDiscountFactor] = useState(1);
 
   const [initialImage, setInitialImage] = useState(false);
@@ -42,37 +41,37 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   const [onMobile, setOnMobile] = useState(false);
 
   useEffect(async () => {
-    if (myOrders && myOrders.length !== 0) {
+    //Check if orders is not an empty array
+    if (myOrders?.length !== 0) {
       // Check if user can write a review after purchased the product
       const hasPurchasedItem = await myOrders.map((order) => {
         if (order.isPaid === true) {
           return order.cart.some((item) => item.productId === productId);
-        } else {
-          return false;
         }
+        return false;
       });
 
+      // If some order contains the purchased product set isPurchase to true
       if (hasPurchasedItem.includes(true)) {
         setIsPurchase(true);
       }
     }
 
-    // Update window innerWidth every 0.1 second
-    const interval = setInterval(() => {
-      if (window.innerWidth <= 576) {
-        setOnMobile(true);
-      } else {
-        setOnMobile(false);
-      }
-    }, 100);
+    // Check current window width to determine screen type
+    if (window.innerWidth <= 576) {
+      setOnMobile(true);
+    } else {
+      setOnMobile(false);
+    }
 
-    // Toggle initial main image to show
+    // Toggle the first image to show as a main image when page load on first time
     if (!initialImage) {
       const mainImage = document.getElementsByClassName("product-main-img");
       mainImage[0].classList.add("toggle-main-img");
       setInitialImage(true);
     }
 
+    // Toggle 'toggle-main-img' class for image when user clicked on that side image
     if (imageEvent) {
       const mainImage = document.getElementsByClassName("product-main-img");
       const sideImage = document.getElementsByClassName("product-side-img");
@@ -93,17 +92,18 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
       imageEvent.target.parentElement.parentElement.classList.add(
         "toggle-side-img"
       );
+
+      // Set image event to default
       setImageEvent(null);
     }
 
+    // Limit quantity input by locked maximum and minimum from the product countInStock
     if (quantity > product.countInStock) {
       setQuantity(product.countInStock);
     } else if (quantity < 1) {
       setQuantity(1);
     }
-
-    return () => clearInterval(interval);
-  }, [imageEvent, quantity, onMobile]);
+  }, [imageEvent, quantity]);
 
   const product = products.find((product) => product.id === productId);
 
@@ -138,7 +138,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
       <Head>
         <title>{product.title} | Aurapan</title>
       </Head>
-      <div className={onMobile ? "px-3" : "px-5"}>
+      <div className="breadcrumb-label">
         {!product.id || product.id !== productId ? (
           <div
             className="d-flex justify-content-center align-items-center px-0"
