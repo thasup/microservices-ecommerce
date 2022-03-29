@@ -27,7 +27,6 @@ const CartPage = ({ currentUser, products }) => {
   const [productId, setProductId] = useState(null);
   const [deletedItemId, setDeletedItemId] = useState(null);
   const [toolTipText, setToolTipText] = useState("");
-  const [onMobile, setOnMobile] = useState(false);
 
   const [storageReady, setStorageReady] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
@@ -124,16 +123,6 @@ const CartPage = ({ currentUser, products }) => {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       setOnRemove(false);
     }
-
-    // Update window innerWidth every 0.1 second
-    const interval = setInterval(() => {
-      if (window.innerWidth <= 576) {
-        setOnMobile(true);
-      } else {
-        setOnMobile(false);
-      }
-    }, 100);
-    return () => clearInterval(interval);
   }, [onIncrease, onDecrease, onEdit, onRemove, currentUser]);
 
   const editItemHandler = (id) => {
@@ -306,8 +295,7 @@ const CartPage = ({ currentUser, products }) => {
                             {item.discount !== 1 ? (
                               <Col
                                 md={3}
-                                className=" d-flex flex-row flex-wrap justify-content-between"
-                                style={{ width: onMobile ? "100%" : "25%" }}
+                                className="cart-price d-flex flex-row flex-wrap justify-content-between"
                               >
                                 <OverlayTrigger
                                   placement="top"
@@ -335,8 +323,7 @@ const CartPage = ({ currentUser, products }) => {
                             ) : (
                               <Col
                                 md={2}
-                                className="d-flex flex-row flex-wrap justify-content-between"
-                                style={{ width: onMobile ? "100%" : "25%" }}
+                                className="cart-price d-flex flex-row flex-wrap justify-content-between"
                               >
                                 <OverlayTrigger
                                   placement="top"
