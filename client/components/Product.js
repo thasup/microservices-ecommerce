@@ -54,6 +54,7 @@ const Product = ({ product, currentUser }) => {
               src={product.images.image1}
               layout="fill"
               objectFit="cover"
+              lazyBoundary="600px"
               alt={`${product.title} image 1`}
             />
           </Card.Body>
@@ -73,6 +74,7 @@ const Product = ({ product, currentUser }) => {
               src={product.images.image2}
               layout="fill"
               objectFit="cover"
+              lazyBoundary="600px"
               alt={`${product.title} image 2`}
             />
           </Card.Body>
