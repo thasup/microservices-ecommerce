@@ -42,7 +42,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
   useEffect(async () => {
     //Check if orders is not an empty array
-    if (myOrders?.length !== 0) {
+    if (myOrders && myOrders.length !== 0) {
       // Check if user can write a review after purchased the product
       const hasPurchasedItem = await myOrders.map((order) => {
         if (order.isPaid === true) {
@@ -345,6 +345,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
                         size={size}
                         quantity={quantity}
                         discountFactor={discountFactor}
+                        lg={onMobile ? true : false}
                       />
                     </ListGroup.Item>
                   </ListGroup>
