@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Breadcrumb, Col, Row } from "react-bootstrap";
+import Link from "next/link";
+import Head from "next/head";
 
 import Product from "../../../components/Product";
 import Loader from "../../../components/Loader";
-import Head from "next/head";
-import Link from "next/link";
 
 const BottomsBestseller = ({ bestseller, currentUser }) => {
-  const [onMobile, setOnMobile] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const bottomsBestseller = bestseller.filter(
@@ -15,12 +14,6 @@ const BottomsBestseller = ({ bestseller, currentUser }) => {
   );
 
   useEffect(() => {
-    if (window.innerWidth <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
-
     if (bestseller && bottomsBestseller) {
       setLoading(false);
     }
@@ -41,7 +34,7 @@ const BottomsBestseller = ({ bestseller, currentUser }) => {
       ) : (
         <>
           <h1 className="category-header">Bestseller Bottoms</h1>
-          <Breadcrumb className={onMobile ? "px-3" : "px-5"}>
+          <Breadcrumb className="breadcrumb-label">
             <Link href="/" passHref>
               <Breadcrumb.Item>Home</Breadcrumb.Item>
             </Link>

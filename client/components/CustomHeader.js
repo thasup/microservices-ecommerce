@@ -65,37 +65,37 @@ const CustomHeader = ({ currentUser }) => {
               <Nav className="offcanvas-body-upper d-flex flex-column justify-content-start">
                 <Link href="/products/bestseller" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Bestseller <i class="fas fa-chevron-right"></i>
+                    Bestseller <i className="fas fa-chevron-right"></i>
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/tops" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Top <i class="fas fa-chevron-right"></i>
+                    Top <i className="fas fa-chevron-right"></i>
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/bottoms" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Bottom <i class="fas fa-chevron-right"></i>
+                    Bottom <i className="fas fa-chevron-right"></i>
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/dresses" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Dress <i class="fas fa-chevron-right"></i>
+                    Dress <i className="fas fa-chevron-right"></i>
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/sets" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Set <i class="fas fa-chevron-right"></i>
+                    Set <i className="fas fa-chevron-right"></i>
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/coats" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Coat <i class="fas fa-chevron-right"></i>
+                    Coat <i className="fas fa-chevron-right"></i>
                   </Nav.Link>
                 </Link>
               </Nav>

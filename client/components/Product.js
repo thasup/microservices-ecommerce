@@ -39,18 +39,11 @@ const Product = ({ product, currentUser }) => {
         className="product-img"
         onMouseEnter={() => setToggle(true)}
         onMouseLeave={() => setToggle(false)}
-        onTouchStart={(e) => {
-          e.preventDefault();
-          setToggle(true);
-        }}
-        onTouchEnd={(e) => {
-          e.preventDefault();
-          setToggle(false);
-        }}
+        onTouchStart={toggle ? () => setToggle(false) : () => setToggle(true)}
       >
         <Link
-          href={onMobile ? "" : `/products/[productId]`}
-          as={onMobile ? "" : `/products/${product.id}`}
+          href={`/products/[productId]`}
+          as={`/products/${product.id}`}
           passHref
         >
           <Card.Body
@@ -62,6 +55,7 @@ const Product = ({ product, currentUser }) => {
               src={product.images.image1}
               layout="fill"
               objectFit="cover"
+              lazyBoundary={onMobile ? "600px" : "1200px"}
               alt={`${product.title} image 1`}
             />
           </Card.Body>
@@ -81,6 +75,7 @@ const Product = ({ product, currentUser }) => {
               src={product.images.image2}
               layout="fill"
               objectFit="cover"
+              lazyBoundary={onMobile ? "600px" : "1200px"}
               alt={`${product.title} image 2`}
             />
           </Card.Body>

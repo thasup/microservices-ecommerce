@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Breadcrumb, Col, Row } from "react-bootstrap";
+import Link from "next/link";
+import Head from "next/head";
 
 import Product from "../../../components/Product";
 import Loader from "../../../components/Loader";
-import Head from "next/head";
-import Link from "next/link";
 
 const BottomsNewArrivals = ({ products, currentUser }) => {
-  const [onMobile, setOnMobile] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const bottomsNewArrivals = products
@@ -15,12 +14,6 @@ const BottomsNewArrivals = ({ products, currentUser }) => {
     .reverse();
 
   useEffect(() => {
-    if (window.innerWidth <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
-
     if (products && bottomsNewArrivals) {
       setLoading(false);
     }
@@ -41,7 +34,7 @@ const BottomsNewArrivals = ({ products, currentUser }) => {
       ) : (
         <>
           <h1 className="category-header">New Arrivals Bottoms</h1>
-          <Breadcrumb className={onMobile ? "px-3" : "px-5"}>
+          <Breadcrumb className="breadcrumb-label">
             <Link href="/" passHref>
               <Breadcrumb.Item>Home</Breadcrumb.Item>
             </Link>

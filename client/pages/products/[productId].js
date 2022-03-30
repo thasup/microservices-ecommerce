@@ -23,6 +23,7 @@ import SizeSelector from "../../components/SizeSelector";
 import ProductDescription from "../../components/ProductDescription";
 import Review from "../../components/Review";
 import Coupon from "../../components/Coupon";
+import AddToCart from "../../components/AddToCart";
 
 const productDetail = ({ products, users, currentUser, myOrders }) => {
   const { productId } = useRouter().query;
@@ -30,7 +31,6 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
-  const [text, setText] = useState("Add To Cart");
   const [discountFactor, setDiscountFactor] = useState(1);
 
   const [initialImage, setInitialImage] = useState(false);
@@ -38,42 +38,40 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   const [imageEvent, setImageEvent] = useState(null);
 
   const [isPurchase, setIsPurchase] = useState(false);
-  const [loadingAddToCart, setLoadingAddToCart] = useState(false);
-  const [onAdd, setOnAdd] = useState(false);
   const [onMobile, setOnMobile] = useState(false);
 
   useEffect(async () => {
+    //Check if orders is not an empty array
     if (myOrders && myOrders.length !== 0) {
       // Check if user can write a review after purchased the product
-      const newArray = await myOrders.map((order) => {
+      const hasPurchasedItem = await myOrders.map((order) => {
         if (order.isPaid === true) {
           return order.cart.some((item) => item.productId === productId);
-        } else {
-          return false;
         }
+        return false;
       });
 
-      if (newArray.includes(true)) {
+      // If some order contains the purchased product set isPurchase to true
+      if (hasPurchasedItem.includes(true)) {
         setIsPurchase(true);
       }
     }
 
-    // Update window innerWidth every 0.1 second
-    const interval = setInterval(() => {
-      if (window.innerWidth <= 576) {
-        setOnMobile(true);
-      } else {
-        setOnMobile(false);
-      }
-    }, 100);
+    // Check current window width to determine screen type
+    if (window.innerWidth <= 576) {
+      setOnMobile(true);
+    } else {
+      setOnMobile(false);
+    }
 
-    // Toggle initial main image to show
+    // Toggle the first image to show as a main image when page load on first time
     if (!initialImage) {
       const mainImage = document.getElementsByClassName("product-main-img");
       mainImage[0].classList.add("toggle-main-img");
       setInitialImage(true);
     }
 
+    // Toggle 'toggle-main-img' class for image when user clicked on that side image
     if (imageEvent) {
       const mainImage = document.getElementsByClassName("product-main-img");
       const sideImage = document.getElementsByClassName("product-side-img");
@@ -94,59 +92,18 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
       imageEvent.target.parentElement.parentElement.classList.add(
         "toggle-side-img"
       );
+
+      // Set image event to default
       setImageEvent(null);
     }
 
-    const cartItems = localStorage.getItem("cartItems")
-      ? JSON.parse(localStorage.getItem("cartItems"))
-      : [];
-
+    // Limit quantity input by locked maximum and minimum from the product countInStock
     if (quantity > product.countInStock) {
       setQuantity(product.countInStock);
     } else if (quantity < 1) {
       setQuantity(1);
     }
-
-    const item = {
-      userId: currentUser?.id || null,
-      title: product.title,
-      qty: quantity,
-      color: color,
-      size: size,
-      image: product.images.image1,
-      price: product.price,
-      countInStock: product.countInStock - quantity,
-      discount: discountFactor || 1,
-      productId: productId,
-    };
-
-    if (onAdd) {
-      // Check if the product exist in cart
-      const existItem = cartItems.find((x) => x.productId === productId);
-
-      // If it existed, replace it with new data
-      if (existItem) {
-        cartItems = cartItems.map((x) =>
-          x.productId === existItem.productId ? item : x
-        );
-      } else {
-        cartItems.push(item);
-      }
-
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      setOnAdd(false);
-      setTimeout(() => {
-        setLoadingAddToCart(false);
-        setText("Added!");
-      }, 500);
-
-      setTimeout(() => {
-        setText("Add To Cart");
-      }, 2000);
-    }
-
-    return () => clearInterval(interval);
-  }, [onAdd, imageEvent, quantity, onMobile]);
+  }, [imageEvent, quantity]);
 
   const product = products.find((product) => product.id === productId);
 
@@ -157,12 +114,6 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
     setImageArray(filterImages);
   }
-
-  const addToCartHandler = (e) => {
-    e.preventDefault();
-    setLoadingAddToCart(true);
-    setOnAdd(true);
-  };
 
   const colorSelectedHandler = (color) => {
     if (color !== null) {
@@ -187,7 +138,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
       <Head>
         <title>{product.title} | Aurapan</title>
       </Head>
-      <div className={onMobile ? "px-3" : "px-5"}>
+      <div className="breadcrumb-label">
         {!product.id || product.id !== productId ? (
           <div
             className="d-flex justify-content-center align-items-center px-0"
@@ -293,6 +244,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
                       >
                         -
                       </div>
+
                       <Form.Group
                         controlId="countInStock"
                         className="quantity-box"
@@ -303,6 +255,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
                           onChange={(e) => setQuantity(Number(e.target.value))}
                         ></Form.Control>
                       </Form.Group>
+
                       <div
                         className="qty-btn increase-btn"
                         onClick={() => setQuantity(quantity + 1)}
@@ -384,35 +337,16 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
                           {"Please select size option"}
                         </div>
                       ) : null}
-                      <Button
-                        onClick={
-                          color !== null
-                            ? size !== null
-                              ? addToCartHandler
-                              : null
-                            : null
-                        }
-                        type="button"
-                        variant="dark"
-                        disabled={
-                          color === null ||
-                          size === null ||
-                          product.countInStock < 1
-                        }
-                      >
-                        {loadingAddToCart ? (
-                          <Spinner
-                            animation="border"
-                            role="status"
-                            as="span"
-                            size="sm"
-                            aria-hidden="true"
-                          >
-                            <span className="visually-hidden">Loading...</span>
-                          </Spinner>
-                        ) : null}{" "}
-                        {text}
-                      </Button>
+
+                      <AddToCart
+                        product={product}
+                        currentUser={currentUser}
+                        color={color}
+                        size={size}
+                        quantity={quantity}
+                        discountFactor={discountFactor}
+                        lg={onMobile ? true : false}
+                      />
                     </ListGroup.Item>
                   </ListGroup>
                 </Card>

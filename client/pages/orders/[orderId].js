@@ -41,6 +41,7 @@ const OrderPage = ({ currentUser, orders, users }) => {
     onSuccess: () => {
       setLoading(false);
       Router.push(`/orders/${orderId}`);
+      setLoadingPay(false);
     },
   });
 
@@ -82,13 +83,6 @@ const OrderPage = ({ currentUser, orders, users }) => {
       }
     }
   }, [loadingPay, loadingDeliver, order]);
-
-  const paypalPaymentHandler = (e) => {
-    e.preventDefault();
-    setLoadingPay(true);
-    payOrder({ token: currentUser.id });
-    setLoadingPay(false);
-  };
 
   const deliverHandler = (e) => {
     e.preventDefault();
@@ -294,33 +288,43 @@ const OrderPage = ({ currentUser, orders, users }) => {
 
                   {!order.isPaid && order.status !== "cancelled" ? (
                     <ListGroup.Item>
-                      {loadingPay && <Loader />}
-                      {order.paymentMethod === "paypal" && (
+                      {paymentErrors}
+                      {loadingPay ? (
+                        <Loader />
+                      ) : (
                         <>
-                          {!sdkReady ? (
-                            <Loader />
-                          ) : (
-                            <PayPalButton
-                              amount={order.totalPrice}
-                              onSuccess={paypalPaymentHandler}
-                              onButtonReady={() => {
-                                setPaypalLoaded(true);
+                          {order.paymentMethod === "paypal" && (
+                            <>
+                              {!sdkReady ? (
+                                <Loader />
+                              ) : (
+                                <PayPalButton
+                                  amount={order.totalPrice}
+                                  onSuccess={() => {
+                                    setLoading(true);
+                                    setLoadingPay(true);
+                                    payOrder({ token: currentUser?.id });
+                                  }}
+                                  onButtonReady={() => {
+                                    setPaypalLoaded(true);
+                                  }}
+                                />
+                              )}
+                            </>
+                          )}
+                          {order.paymentMethod === "stripe" && (
+                            <StripeCheckout
+                              token={({ id }) => {
+                                setLoading(true);
+                                setLoadingPay(true);
+                                payOrder({ token: id });
                               }}
+                              stripeKey="pk_test_51KYCbpCqypc6uabtXBYVwjkCQxYJ02VlTebqSllPb0Kei5mvKN1brmzIgEeZK371eoKkh7rJxX70lr7wet0VfZjb00PDUgCK7c"
+                              amount={order.totalPrice * 100}
+                              email={currentUser.email}
                             />
                           )}
                         </>
-                      )}
-                      {paymentErrors}
-                      {order.paymentMethod === "stripe" && (
-                        <StripeCheckout
-                          token={({ id }) => {
-                            setLoading(true);
-                            payOrder({ token: id });
-                          }}
-                          stripeKey="pk_test_51KYCbpCqypc6uabtXBYVwjkCQxYJ02VlTebqSllPb0Kei5mvKN1brmzIgEeZK371eoKkh7rJxX70lr7wet0VfZjb00PDUgCK7c"
-                          amount={order.totalPrice * 100}
-                          email={currentUser.email}
-                        />
                       )}
                     </ListGroup.Item>
                   ) : null}

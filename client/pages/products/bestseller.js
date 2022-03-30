@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Breadcrumb, Col, Row } from "react-bootstrap";
+import Link from "next/link";
+import Head from "next/head";
 
 import Product from "../../components/Product";
 import Loader from "../../components/Loader";
-import Head from "next/head";
 
 const BestSeller = ({ bestseller, currentUser }) => {
   const [loading, setLoading] = useState(true);
@@ -27,13 +28,26 @@ const BestSeller = ({ bestseller, currentUser }) => {
           <Loader />
         </div>
       ) : (
-        <Row className="mx-0">
-          {bestseller.map((item) => (
-            <Col key={item.id} xs={6} md={4} xl={3} className="p-0">
-              <Product product={item} currentUser={currentUser} />
-            </Col>
-          ))}
-        </Row>
+        <>
+          <h1 className="category-header">BestSeller</h1>
+          <Breadcrumb className="breadcrumb-label">
+            <Link href="/" passHref>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+            </Link>
+
+            <Link href="/products/bestseller" passHref>
+              <Breadcrumb.Item>BestSeller</Breadcrumb.Item>
+            </Link>
+          </Breadcrumb>
+
+          <Row className="mx-0">
+            {bestseller.map((item) => (
+              <Col key={item.id} xs={6} md={4} xl={3} className="p-0">
+                <Product product={item} currentUser={currentUser} />
+              </Col>
+            ))}
+          </Row>
+        </>
       )}
     </>
   );
