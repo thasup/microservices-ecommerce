@@ -41,14 +41,18 @@ Aurapan is the beautiful women's clothes e-commerce website built with **microse
 - Accept both **PayPal** and **Stripe** integration payment method
 - Mark orders as a delivered option for admin
 - Make a product review and rating and calculate new rating instantly
-- Accept coupon promotion input
-- Easily navigate with a cool navigation bar and footer
-- Optimize **Next.js** feature to maximize better performance and quality
+- Accept coupon promotion
+- Easily navigate with a cool navigation bar and breadcrumb
+- Implement **Optimistic concurrency control** concept with **Mongoose** to handle concurrency issue with event flow
+- Optimize **Next.js** features to maximize better performance and quality in _lighthouse_ report
 - Safely secure **HTTPS** protocol with let's encrypt certificate
+- Integrate **Google Analytics 4** script and track significant events on the website
   <!-- - Integrate wishlist in user data (work in process...) -->
   <!-- - Product search feature (work in process...) -->
+  <!-- - Sorting and filtering all product on store (work in process...) -->
 
-Something might be a bit exaggerated but one certain thing is that I put all my heart into creating this project. happy browsing! :D
+Something might be a bit exaggerated but one certain thing is that I put all my heart into creating this project.
+happy browsing! :D
 
 # Install
 
