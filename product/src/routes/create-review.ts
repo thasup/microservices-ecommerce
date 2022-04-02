@@ -98,7 +98,7 @@ router.post(
         version: product.version,
       });
 
-      res.status(200).send(review);
+      res.status(201).send(review);
     }
   }
 );
