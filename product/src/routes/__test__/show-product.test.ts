@@ -17,7 +17,6 @@ const createProduct = () => {
       material: "Polyester 100%",
       description:
         "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
-      // reviews,
       numReviews: 0,
       rating: 5,
       countInStock: 12,
