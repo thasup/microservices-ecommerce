@@ -11,7 +11,6 @@ const createUser = async (email?: string) => {
       password: "password",
       isAdmin: true,
       name: "Geralt of Rivia",
-      // image: "https://joeschmoe.io/api/v1/male/geralt",
       gender: "male",
       age: 45,
       bio: "I'm the witcher!",
