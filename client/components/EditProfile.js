@@ -31,7 +31,7 @@ const EditProfile = ({ user }) => {
       bio,
       jsonShippingAddress: user.shippingAddress,
     },
-    onSuccess: (user) => {
+    onSuccess: () => {
       setUpdateSuccess(true);
       Router.push("/dashboard");
     },

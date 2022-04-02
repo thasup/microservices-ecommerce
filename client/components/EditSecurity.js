@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Router from "next/router";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
@@ -30,7 +29,7 @@ const EditSecurity = ({ user }) => {
       bio: user.bio,
       jsonShippingAddress: user.shippingAddress,
     },
-    onSuccess: (user) => {
+    onSuccess: () => {
       setUpdateSuccess(true);
       Router.push("/dashboard");
     },

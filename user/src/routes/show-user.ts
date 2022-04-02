@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { adminUser, NotFoundError, requireAuth } from "@thasup-dev/common";
+import { NotFoundError } from "@thasup-dev/common";
 
 import { User } from "../models/user";
 
@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/api/users", async (req: Request, res: Response) => {
   const users = await User.find({});
 
-  if (!users) {
+  if (users.length === 0) {
     throw new NotFoundError();
   }
 
