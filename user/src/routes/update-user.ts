@@ -1,10 +1,9 @@
 import express, { Request, Response } from "express";
-import { param } from "express-validator";
+import { body, param } from "express-validator";
 import jwt from "jsonwebtoken";
 import {
   validateRequest,
   NotFoundError,
-  NotAuthorizedError,
   BadRequestError,
 } from "@thasup-dev/common";
 import { User } from "../models/user";
@@ -37,7 +36,7 @@ router.patch(
     }
 
     if (password && password !== "") {
-      const existingUser = await User.findOne({ email });
+      const existingUser = await User.findOne({ name });
 
       if (!existingUser) {
         throw new BadRequestError("Invalid credentials");

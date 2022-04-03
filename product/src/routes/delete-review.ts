@@ -79,9 +79,9 @@ router.delete(
       }
 
       await review.remove();
-
-      res.status(200).send(product);
     }
+
+    res.status(200).send(product);
   }
 );
 

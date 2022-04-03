@@ -4,165 +4,118 @@ import mongoose from "mongoose";
 import { natsWrapper } from "../../NatsWrapper";
 import { Product } from "../../models/product";
 
+const createProduct = async () => {
+  const adminId = new mongoose.Types.ObjectId().toHexString();
+
+  const { body: product } = await request(app)
+    .post("/api/products")
+    .set("Cookie", global.adminSignin(adminId))
+    .send({
+      title: "Sample Dress",
+      price: 99,
+      userId: adminId,
+      image1: "./asset/sample.jpg",
+      colors: "White,Black",
+      sizes: "S,M,L",
+      brand: "Uniqlo",
+      category: "Dress",
+      material: "Polyester 100%",
+      description:
+        "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
+      numReviews: 0,
+      rating: 0,
+      countInStock: 12,
+    });
+  return product;
+};
+
 it("returns a 404 if the provided id does NOT exist", async () => {
-  const id = new mongoose.Types.ObjectId().toHexString();
+  const anotherProductId = new mongoose.Types.ObjectId().toHexString();
+
+  // Create a product
+  await createProduct();
+
   await request(app)
-    .patch(`/api/products/${id}`)
+    .patch(`/api/products/${anotherProductId}`)
     .set("Cookie", global.adminSignin())
     .send({
       title: "Sample Skirt",
-      price: 690,
+      price: 69,
     })
     .expect(404);
 });
 
 it("returns a 401 if the user is NOT signing in", async () => {
-  const id = new mongoose.Types.ObjectId().toHexString();
+  // Create a product
+  const product = await createProduct();
+
   await request(app)
-    .patch(`/api/products/${id}`)
+    .patch(`/api/products/${product.id}`)
     .send({
       title: "Sample Skirt",
-      price: 690,
+      price: 69,
     })
     .expect(401);
 });
 
 it("returns a 401 if the user is NOT authenticated as an admin", async () => {
-  const id = new mongoose.Types.ObjectId().toHexString();
+  // Create a product
+  const product = await createProduct();
+
   await request(app)
-    .patch(`/api/products/${id}`)
+    .patch(`/api/products/${product.id}`)
     .set("Cookie", global.signin())
     .send({
       title: "Sample Skirt",
-      price: 690,
+      price: 69,
     })
     .expect(401);
 });
 
-// it("returns a 400 if the admin user provides an invalid title or price", async () => {
-//   const cookie = global.adminSignin();
-
-//   const response = await request(app)
-//     .post("/api/products")
-//     .set("Cookie", cookie)
-//     .send({
-//       title: "Sample Dress",
-//       price: 1990,
-//       userId: "6214a0227e0d2db80ddb0860",
-//       image1: "./asset/sample.jpg",
-//       colors: "White,Black",
-//       sizes: "S,M,L",
-//       brand: "Uniqlo",
-//       category: "Dress",
-//       material: "Polyester 100%",
-//       description:
-//         "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
-//       // reviews,
-//       numReviews: 0,
-//       rating: 5,
-//       countInStock: 12,
-//     });
-
-//   await request(app)
-//     .patch(`/api/products/${response.body.id}`)
-//     .set("Cookie", cookie)
-//     .send({
-//       title: "",
-//       price: 1990,
-//     })
-//     .expect(400);
-
-//   await request(app)
-//     .patch(`/api/products/${response.body.id}`)
-//     .set("Cookie", cookie)
-//     .send({
-//       title: "Sample Dress",
-//       price: -10,
-//     })
-//     .expect(400);
-// });
-
-it("updates the product provided valid inputs as an admin user", async () => {
+it("updates the product provided valid inputs as an admin", async () => {
   const cookie = global.adminSignin();
 
-  const response = await request(app)
-    .post("/api/products")
-    .set("Cookie", cookie)
-    .send({
-      title: "Sample Dress",
-      price: 1990,
-      image1: "./asset/sample.jpg",
-      colors: "White,Black",
-      sizes: "S,M,L",
-      brand: "Uniqlo",
-      category: "Dress",
-      material: "Polyester 100%",
-      description:
-        "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
-      // reviews,
-      numReviews: 0,
-      rating: 5,
-      countInStock: 12,
-    });
+  // Create a product
+  const product = await createProduct();
 
   await request(app)
-    .patch(`/api/products/${response.body.id}`)
+    .patch(`/api/products/${product.id}`)
     .set("Cookie", cookie)
     .send({
       title: "New Sample Cloth",
-      price: 1790,
+      price: 119,
     })
     .expect(200);
 
-  const productResponse = await request(app)
-    .get(`/api/products/${response.body.id}`)
+  const { body: productResponse } = await request(app)
+    .get(`/api/products/${product.id}`)
     .send();
 
-  expect(productResponse.body.title).toEqual("New Sample Cloth");
-  expect(productResponse.body.price).toEqual(1790);
+  expect(productResponse.title).toEqual("New Sample Cloth");
+  expect(productResponse.price).toEqual(119);
 });
 
 it("publishes an event", async () => {
   const cookie = global.adminSignin();
 
-  const response = await request(app)
-    .post("/api/products")
-    .set("Cookie", cookie)
-    .send({
-      title: "Sample Dress",
-      price: 1990,
-      userId: "6214a0227e0d2db80ddb0860",
-      image1: "./asset/sample.jpg",
-      colors: "White,Black",
-      sizes: "S,M,L",
-      brand: "Uniqlo",
-      category: "Dress",
-      material: "Polyester 100%",
-      description:
-        "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
-      // reviews,
-      numReviews: 0,
-      rating: 5,
-      countInStock: 12,
-    });
+  // Create a product
+  const product = await createProduct();
 
   await request(app)
-    .patch(`/api/products/${response.body.id}`)
+    .patch(`/api/products/${product.id}`)
     .set("Cookie", cookie)
     .send({
       title: "Sample Dress 2",
-      price: 590,
-      userId: "6214a0227e0d2db80ddb0860",
+      price: 79,
+      userId: product.userId,
       image1: "./asset/sample.jpg",
-      colors: "White,Black",
+      colors: "White,Black,Red",
       sizes: "S,M,L,XL",
-      brand: "Uniqlo",
       category: "Dress",
-      material: "Cotton 100%",
+      material: "Cotton 70% Polyester 30%",
       description:
-        "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
-      // reviews,
-      numReviews: 0,
+        "Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
+      numReviews: 2,
       rating: 4.5,
       countInStock: 6,
     })
@@ -175,36 +128,18 @@ it("rejects updates if the product is reserved", async () => {
   const cookie = global.adminSignin();
 
   // Create a product
-  const response = await request(app)
-    .post("/api/products")
-    .set("Cookie", cookie)
-    .send({
-      title: "Sample Dress",
-      price: 1990,
-      userId: "6214a0227e0d2db80ddb0860",
-      image1: "./asset/sample.jpg",
-      colors: "White,Black",
-      sizes: "S,M,L",
-      brand: "Uniqlo",
-      category: "Dress",
-      material: "Polyester 100%",
-      description:
-        "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
-      numReviews: 0,
-      rating: 0,
-      countInStock: 1,
-    });
+  const product = await createProduct();
 
-  const product = await Product.findById(response.body.id);
-  product!.set({ isReserved: true });
-  await product!.save();
+  const reservedProduct = await Product.findById(product.id);
+  reservedProduct!.set({ isReserved: true });
+  await reservedProduct!.save();
 
   // Reject an update when product has isReserved equal to true
   await request(app)
-    .patch(`/api/products/${response.body.id}`)
+    .patch(`/api/products/${product.id}`)
     .set("Cookie", cookie)
     .send({
-      price: 1790,
+      price: 119,
     })
     .expect(400);
 });

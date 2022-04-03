@@ -29,11 +29,8 @@ router.patch(
       throw new NotFoundError();
     }
 
-    // Only admin *OR* the user who request that order can only access the order
-    if (
-      order.userId !== req.currentUser!.id &&
-      req.currentUser!.isAdmin !== true
-    ) {
+    // Only admin can make a request
+    if (req.currentUser!.isAdmin !== true) {
       throw new NotAuthorizedError();
     }
 
