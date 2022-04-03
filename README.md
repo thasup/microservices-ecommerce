@@ -1,6 +1,6 @@
 <!-- Add banner here -->
 
-![Project Preview](docs/aurapan-shop-banner-2.png)
+![Project Preview](docs/aurapan-shop-banner-1.jpg)
 
 # microservices-ecommerce
 
