@@ -3,6 +3,15 @@ import Link from "next/link";
 import Router from "next/router";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row, Spinner, Table } from "react-bootstrap";
+import {
+  faCheck,
+  faEdit,
+  faMars,
+  faTimes,
+  faTrash,
+  faVenus,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import CustomTooltip from "./CustomTooltip";
 import profilePic from "../public/asset/sample.jpg";
@@ -97,16 +106,19 @@ const UserList = ({ users }) => {
                 <td>
                   {user.isAdmin ? (
                     <>
-                      <i
-                        className="fas fa-check"
+                      <FontAwesomeIcon
+                        icon={faCheck}
                         style={{ color: "green" }}
-                      ></i>
+                      />
                       {"  "}
                       Yes
                     </>
                   ) : (
                     <>
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
+                      <FontAwesomeIcon
+                        icon={faTimes}
+                        style={{ color: "red" }}
+                      />
                       {"  "}
                       No
                     </>
@@ -117,19 +129,19 @@ const UserList = ({ users }) => {
                   {user.gender ? (
                     user.gender === "male" ? (
                       <>
-                        <i
-                          className="fa-solid fa-mars"
+                        <FontAwesomeIcon
+                          icon={faMars}
                           style={{ color: "dodgerblue" }}
-                        ></i>
+                        />
                         {"  "}
                         Male
                       </>
                     ) : (
                       <>
-                        <i
-                          className="fa-solid fa-venus"
+                        <FontAwesomeIcon
+                          icon={faVenus}
                           style={{ color: "hotpink" }}
-                        ></i>
+                        />
                         {"  "}
                         Female
                       </>
@@ -163,7 +175,7 @@ const UserList = ({ users }) => {
                     passHref
                   >
                     <Button variant="dark" className="btn-sm mx-1">
-                      <i className="fas fa-edit"></i>
+                      <FontAwesomeIcon icon={faEdit} />
                     </Button>
                   </Link>
                   <Button
@@ -182,7 +194,7 @@ const UserList = ({ users }) => {
                         <span className="visually-hidden">Loading...</span>
                       </Spinner>
                     ) : (
-                      <i className="fas fa-trash"></i>
+                      <FontAwesomeIcon icon={faTrash} />
                     )}
                   </Button>
                 </td>

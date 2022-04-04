@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Col, Form, ListGroup, Row, Spinner } from "react-bootstrap";
 import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faStarHalfAlt,
+  faTrash,
+  faStar as fasfaStar,
+} from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-regular-svg-icons";
 
 import ReactStars from "react-rating-stars-component";
 import useRequest from "../hooks/use-request";
@@ -10,7 +17,7 @@ import Loader from "./Loader";
 import Message from "./Message";
 import Rating from "./Rating";
 
-const Review = ({ currentUser, product, users, isPurchase }) => {
+const Review = ({ currentUser, product, users, isPurchase, onMobile }) => {
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState("");
   const [comment, setComment] = useState("");
@@ -94,7 +101,10 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
                       {users.find((user) => user.id === review.userId).name}
                     </p>
                     <div className="d-flex flex-row align-items-center mb-3">
-                      <Rating value={review.rating} />
+                      <Rating
+                        value={review.rating}
+                        mobile={onMobile ? true : false}
+                      />
                       <div className="ms-3">
                         {review.createdAt.substring(0, 10)}
                       </div>
@@ -111,7 +121,7 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
                         className="btn-sm mx-1 btn btn-dark"
                         onClick={() => deleteReviewHandler(review)}
                       >
-                        <i className="fas fa-trash"></i>
+                        <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </Col>
                   )}
@@ -136,9 +146,9 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
                       count={5}
                       size={40}
                       isHalf={true}
-                      emptyIcon={<i className="fa-light fa-star"></i>}
-                      halfIcon={<i className="fa-solid fa-star-half-alt"></i>}
-                      fullIcon={<i className="fa-solid fa-star"></i>}
+                      emptyIcon={<FontAwesomeIcon icon={faStar} />}
+                      halfIcon={<FontAwesomeIcon icon={faStarHalfAlt} />}
+                      fullIcon={<FontAwesomeIcon icon={fasfaStar} />}
                       activeColor="#000"
                       value={rating}
                       onChange={(newValue) => setRating(newValue)}

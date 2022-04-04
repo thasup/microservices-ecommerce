@@ -3,6 +3,13 @@ import dynamic from "next/dynamic";
 import { Col, Container, Nav, Row } from "react-bootstrap";
 import Router from "next/router";
 import Head from "next/head";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBasketShopping,
+  faPlus,
+  faShirt,
+} from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 import CreateProduct from "../../components/CreateProduct";
 import UserList from "../../components/UserList";
@@ -59,22 +66,22 @@ const AdminDashboard = ({
                 <Nav variant="pills" className="flex-column">
                   <Nav.Item>
                     <Nav.Link eventKey="product-list">
-                      <i className="fa-solid fa-shirt"></i> Product List
+                      <FontAwesomeIcon icon={faShirt} /> Product List
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="user-list">
-                      <i className="far fa-user"></i> User List
+                      <FontAwesomeIcon icon={faUser} /> User List
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="order-list">
-                      <i className="fa-solid fa-basket-shopping"></i> Order List
+                      <FontAwesomeIcon icon={faBasketShopping} /> Order List
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="create-product">
-                      <i className="fa-solid fa-plus"></i> New Product
+                      <FontAwesomeIcon icon={faPlus} /> New Product
                     </Nav.Link>
                   </Nav.Item>
                 </Nav>
