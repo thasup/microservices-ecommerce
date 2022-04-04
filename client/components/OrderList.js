@@ -1,6 +1,13 @@
 import React from "react";
 import { Button, Row, Col, Table } from "react-bootstrap";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaypal, faStripeS } from "@fortawesome/free-brands-svg-icons";
+import {
+  faCheck,
+  faInfoCircle,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 
 import CustomTooltip from "./CustomTooltip";
 import ExpireTimer from "./ExpireTimer";
@@ -40,11 +47,11 @@ const OrderList = ({ orders, users }) => {
                   <p style={{ fontSize: "1rem" }}>
                     {order.paymentMethod === "paypal" ? (
                       <>
-                        <i className="fa-brands fa-paypal"></i> PayPal
+                        <FontAwesomeIcon icon={faPaypal} /> PayPal
                       </>
                     ) : (
                       <>
-                        <i className="fa-brands fa-stripe-s"></i> Stripe
+                        <FontAwesomeIcon icon={faStripeS} /> Stripe
                       </>
                     )}
                   </p>
@@ -67,15 +74,18 @@ const OrderList = ({ orders, users }) => {
                 <td>
                   {order.isPaid ? (
                     <p>
-                      <i
-                        className="fas fa-check"
+                      <FontAwesomeIcon
+                        icon={faCheck}
                         style={{ color: "green" }}
-                      ></i>{" "}
+                      />{" "}
                       {order.paidAt?.substring(0, 10)}
                     </p>
                   ) : (
                     <p>
-                      <i className="fas fa-times" style={{ color: "red" }}></i>{" "}
+                      <FontAwesomeIcon
+                        icon={faTimes}
+                        style={{ color: "red" }}
+                      />{" "}
                       Not Paid
                     </p>
                   )}
@@ -83,15 +93,18 @@ const OrderList = ({ orders, users }) => {
                 <td>
                   {order.isDelivered ? (
                     <p>
-                      <i
-                        className="fas fa-check"
+                      <FontAwesomeIcon
+                        icon={faCheck}
                         style={{ color: "green" }}
-                      ></i>{" "}
+                      />{" "}
                       {order.deliveredAt?.substring(0, 10)}
                     </p>
                   ) : (
                     <p>
-                      <i className="fas fa-times" style={{ color: "red" }}></i>{" "}
+                      <FontAwesomeIcon
+                        icon={faTimes}
+                        style={{ color: "red" }}
+                      />{" "}
                       Not Delivered
                     </p>
                   )}
@@ -103,7 +116,7 @@ const OrderList = ({ orders, users }) => {
                     passHref
                   >
                     <Button className="btn-sm" variant="light">
-                      <i className="fas fa-info-circle"></i> Details
+                      <FontAwesomeIcon icon={faInfoCircle} /> Details
                     </Button>
                   </Link>
                 </td>

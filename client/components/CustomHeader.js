@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Nav, Container, Offcanvas } from "react-bootstrap";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBasketShopping,
+  faChevronRight,
+  faListCheck,
+  faRightFromBracket,
+  faRightToBracket,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 
 const CustomHeader = ({ currentUser }) => {
   const [showDropDown, setShowDropDown] = useState(false);
@@ -65,37 +75,37 @@ const CustomHeader = ({ currentUser }) => {
               <Nav className="offcanvas-body-upper d-flex flex-column justify-content-start">
                 <Link href="/products/bestseller" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Bestseller <i className="fas fa-chevron-right"></i>
+                    Bestseller <FontAwesomeIcon icon={faChevronRight} />
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/tops" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Top <i className="fas fa-chevron-right"></i>
+                    Top <FontAwesomeIcon icon={faChevronRight} />
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/bottoms" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Bottom <i className="fas fa-chevron-right"></i>
+                    Bottom <FontAwesomeIcon icon={faChevronRight} />
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/dresses" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Dress <i className="fas fa-chevron-right"></i>
+                    Dress <FontAwesomeIcon icon={faChevronRight} />
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/sets" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Set <i className="fas fa-chevron-right"></i>
+                    Set <FontAwesomeIcon icon={faChevronRight} />
                   </Nav.Link>
                 </Link>
 
                 <Link href="/products/coats" passHref>
                   <Nav.Link className="offcanvas-link">
-                    Coat <i className="fas fa-chevron-right"></i>
+                    Coat <FontAwesomeIcon icon={faChevronRight} />
                   </Nav.Link>
                 </Link>
               </Nav>
@@ -104,20 +114,19 @@ const CustomHeader = ({ currentUser }) => {
                 <Nav className="offcanvas-body-lower mb-2 d-flex flex-row justify-content-around">
                   <Link href="/dashboard" passHref>
                     <Nav.Link>
-                      <i className="fas fa-user"></i> Account
+                      <FontAwesomeIcon icon={faUser} /> Account
                     </Nav.Link>
                   </Link>
                   {currentUser?.isAdmin && (
                     <Link href="/admin" passHref>
                       <Nav.Link>
-                        <i className="fas fa-list-check"></i> Management
+                        <FontAwesomeIcon icon={faListCheck} /> Management
                       </Nav.Link>
                     </Link>
                   )}
                   <Link href="/signout" passHref>
                     <Nav.Link>
-                      <i className="fa-solid fa-right-from-bracket"></i> Sign
-                      Out
+                      <FontAwesomeIcon icon={faRightFromBracket} /> Sign Out
                     </Nav.Link>
                   </Link>
                 </Nav>
@@ -125,7 +134,7 @@ const CustomHeader = ({ currentUser }) => {
                 <Nav className="mx-3 d-flex flex-row justify-content-end ">
                   <Link href="/signin" passHref>
                     <Nav.Link>
-                      <i className="fa-solid fa-right-to-bracket"></i> Sign In
+                      <FontAwesomeIcon icon={faRightToBracket} /> Sign In
                     </Nav.Link>
                   </Link>
                 </Nav>
@@ -142,7 +151,7 @@ const CustomHeader = ({ currentUser }) => {
           <Nav className="icon-menu d-flex flex-row">
             <Link href="/cart" passHref>
               <Nav.Link className="position-relative cart-icon">
-                <i className="fas fa-basket-shopping"></i> Cart
+                <FontAwesomeIcon icon={faBasketShopping} /> Cart
                 <span
                   id="notification"
                   className="position-absolute  badge border border-light rounded-circle bg-danger"
@@ -205,7 +214,7 @@ const CustomHeader = ({ currentUser }) => {
           <Nav className="icon-menu d-flex flex-row position-relative">
             <Link href="/cart" passHref>
               <Nav.Link className="position-relative cart-icon">
-                <i className="fas fa-basket-shopping"></i> Cart
+                <FontAwesomeIcon icon={faBasketShopping} /> Cart
                 <span
                   id="notification"
                   className="position-absolute  badge border border-light rounded-circle bg-danger"
@@ -224,7 +233,7 @@ const CustomHeader = ({ currentUser }) => {
                   currentUser ? setShowDropDown(true) : setShowDropDown(false)
                 }
               >
-                <i className="fa-regular fa-circle-user"></i> Account
+                <FontAwesomeIcon icon={faCircleUser} /> Account
               </Nav.Link>
             </Link>
 
@@ -239,21 +248,21 @@ const CustomHeader = ({ currentUser }) => {
 
               <Link href="/dashboard" passHref>
                 <a className="account-dropdown-item">
-                  <i className="fas fa-user"></i> Account
+                  <FontAwesomeIcon icon={faUser} /> Account
                 </a>
               </Link>
 
               {currentUser?.isAdmin && (
                 <Link href="/admin" passHref>
                   <a className="account-dropdown-item">
-                    <i className="fas fa-list-check"></i> Management
+                    <FontAwesomeIcon icon={faListCheck} /> Management
                   </a>
                 </Link>
               )}
 
               <Link href="/signout" passHref>
                 <a className="account-dropdown-item">
-                  <i className="fa-solid fa-right-from-bracket"></i> Sign Out
+                  <FontAwesomeIcon icon={faRightFromBracket} /> Sign Out
                 </a>
               </Link>
             </div>

@@ -1,35 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
+import { faStar as farfaStar } from "@fortawesome/free-regular-svg-icons";
 
-const Rating = ({ value, text, color, mobile }) => {
-  const [onMobile, setOnMobile] = useState(false);
-
-  useEffect(() => {
-    if (mobile) {
-      const interval = setInterval(() => {
-        if (window.innerWidth <= 650) {
-          setOnMobile(true);
-        } else {
-          setOnMobile(false);
-        }
-      }, 100);
-      return () => clearInterval(interval);
-    }
-  }, []);
-
-  return onMobile ? (
+const Rating = ({ value, text, color, mobile = false }) => {
+  return mobile ? (
     <div className="rating">
-      <span>
-        <i
-          style={{ color }}
-          className={
-            value >= 5
-              ? "fa-solid fa-star"
-              : value >= 0.5
-              ? "fa-solid fa-star-half-alt"
-              : "fa-regular fa-star"
-          }
-        ></i>
+      <span style={{ color }}>
+        {value >= 5 ? (
+          <FontAwesomeIcon icon={faStar} />
+        ) : value >= 0.5 ? (
+          <FontAwesomeIcon icon={faStarHalfAlt} />
+        ) : (
+          <FontAwesomeIcon icon={farfaStar} />
+        )}
       </span>
       <span> {value}</span>
     </div>
@@ -37,17 +22,15 @@ const Rating = ({ value, text, color, mobile }) => {
     <div className="rating">
       <span>
         {[1, 2, 3, 4, 5].map((index) => (
-          <i
-            key={index}
-            style={{ color }}
-            className={
-              value >= index
-                ? "fa-solid fa-star"
-                : value >= index - 0.5
-                ? "fa-solid fa-star-half-alt"
-                : "fa-regular fa-star"
-            }
-          ></i>
+          <span key={index} style={{ color }}>
+            {value >= index ? (
+              <FontAwesomeIcon icon={faStar} />
+            ) : value >= index - 0.5 ? (
+              <FontAwesomeIcon icon={faStarHalfAlt} />
+            ) : (
+              <FontAwesomeIcon icon={farfaStar} />
+            )}
+          </span>
         ))}
       </span>
 

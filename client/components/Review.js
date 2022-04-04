@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Col, Form, ListGroup, Row, Spinner } from "react-bootstrap";
 import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faStarHalfAlt,
+  faTrash,
+  faStar as fasfaStar,
+} from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-regular-svg-icons";
 
 import ReactStars from "react-rating-stars-component";
 import useRequest from "../hooks/use-request";
@@ -111,7 +118,7 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
                         className="btn-sm mx-1 btn btn-dark"
                         onClick={() => deleteReviewHandler(review)}
                       >
-                        <i className="fas fa-trash"></i>
+                        <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </Col>
                   )}
@@ -136,9 +143,9 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
                       count={5}
                       size={40}
                       isHalf={true}
-                      emptyIcon={<i className="fa-light fa-star"></i>}
-                      halfIcon={<i className="fa-solid fa-star-half-alt"></i>}
-                      fullIcon={<i className="fa-solid fa-star"></i>}
+                      emptyIcon={<FontAwesomeIcon icon={faStar} />}
+                      halfIcon={<FontAwesomeIcon icon={faStarHalfAlt} />}
+                      fullIcon={<FontAwesomeIcon icon={fasfaStar} />}
                       activeColor="#000"
                       value={rating}
                       onChange={(newValue) => setRating(newValue)}

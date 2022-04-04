@@ -95,7 +95,7 @@ const Product = ({ product, currentUser }) => {
       <Card.Body className="px-2 pb-0">
         <Row
           className="d-flex flex-row justify-content-between px-0 mx-0"
-          style={{ minHeight: onMobile ? "6rem" : "auto" }}
+          style={{ minHeight: onMobile ? "6rem" : "4rem" }}
         >
           <Col xs={12} sm={9} className="card-product-title" as="h4">
             <Link
@@ -108,7 +108,12 @@ const Product = ({ product, currentUser }) => {
           </Col>
 
           <Col xs={12} sm={3} className="card-product-price">
-            <h4 style={{ textAlign: onMobile ? "start" : "end" }}>
+            <h4
+              style={{
+                textAlign: onMobile ? "start" : "end",
+                justifyContent: onMobile ? "flex-end" : "flex-start",
+              }}
+            >
               ${product.price}
             </h4>
           </Col>
@@ -119,7 +124,7 @@ const Product = ({ product, currentUser }) => {
             <Rating
               value={product.rating}
               text={`(${product.numReviews})`}
-              mobile={true}
+              mobile={onMobile ? true : false}
             />
           </Col>
 
@@ -135,7 +140,6 @@ const Product = ({ product, currentUser }) => {
         </Row>
 
         {onMobile && (
-          // <div className="menu-tab-mobile d-flex justify-content-center">
           <AddToCart
             className="d-flex justify-content-center"
             product={product}
@@ -143,7 +147,6 @@ const Product = ({ product, currentUser }) => {
             color={color}
             lg={true}
           />
-          // </div>
         )}
       </Card.Body>
     </Card>

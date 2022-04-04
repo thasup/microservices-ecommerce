@@ -13,6 +13,8 @@ import {
 import Router from "next/router";
 import Link from "next/link";
 import Head from "next/head";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
@@ -383,7 +385,7 @@ const CartPage = ({ currentUser, products }) => {
                                       removeFromCartHandler(item.productId)
                                     }
                                   >
-                                    <i className="fas fa-trash"></i>
+                                    <FontAwesomeIcon icon={faTrash} />
                                   </Button>
                                 </Col>
                               </Row>

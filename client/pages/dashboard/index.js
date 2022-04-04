@@ -3,6 +3,15 @@ import { Row, Col, Container, Nav } from "react-bootstrap";
 import dynamic from "next/dynamic";
 import Router from "next/router";
 import Head from "next/head";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBasketShopping,
+  faCircleInfo,
+  faHeart,
+  faMapLocationDot,
+  faShieldHalved,
+} from "@fortawesome/free-solid-svg-icons";
 
 import EditProfile from "../../components/EditProfile";
 import EditSecurity from "../../components/EditSecurity";
@@ -57,37 +66,37 @@ const Dashboard = ({ currentUser, users, myOrders, products }) => {
                 <Nav variant="pills" className="flex-column">
                   <Nav.Item>
                     <Nav.Link eventKey="profile">
-                      <i className="far fa-user"></i> Profile
+                      <FontAwesomeIcon icon={faUser} /> Profile
                     </Nav.Link>
                   </Nav.Item>
 
                   <Nav.Item>
                     <Nav.Link eventKey="security">
-                      <i className="fas fa-shield-halved"></i> Security
+                      <FontAwesomeIcon icon={faShieldHalved} /> Security
                     </Nav.Link>
                   </Nav.Item>
 
                   <Nav.Item>
                     <Nav.Link eventKey="address">
-                      <i className="fas fa-map-location-dot"></i> Address
+                      <FontAwesomeIcon icon={faMapLocationDot} /> Address
                     </Nav.Link>
                   </Nav.Item>
 
                   <Nav.Item>
                     <Nav.Link eventKey="orders">
-                      <i className="fas fa-basket-shopping"></i> Orders
+                      <FontAwesomeIcon icon={faBasketShopping} /> Orders
                     </Nav.Link>
                   </Nav.Item>
 
                   <Nav.Item>
                     <Nav.Link eventKey="wishlist">
-                      <i className="fas fa-heart"></i> Wishlist
+                      <FontAwesomeIcon icon={faHeart} /> Wishlist
                     </Nav.Link>
                   </Nav.Item>
 
                   <Nav.Item>
                     <Nav.Link eventKey="support">
-                      <i className="fas fa-circle-info"></i> Support
+                      <FontAwesomeIcon icon={faCircleInfo} /> Support
                     </Nav.Link>
                   </Nav.Item>
                 </Nav>

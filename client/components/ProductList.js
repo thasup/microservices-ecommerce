@@ -1,3 +1,5 @@
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import Router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -127,7 +129,7 @@ const ProductList = ({ products, orderProducts, paymentProducts }) => {
                     passHref
                   >
                     <Button variant="dark" className="btn-sm mx-1">
-                      <i className="fas fa-edit"></i>
+                      <FontAwesomeIcon icon={faEdit} />
                     </Button>
                   </Link>
                   <Button
@@ -146,7 +148,7 @@ const ProductList = ({ products, orderProducts, paymentProducts }) => {
                         <span className="visually-hidden">Loading...</span>
                       </Spinner>
                     ) : (
-                      <i className="fas fa-trash"></i>
+                      <FontAwesomeIcon icon={faTrash} />
                     )}
                   </Button>
                 </td>
