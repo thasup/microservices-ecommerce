@@ -124,7 +124,7 @@ const Product = ({ product, currentUser }) => {
             <Rating
               value={product.rating}
               text={`(${product.numReviews})`}
-              mobile={true}
+              mobile={onMobile ? true : false}
             />
           </Col>
 

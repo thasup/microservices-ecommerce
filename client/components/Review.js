@@ -17,7 +17,7 @@ import Loader from "./Loader";
 import Message from "./Message";
 import Rating from "./Rating";
 
-const Review = ({ currentUser, product, users, isPurchase, onMobile }) => {
+const Review = ({ currentUser, product, users, isPurchase }) => {
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState("");
   const [comment, setComment] = useState("");
@@ -101,10 +101,7 @@ const Review = ({ currentUser, product, users, isPurchase, onMobile }) => {
                       {users.find((user) => user.id === review.userId).name}
                     </p>
                     <div className="d-flex flex-row align-items-center mb-3">
-                      <Rating
-                        value={review.rating}
-                        mobile={onMobile ? true : false}
-                      />
+                      <Rating value={review.rating} />
                       <div className="ms-3">
                         {review.createdAt.substring(0, 10)}
                       </div>
