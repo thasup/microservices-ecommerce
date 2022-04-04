@@ -95,7 +95,7 @@ const Product = ({ product, currentUser }) => {
       <Card.Body className="px-2 pb-0">
         <Row
           className="d-flex flex-row justify-content-between px-0 mx-0"
-          style={{ minHeight: onMobile ? "6rem" : "auto" }}
+          style={{ minHeight: onMobile ? "6rem" : "4rem" }}
         >
           <Col xs={12} sm={9} className="card-product-title" as="h4">
             <Link
