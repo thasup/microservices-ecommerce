@@ -108,7 +108,12 @@ const Product = ({ product, currentUser }) => {
           </Col>
 
           <Col xs={12} sm={3} className="card-product-price">
-            <h4 style={{ textAlign: onMobile ? "start" : "end" }}>
+            <h4
+              style={{
+                textAlign: onMobile ? "start" : "end",
+                justifyContent: onMobile ? "flex-end" : "flex-start",
+              }}
+            >
               ${product.price}
             </h4>
           </Col>
@@ -135,7 +140,6 @@ const Product = ({ product, currentUser }) => {
         </Row>
 
         {onMobile && (
-          // <div className="menu-tab-mobile d-flex justify-content-center">
           <AddToCart
             className="d-flex justify-content-center"
             product={product}
@@ -143,7 +147,6 @@ const Product = ({ product, currentUser }) => {
             color={color}
             lg={true}
           />
-          // </div>
         )}
       </Card.Body>
     </Card>
