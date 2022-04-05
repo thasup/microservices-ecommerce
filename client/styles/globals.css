@@ -1,5 +1,5 @@
 #__next {
-  min-height: 100vh;
+  /* min-height: 100vh; */
   position: relative;
 }
 
@@ -718,5 +718,41 @@ header {
   #checkout-step .nav-item a {
     padding: 5px 8px;
     text-align: center;
+  }
+}
+
+/* Sign In Page */
+.register-box {
+  box-shadow: 1px 1px 12px rgb(44, 44, 44);
+  margin: 100px auto 0;
+  padding: 0;
+  max-width: 1000px;
+}
+
+.register-box .row {
+  margin: 0;
+}
+
+.register-box .row .col:nth-child(2) {
+  padding: 2rem;
+}
+
+.banner-img {
+  position: relative;
+  min-height: 70vh;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Tablet Screen */
+@media only screen and (max-width: 768px) {
+  .register-box {
+    max-width: none;
+    width: auto;
+    margin: 100px 15px 0 15px;
+  }
+
+  .banner-img {
+    display: none;
   }
 }

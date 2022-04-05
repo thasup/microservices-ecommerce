@@ -3,9 +3,9 @@ import Router from "next/router";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import Link from "next/link";
 import Head from "next/head";
+import Image from "next/image";
 
 import useRequest from "../hooks/use-request";
-import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
 
 const signin = () => {
@@ -42,6 +42,10 @@ const signin = () => {
     doRequest();
   };
 
+  const myLoader = ({ src }) => {
+    return `./asset/${src}`;
+  };
+
   return (
     <>
       <Head>
@@ -55,47 +59,58 @@ const signin = () => {
           <Loader />
         </div>
       ) : (
-        <Container className="app-container">
+        <Container className="app-container register-box">
           <Row>
+            <Link href={`/signup`} passHref>
+              <Col className="banner-img">
+                <Image
+                  loader={myLoader}
+                  src="sign_up_banner.png"
+                  layout="fill"
+                  objectFit="cover"
+                  priority="true"
+                  alt="sign up banner"
+                />
+              </Col>
+            </Link>
+
             <Col>
-              <FormContainer>
-                <h1>Sign In</h1>
-                <Form className="mt-3" onSubmit={submitHandler}>
-                  <Form.Group controlId="email" className="my-3">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    ></Form.Control>
-                  </Form.Group>
+              <h1>Sign In</h1>
+              <Form className="mt-3" onSubmit={submitHandler}>
+                <Form.Group controlId="email" className="my-3">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  ></Form.Control>
+                </Form.Group>
 
-                  <Form.Group controlId="password" className="my-3">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Enter password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    ></Form.Control>
-                  </Form.Group>
+                <Form.Group controlId="password" className="my-3">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  ></Form.Control>
+                </Form.Group>
 
-                  {showErrors ? errors : null}
-                  <Button className="mt-3" type="submit" variant="dark">
-                    Sign In
-                  </Button>
-                </Form>
+                {showErrors ? errors : null}
+                <Button className="mt-3 ripple" type="submit" variant="dark">
+                  Sign In
+                </Button>
+              </Form>
 
-                <Row className="py-3">
-                  <Col>
-                    New here ?{" "}
-                    <Link href="/signup">
-                      <a>Create an Account</a>
-                    </Link>
-                  </Col>
-                </Row>
-              </FormContainer>
+              <Row className="py-3">
+                <Col>
+                  New here ?{" "}
+                  <Link href="/signup">
+                    <a>Create an Account</a>
+                  </Link>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Container>
