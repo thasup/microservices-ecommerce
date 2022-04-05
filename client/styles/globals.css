@@ -80,6 +80,43 @@ a::before {
 
 .btn {
   text-transform: uppercase;
+  box-shadow: 0px 0px 5px #555;
+  background-position: center;
+  transition: background 0.8s;
+}
+
+.btn-dark:hover {
+  background: #464646 radial-gradient(circle, transparent 1%, #464646 1%)
+    center/15000%;
+  border-color: #464646;
+}
+
+.btn-dark:active {
+  background-color: #5e5e5e;
+  border-color: #5e5e5e;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+.btn-light:hover {
+  background: #f1f1f1 radial-gradient(circle, transparent 1%, #f1f1f1 1%)
+    center/15000%;
+  border-color: #f1f1f1;
+}
+
+.btn-light:active {
+  background-color: #f1f1f1;
+  border-color: #f1f1f1;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+.btn-dark:focus {
+  box-shadow: none;
+}
+
+.btn-dark:active:focus {
+  box-shadow: none;
 }
 
 .app-container {

@@ -98,7 +98,7 @@ const signin = () => {
                 </Form.Group>
 
                 {showErrors ? errors : null}
-                <Button className="mt-3 ripple" type="submit" variant="dark">
+                <Button className="mt-3" type="submit" variant="dark">
                   Sign In
                 </Button>
               </Form>
