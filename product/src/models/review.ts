@@ -7,6 +7,8 @@ interface ReviewAttrs {
   rating: number;
   comment: string;
   userId: string;
+  productTitle?: string;
+  productId?: string;
 }
 
 // An interface that describes the properties
@@ -22,6 +24,8 @@ export interface ReviewDoc extends mongoose.Document {
   rating: number;
   comment: string;
   userId: string;
+  productTitle?: string;
+  productId?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -43,6 +47,14 @@ export const reviewSchema = new mongoose.Schema<ReviewDoc, ReviewModel>(
     userId: {
       type: String,
       required: true,
+    },
+    productTitle: {
+      type: String,
+      required: false,
+    },
+    productId: {
+      type: String,
+      required: false,
     },
   },
   {

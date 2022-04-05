@@ -52,6 +52,8 @@ router.post(
         rating,
         comment,
         userId: req.currentUser!.id,
+        productTitle: product.title,
+        productId: product.id,
       });
 
       await review.save();
