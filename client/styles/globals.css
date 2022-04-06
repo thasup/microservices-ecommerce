@@ -1,5 +1,5 @@
 #__next {
-  min-height: 100vh;
+  /* min-height: 100vh; */
   position: relative;
 }
 
@@ -80,6 +80,58 @@ a::before {
 
 .btn {
   text-transform: uppercase;
+  box-shadow: 0px 0px 5px #555;
+  background-position: center;
+  transition: background 0.8s;
+}
+
+.btn-dark:hover {
+  background: #464646 radial-gradient(circle, transparent 1%, #464646 1%)
+    center/15000%;
+  border-color: #464646;
+}
+
+.btn-dark:active {
+  background-color: #5e5e5e;
+  border-color: #5e5e5e;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+.btn-outline-dark:hover {
+  background: #464646 radial-gradient(circle, transparent 1%, #464646 1%)
+    center/15000%;
+  border-color: #464646;
+}
+
+.btn-outline-dark:active {
+  background-color: #5e5e5e;
+  border-color: #5e5e5e;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+.btn-light:hover {
+  background: #f1f1f1 radial-gradient(circle, transparent 1%, #f1f1f1 1%)
+    center/15000%;
+  border-color: #f1f1f1;
+}
+
+.btn-light:active {
+  background-color: #f1f1f1;
+  border-color: #f1f1f1;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+.btn-dark:focus,
+.btn-outline-dark:focus {
+  box-shadow: none;
+}
+
+.btn-dark:active:focus,
+.btn-outline-dark:active:focus {
+  box-shadow: none;
 }
 
 .app-container {
@@ -578,6 +630,7 @@ header {
 .profile-img {
   position: relative;
   border-radius: 50%;
+  padding: 0;
 }
 
 .text-area {
@@ -718,5 +771,45 @@ header {
   #checkout-step .nav-item a {
     padding: 5px 8px;
     text-align: center;
+  }
+}
+
+/* Sign In & Sign Up Page */
+.register-box {
+  box-shadow: 1px 1px 12px rgb(44, 44, 44);
+  margin: 100px auto 0;
+  padding: 0;
+  max-width: 1000px;
+}
+
+.register-box .row {
+  margin: 0;
+}
+
+.register-box .row .col:nth-child(2) {
+  padding: 2rem;
+}
+
+.register-box h1 {
+  font-family: "Italiana", serif;
+}
+
+.banner-img {
+  position: relative;
+  min-height: 70vh;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Tablet Screen */
+@media only screen and (max-width: 768px) {
+  .register-box {
+    max-width: none;
+    width: auto;
+    margin: 100px 15px 0 15px;
+  }
+
+  .banner-img {
+    display: none;
   }
 }

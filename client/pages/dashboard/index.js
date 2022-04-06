@@ -11,12 +11,14 @@ import {
   faHeart,
   faMapLocationDot,
   faShieldHalved,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
 import EditProfile from "../../components/EditProfile";
 import EditSecurity from "../../components/EditSecurity";
 import EditAddress from "../../components/EditAddress";
 import UserOrderList from "../../components/UserOrderList";
+import UserReviewList from "../../components/UserReviewList";
 import WishList from "../../components/WishList";
 import Support from "../../components/Support";
 
@@ -33,7 +35,7 @@ const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
   ssr: false,
 });
 
-const Dashboard = ({ currentUser, users, myOrders, products }) => {
+const Dashboard = ({ currentUser, users, myOrders, myReviews, products }) => {
   const [isReady, setIsReady] = useState(false);
   const user = users.find((user) => user.id === currentUser?.id);
 
@@ -89,6 +91,12 @@ const Dashboard = ({ currentUser, users, myOrders, products }) => {
                   </Nav.Item>
 
                   <Nav.Item>
+                    <Nav.Link eventKey="reviews">
+                      <FontAwesomeIcon icon={faStar} /> Reviews
+                    </Nav.Link>
+                  </Nav.Item>
+
+                  <Nav.Item>
                     <Nav.Link eventKey="wishlist">
                       <FontAwesomeIcon icon={faHeart} /> Wishlist
                     </Nav.Link>
@@ -118,6 +126,10 @@ const Dashboard = ({ currentUser, users, myOrders, products }) => {
 
                   <DynamicTabPane eventKey="orders">
                     <UserOrderList myOrders={myOrders} />
+                  </DynamicTabPane>
+
+                  <DynamicTabPane eventKey="reviews">
+                    <UserReviewList myReviews={myReviews} products={products} />
                   </DynamicTabPane>
 
                   <DynamicTabPane eventKey="wishlist">

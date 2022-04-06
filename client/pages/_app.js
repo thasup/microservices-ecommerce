@@ -68,6 +68,7 @@ MyApp.getInitialProps = async (appContext) => {
   };
   if (data.currentUser !== null) {
     const { data: myOrders } = await client.get("/api/orders/myorders");
+    const { data: myReviews } = await client.get("/api/products/myreviews");
 
     const { data: orders } = await client.get("/api/orders");
 
@@ -78,6 +79,7 @@ MyApp.getInitialProps = async (appContext) => {
       users,
       bestseller,
       myOrders,
+      myReviews,
       orders,
     };
   }

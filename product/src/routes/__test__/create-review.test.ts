@@ -121,6 +121,8 @@ it("return 201 when make a successful request", async () => {
   expect(updatedProduct!.reviews![0].comment).toEqual(
     "Purus semper eget duis at tellus. Ut placerat orci nulla pellentesque dignissim enim."
   );
+  expect(updatedProduct!.reviews![0].productTitle).toEqual(product.title);
+  expect(updatedProduct!.reviews![0].productId).toEqual(product.id);
 });
 
 it("update new rating and numReviews correctly when recieve new several request", async () => {

@@ -3,17 +3,18 @@ import Router from "next/router";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import Link from "next/link";
 import Head from "next/head";
+import Image from "next/image";
 
 import useRequest from "../hooks/use-request";
-import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
 
-const signin = () => {
+const signin = ({ currentUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [showErrors, setShowErrors] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const { doRequest, errors } = useRequest({
     url: "/api/users/signin",
@@ -29,6 +30,13 @@ const signin = () => {
   });
 
   useEffect(() => {
+    // Protect unauthorized access
+    if (currentUser) {
+      return Router.push("/");
+    } else {
+      setIsReady(true);
+    }
+
     if (errors) {
       setLoading(false);
       setShowErrors(true);
@@ -42,23 +50,41 @@ const signin = () => {
     doRequest();
   };
 
+  const myLoader = ({ src }) => {
+    return `./asset/${src}`;
+  };
+
   return (
-    <>
-      <Head>
-        <title>Sign In | Aurapan</title>
-      </Head>
-      {loading ? (
-        <div
-          className="d-flex justify-content-center align-items-center px-0"
-          style={{ marginTop: "80px" }}
-        >
-          <Loader />
-        </div>
-      ) : (
-        <Container className="app-container">
-          <Row>
-            <Col>
-              <FormContainer>
+    isReady && (
+      <>
+        <Head>
+          <title>Sign In | Aurapan</title>
+        </Head>
+        {loading ? (
+          <div
+            className="d-flex justify-content-center align-items-center px-0"
+            style={{ marginTop: "80px" }}
+          >
+            <Loader />
+          </div>
+        ) : (
+          <Container className="app-container register-box">
+            <Row>
+              <Link href={`/signup`} passHref>
+                <Col className="banner-img">
+                  <Image
+                    loader={myLoader}
+                    src="sign_up_banner_1.png"
+                    layout="fill"
+                    objectFit="cover"
+                    objectPosition="left center"
+                    priority="true"
+                    alt="sign up banner"
+                  />
+                </Col>
+              </Link>
+
+              <Col>
                 <h1>Sign In</h1>
                 <Form className="mt-3" onSubmit={submitHandler}>
                   <Form.Group controlId="email" className="my-3">
@@ -88,19 +114,19 @@ const signin = () => {
                 </Form>
 
                 <Row className="py-3">
-                  <Col>
-                    New here ?{" "}
+                  <Col className="px-0">
+                    New here?{" "}
                     <Link href="/signup">
                       <a>Create an Account</a>
                     </Link>
                   </Col>
                 </Row>
-              </FormContainer>
-            </Col>
-          </Row>
-        </Container>
-      )}
-    </>
+              </Col>
+            </Row>
+          </Container>
+        )}
+      </>
+    )
   );
 };
 
