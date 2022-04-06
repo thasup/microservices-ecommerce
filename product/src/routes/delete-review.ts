@@ -30,7 +30,12 @@ router.delete(
       const deletedId = product.reviews.find(
         (review) => review.userId.toString() === req.currentUser!.id
       );
-      const deletedReview = await Review.findById(deletedId!.id);
+
+      if (!deletedId) {
+        throw new NotFoundError();
+      }
+
+      const deletedReview = await Review.findById(deletedId.id);
 
       if (!deletedReview) {
         throw new NotFoundError();
