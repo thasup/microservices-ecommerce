@@ -98,6 +98,19 @@ a::before {
   transition: background 0s;
 }
 
+.btn-outline-dark:hover {
+  background: #464646 radial-gradient(circle, transparent 1%, #464646 1%)
+    center/15000%;
+  border-color: #464646;
+}
+
+.btn-outline-dark:active {
+  background-color: #5e5e5e;
+  border-color: #5e5e5e;
+  background-size: 100%;
+  transition: background 0s;
+}
+
 .btn-light:hover {
   background: #f1f1f1 radial-gradient(circle, transparent 1%, #f1f1f1 1%)
     center/15000%;
@@ -111,11 +124,13 @@ a::before {
   transition: background 0s;
 }
 
-.btn-dark:focus {
+.btn-dark:focus,
+.btn-outline-dark:focus {
   box-shadow: none;
 }
 
-.btn-dark:active:focus {
+.btn-dark:active:focus,
+.btn-outline-dark:active:focus {
   box-shadow: none;
 }
 
@@ -615,6 +630,7 @@ header {
 .profile-img {
   position: relative;
   border-radius: 50%;
+  padding: 0;
 }
 
 .text-area {
