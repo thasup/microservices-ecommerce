@@ -27,6 +27,17 @@ router.delete(
     }
 
     if (product.reviews) {
+      const deletedId = product.reviews.find(
+        (review) => review.userId.toString() === req.currentUser!.id
+      );
+      const deletedReview = await Review.findById(deletedId!.id);
+
+      if (!deletedReview) {
+        throw new NotFoundError();
+      }
+
+      await deletedReview.remove();
+
       // Filter all reviews of the product *EXCEPT* the review of this user
       const updateReviews = product.reviews.filter(
         (review) => review.userId.toString() !== req.currentUser!.id
@@ -71,14 +82,6 @@ router.delete(
         isReserved: product.isReserved,
         version: product.version,
       });
-
-      const review = await Review.findOne({ userId: req.currentUser!.id });
-
-      if (!review) {
-        throw new NotFoundError();
-      }
-
-      await review.remove();
     }
 
     res.status(200).send(product);
