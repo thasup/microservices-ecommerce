@@ -801,7 +801,21 @@ header {
   cursor: pointer;
 }
 
-/* Tablet Screen */
+.register-box .gender-age-form {
+  margin: 1rem 0;
+}
+
+.register-box .gender-form {
+  padding-right: 1rem;
+  padding-left: 0;
+}
+
+.register-box .age-form {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+/* Mobile, Tablet Screen */
 @media only screen and (max-width: 768px) {
   .register-box {
     max-width: none;
@@ -811,5 +825,19 @@ header {
 
   .banner-img {
     display: none;
+  }
+
+  .register-box .gender-age-form {
+    margin: 0;
+  }
+
+  .register-box .gender-form {
+    padding-right: 0;
+    margin-bottom: 1rem;
+  }
+
+  .register-box .age-form {
+    padding-left: 0;
+    margin-bottom: 1rem;
   }
 }

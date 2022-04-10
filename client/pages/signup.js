@@ -123,8 +123,8 @@ const signup = ({ currentUser }) => {
                     ></Form.Control>
                   </Form.Group>
 
-                  <Row className="my-3">
-                    <Col sm={6} className="ps-0 pe-3">
+                  <Row className="gender-age-form">
+                    <Col sm={6} className="gender-form">
                       <Form.Group controlId="gender">
                         <Form.Label>Gender</Form.Label>
                         <Form.Control
@@ -140,7 +140,7 @@ const signup = ({ currentUser }) => {
                       </Form.Group>
                     </Col>
 
-                    <Col sm={6} className="ps-3 pe-0">
+                    <Col sm={6} className="age-form">
                       <Form.Group controlId="age">
                         <Form.Label>Age</Form.Label>
                         <Form.Control
