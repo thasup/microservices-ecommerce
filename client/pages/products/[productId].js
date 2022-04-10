@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Row, Col, ListGroup, Card, Form, Breadcrumb } from "react-bootstrap";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -31,6 +31,27 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   const [isPurchase, setIsPurchase] = useState(false);
   const [onMobile, setOnMobile] = useState(false);
 
+  const [screenWidth, setScreenWidth] = useState(0);
+
+  useLayoutEffect(() => {
+    function updateSize() {
+      setScreenWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", updateSize);
+    updateSize();
+
+    // Check current window width to determine screen type
+    if (screenWidth <= 576) {
+      setOnMobile(true);
+    } else {
+      setInitialImage(false);
+      setOnMobile(false);
+    }
+
+    return () => window.removeEventListener("resize", updateSize);
+  }, [screenWidth]);
+
   useEffect(async () => {
     //Check if orders is not an empty array
     if (myOrders && myOrders.length !== 0) {
@@ -48,37 +69,33 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
       }
     }
 
-    // Check current window width to determine screen type
-    if (window.innerWidth <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
+    // Defined variable
+    const mainImage = document.getElementsByClassName("product-main-img");
+    const sideImage = document.getElementsByClassName("product-side-img");
 
-    // Toggle the first image to show as a main image when page load on first time
-    if (!initialImage) {
-      const mainImage = document.getElementsByClassName("product-main-img");
+    // Toggle the first image to show as a main image
+    // when page load at first time on desktop screen
+    if (!initialImage && !onMobile) {
+      for (let i = 0; i < mainImage.length; i++) {
+        mainImage[i].classList.remove("toggle-main-img");
+        sideImage[i].classList.remove("toggle-side-img");
+      }
+
       mainImage[0].classList.add("toggle-main-img");
       setInitialImage(true);
     }
 
     // Toggle 'toggle-main-img' class for image when user clicked on that side image
     if (imageEvent) {
-      const mainImage = document.getElementsByClassName("product-main-img");
-      const sideImage = document.getElementsByClassName("product-side-img");
-
       for (let i = 0; i < mainImage.length; i++) {
         mainImage[i].classList.remove("toggle-main-img");
+        sideImage[i].classList.remove("toggle-side-img");
       }
 
       const currentId =
         imageEvent.target.parentElement.parentElement.id.slice(-1);
 
       mainImage[currentId].classList.add("toggle-main-img");
-
-      for (let i = 0; i < sideImage.length; i++) {
-        sideImage[i].classList.remove("toggle-side-img");
-      }
 
       imageEvent.target.parentElement.parentElement.classList.add(
         "toggle-side-img"
@@ -94,7 +111,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
     } else if (quantity < 1) {
       setQuantity(1);
     }
-  }, [imageEvent, quantity]);
+  }, [initialImage, imageEvent, quantity]);
 
   const product = products.find((product) => product.id === productId);
 
