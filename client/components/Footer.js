@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Image from "next/image";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const [email, setEmail] = useState("");
+
   return (
     <footer>
       <Container>
-        <Row>
+        <Row className="flex-wrap">
           <Col className="d-flex flex-column justify-content-center">
             <Row className="upper-footer">
               <Col className="topic-footer" id="discover">
@@ -84,12 +86,12 @@ const Footer = () => {
                 <ul className="footer-lists">
                   <li>
                     <Link href="/company/about">
-                      <a>About us</a>
+                      <a>About Us</a>
                     </Link>
                   </li>
                   <li>
                     <Link href="/company/mission">
-                      <a>Our mission</a>
+                      <a>Our Mission</a>
                     </Link>
                   </li>
                   <li>
@@ -115,35 +117,61 @@ const Footer = () => {
                 </ul>
               </Col>
 
-              <Col className="topic-footer" id="about">
-                <h5>Connect With Us</h5>
+              <Col className="topic-footer" id="connect">
+                <Row className="topic-footer d-flex flex-column">
+                  <h5>Newsletter</h5>
+                  <div className="d-flex flex-row">
+                    <Form.Control
+                      // className="coupon-text text-uppercase"
+                      type="text"
+                      placeholder="Enter email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    ></Form.Control>
+                    <Button
+                      // className="coupon-button"
+                      type="button"
+                      variant="dark"
+                      onClick={() => {
+                        console.log(email);
+                        setEmail("");
+                      }}
+                    >
+                      Subscribe
+                    </Button>
+                  </div>
+                </Row>
 
-                <div className="social-media">
-                  <a href="/" id="facebook">
-                    <Image
-                      src="/asset/facebook_b.png"
-                      width={25}
-                      height={25}
-                      alt="facebook"
-                    />
-                  </a>
-                  <a href="/" id="instagram">
-                    <Image
-                      src="/asset/instagram_b.png"
-                      width={25}
-                      height={25}
-                      alt="Instagram"
-                    />
-                  </a>
-                  <a href="/" id="twitter">
-                    <Image
-                      src="/asset/twitter_b.png"
-                      width={25}
-                      height={25}
-                      alt="twitter"
-                    />
-                  </a>
-                </div>
+                <Row className="topic-footer d-flex flex-column">
+                  <h5>Connect With Us</h5>
+
+                  <div className="social-media">
+                    <a href="/" id="facebook">
+                      <Image
+                        src="/asset/facebook_b.png"
+                        width={25}
+                        height={25}
+                        alt="facebook"
+                      />
+                    </a>
+                    <a href="/" id="instagram">
+                      <Image
+                        src="/asset/instagram_b.png"
+                        width={25}
+                        height={25}
+                        alt="Instagram"
+                      />
+                    </a>
+                    <a href="/" id="twitter">
+                      <Image
+                        src="/asset/twitter_b.png"
+                        width={25}
+                        height={25}
+                        alt="twitter"
+                      />
+                    </a>
+                  </div>
+                </Row>
               </Col>
             </Row>
 
