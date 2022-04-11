@@ -12,120 +12,135 @@ const Footer = () => {
         <Row>
           <Col className="d-flex flex-column justify-content-center">
             <Row className="upper-footer">
-              <Col
-                className="topic-footer d-flex flex-column justify-content-center"
-                id="discover"
-              >
+              <Col className="topic-footer" id="discover">
+                <h5>Category</h5>
+                <ul className="footer-lists">
+                  <li>
+                    <Link href="/products/tops">
+                      <a>Top</a>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/products/bottoms">
+                      <a>Bottom</a>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/products/dresses">
+                      <a>Dress</a>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/products/sets">
+                      <a>Set</a>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/products/coats">
+                      <a>Coat</a>
+                    </Link>
+                  </li>
+                </ul>
+              </Col>
+
+              <Col className="topic-footer" id="support">
                 <h5>Support</h5>
                 <ul className="footer-lists">
                   <li>
-                    <Link href="#">
-                      <a>How Histovie works</a>
+                    <Link href="/support/faq">
+                      <a>FAQ</a>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#">
-                      <a>FAQs</a>
+                    <Link href="/support/sizing">
+                      <a>Sizing</a>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#">
+                    <Link href="/support/accessibility">
                       <a>Accessibility</a>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#">
-                      <a>Terms of Use</a>
+                    <Link href="/support/return">
+                      <a>Return Policy</a>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#">
-                      <a>Privacy</a>
+                    <Link href="/support/privacy">
+                      <a>Privacy Policy</a>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/support/terms">
+                      <a>Terms of Service</a>
                     </Link>
                   </li>
                 </ul>
               </Col>
 
-              <Col
-                className="topic-footer d-flex flex-column justify-content-center"
-                id="support"
-              >
-                <h5>Discover More</h5>
+              <Col className="topic-footer" id="company">
+                <h5>Company</h5>
                 <ul className="footer-lists">
                   <li>
-                    <Link href="#">
-                      <a>Only on Histovie</a>
+                    <Link href="/company/about">
+                      <a>About us</a>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#">
-                      <a>Histovie Studio</a>
+                    <Link href="/company/mission">
+                      <a>Our mission</a>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#">
-                      <a>Histovie Device</a>
+                    <Link href="/company/careers">
+                      <a>Careers</a>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#">
-                      <a>Histovie Apps</a>
+                    <Link href="/company/contact">
+                      <a>Contact</a>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#">
-                      <a>Affiliates</a>
+                    <Link href="/company/sustainability">
+                      <a>Sustainability</a>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/company/press">
+                      <a>Press</a>
                     </Link>
                   </li>
                 </ul>
               </Col>
 
-              <Col
-                className="topic-footer d-flex flex-column justify-content-center"
-                id="about"
-              >
+              <Col className="topic-footer" id="about">
                 <h5>Connect With Us</h5>
-                <ul className="footer-lists">
-                  <li>
-                    <Link href="#">
-                      <a>About Us</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#">
-                      <a>Contact Us</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#">
-                      <a>join Us</a>
-                    </Link>
-                  </li>
-                </ul>
 
                 <div className="social-media">
-                  <a href="#" className="github">
+                  <a href="/" id="facebook">
                     <Image
-                      src="/asset/github_b.png"
-                      width={50}
-                      height={50}
-                      alt="github"
+                      src="/asset/facebook_b.png"
+                      width={25}
+                      height={25}
+                      alt="facebook"
                     />
                   </a>
-                  <a href="#" className="linkedin">
-                    <Image
-                      src="/asset/linkedin_b.png"
-                      width={50}
-                      height={50}
-                      alt="LinkedIn"
-                    />
-                  </a>
-                  <a href="#" className="instagram">
+                  <a href="/" id="instagram">
                     <Image
                       src="/asset/instagram_b.png"
-                      width={50}
-                      height={50}
+                      width={25}
+                      height={25}
                       alt="Instagram"
+                    />
+                  </a>
+                  <a href="/" id="twitter">
+                    <Image
+                      src="/asset/twitter_b.png"
+                      width={25}
+                      height={25}
+                      alt="twitter"
                     />
                   </a>
                 </div>
