@@ -13,13 +13,13 @@ body {
   right: 0;
 }
 
-footer {
+/* footer {
   position: absolute;
   bottom: -6vh;
   width: 100%;
   height: 2.5rem;
   text-align: center;
-}
+} */
 
 /* Typography */
 h1,
@@ -173,6 +173,11 @@ a::before {
 }
 
 /* Custom Compoent */
+
+/* image swiper */
+.mySwiper {
+  box-shadow: 0px 0px 5px #555;
+}
 
 /* color selector */
 .color-selector-outer {
@@ -572,6 +577,7 @@ header {
   opacity: 1;
   aspect-ratio: 6/9;
   transition: opacity 650ms ease-in-out;
+  box-shadow: 0px 0px 5px #555;
 }
 
 #product-page .product-side-img {
@@ -579,6 +585,7 @@ header {
   margin-bottom: 1rem;
   position: relative;
   width: 100%;
+  box-shadow: 0px 0px 5px #555;
 }
 
 #product-page .product-side-img:hover {
@@ -629,7 +636,6 @@ header {
 
 .profile-img {
   position: relative;
-  border-radius: 50%;
   padding: 0;
 }
 
@@ -659,6 +665,17 @@ header {
 
 .description-section h6 {
   font-family: "Lucida Sans", sans-serif;
+}
+
+/* Mobile, Tablet Screen */
+@media only screen and (max-width: 576px) {
+  #product-page .toggle-main-img {
+    box-shadow: none;
+  }
+
+  #product-page .product-side-img {
+    box-shadow: none;
+  }
 }
 
 /* Dashboard */
@@ -801,7 +818,21 @@ header {
   cursor: pointer;
 }
 
-/* Tablet Screen */
+.register-box .gender-age-form {
+  margin: 1rem 0;
+}
+
+.register-box .gender-form {
+  padding-right: 1rem;
+  padding-left: 0;
+}
+
+.register-box .age-form {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+/* Mobile, Tablet Screen */
 @media only screen and (max-width: 768px) {
   .register-box {
     max-width: none;
@@ -812,4 +843,76 @@ header {
   .banner-img {
     display: none;
   }
+
+  .register-box .gender-age-form {
+    margin: 0;
+  }
+
+  .register-box .gender-form {
+    padding-right: 0;
+    margin-bottom: 1rem;
+  }
+
+  .register-box .age-form {
+    padding-left: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Footer */
+footer {
+  background: #fff;
+  padding: 0;
+  color: #000;
+}
+
+.upper-footer {
+  padding: 2rem;
+  height: auto;
+  margin: auto 0;
+}
+
+.topic-footer {
+  margin-bottom: 1.5rem;
+}
+
+.topic-footer h5 {
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.footer-lists {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-lists li {
+  margin: 5px 0;
+}
+
+.footer-lists li a {
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.social-media {
+  margin-top: 10px;
+}
+
+.social-media a {
+  margin-right: 5px;
+  transition: all 0.3s ease-out;
+  transition-duration: 0.8s;
+}
+
+.lower-footer {
+  padding: 2rem 0;
+  text-align: center;
+  border-top: 1px solid;
+}
+
+.lower-footer p {
+  text-align: center;
 }

@@ -5,8 +5,10 @@ function Error({ statusCode }) {
       style={{ height: "90vh" }}
     >
       {statusCode
-        ? `An error ${statusCode} occurred on server`
-        : "An error occurred on client"}
+        ? statusCode === 404
+          ? "404 Page not found X("
+          : `An error ${statusCode} occurred on server`
+        : "404 Page not found :("}
     </p>
   );
 }

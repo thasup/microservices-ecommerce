@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,21 +7,9 @@ import Rating from "./Rating";
 import AddToCart from "./AddToCart";
 import ColorSelector from "./ColorSelector";
 
-const Product = ({ product, currentUser }) => {
+const Product = ({ onMobile, product, currentUser }) => {
   const [color, setColor] = useState(null);
   const [toggle, setToggle] = useState(false);
-  const [onMobile, setOnMobile] = useState(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (window.innerWidth <= 576) {
-        setOnMobile(true);
-      } else {
-        setOnMobile(false);
-      }
-    }, 100);
-    return () => clearInterval(interval);
-  }, []);
 
   const colorSelectedHandler = (color) => {
     if (color !== null) {
