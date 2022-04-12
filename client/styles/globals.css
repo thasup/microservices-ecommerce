@@ -667,6 +667,17 @@ header {
   font-family: "Lucida Sans", sans-serif;
 }
 
+/* Mobile, Tablet Screen */
+@media only screen and (max-width: 576px) {
+  #product-page .toggle-main-img {
+    box-shadow: none;
+  }
+
+  #product-page .product-side-img {
+    box-shadow: none;
+  }
+}
+
 /* Dashboard */
 .admin-dashboard .nav-link {
   cursor: pointer;
