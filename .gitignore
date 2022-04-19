@@ -10,5 +10,5 @@ infra/
 infra/k8s
 infra/k8s/
 client/api/build-client.js
-*.yaml
+# *.yaml
 infra/k8s/client-depl.yaml
