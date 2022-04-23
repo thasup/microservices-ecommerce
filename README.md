@@ -51,8 +51,8 @@ Aurapan is the beautiful women's clothes e-commerce website built with **microse
   <!-- - Product search feature (work in process...) -->
   <!-- - Sorting and filtering all product on store (work in process...) -->
 
-Something might be a bit exaggerated but one certain thing is that I put all my heart into creating this project.
-happy browsing! :D
+Something might be a bit exaggerated but one certain thing is that I put all my ❤️ into creating this project.
+happy browsing! 😊
 
 # Install
 
@@ -141,12 +141,11 @@ IN AN ALIAS OF: @
 TTL: 30
 ```
 
-14. waiting for 5-10 minutes for websie to setup
-15. browsing to your website with `HTTP` protocal
-16. if you want to browse with `HTTPS` this link is for you to follow [How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean Kubernetes](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes)
+14. waiting around 5-15 minutes for setting up then browse to your website with `HTTP` protocal
+15. if you want to browse with `HTTPS` this link is for you to follow [How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean Kubernetes](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes)
 
 # Disclaimer
 
 [(Back to top)](#table-of-contents)
 
-All images are used for educational purposes in this fictional clothing store ;)
+All images are used for educational purposes in this fictional store 😉
