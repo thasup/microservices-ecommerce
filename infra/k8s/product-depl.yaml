@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: product
-          # image: thasup/product
-          image: us.gcr.io/aurapan-shop-348908/product
+          image: thasup/product
+          # image: us.gcr.io/aurapan-shop-348908/product
           env:
             - name: NATS_CLIENT_ID
               valueFrom:

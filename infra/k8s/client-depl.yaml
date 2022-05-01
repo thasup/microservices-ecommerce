@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: client
-          # image: thasup/client
-          image: us.gcr.io/aurapan-shop-348908/client
+          image: thasup/client
+          # image: us.gcr.io/aurapan-shop-348908/client
 ---
 apiVersion: v1
 kind: Service
