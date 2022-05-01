@@ -5,7 +5,7 @@ export default ({ req }) => {
     // We are on the server
 
     return axios.create({
-      baseURL: "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local",
+      baseURL: "https://www.aurapan.com",
       headers: req.headers,
       withCredentials: true,
     });
