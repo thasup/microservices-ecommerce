@@ -60,13 +60,13 @@ happy browsing! 😊
 
 **Running on Google Cloud Platform**
 
-1. clone `google-cloud` branch on your computer
+1. clone `cloud` branch on your computer
 2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/), [kubectl](https://kubernetes.io/docs/tasks/tools/)
 3. sign up free account with $100 on google cloud and sign up docker hub account
 4. create an image by running `docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .` in every folder that has Dockerfile
-5. push al images to docker hub by running `docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>` in every folder that you already created image
-6. create a new project then enable `Kubernetes Engine API` and `Cloud Build API` then enable `Cloud Build` service account permission
-7. create a new kubernetes cluster with minimum resource, 3 nodes, and select any region that closest to you
+5. push all images to docker hub by running `docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>`
+6. create a new project on GCP then enable `Kubernetes Engine API` and `Cloud Build API` after successfully enable api services, grant permission for `Cloud Build` service account permission on `Cloud Build API`
+7. create a new kubernetes cluster with minimum resource at 3 nodes (recommended), and select any region that closest to your location
 8. install `GCP SDK` to connect our images to GCP cluster context
 9. open google cloud SDK and log in by running `gcloud auth login` then initiate with `gcloud init` command, choose the correct options to proceed
 10. create kubernetes context in your desktop by running `gcloud container clusters get-credentials <YOUR_CLUSTER_NAME>` (your cluster name from GCP cluster that you created)
@@ -76,9 +76,10 @@ happy browsing! 😊
 14. for `windows` users, open host file `C:\Windows\System32\drivers\etc\hosts` to edit by adding `YOUR_LOAD_BALANCING_PORT YOUR_EXAMPLE_URL` and save as an admin (ex. `56.125.456.45 example.com`)
 15. config all yaml files to matches your example URL
 16. create all [kubernetes secrets](#setup-env)
-17. run `skaffold dev` in this project root directory, make sure to use correct context before run command
-18. check all pods in a cluster by running `kubectl get pods`
-19. open a web browser enter your example URL to see this project come to live!
+17. run `gcloud auth application-default login` then authenticate GCP account via web browser
+18. run `skaffold dev` in this project root directory, make sure to use correct context before run command
+19. check all pods in a cluster by running `kubectl get pods`
+20. open a web browser enter your example URL to see this project come to live!
 
 **Running on Docker Desktop**
 
