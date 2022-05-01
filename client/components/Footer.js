@@ -120,16 +120,14 @@ const Footer = () => {
               <Col className="topic-footer" id="connect">
                 <Row className="topic-footer d-flex flex-column">
                   <h5>Newsletter</h5>
-                  <div className="d-flex flex-row">
+                  <div className="footer-newsletter">
                     <Form.Control
-                      // className="coupon-text text-uppercase"
                       type="text"
                       placeholder="Enter email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     ></Form.Control>
                     <Button
-                      // className="coupon-button"
                       type="button"
                       variant="dark"
                       onClick={() => {

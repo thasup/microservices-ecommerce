@@ -29,7 +29,7 @@ spec:
               "2",
               "-SD",
               "-cid",
-              "my-first-cluster-1",
+              "my-covid-cluster",
             ]
 ---
 apiVersion: v1

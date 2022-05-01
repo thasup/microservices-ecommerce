@@ -813,7 +813,7 @@ header {
 
 .banner-img {
   position: relative;
-  min-height: 70vh;
+  min-height: 80vh;
   padding: 0;
   cursor: pointer;
 }
@@ -897,6 +897,11 @@ footer {
   font-weight: normal;
 }
 
+.footer-newsletter {
+  display: flex;
+  flex-direction: row;
+}
+
 .social-media {
   margin-top: 10px;
 }
@@ -915,4 +920,11 @@ footer {
 
 .lower-footer p {
   text-align: center;
+}
+
+/* Mobile Screen */
+@media only screen and (max-width: 425px) {
+  .footer-newsletter {
+    flex-direction: column;
+  }
 }
