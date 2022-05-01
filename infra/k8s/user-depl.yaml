@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: user
-          image: thasup/user
+          # image: thasup/user
+          image: ur.gcr.io/aurapan-shop-348908/user
           env:
             - name: MONGO_URI_USER
               valueFrom:

@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: expiration
-          image: thasup/expiration
+          # image: thasup/expiration
+          image: ur.gcr.io/aurapan-shop-348908/expiration
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -23,6 +24,6 @@ spec:
             - name: NATS_URL
               value: "http://nats-srv:4222"
             - name: NATS_CLUSTER_ID
-              value: my-first-cluster-1
+              value: my-covid-cluster
             - name: REDIS_HOST
               value: expiration-redis-srv

@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: product
-          image: thasup/product
+          # image: thasup/product
+          image: ur.gcr.io/aurapan-shop-348908/product
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -23,7 +24,7 @@ spec:
             - name: NATS_URL
               value: "http://nats-srv:4222"
             - name: NATS_CLUSTER_ID
-              value: my-first-cluster-1
+              value: my-covid-cluster
             - name: MONGO_URI_PRODUCT
               valueFrom:
                 secretKeyRef:
