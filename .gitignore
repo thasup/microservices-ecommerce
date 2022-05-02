@@ -12,3 +12,4 @@ infra/k8s/
 client/api/build-client.js
 # *.yaml
 infra/k8s/client-depl.yaml
+.DS_Store
