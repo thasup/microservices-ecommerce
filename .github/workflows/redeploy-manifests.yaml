@@ -8,7 +8,7 @@ on:
 
     # watch for changes in specific file
     paths:
-      - "trigger.txt"
+      - "trigger2-manifest.txt"
 
 jobs:
   build:
@@ -19,10 +19,10 @@ jobs:
       # use and cliententicate doctl
       - uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN_2 }}
 
       # use and cliententicate doctl
-      - run: doctl kubernetes cluster kubeconfig save not-a-covid-cluster
+      - run: doctl kubernetes cluster kubeconfig save do-covid-cluster
 
       # apply deployment yaml files (k8s-prod is for production!)
       - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
