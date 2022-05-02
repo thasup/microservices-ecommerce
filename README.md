@@ -77,9 +77,8 @@ happy browsing! 😊
 15. config all yaml files to matches your example URL
 16. create all [kubernetes secrets](#setup-env)
 17. run `gcloud auth application-default login` then authenticate GCP account via web browser
-18. run `skaffold dev` in this project root directory, make sure to use correct context before run command
-19. check all pods in a cluster by running `kubectl get pods`
-20. open a web browser enter your example URL to see this project come to live!
+18. run `skaffold dev` in this project root directory, make sure to use correct context before run the command
+19. open a web browser enter your example URL to see this project come to live!
 
 **Running on Docker Desktop**
 
@@ -112,11 +111,45 @@ Create all these secrets in kubernetes secret by run this command line
 3. generate new token, install [doctl](https://docs.digitalocean.com/reference/doctl/how-to/install/) and [kubectl](https://kubernetes.io/docs/tasks/tools/)
 4. connect with digitalOcean k8s cluster context by running `doctl kubernetes cluster kubeconfig save <YOUR_CLUSTER_NAME>` and authorize with your credentials
 5. switch kubernetes context to the new context by running `kubectl config use-context <CONTEXT_NAME>`
-6. create `github workflow` for initial build an docker image on push event on `main` branch and perform automation testing by running `jest` script in every services on pull request event trigger with trying to merge with `main` branch
-7. add github action secret for docker credentials
-8. purchase a domain name with a promotion that can be very cheap as $1 for 1st year
-9. Separate k8s folder to k8s-dev and k8s-prod then copy `ingress-srv.yaml` file to both folders and edit host URL to a new domain name
-10. create `github workflow` for telling kubernetes cluster to use images we built by adding this
+6. create `github workflow` for initial build an docker image on push event on `main` branch and perform automate testing by running jest script in every services on pull request event trigger with trying to merge with `main` branch
+
+```
+name: deploy-client
+
+on:
+  push:
+    # watch for pull request into main branch
+    branches:
+      - main
+
+    # watch for changes in client folder
+    paths:
+      - "client/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # build an image
+      - run: cd client && docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .
+
+      # login on docker hub
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      # push an image to docker hub
+      - run: docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
+```
+
+8. add github action secret for docker credentials and digitalocean token key
+9. edit files in every services then commit code to `main` branch for triggering Github action workflow to build and push all images to our cluster
+10. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) for digitalocean
+11. separate k8s folder to k8s-dev and k8s-prod then copy `ingress-srv.yaml` file to both folders and edit host URL to a new domain name
+12. create `github workflow` for telling kubernetes cluster to use images we built by adding this
 
 ```
 - uses: digitalocean/action-doctl@v2
@@ -126,9 +159,42 @@ Create all these secrets in kubernetes secret by run this command line
 - run: kubectl rollout restart deployment <YOUR_DEPLOYMENT_NAME>
 ```
 
-11. add github action secret for digitalocean token key
-12. config domain name nameserver with your domain name registor website by custom add `ns1.digitalocean.com`, `ns2.digitalocean.com`. `ns3.digitalocean.com`
-13. add domain name in digital ocean at networking tab then create new record
+13. edit your cluster name `deploy-manifests.yaml` file then redo 9. again
+
+```
+name: deploy-manifests
+
+on:
+  push:
+    # watch for pull request into main branch
+    branches:
+      - main
+
+    # watch for changes in infra folder
+    paths:
+      - "infra/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # use and cliententicate doctl
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      # use and cliententicate doctl
+      - run: doctl kubernetes cluster kubeconfig save <YOUR_CLUSTER_NAME>
+
+      # apply deployment yaml files (k8s-prod is for production!)
+      - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
+```
+
+14. purchase a domain name with a promotion that can be very cheap as $1 for 1st year
+15. config domain name nameserver with your domain name registor website by custom add `ns1.digitalocean.com`, `ns2.digitalocean.com`. `ns3.digitalocean.com`
+16. add domain name in digital ocean at networking tab then create new record
 
 ```
 // A record
@@ -142,8 +208,8 @@ IN AN ALIAS OF: @
 TTL: 30
 ```
 
-14. waiting around 5-15 minutes for setting up then browse to your website with `HTTP` protocal
-15. if you want to browse with `HTTPS` this link is for you to follow [How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean Kubernetes](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes)
+17. waiting around 5-15 minutes for setting up then browse to your website with `HTTP` protocal
+18. if you want to browse with `HTTPS` this link is for you to follow [How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean Kubernetes](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes)
 
 # Disclaimer
 
