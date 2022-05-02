@@ -1,7 +1,6 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    // loader: "custom",
     domains: ["www.dropbox.com"],
     minimumCacheTTL: 86400,
   },

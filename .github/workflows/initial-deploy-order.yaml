@@ -1,0 +1,29 @@
+name: initial-deploy-order
+
+on:
+  push:
+    # watch for push event in main branch
+    branches:
+      - main
+
+    # watch for changes in specific file
+    paths:
+      - "trigger2.txt"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # build an image
+      - run: cd order && docker build -t thasup/order .
+
+      # login on docker hub
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      # push an image to docker hub
+      - run: docker push thasup/order
