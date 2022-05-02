@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, ListGroup, Card, Form, Breadcrumb } from "react-bootstrap";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -17,371 +17,384 @@ import Coupon from "../../components/Coupon";
 import AddToCart from "../../components/AddToCart";
 
 const productDetail = ({ products, users, currentUser, myOrders }) => {
-  const { productId } = useRouter().query;
+	const { productId } = useRouter().query;
 
-  const [quantity, setQuantity] = useState(1);
-  const [color, setColor] = useState(null);
-  const [size, setSize] = useState(null);
-  const [discountFactor, setDiscountFactor] = useState(1);
+	const [quantity, setQuantity] = useState(1);
+	const [color, setColor] = useState(null);
+	const [size, setSize] = useState(null);
+	const [discountFactor, setDiscountFactor] = useState(1);
 
-  const [initialImage, setInitialImage] = useState(false);
-  const [imageArray, setImageArray] = useState([]);
-  const [imageEvent, setImageEvent] = useState(null);
+	const [initialImage, setInitialImage] = useState(false);
+	const [imageArray, setImageArray] = useState([]);
+	const [imageEvent, setImageEvent] = useState(null);
 
-  const [isPurchase, setIsPurchase] = useState(false);
-  const [onMobile, setOnMobile] = useState(false);
+	const [isPurchase, setIsPurchase] = useState(false);
+	const [onMobile, setOnMobile] = useState(false);
+	const [showChild, setShowChild] = useState(false);
 
-  const [screenWidth, setScreenWidth] = useState(0);
+	const [screenWidth, setScreenWidth] = useState(0);
 
-  useLayoutEffect(() => {
-    function updateSize() {
-      setScreenWidth(window.innerWidth);
-    }
+	useEffect(() => {
+		function updateSize() {
+			setScreenWidth(window.innerWidth);
+		}
 
-    window.addEventListener("resize", updateSize);
-    updateSize();
+		window.addEventListener("resize", updateSize);
+		updateSize();
 
-    // Check current window width to determine screen type
-    if (screenWidth <= 576) {
-      setOnMobile(true);
-    } else {
-      setInitialImage(false);
-      setOnMobile(false);
-    }
+		// Check current window width to determine screen type
+		if (screenWidth <= 576) {
+			setOnMobile(true);
+		} else {
+			setInitialImage(false);
+			setOnMobile(false);
+		}
 
-    return () => window.removeEventListener("resize", updateSize);
-  }, [screenWidth]);
+		return () => window.removeEventListener("resize", updateSize);
+	}, [screenWidth]);
 
-  useEffect(async () => {
-    //Check if orders is not an empty array
-    if (myOrders && myOrders.length !== 0) {
-      // Check if user can write a review after purchased the product
-      const hasPurchasedItem = await myOrders.map((order) => {
-        if (order.isPaid === true) {
-          return order.cart.some((item) => item.productId === productId);
-        }
-        return false;
-      });
+	// Wait until after client-side hydration to show
+	// useEffect(() => {
+	// 	setShowChild(true);
+	// }, []);
 
-      // If some order contains the purchased product set isPurchase to true
-      if (hasPurchasedItem.includes(true)) {
-        setIsPurchase(true);
-      }
-    }
+	useEffect(async () => {
+		//Check if orders is not an empty array
+		if (myOrders && myOrders.length !== 0) {
+			// Check if user can write a review after purchased the product
+			const hasPurchasedItem = await myOrders.map((order) => {
+				if (order.isPaid === true) {
+					return order.cart.some((item) => item.productId === productId);
+				}
+				return false;
+			});
 
-    // Defined variable
-    const mainImage = document.getElementsByClassName("product-main-img");
-    const sideImage = document.getElementsByClassName("product-side-img");
+			// If some order contains the purchased product set isPurchase to true
+			if (hasPurchasedItem.includes(true)) {
+				setIsPurchase(true);
+			}
+		}
 
-    // Toggle the first image to show as a main image
-    // when page load at first time on desktop screen
-    if (!initialImage && !onMobile) {
-      for (let i = 0; i < mainImage.length; i++) {
-        mainImage[i].classList.remove("toggle-main-img");
-        sideImage[i].classList.remove("toggle-side-img");
-      }
+		// Defined variable
+		const mainImage = document.getElementsByClassName("product-main-img");
+		const sideImage = document.getElementsByClassName("product-side-img");
 
-      mainImage[0].classList.add("toggle-main-img");
-      setInitialImage(true);
-    }
+		// Toggle the first image to show as a main image
+		// when page load at first time on desktop screen
+		if (!initialImage && !onMobile) {
+			for (let i = 0; i < mainImage.length; i++) {
+				mainImage[i].classList.remove("toggle-main-img");
+				sideImage[i].classList.remove("toggle-side-img");
+			}
 
-    // Toggle 'toggle-main-img' class for image when user clicked on that side image
-    if (imageEvent) {
-      for (let i = 0; i < mainImage.length; i++) {
-        mainImage[i].classList.remove("toggle-main-img");
-        sideImage[i].classList.remove("toggle-side-img");
-      }
+			mainImage[0].classList.add("toggle-main-img");
+			setInitialImage(true);
+		}
 
-      const currentId =
-        imageEvent.target.parentElement.parentElement.id.slice(-1);
+		// Show child after set main image
+		setShowChild(true);
 
-      mainImage[currentId].classList.add("toggle-main-img");
+		// Toggle 'toggle-main-img' class for image when user clicked on that side image
+		if (imageEvent) {
+			for (let i = 0; i < mainImage.length; i++) {
+				mainImage[i].classList.remove("toggle-main-img");
+				sideImage[i].classList.remove("toggle-side-img");
+			}
 
-      imageEvent.target.parentElement.parentElement.classList.add(
-        "toggle-side-img"
-      );
+			const currentId =
+				imageEvent.target.parentElement.parentElement.id.slice(-1);
 
-      // Set image event to default
-      setImageEvent(null);
-    }
+			mainImage[currentId].classList.add("toggle-main-img");
 
-    // Limit quantity input by locked maximum and minimum from the product countInStock
-    if (quantity > product.countInStock) {
-      setQuantity(product.countInStock);
-    } else if (quantity < 1) {
-      setQuantity(1);
-    }
-  }, [initialImage, imageEvent, quantity]);
+			imageEvent.target.parentElement.parentElement.classList.add(
+				"toggle-side-img"
+			);
 
-  const product = products.find((product) => product.id === productId);
+			// Set image event to default
+			setImageEvent(null);
+		}
 
-  if (imageArray.length === 0 && product) {
-    const filterImages = Object.values(product.images).filter(
-      (image) => image !== null && image !== ""
-    );
+		// Limit quantity input by locked maximum and minimum from the product countInStock
+		if (quantity > product.countInStock) {
+			setQuantity(product.countInStock);
+		} else if (quantity < 1) {
+			setQuantity(1);
+		}
+	}, [showChild, initialImage, imageEvent, quantity]);
 
-    setImageArray(filterImages);
-  }
+	const product = products.find((product) => product.id === productId);
 
-  const colorSelectedHandler = (color) => {
-    if (color !== null) {
-      setColor(color);
-    }
-  };
+	if (imageArray.length === 0 && product) {
+		const filterImages = Object.values(product.images).filter(
+			(image) => image !== null && image !== ""
+		);
 
-  const sizeSelectedHandler = (size) => {
-    if (size !== null) {
-      setSize(size);
-    }
-  };
+		setImageArray(filterImages);
+	}
 
-  const couponHandler = (factor) => {
-    if (factor) {
-      setDiscountFactor(factor);
-    }
-  };
+	const colorSelectedHandler = (color) => {
+		if (color !== null) {
+			setColor(color);
+		}
+	};
 
-  return (
-    <>
-      <Head>
-        <title>{product.title} | Aurapan</title>
-      </Head>
-      <div className="breadcrumb-label">
-        {!product.id || product.id !== productId ? (
-          <div
-            className="d-flex justify-content-center align-items-center px-0"
-            style={{ marginTop: "80px" }}
-          >
-            <Loader />
-          </div>
-        ) : (
-          <>
-            <Breadcrumb className="pt-4">
-              <Link href="/" passHref>
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-              </Link>
+	const sizeSelectedHandler = (size) => {
+		if (size !== null) {
+			setSize(size);
+		}
+	};
 
-              <Link
-                href="/products/[productId]"
-                as={`/products/${product.id}`}
-                passHref
-              >
-                <Breadcrumb.Item>{product.title}</Breadcrumb.Item>
-              </Link>
-            </Breadcrumb>
+	const couponHandler = (factor) => {
+		if (factor) {
+			setDiscountFactor(factor);
+		}
+	};
 
-            <Row id="product-page">
-              {onMobile ? (
-                <Col className="mb-3">
-                  <ImageSwiper product={product} />
-                </Col>
-              ) : (
-                <>
-                  <Col sm={1} className="mb-3">
-                    {imageArray.map((img, index) => (
-                      <div
-                        className="product-side-img"
-                        id={`side-img-${index}`}
-                        key={index}
-                        onClick={(e) => setImageEvent(e)}
-                      >
-                        <NextImage
-                          src={img}
-                          alt={`product_image_${index}`}
-                          priority={true}
-                          quality={30}
-                        />
-                      </div>
-                    ))}
-                  </Col>
+	return (
+		<>
+			<Head>
+				<title>{product.title} | Aurapan</title>
+			</Head>
+			<div className="breadcrumb-label">
+				{!product.id || product.id !== productId ? (
+					<div
+						className="d-flex justify-content-center align-items-center px-0"
+						style={{ marginTop: "80px" }}
+					>
+						<Loader />
+					</div>
+				) : (
+					<>
+						<Breadcrumb className="pt-4">
+							<Link href="/" passHref>
+								<Breadcrumb.Item>Home</Breadcrumb.Item>
+							</Link>
 
-                  <Col sm={5} className="mb-3 position-relative">
-                    {imageArray.map((img, index) => (
-                      <div className="product-main-img" key={index}>
-                        <NextImage
-                          src={img}
-                          alt={`product_image_${index}`}
-                          priority={true}
-                          quality={75}
-                        />
-                      </div>
-                    ))}
-                  </Col>
-                </>
-              )}
+							<Link
+								href="/products/[productId]"
+								as={`/products/${product.id}`}
+								passHref
+							>
+								<Breadcrumb.Item>{product.title}</Breadcrumb.Item>
+							</Link>
+						</Breadcrumb>
 
-              <Col sm={6}>
-                <ListGroup variant="flush" className="mb-3">
-                  <ListGroup.Item className="py-0">
-                    <Rating value={product.rating} mobile={false} />
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <h1>{product.title}</h1>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <h1 id="price">$ {product.price}</h1>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <h3>Color</h3>
-                    <div className="my-1 px-0">
-                      <ColorSelector
-                        product={product}
-                        callback={colorSelectedHandler}
-                        margin={"5px"}
-                        size={"2rem"}
-                        flex={"start"}
-                      />
-                    </div>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <h3>Size</h3>
-                    <div className="my-1 px-0">
-                      <SizeSelector
-                        product={product}
-                        width={"35px"}
-                        callback={sizeSelectedHandler}
-                      />
-                    </div>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <h3>QTY</h3>
-                    <div className="my-1 quantity-selector d-flex flex-row align-items-center">
-                      <div
-                        className="qty-btn decrease-btn"
-                        onClick={() => setQuantity(quantity - 1)}
-                      >
-                        -
-                      </div>
+						<Row id="product-page">
+							{onMobile ? (
+								<Col className="mb-3">
+									<ImageSwiper product={product} />
+								</Col>
+							) : (
+								<>
+									<Col sm={1} className="mb-3">
+										{imageArray.map((img, index) => (
+											<div
+												className="product-side-img"
+												id={`side-img-${index}`}
+												key={index}
+												onClick={(e) => setImageEvent(e)}
+											>
+												{showChild && (
+													<NextImage
+														src={img}
+														alt={`product_image_${index}`}
+														priority={true}
+														quality={30}
+													/>
+												)}
+											</div>
+										))}
+									</Col>
 
-                      <Form.Group
-                        controlId="countInStock"
-                        className="quantity-box"
-                      >
-                        <Form.Control
-                          type="number"
-                          value={quantity}
-                          onChange={(e) => setQuantity(Number(e.target.value))}
-                        ></Form.Control>
-                      </Form.Group>
+									<Col sm={5} className="mb-3 position-relative">
+										{imageArray.map((img, index) => (
+											<div className="product-main-img" key={index}>
+												{showChild && (
+													<NextImage
+														src={img}
+														alt={`product_image_${index}`}
+														priority={true}
+														quality={75}
+													/>
+												)}
+											</div>
+										))}
+									</Col>
+								</>
+							)}
 
-                      <div
-                        className="qty-btn increase-btn"
-                        onClick={() => setQuantity(quantity + 1)}
-                      >
-                        +
-                      </div>
-                    </div>
-                  </ListGroup.Item>
+							<Col sm={6}>
+								<ListGroup variant="flush" className="mb-3">
+									<ListGroup.Item className="py-0">
+										<Rating value={product.rating} mobile={false} />
+									</ListGroup.Item>
+									<ListGroup.Item>
+										<h1>{product.title}</h1>
+									</ListGroup.Item>
+									<ListGroup.Item>
+										<h1 id="price">$ {product.price}</h1>
+									</ListGroup.Item>
+									<ListGroup.Item>
+										<h3>Color</h3>
+										<div className="my-1 px-0">
+											<ColorSelector
+												product={product}
+												callback={colorSelectedHandler}
+												margin={"5px"}
+												size={"2rem"}
+												flex={"start"}
+											/>
+										</div>
+									</ListGroup.Item>
+									<ListGroup.Item>
+										<h3>Size</h3>
+										<div className="my-1 px-0">
+											<SizeSelector
+												product={product}
+												width={"35px"}
+												callback={sizeSelectedHandler}
+											/>
+										</div>
+									</ListGroup.Item>
+									<ListGroup.Item>
+										<h3>QTY</h3>
+										<div className="my-1 quantity-selector d-flex flex-row align-items-center">
+											<div
+												className="qty-btn decrease-btn"
+												onClick={() => setQuantity(quantity - 1)}
+											>
+												-
+											</div>
 
-                  <ListGroup.Item>
-                    <div className="my-1 px-0">
-                      <p>{product.description}</p>
-                    </div>
-                  </ListGroup.Item>
+											<Form.Group
+												controlId="countInStock"
+												className="quantity-box"
+											>
+												<Form.Control
+													type="number"
+													value={quantity}
+													onChange={(e) => setQuantity(Number(e.target.value))}
+												></Form.Control>
+											</Form.Group>
 
-                  <ListGroup.Item>
-                    <SocialShare product={product} />
-                  </ListGroup.Item>
-                </ListGroup>
+											<div
+												className="qty-btn increase-btn"
+												onClick={() => setQuantity(quantity + 1)}
+											>
+												+
+											</div>
+										</div>
+									</ListGroup.Item>
 
-                <Card className="product-page-box">
-                  <ListGroup>
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>
-                          <h5>Status:</h5>
-                        </Col>
-                        <Col>
-                          <h6>
-                            {product.countInStock > 0
-                              ? "In Stock"
-                              : "Out of Stock"}
-                          </h6>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
+									<ListGroup.Item>
+										<div className="my-1 px-0">
+											<p>{product.description}</p>
+										</div>
+									</ListGroup.Item>
 
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>
-                          <h5>Brand:</h5>
-                        </Col>
-                        <Col>
-                          <h6>{product.brand}</h6>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
+									<ListGroup.Item>
+										<SocialShare product={product} />
+									</ListGroup.Item>
+								</ListGroup>
 
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>
-                          <h5>Category:</h5>
-                        </Col>
-                        <Col>
-                          <h6>{product.category}</h6>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
+								<Card className="product-page-box">
+									<ListGroup>
+										<ListGroup.Item>
+											<Row>
+												<Col>
+													<h5>Status:</h5>
+												</Col>
+												<Col>
+													<h6>
+														{product.countInStock > 0
+															? "In Stock"
+															: "Out of Stock"}
+													</h6>
+												</Col>
+											</Row>
+										</ListGroup.Item>
 
-                    {product.countInStock > 0 && (
-                      <>
-                        <ListGroup.Item>
-                          <Coupon callback={couponHandler} />
-                        </ListGroup.Item>
-                      </>
-                    )}
+										<ListGroup.Item>
+											<Row>
+												<Col>
+													<h5>Brand:</h5>
+												</Col>
+												<Col>
+													<h6>{product.brand}</h6>
+												</Col>
+											</Row>
+										</ListGroup.Item>
 
-                    <ListGroup.Item className="d-grid">
-                      {color === null && size === null ? (
-                        <div className="px-0 py-2" style={{ color: "red" }}>
-                          {"Please select color and size option"}
-                        </div>
-                      ) : color === null && size !== null ? (
-                        <div className="px-0 py-2" style={{ color: "red" }}>
-                          {"Please select color option"}
-                        </div>
-                      ) : color !== null && size === null ? (
-                        <div className="px-0 py-2" style={{ color: "red" }}>
-                          {"Please select size option"}
-                        </div>
-                      ) : null}
+										<ListGroup.Item>
+											<Row>
+												<Col>
+													<h5>Category:</h5>
+												</Col>
+												<Col>
+													<h6>{product.category}</h6>
+												</Col>
+											</Row>
+										</ListGroup.Item>
 
-                      <AddToCart
-                        product={product}
-                        currentUser={currentUser}
-                        color={color}
-                        size={size}
-                        quantity={quantity}
-                        discountFactor={discountFactor}
-                        lg={onMobile ? true : false}
-                      />
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Card>
-              </Col>
-            </Row>
+										{product.countInStock > 0 && (
+											<>
+												<ListGroup.Item>
+													<Coupon callback={couponHandler} />
+												</ListGroup.Item>
+											</>
+										)}
 
-            <Row className="mt-4 pb-5">
-              <Col sm={6} className="mb-3">
-                <div className="px-0 mt-2">
-                  <ProductDescription product={product} />
-                </div>
-              </Col>
+										<ListGroup.Item className="d-grid">
+											{color === null && size === null ? (
+												<div className="px-0 py-2" style={{ color: "red" }}>
+													{"Please select color and size option"}
+												</div>
+											) : color === null && size !== null ? (
+												<div className="px-0 py-2" style={{ color: "red" }}>
+													{"Please select color option"}
+												</div>
+											) : color !== null && size === null ? (
+												<div className="px-0 py-2" style={{ color: "red" }}>
+													{"Please select size option"}
+												</div>
+											) : null}
 
-              <Col sm={6}>
-                <Review
-                  product={product}
-                  users={users}
-                  isPurchase={isPurchase}
-                  currentUser={currentUser}
-                />
-              </Col>
-            </Row>
-          </>
-        )}
-      </div>
-    </>
-  );
+											<AddToCart
+												product={product}
+												currentUser={currentUser}
+												color={color}
+												size={size}
+												quantity={quantity}
+												discountFactor={discountFactor}
+												lg={onMobile ? true : false}
+											/>
+										</ListGroup.Item>
+									</ListGroup>
+								</Card>
+							</Col>
+						</Row>
+
+						<Row className="mt-4 pb-5">
+							<Col sm={6} className="mb-3">
+								<div className="px-0 mt-2">
+									<ProductDescription product={product} />
+								</div>
+							</Col>
+
+							<Col sm={6}>
+								<Review
+									product={product}
+									users={users}
+									isPurchase={isPurchase}
+									currentUser={currentUser}
+								/>
+							</Col>
+						</Row>
+					</>
+				)}
+			</div>
+		</>
+	);
 };
 
 export default productDetail;
