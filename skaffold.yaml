@@ -6,13 +6,13 @@ deploy:
       - ./infra/k8s/*
       - ./infra/k8s-dev/*
 build:
-  local:
-    push: false
-  # googleCloudBuild:
-  #   projectId: aurapan-shop-348908
+  # local:
+  #   push: false
+  googleCloudBuild:
+    projectId: aurapan-shop-348908
   artifacts:
-    - image: thasup/user
-    # - image: us.gcr.io/aurapan-shop-348908/user
+    # - image: thasup/user
+    - image: us.gcr.io/aurapan-shop-348908/user
       context: user
       docker:
         dockerfile: Dockerfile
@@ -20,8 +20,8 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: thasup/client
-    # - image: us.gcr.io/aurapan-shop-348908/client
+    # - image: thasup/client
+    - image: us.gcr.io/aurapan-shop-348908/client
       context: client
       docker:
         dockerfile: Dockerfile
@@ -35,8 +35,8 @@ build:
             dest: .
           - src: "**/*.png"
             dest: .
-    - image: thasup/product
-    # - image: us.gcr.io/aurapan-shop-348908/product
+    # - image: thasup/product
+    - image: us.gcr.io/aurapan-shop-348908/product
       context: product
       docker:
         dockerfile: Dockerfile
@@ -44,8 +44,8 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: thasup/order
-    # - image: us.gcr.io/aurapan-shop-348908/order
+    # - image: thasup/order
+    - image: us.gcr.io/aurapan-shop-348908/order
       context: order
       docker:
         dockerfile: Dockerfile
@@ -53,8 +53,8 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: thasup/expiration
-    # - image: us.gcr.io/aurapan-shop-348908/expiration
+    # - image: thasup/expiration
+    - image: us.gcr.io/aurapan-shop-348908/expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -62,8 +62,8 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: thasup/payment
-    # - image: us.gcr.io/aurapan-shop-348908/payment
+    # - image: thasup/payment
+    - image: us.gcr.io/aurapan-shop-348908/payment
       context: payment
       docker:
         dockerfile: Dockerfile

@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: payment
-          image: thasup/payment
-          # image: us.gcr.io/aurapan-shop-348908/payment
+          # image: thasup/payment
+          image: us.gcr.io/aurapan-shop-348908/payment
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
