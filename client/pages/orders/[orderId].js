@@ -40,8 +40,8 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 		},
 		onSuccess: () => {
 			setLoading(false);
-			Router.push(`/orders/${orderId}`);
 			setLoadingPay(false);
+			Router.push(`/orders/${orderId}`);
 		},
 	});
 
@@ -64,12 +64,10 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 			currentUser.isAdmin === false
 		) {
 			return Router.push("/signin");
-		} else {
-			if (!order) {
-				const order = await orders.find((order) => order.id === orderId);
-				setOrder(order);
-				setIsReady(true);
-			}
+		} else if (!order) {
+			const order = await orders.find((order) => order.id === orderId);
+			setOrder(order);
+			setIsReady(true);
 		}
 	}, []);
 
