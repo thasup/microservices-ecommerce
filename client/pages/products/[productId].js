@@ -15,6 +15,7 @@ import ProductDescription from "../../components/product/ProductDescription";
 import Review from "../../components/product/Review";
 import Coupon from "../../components/product/Coupon";
 import AddToCart from "../../components/common/AddToCart";
+import QuantitySelector from "../../components/common/QuantitySelector";
 
 const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const { productId } = useRouter().query;
@@ -253,7 +254,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 									</ListGroup.Item>
 									<ListGroup.Item>
 										<h3>QTY</h3>
-										<div className="my-1 quantity-selector d-flex flex-row align-items-center">
+										{/* <div className="my-1 quantity-selector d-flex flex-row align-items-center">
 											<div
 												className="qty-btn decrease-btn"
 												onClick={() => setQuantity(quantity - 1)}
@@ -278,7 +279,12 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 											>
 												+
 											</div>
-										</div>
+										</div> */}
+										<QuantitySelector
+											product={product}
+											quantity={quantity}
+											setQuantity={setQuantity}
+										/>
 									</ListGroup.Item>
 
 									<ListGroup.Item>

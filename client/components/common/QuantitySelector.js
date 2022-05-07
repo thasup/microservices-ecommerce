@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 
-const QuantitySelector = ({ product }) => {
-	const [quantity, setQuantity] = useState(1);
-
+const QuantitySelector = ({ product, quantity, setQuantity }) => {
 	useEffect(() => {
 		if (quantity > product.countInStock) {
 			setQuantity(product.countInStock);
