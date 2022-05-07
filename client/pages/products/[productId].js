@@ -4,17 +4,17 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
 
-import Loader from "../../components/Loader";
-import Rating from "../../components/Rating";
-import NextImage from "../../components/NextImage";
-import ImageSwiper from "../../components/ImageSwiper";
-import SocialShare from "../../components/SocialShare";
-import ColorSelector from "../../components/ColorSelector";
-import SizeSelector from "../../components/SizeSelector";
-import ProductDescription from "../../components/ProductDescription";
-import Review from "../../components/Review";
-import Coupon from "../../components/Coupon";
-import AddToCart from "../../components/AddToCart";
+import Loader from "../../components/common/Loader";
+import Rating from "../../components/common/Rating";
+import NextImage from "../../components/common/NextImage";
+import ImageSwiper from "../../components/product/ImageSwiper";
+import SocialShare from "../../components/product/SocialShare";
+import ColorSelector from "../../components/common/ColorSelector";
+import SizeSelector from "../../components/common/SizeSelector";
+import ProductDescription from "../../components/product/ProductDescription";
+import Review from "../../components/product/Review";
+import Coupon from "../../components/product/Coupon";
+import AddToCart from "../../components/common/AddToCart";
 
 const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const { productId } = useRouter().query;
@@ -52,11 +52,6 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
 		return () => window.removeEventListener("resize", updateSize);
 	}, [screenWidth]);
-
-	// Wait until after client-side hydration to show
-	// useEffect(() => {
-	// 	setShowChild(true);
-	// }, []);
 
 	useEffect(async () => {
 		//Check if orders is not an empty array
