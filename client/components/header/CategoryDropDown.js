@@ -7,10 +7,14 @@ const CategoryDropDown = ({
 	showCategoryDropDown,
 	setShowCategoryDropDown,
 	products,
+	bestseller,
 }) => {
 	const [categoryName, setCategoryName] = useState("");
 	const [categoryParams, setCategoryParams] = useState("");
+
 	const [categoryProducts, setCategoryProducts] = useState([]);
+	const [bestsellerProducts, setBestsellerProducts] = useState([]);
+	const [newArrivalsProducts, setNewArrivalsProducts] = useState([]);
 
 	const [toggle, setToggle] = useState(false);
 	const [isReady, setIsReady] = useState(false);
@@ -20,17 +24,32 @@ const CategoryDropDown = ({
 			setCategoryName(eventTarget.text);
 			setCategoryParams(eventTarget.pathname);
 
-			const categoryArray = await products.filter(
-				(product) => product.category === `${categoryName}`
-			);
+			const categoryArray = await products
+				.filter((product) => product.category === `${categoryName}`)
+				.slice(0, 3);
 			if (categoryArray.length !== 0) {
-				setCategoryProducts(categoryArray.slice(0, 3));
+				setCategoryProducts(categoryArray);
+			}
+
+			const bestsellerArray = bestseller
+				.filter((product) => product.category === `${categoryName}`)
+				.slice(0, 3);
+			if (bestsellerArray.length !== 0) {
+				setBestsellerProducts(bestsellerArray);
+			}
+
+			const newArrivalsArray = products
+				.filter((product) => product.category === `${categoryName}`)
+				.reverse()
+				.slice(0, 2);
+			if (newArrivalsArray.length !== 0) {
+				setNewArrivalsProducts(newArrivalsArray);
 			}
 
 			setShowCategoryDropDown(true);
 			setIsReady(true);
 		}
-	}, [eventTarget]);
+	}, [eventTarget, categoryName]);
 
 	const myLoader = ({ src, quality }) => {
 		return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 50}`;
@@ -83,39 +102,57 @@ const CategoryDropDown = ({
 			</div>
 			<div className="category-dropdown-wrapper">
 				<ul className="menu-parent">
-					<li>
+					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/bestseller`} passHref>
-							<a className="account-dropdown-item">Bestseller</a>
+							<a className="menu-parent-link">Bestseller</a>
 						</Link>
+						<ul className="menu-child">
+							{bestsellerProducts.map((product, index) => (
+								<li key={index}>
+									<Link href={`/products/${product.id}`} passHref>
+										<a className="menu-child-link">{product.title}</a>
+									</Link>
+								</li>
+							))}
+						</ul>
 					</li>
-					<li>
+					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/new`} passHref>
-							<a className="account-dropdown-item">New Arrivals</a>
+							<a className="menu-parent-link">New Arrivals</a>
 						</Link>
+						<ul className="menu-child">
+							{newArrivalsProducts.map((product, index) => (
+								<li key={index}>
+									<Link href={`/products/${product.id}`} passHref>
+										<a className="menu-child-link">{product.title}</a>
+									</Link>
+								</li>
+							))}
+						</ul>
 					</li>
-					<li>
+					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/top-brands`} passHref>
-							<a className="account-dropdown-item">Top Brands</a>
+							<a className="menu-parent-link">Top Brands</a>
 						</Link>
 					</li>
-					<li>
+					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/recommend`} passHref>
-							<a className="account-dropdown-item">Recommended</a>
+							<a className="menu-parent-link">Recommended</a>
 						</Link>
 					</li>
-					<li>
+					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/trending`} passHref>
-							<a className="account-dropdown-item">Trending</a>
+							<a className="menu-parent-link">Trending</a>
 						</Link>
 					</li>
-					<li>
+					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/coming`} passHref>
-							<a className="account-dropdown-item">Coming Soon</a>
+							<a className="menu-parent-link">Coming Soon</a>
 						</Link>
 					</li>
-					<li>
+					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/sale`} passHref>
-							<a className="account-dropdown-item">Sale</a>
+							<a className="menu-parent-link">Sale</a>
 						</Link>
 					</li>
 				</ul>

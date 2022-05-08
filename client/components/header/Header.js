@@ -15,7 +15,7 @@ import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import AccountDropDown from "./AccountDropDown";
 import CategoryDropDown from "./CategoryDropDown";
 
-const Header = ({ currentUser, products }) => {
+const Header = ({ currentUser, products, bestseller }) => {
 	const [eventTarget, setEventTarget] = useState(null);
 	const [showCategoryDropDown, setShowCategoryDropDown] = useState(false);
 	const [showAccountDropDown, setShowAccountDropDown] = useState(false);
@@ -252,6 +252,7 @@ const Header = ({ currentUser, products }) => {
 						showCategoryDropDown={showCategoryDropDown}
 						setShowCategoryDropDown={setShowCategoryDropDown}
 						products={products}
+						bestseller={bestseller}
 					/>
 
 					<Nav className="icon-menu d-flex flex-row position-relative">
