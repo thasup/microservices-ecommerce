@@ -384,22 +384,15 @@ header {
 /* account dropdown */
 .account-dropdown-menu {
 	position: absolute;
-	top: 100%;
+	top: 55px;
 	right: 0;
-	margin-top: 0.125rem;
 	z-index: 1000;
 	min-width: 10rem;
-	padding: 0rem;
 	margin: 0;
-	font-size: 1rem;
 	color: #222;
 	text-align: left;
 	list-style: none;
 	background-color: #fff;
-	background-clip: padding-box;
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	border-radius: 0;
-	display: none;
 }
 
 .account-dropdown-menu .account-dropdown-item {

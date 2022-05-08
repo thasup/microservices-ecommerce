@@ -7,12 +7,16 @@ import {
 	faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
-const MenuDropDown = ({ currentUser, showDropDown, setShowDropDown }) => {
+const AccountDropDown = ({
+	currentUser,
+	showAccountDropDown,
+	setShowAccountDropDown,
+}) => {
 	return (
 		<div
 			className="account-dropdown-menu"
-			style={{ display: showDropDown ? "block" : "none" }}
-			onMouseLeave={() => setShowDropDown(false)}
+			style={{ display: showAccountDropDown ? "block" : "none" }}
+			onMouseLeave={() => setShowAccountDropDown(false)}
 		>
 			<div className="account-dropdown-item account-dropdown-title d-flex justify-content-center">
 				{currentUser?.name}
@@ -41,4 +45,4 @@ const MenuDropDown = ({ currentUser, showDropDown, setShowDropDown }) => {
 	);
 };
 
-export default MenuDropDown;
+export default AccountDropDown;

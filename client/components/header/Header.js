@@ -256,11 +256,11 @@ const Header = ({ currentUser, products }) => {
 
 					<Nav className="icon-menu d-flex flex-row position-relative">
 						<Link href="/cart" passHref>
-							<Nav.Link className="position-relative cart-icon">
+							<Nav.Link className="cart-icon">
 								<FontAwesomeIcon icon={faBasketShopping} /> Cart
 								<span
 									id="notification"
-									className="position-absolute  badge border border-light rounded-circle bg-danger"
+									className="position-absolute badge border border-light rounded-circle bg-danger"
 									style={{ display: showNotification ? "block" : "none" }}
 								>
 									<span className="visually-hidden">unread messages</span>
