@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Carousel } from "react-bootstrap";
 
-import Loader from "./Loader";
+import Loader from "../common/Loader";
 
 const CustomCarousol = ({ images, quality }) => {
 	const [index, setIndex] = useState(0);
