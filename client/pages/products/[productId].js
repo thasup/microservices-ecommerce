@@ -30,7 +30,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const [imageEvent, setImageEvent] = useState(null);
 
 	const [isPurchase, setIsPurchase] = useState(false);
-	const [onMobile, setOnMobile] = useState(false);
+	const [onMobile, setOnMobile] = useState(true);
 	const [showChild, setShowChild] = useState(false);
 
 	const [screenWidth, setScreenWidth] = useState(0);
@@ -127,6 +127,17 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
 		setImageArray(filterImages);
 	}
+
+	useEffect(() => {
+		// Re-evaluate new filter images when the product had changed
+		if (product) {
+			const filterImages = Object.values(product?.images).filter(
+				(image) => image !== null && image !== ""
+			);
+
+			setImageArray(filterImages);
+		}
+	}, [product]);
 
 	const colorSelectedHandler = (color) => {
 		if (color !== null) {

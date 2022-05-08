@@ -186,10 +186,6 @@ const Header = ({ currentUser, products, bestseller }) => {
 					</Link>
 
 					<Nav className="sub-menu">
-						<Link href="/products/bestseller" passHref>
-							<Nav.Link>Bestseller</Nav.Link>
-						</Link>
-
 						<Link href="/products/tops" passHref>
 							<Nav.Link
 								onMouseEnter={(e) => {

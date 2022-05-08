@@ -441,6 +441,10 @@ header {
 	text-transform: uppercase;
 }
 
+.sub-menu a:hover {
+	color: #000;
+}
+
 #dropdown-menu .dropdown-menu {
 	right: 0;
 	left: auto;
