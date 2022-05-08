@@ -12,10 +12,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 
-import MenuDropDown from "./MenuDropDown";
+import AccountDropDown from "./AccountDropDown";
+import CategoryDropDown from "./CategoryDropDown";
 
-const Header = ({ currentUser }) => {
-	const [showDropDown, setShowDropDown] = useState(false);
+const Header = ({ currentUser, products }) => {
+	const [eventTarget, setEventTarget] = useState(null);
+	const [showCategoryDropDown, setShowCategoryDropDown] = useState(false);
+	const [showAccountDropDown, setShowAccountDropDown] = useState(false);
+
 	const [numItems, setNumItems] = useState(0);
 	const [showNotification, setShowNotification] = useState(false);
 	const [onMobile, setOnMobile] = useState(true);
@@ -48,13 +52,7 @@ const Header = ({ currentUser }) => {
 
 	return onMobile ? (
 		<header>
-			<Navbar
-				variant="light"
-				expand="lg"
-				fixed="top"
-				collapseOnSelect="true"
-				className="menu"
-			>
+			<Navbar variant="light" expand="lg" fixed="top" collapseOnSelect="true">
 				<Container>
 					<Navbar.Toggle aria-controls="offcanvasNavbar" />
 
@@ -169,17 +167,17 @@ const Header = ({ currentUser }) => {
 			</Navbar>
 		</header>
 	) : (
-		<header>
+		<header className="position-relative">
 			<Navbar
 				variant="light"
 				expand="lg"
 				fixed="top"
 				collapseOnSelect="true"
-				className="menu"
+				className="py-0"
 			>
 				<Container
-					className="menu-container d-flex flex-row"
-					onMouseLeave={() => setShowDropDown(false)}
+					className="menu-container d-flex flex-row py-2"
+					onMouseLeave={() => setShowAccountDropDown(false)}
 				>
 					<Link href="/" passHref>
 						<Navbar.Brand className="header-logo text-uppercase">
@@ -193,25 +191,68 @@ const Header = ({ currentUser }) => {
 						</Link>
 
 						<Link href="/products/tops" passHref>
-							<Nav.Link>Top</Nav.Link>
+							<Nav.Link
+								onMouseEnter={(e) => {
+									setEventTarget(e.target);
+									setShowCategoryDropDown(true);
+								}}
+							>
+								Top
+							</Nav.Link>
 						</Link>
 
 						<Link href="/products/bottoms" passHref>
-							<Nav.Link>Bottom</Nav.Link>
+							<Nav.Link
+								onMouseEnter={(e) => {
+									setEventTarget(e.target);
+									setShowCategoryDropDown(true);
+								}}
+							>
+								Bottom
+							</Nav.Link>
 						</Link>
 
 						<Link href="/products/dresses" passHref>
-							<Nav.Link>Dress</Nav.Link>
+							<Nav.Link
+								className="dress-category-link"
+								onMouseEnter={(e) => {
+									setEventTarget(e.target);
+									setShowCategoryDropDown(true);
+								}}
+							>
+								Dress
+							</Nav.Link>
 						</Link>
 
 						<Link href="/products/sets" passHref>
-							<Nav.Link>Set</Nav.Link>
+							<Nav.Link
+								onMouseEnter={(e) => {
+									setEventTarget(e.target);
+									setShowCategoryDropDown(true);
+								}}
+							>
+								Set
+							</Nav.Link>
 						</Link>
 
 						<Link href="/products/coats" passHref>
-							<Nav.Link>Coat</Nav.Link>
+							<Nav.Link
+								onMouseEnter={(e) => {
+									setEventTarget(e.target);
+									setShowCategoryDropDown(true);
+								}}
+							>
+								Coat
+							</Nav.Link>
 						</Link>
 					</Nav>
+
+					<CategoryDropDown
+						eventTarget={eventTarget}
+						showCategoryDropDown={showCategoryDropDown}
+						setShowCategoryDropDown={setShowCategoryDropDown}
+						products={products}
+					/>
 
 					<Nav className="icon-menu d-flex flex-row position-relative">
 						<Link href="/cart" passHref>
@@ -232,17 +273,19 @@ const Header = ({ currentUser }) => {
 							<Nav.Link
 								className="account-icon"
 								onMouseEnter={() =>
-									currentUser ? setShowDropDown(true) : setShowDropDown(false)
+									currentUser
+										? setShowAccountDropDown(true)
+										: setShowAccountDropDown(false)
 								}
 							>
 								<FontAwesomeIcon icon={faCircleUser} /> Account
 							</Nav.Link>
 						</Link>
 
-						<MenuDropDown
+						<AccountDropDown
 							currentUser={currentUser}
-							showDropDown={showDropDown}
-							setShowDropDown={setShowDropDown}
+							showAccountDropDown={showAccountDropDown}
+							setShowAccountDropDown={setShowAccountDropDown}
 						/>
 					</Nav>
 				</Container>

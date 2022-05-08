@@ -36,7 +36,7 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
 				<title>Aurapan | Women's Clothing Online Shop</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 			</Head>
-			<Header currentUser={currentUser} />
+			<Header currentUser={currentUser} products={pageProps.products} />
 			<main className="pb-5" style={{ marginTop: "74px" }}>
 				<Container fluid className="px-0">
 					<Component currentUser={currentUser} {...pageProps} />
