@@ -12,10 +12,10 @@ const app = express();
 app.set("trust proxy", true);
 app.use(express.json());
 app.use(
-  cookieSession({
-    signed: false,
-    secure: false,
-  })
+	cookieSession({
+		signed: false,
+		secure: process.env.NOND_ENV === "production",
+	})
 );
 app.use(currentUser);
 
@@ -25,7 +25,7 @@ app.use(getPaymentRouter);
 app.use(paypalRouter);
 
 app.all("*", async (req, res) => {
-  throw new NotFoundError();
+	throw new NotFoundError();
 });
 
 app.use(errorHandler);
