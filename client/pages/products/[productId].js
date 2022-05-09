@@ -34,6 +34,8 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
 	const [screenWidth, setScreenWidth] = useState(0);
 
+	const product = products.find((product) => product.id === productId);
+
 	useEffect(() => {
 		function updateSize() {
 			setScreenWidth(window.innerWidth);
@@ -112,9 +114,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 		} else if (quantity < 1) {
 			setQuantity(1);
 		}
-	}, [initialImage, imageEvent, quantity]);
-
-	const product = products.find((product) => product.id === productId);
+	}, [product, initialImage, imageEvent, quantity]);
 
 	if (imageArray.length === 0 && product) {
 		const filterImages = Object.values(product.images).filter(
@@ -132,6 +132,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 			);
 
 			setImageArray(filterImages);
+			setInitialImage(false);
 		}
 	}, [product]);
 
