@@ -104,13 +104,23 @@ const CategoryDropDown = ({
 				<ul className="menu-parent">
 					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/bestseller`} passHref>
-							<a className="menu-parent-link">Bestseller</a>
+							<a
+								className="menu-parent-link"
+								onClick={() => setShowCategoryDropDown(false)}
+							>
+								Bestseller
+							</a>
 						</Link>
 						<ul className="menu-child">
 							{bestsellerProducts.map((product, index) => (
 								<li key={index}>
 									<Link href={`/products/${product.id}`} passHref>
-										<a className="menu-child-link">{product.title}</a>
+										<a
+											className="menu-child-link"
+											onClick={() => setShowCategoryDropDown(false)}
+										>
+											{product.title}
+										</a>
 									</Link>
 								</li>
 							))}
@@ -118,13 +128,23 @@ const CategoryDropDown = ({
 					</li>
 					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/new`} passHref>
-							<a className="menu-parent-link">New Arrivals</a>
+							<a
+								className="menu-parent-link"
+								onClick={() => setShowCategoryDropDown(false)}
+							>
+								New Arrivals
+							</a>
 						</Link>
 						<ul className="menu-child">
 							{newArrivalsProducts.map((product, index) => (
 								<li key={index}>
 									<Link href={`/products/${product.id}`} passHref>
-										<a className="menu-child-link">{product.title}</a>
+										<a
+											className="menu-child-link"
+											onClick={() => setShowCategoryDropDown(false)}
+										>
+											{product.title}
+										</a>
 									</Link>
 								</li>
 							))}
@@ -132,27 +152,52 @@ const CategoryDropDown = ({
 					</li>
 					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/top-brands`} passHref>
-							<a className="menu-parent-link">Top Brands</a>
+							<a
+								className="menu-parent-link"
+								onClick={() => setShowCategoryDropDown(false)}
+							>
+								Top Brands
+							</a>
 						</Link>
 					</li>
 					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/recommend`} passHref>
-							<a className="menu-parent-link">Recommended</a>
+							<a
+								className="menu-parent-link"
+								onClick={() => setShowCategoryDropDown(false)}
+							>
+								Recommended
+							</a>
 						</Link>
 					</li>
 					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/trending`} passHref>
-							<a className="menu-parent-link">Trending</a>
+							<a
+								className="menu-parent-link"
+								onClick={() => setShowCategoryDropDown(false)}
+							>
+								Trending
+							</a>
 						</Link>
 					</li>
 					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/coming`} passHref>
-							<a className="menu-parent-link">Coming Soon</a>
+							<a
+								className="menu-parent-link"
+								onClick={() => setShowCategoryDropDown(false)}
+							>
+								Coming Soon
+							</a>
 						</Link>
 					</li>
 					<li className="menu-parent-item">
 						<Link href={`${categoryParams}/sale`} passHref>
-							<a className="menu-parent-link">Sale</a>
+							<a
+								className="menu-parent-link"
+								onClick={() => setShowCategoryDropDown(false)}
+							>
+								Sale
+							</a>
 						</Link>
 					</li>
 				</ul>

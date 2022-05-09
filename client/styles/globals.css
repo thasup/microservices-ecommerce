@@ -319,7 +319,7 @@ header {
 /* category dropdown */
 .category-dropdown-menu {
 	position: absolute;
-	top: 62px;
+	top: 74px;
 	left: 0;
 	margin-top: 0.125rem;
 	z-index: 1000;
