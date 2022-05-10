@@ -132,7 +132,9 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 			);
 
 			setImageArray(filterImages);
-			setInitialImage(false);
+			if (initialImage) {
+				setInitialImage(false);
+			}
 		}
 	}, [product]);
 
