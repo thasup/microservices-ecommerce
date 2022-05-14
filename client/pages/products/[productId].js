@@ -30,10 +30,11 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const [imageEvent, setImageEvent] = useState(null);
 
 	const [isPurchase, setIsPurchase] = useState(false);
-	const [onMobile, setOnMobile] = useState(true);
-	const [showChild, setShowChild] = useState(false);
+	const [onMobile, setOnMobile] = useState(false);
 
 	const [screenWidth, setScreenWidth] = useState(0);
+
+	const product = products.find((product) => product.id === productId);
 
 	useEffect(() => {
 		function updateSize() {
@@ -87,9 +88,6 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 			setInitialImage(true);
 		}
 
-		// Show child after set main image
-		setShowChild(true);
-
 		// Toggle 'toggle-main-img' class for image when user clicked on that side image
 		if (imageEvent) {
 			for (let i = 0; i < mainImage.length; i++) {
@@ -116,9 +114,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 		} else if (quantity < 1) {
 			setQuantity(1);
 		}
-	}, [showChild, initialImage, imageEvent, quantity]);
-
-	const product = products.find((product) => product.id === productId);
+	}, [product, initialImage, imageEvent, quantity]);
 
 	if (imageArray.length === 0 && product) {
 		const filterImages = Object.values(product.images).filter(
@@ -136,6 +132,9 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 			);
 
 			setImageArray(filterImages);
+			if (initialImage) {
+				setInitialImage(false);
+			}
 		}
 	}, [product]);
 
@@ -201,14 +200,12 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 												key={index}
 												onClick={(e) => setImageEvent(e)}
 											>
-												{showChild && (
-													<NextImage
-														src={img}
-														alt={`product_image_${index}`}
-														priority={true}
-														quality={30}
-													/>
-												)}
+												<NextImage
+													src={img}
+													alt={`product_image_${index}`}
+													priority={true}
+													quality={30}
+												/>
 											</div>
 										))}
 									</Col>
@@ -216,14 +213,12 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 									<Col sm={5} className="mb-3 position-relative">
 										{imageArray.map((img, index) => (
 											<div className="product-main-img" key={index}>
-												{showChild && (
-													<NextImage
-														src={img}
-														alt={`product_image_${index}`}
-														priority={true}
-														quality={75}
-													/>
-												)}
+												<NextImage
+													src={img}
+													alt={`product_image_${index}`}
+													priority={true}
+													quality={75}
+												/>
 											</div>
 										))}
 									</Col>
