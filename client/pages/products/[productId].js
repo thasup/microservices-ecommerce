@@ -4,17 +4,18 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
 
-import Loader from "../../components/Loader";
-import Rating from "../../components/Rating";
-import NextImage from "../../components/NextImage";
-import ImageSwiper from "../../components/ImageSwiper";
-import SocialShare from "../../components/SocialShare";
-import ColorSelector from "../../components/ColorSelector";
-import SizeSelector from "../../components/SizeSelector";
-import ProductDescription from "../../components/ProductDescription";
-import Review from "../../components/Review";
-import Coupon from "../../components/Coupon";
-import AddToCart from "../../components/AddToCart";
+import Loader from "../../components/common/Loader";
+import Rating from "../../components/common/Rating";
+import NextImage from "../../components/common/NextImage";
+import ImageSwiper from "../../components/product/ImageSwiper";
+import SocialShare from "../../components/product/SocialShare";
+import ColorSelector from "../../components/common/ColorSelector";
+import SizeSelector from "../../components/common/SizeSelector";
+import ProductDescription from "../../components/product/ProductDescription";
+import Review from "../../components/product/Review";
+import Coupon from "../../components/product/Coupon";
+import AddToCart from "../../components/common/AddToCart";
+import QuantitySelector from "../../components/common/QuantitySelector";
 
 const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const { productId } = useRouter().query;
@@ -30,9 +31,10 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
 	const [isPurchase, setIsPurchase] = useState(false);
 	const [onMobile, setOnMobile] = useState(false);
-	const [showChild, setShowChild] = useState(false);
 
 	const [screenWidth, setScreenWidth] = useState(0);
+
+	const product = products.find((product) => product.id === productId);
 
 	useEffect(() => {
 		function updateSize() {
@@ -52,11 +54,6 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
 		return () => window.removeEventListener("resize", updateSize);
 	}, [screenWidth]);
-
-	// Wait until after client-side hydration to show
-	// useEffect(() => {
-	// 	setShowChild(true);
-	// }, []);
 
 	useEffect(async () => {
 		//Check if orders is not an empty array
@@ -91,9 +88,6 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 			setInitialImage(true);
 		}
 
-		// Show child after set main image
-		setShowChild(true);
-
 		// Toggle 'toggle-main-img' class for image when user clicked on that side image
 		if (imageEvent) {
 			for (let i = 0; i < mainImage.length; i++) {
@@ -120,9 +114,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 		} else if (quantity < 1) {
 			setQuantity(1);
 		}
-	}, [showChild, initialImage, imageEvent, quantity]);
-
-	const product = products.find((product) => product.id === productId);
+	}, [product, initialImage, imageEvent, quantity]);
 
 	if (imageArray.length === 0 && product) {
 		const filterImages = Object.values(product.images).filter(
@@ -131,6 +123,20 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
 		setImageArray(filterImages);
 	}
+
+	useEffect(() => {
+		// Re-evaluate new filter images when the product had changed
+		if (product) {
+			const filterImages = Object.values(product?.images).filter(
+				(image) => image !== null && image !== ""
+			);
+
+			setImageArray(filterImages);
+			if (initialImage) {
+				setInitialImage(false);
+			}
+		}
+	}, [product]);
 
 	const colorSelectedHandler = (color) => {
 		if (color !== null) {
@@ -194,14 +200,12 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 												key={index}
 												onClick={(e) => setImageEvent(e)}
 											>
-												{showChild && (
-													<NextImage
-														src={img}
-														alt={`product_image_${index}`}
-														priority={true}
-														quality={30}
-													/>
-												)}
+												<NextImage
+													src={img}
+													alt={`product_image_${index}`}
+													priority={true}
+													quality={30}
+												/>
 											</div>
 										))}
 									</Col>
@@ -209,14 +213,12 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 									<Col sm={5} className="mb-3 position-relative">
 										{imageArray.map((img, index) => (
 											<div className="product-main-img" key={index}>
-												{showChild && (
-													<NextImage
-														src={img}
-														alt={`product_image_${index}`}
-														priority={true}
-														quality={75}
-													/>
-												)}
+												<NextImage
+													src={img}
+													alt={`product_image_${index}`}
+													priority={true}
+													quality={75}
+												/>
 											</div>
 										))}
 									</Col>
@@ -258,7 +260,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 									</ListGroup.Item>
 									<ListGroup.Item>
 										<h3>QTY</h3>
-										<div className="my-1 quantity-selector d-flex flex-row align-items-center">
+										{/* <div className="my-1 quantity-selector d-flex flex-row align-items-center">
 											<div
 												className="qty-btn decrease-btn"
 												onClick={() => setQuantity(quantity - 1)}
@@ -283,7 +285,12 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 											>
 												+
 											</div>
-										</div>
+										</div> */}
+										<QuantitySelector
+											product={product}
+											quantity={quantity}
+											setQuantity={setQuantity}
+										/>
 									</ListGroup.Item>
 
 									<ListGroup.Item>
