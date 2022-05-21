@@ -2,6 +2,20 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+import TopBannerSrc from "../../public/asset/header-banner/Top-category-banner.png"
+import BottomBannerSrc from "../../public/asset/header-banner/Bottom-category-banner.png"
+import DressBannerSrc from "../../public/asset/header-banner/Dress-category-banner.png"
+import SetBannerSrc from "../../public/asset/header-banner/Set-category-banner.png"
+import CoatBannerSrc from "../../public/asset/header-banner/Coat-category-banner.png"
+
+const HeaderBannerSrc = {
+	Top: TopBannerSrc,
+	Bottom: BottomBannerSrc,
+	Dress: DressBannerSrc,
+	Set: SetBannerSrc,
+	Coat: CoatBannerSrc,
+}
+
 const CategoryDropDown = ({
 	eventTarget,
 	showCategoryDropDown,
@@ -71,7 +85,7 @@ const CategoryDropDown = ({
 				onMouseLeave={() => setToggle(false)}
 				onTouchStart={toggle ? () => setToggle(false) : () => setToggle(true)}
 			>
-				{categoryProducts.map((product, index) => (
+				{/* {categoryProducts.map((product, index) => (
 					<div key={index}>
 						<div
 							className="dropdown-menu-img__cover"
@@ -98,7 +112,15 @@ const CategoryDropDown = ({
 							/>
 						</div>
 					</div>
-				))}
+				))} */}
+				<Image
+										src={HeaderBannerSrc[`${categoryName}`]}
+										layout="fill"
+										objectFit="cover"
+										objectPosition="center center"
+										priority="true"
+										alt="category banner"
+									/>
 			</div>
 			<div className="category-dropdown-wrapper">
 				<ul className="menu-parent">
