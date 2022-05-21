@@ -38,7 +38,7 @@ const CartPage = ({ currentUser, products }) => {
 
 	useEffect(() => {
 		// Get cartItems from LocalStorage
-		const cartItems = localStorage.getItem("cartItems")
+		let cartItems = localStorage.getItem("cartItems")
 			? JSON.parse(localStorage.getItem("cartItems"))
 			: [];
 
@@ -63,7 +63,7 @@ const CartPage = ({ currentUser, products }) => {
 
 		// Run when update an item
 		if (onEdit) {
-			const existItem = cartItems.find((x) => x.productId === productId);
+			const existItem = cartItems.find((item) => item.productId === productId);
 
 			let newQty = existItem.qty;
 
@@ -97,8 +97,8 @@ const CartPage = ({ currentUser, products }) => {
 
 			// If it existed, replace it with new data
 			if (existItem) {
-				cartItems = cartItems.map((x) =>
-					x.productId === existItem.productId ? editedItem : x
+				cartItems = cartItems.map((item) =>
+				item.productId === existItem.productId ? editedItem : item
 				);
 			} else {
 				cartItems.push(editedItem);
