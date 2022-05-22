@@ -261,19 +261,21 @@ a::before {
 /* review */
 .review-name {
 	font-family: "Poppins", sans-serif;
-	font-size: 1.25rem;
+	font-size: 1rem;
 	font-weight: 500;
 	margin-bottom: 0;
 }
 
 .review-title {
-	font-weight: 400;
-	font-size: 1.1rem;
+	font-family: 'Montserrat Alternates', sans-serif;
+	font-size: 1.25rem;
+	font-weight: 500;
 	margin-bottom: 0;
 }
 
 .review-comment {
 	font-size: 1rem;
+	color: #555;
 }
 
 /* Header */
@@ -409,6 +411,7 @@ header {
 	text-align: left;
 	list-style: none;
 	background-color: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .account-dropdown-menu .account-dropdown-item {
