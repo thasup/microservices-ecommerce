@@ -24,6 +24,8 @@ const Header = ({ currentUser, products, bestseller }) => {
 	const [showNotification, setShowNotification] = useState(false);
 	const [onMobile, setOnMobile] = useState(true);
 
+	const productCategories = ["Top", "Bottom", "Dress", "Set", "Coat"];
+
 	useEffect(() => {
 		// Update window innerWidth every 0.1 second
 		const interval = setInterval(() => {
@@ -79,35 +81,13 @@ const Header = ({ currentUser, products, bestseller }) => {
 									</Nav.Link>
 								</Link>
 
-								<Link href="/products/tops" passHref>
-									<Nav.Link className="offcanvas-link">
-										Top <FontAwesomeIcon icon={faChevronRight} />
-									</Nav.Link>
-								</Link>
-
-								<Link href="/products/bottoms" passHref>
-									<Nav.Link className="offcanvas-link">
-										Bottom <FontAwesomeIcon icon={faChevronRight} />
-									</Nav.Link>
-								</Link>
-
-								<Link href="/products/dresses" passHref>
-									<Nav.Link className="offcanvas-link">
-										Dress <FontAwesomeIcon icon={faChevronRight} />
-									</Nav.Link>
-								</Link>
-
-								<Link href="/products/sets" passHref>
-									<Nav.Link className="offcanvas-link">
-										Set <FontAwesomeIcon icon={faChevronRight} />
-									</Nav.Link>
-								</Link>
-
-								<Link href="/products/coats" passHref>
-									<Nav.Link className="offcanvas-link">
-										Coat <FontAwesomeIcon icon={faChevronRight} />
-									</Nav.Link>
-								</Link>
+								{productCategories.map((category, index) => (
+									<Link href={`/products/${category.toLowerCase()}${category === "Dress" ? "es" : "s"}`} key={index} passHref>
+										<Nav.Link className="offcanvas-link">
+											{category} <FontAwesomeIcon icon={faChevronRight} />
+										</Nav.Link>
+									</Link>
+								))}
 							</Nav>
 
 							{currentUser ? (
@@ -186,61 +166,18 @@ const Header = ({ currentUser, products, bestseller }) => {
 					</Link>
 
 					<Nav className="sub-menu">
-						<Link href="/products/tops" passHref>
-							<Nav.Link
-								onMouseEnter={(e) => {
-									setEventTarget(e.target);
-									setShowCategoryDropDown(true);
-								}}
-							>
-								Top
-							</Nav.Link>
-						</Link>
-
-						<Link href="/products/bottoms" passHref>
-							<Nav.Link
-								onMouseEnter={(e) => {
-									setEventTarget(e.target);
-									setShowCategoryDropDown(true);
-								}}
-							>
-								Bottom
-							</Nav.Link>
-						</Link>
-
-						<Link href="/products/dresses" passHref>
-							<Nav.Link
-								className="dress-category-link"
-								onMouseEnter={(e) => {
-									setEventTarget(e.target);
-									setShowCategoryDropDown(true);
-								}}
-							>
-								Dress
-							</Nav.Link>
-						</Link>
-
-						<Link href="/products/sets" passHref>
-							<Nav.Link
-								onMouseEnter={(e) => {
-									setEventTarget(e.target);
-									setShowCategoryDropDown(true);
-								}}
-							>
-								Set
-							</Nav.Link>
-						</Link>
-
-						<Link href="/products/coats" passHref>
-							<Nav.Link
-								onMouseEnter={(e) => {
-									setEventTarget(e.target);
-									setShowCategoryDropDown(true);
-								}}
-							>
-								Coat
-							</Nav.Link>
-						</Link>
+						{productCategories.map((category, index) => (
+							<Link href={`/products/${category.toLowerCase()}${category === "Dress" ? "es" : "s"}`} key={index} passHref>
+								<Nav.Link
+									onMouseEnter={(e) => {
+										setEventTarget(e.target);
+										setShowCategoryDropDown(true);
+									}}
+								>
+									{category}
+								</Nav.Link>
+							</Link>
+						))}
 					</Nav>
 
 					<CategoryDropDown
