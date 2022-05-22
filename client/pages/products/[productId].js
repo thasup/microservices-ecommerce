@@ -35,6 +35,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const [screenWidth, setScreenWidth] = useState(0);
 
 	const product = products.find((product) => product.id === productId);
+	const categoryParams = `${product?.category.toLowerCase()}${product?.category === "Dress" ? "es" : "s"}`;
 
 	useEffect(() => {
 		function updateSize() {
@@ -174,6 +175,13 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 						<Breadcrumb className="pt-4">
 							<Link href="/" passHref>
 								<Breadcrumb.Item>Home</Breadcrumb.Item>
+							</Link>
+
+							<Link
+								href={`/products/${categoryParams}`}
+								passHref
+							>
+								<Breadcrumb.Item>{product.category}</Breadcrumb.Item>
 							</Link>
 
 							<Link
