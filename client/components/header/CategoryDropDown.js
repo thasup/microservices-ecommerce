@@ -33,6 +33,8 @@ const CategoryDropDown = ({
 	const [toggle, setToggle] = useState(false);
 	const [isReady, setIsReady] = useState(false);
 
+	const menuItems = ["Bestseller", "New Arrivals", "Top Brands", "Recommended", "Trending", "Coming Soon", "Sale"];
+
 	useEffect(async () => {
 		if (eventTarget) {
 			setCategoryName(eventTarget.text);
@@ -114,114 +116,62 @@ const CategoryDropDown = ({
 					</div>
 				))} */}
 				<Image
-										src={HeaderBannerSrc[`${categoryName}`]}
-										layout="fill"
-										objectFit="cover"
-										objectPosition="center center"
-										priority="true"
-										alt="category banner"
-									/>
+					src={HeaderBannerSrc[`${categoryName}`]}
+					layout="fill"
+					objectFit="cover"
+					objectPosition="center center"
+					priority="true"
+					alt="category banner"
+				/>
 			</div>
 			<div className="category-dropdown-wrapper">
 				<ul className="menu-parent">
-					<li className="menu-parent-item">
-						<Link href={`${categoryParams}/bestseller`} passHref>
-							<a
-								className="menu-parent-link"
-								onClick={() => setShowCategoryDropDown(false)}
-							>
-								Bestseller
-							</a>
-						</Link>
-						<ul className="menu-child">
-							{bestsellerProducts.map((product, index) => (
-								<li key={index}>
-									<Link href={`/products/${product.id}`} passHref>
-										<a
-											className="menu-child-link"
-											onClick={() => setShowCategoryDropDown(false)}
-										>
-											{product.title}
-										</a>
-									</Link>
-								</li>
-							))}
-						</ul>
-					</li>
-					<li className="menu-parent-item">
-						<Link href={`${categoryParams}/new`} passHref>
-							<a
-								className="menu-parent-link"
-								onClick={() => setShowCategoryDropDown(false)}
-							>
-								New Arrivals
-							</a>
-						</Link>
-						<ul className="menu-child">
-							{newArrivalsProducts.map((product, index) => (
-								<li key={index}>
-									<Link href={`/products/${product.id}`} passHref>
-										<a
-											className="menu-child-link"
-											onClick={() => setShowCategoryDropDown(false)}
-										>
-											{product.title}
-										</a>
-									</Link>
-								</li>
-							))}
-						</ul>
-					</li>
-					<li className="menu-parent-item">
-						<Link href={`${categoryParams}/top-brands`} passHref>
-							<a
-								className="menu-parent-link"
-								onClick={() => setShowCategoryDropDown(false)}
-							>
-								Top Brands
-							</a>
-						</Link>
-					</li>
-					<li className="menu-parent-item">
-						<Link href={`${categoryParams}/recommend`} passHref>
-							<a
-								className="menu-parent-link"
-								onClick={() => setShowCategoryDropDown(false)}
-							>
-								Recommended
-							</a>
-						</Link>
-					</li>
-					<li className="menu-parent-item">
-						<Link href={`${categoryParams}/trending`} passHref>
-							<a
-								className="menu-parent-link"
-								onClick={() => setShowCategoryDropDown(false)}
-							>
-								Trending
-							</a>
-						</Link>
-					</li>
-					<li className="menu-parent-item">
-						<Link href={`${categoryParams}/coming`} passHref>
-							<a
-								className="menu-parent-link"
-								onClick={() => setShowCategoryDropDown(false)}
-							>
-								Coming Soon
-							</a>
-						</Link>
-					</li>
-					<li className="menu-parent-item">
-						<Link href={`${categoryParams}/sale`} passHref>
-							<a
-								className="menu-parent-link"
-								onClick={() => setShowCategoryDropDown(false)}
-							>
-								Sale
-							</a>
-						</Link>
-					</li>
+
+					{menuItems.map((item, index) => (
+						<li className="menu-parent-item" key={index}>
+							<Link href={`${categoryParams}/${item.replace(" ", "-").toLowerCase()}`} passHref>
+								<a
+									className="menu-parent-link"
+									onClick={() => setShowCategoryDropDown(false)}
+								>
+									{item}
+								</a>
+							</Link>
+							{item === "Bestseller" && (
+								<ul className="menu-child">
+										{bestsellerProducts.map((product, index) => (
+											<li key={index}>
+												<Link href={`/products/${product.id}`} passHref>
+													<a
+														className="menu-child-link"
+														onClick={() => setShowCategoryDropDown(false)}
+													>
+														{product.title}
+													</a>
+												</Link>
+											</li>
+										))}
+								</ul>
+							)}
+							{item === "New Arrivals" &&  (
+								<ul className="menu-child">
+										{newArrivalsProducts.map((product, index) => (
+											<li key={index}>
+												<Link href={`/products/${product.id}`} passHref>
+													<a
+														className="menu-child-link"
+														onClick={() => setShowCategoryDropDown(false)}
+													>
+														{product.title}
+													</a>
+												</Link>
+											</li>
+										))}
+								</ul>
+							)}
+						</li>
+					))}
+
 				</ul>
 			</div>
 		</div>
