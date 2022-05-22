@@ -19,13 +19,13 @@ const AddToCart = ({
 
 	useEffect(() => {
 		// Initial retrieve data from localStorage
-		const cartItems = localStorage.getItem("cartItems")
+		let cartItems = localStorage.getItem("cartItems")
 			? JSON.parse(localStorage.getItem("cartItems"))
 			: [];
 
 		if (onAdd) {
-			// Create item to push in cart array then stored in localStorage
-			const item = {
+			// Create new item to push in cart array then stored in localStorage
+			const newItem = {
 				userId: currentUser?.id || null,
 				title: product.title,
 				qty: quantity,
@@ -39,15 +39,15 @@ const AddToCart = ({
 			};
 
 			// Check if the product exist in cart
-			const existItem = cartItems.find((x) => x.productId === product.id);
+			const existItem = cartItems.find((item) => item.productId === product.id);
 
 			// If it existed, replace it with new data
 			if (existItem) {
-				cartItems = cartItems.map((x) =>
-					x.productId === existItem.productId ? item : x
+				cartItems = cartItems.map((item) =>
+					item.productId === existItem.productId ? newItem : item
 				);
 			} else {
-				cartItems.push(item);
+				cartItems.push(newItem);
 			}
 
 			localStorage.setItem("cartItems", JSON.stringify(cartItems));
