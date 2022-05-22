@@ -238,12 +238,15 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 									<ListGroup.Item className="py-0">
 										<Rating value={product.rating} mobile={false} />
 									</ListGroup.Item>
+
 									<ListGroup.Item>
 										<h1>{product.title}</h1>
 									</ListGroup.Item>
+
 									<ListGroup.Item>
 										<h1 id="price">$ {product.price}</h1>
 									</ListGroup.Item>
+
 									<ListGroup.Item>
 										<h3>Color</h3>
 										<div className="my-1 px-0">
@@ -256,6 +259,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 											/>
 										</div>
 									</ListGroup.Item>
+
 									<ListGroup.Item>
 										<h3>Size</h3>
 										<div className="my-1 px-0">
@@ -266,34 +270,9 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 											/>
 										</div>
 									</ListGroup.Item>
+
 									<ListGroup.Item>
 										<h3>QTY</h3>
-										{/* <div className="my-1 quantity-selector d-flex flex-row align-items-center">
-											<div
-												className="qty-btn decrease-btn"
-												onClick={() => setQuantity(quantity - 1)}
-											>
-												-
-											</div>
-
-											<Form.Group
-												controlId="countInStock"
-												className="quantity-box"
-											>
-												<Form.Control
-													type="number"
-													value={quantity}
-													onChange={(e) => setQuantity(Number(e.target.value))}
-												></Form.Control>
-											</Form.Group>
-
-											<div
-												className="qty-btn increase-btn"
-												onClick={() => setQuantity(quantity + 1)}
-											>
-												+
-											</div>
-										</div> */}
 										<QuantitySelector
 											product={product}
 											quantity={quantity}
@@ -360,19 +339,19 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 										)}
 
 										<ListGroup.Item className="d-grid">
-											{color === null && size === null ? (
+											{/* {color === null && size === null ? (
 												<div className="px-0 py-2" style={{ color: "red" }}>
-													{"Please select color and size option"}
+													Please select color and size option
 												</div>
 											) : color === null && size !== null ? (
 												<div className="px-0 py-2" style={{ color: "red" }}>
-													{"Please select color option"}
+													Please select color option
 												</div>
 											) : color !== null && size === null ? (
 												<div className="px-0 py-2" style={{ color: "red" }}>
-													{"Please select size option"}
+													Please select size option
 												</div>
-											) : null}
+											) : null} */}
 
 											<AddToCart
 												product={product}
