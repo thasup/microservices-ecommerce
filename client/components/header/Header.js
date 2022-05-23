@@ -82,7 +82,13 @@ const Header = ({ currentUser, products, bestseller }) => {
 								</Link>
 
 								{productCategories.map((category, index) => (
-									<Link href={`/products/${category.toLowerCase()}${category === "Dress" ? "es" : "s"}`} key={index} passHref>
+									<Link
+										href={`/products/${category.toLowerCase()}${
+											category === "Dress" ? "es" : "s"
+										}`}
+										key={index}
+										passHref
+									>
 										<Nav.Link className="offcanvas-link">
 											{category} <FontAwesomeIcon icon={faChevronRight} />
 										</Nav.Link>
@@ -156,7 +162,7 @@ const Header = ({ currentUser, products, bestseller }) => {
 				className="py-0"
 			>
 				<Container
-					className="menu-container d-flex flex-row py-2"
+					className="menu-container d-flex flex-row"
 					onMouseLeave={() => setShowAccountDropDown(false)}
 				>
 					<Link href="/" passHref>
@@ -167,7 +173,13 @@ const Header = ({ currentUser, products, bestseller }) => {
 
 					<Nav className="sub-menu">
 						{productCategories.map((category, index) => (
-							<Link href={`/products/${category.toLowerCase()}${category === "Dress" ? "es" : "s"}`} key={index} passHref>
+							<Link
+								href={`/products/${category.toLowerCase()}${
+									category === "Dress" ? "es" : "s"
+								}`}
+								key={index}
+								passHref
+							>
 								<Nav.Link
 									onMouseEnter={(e) => {
 										setEventTarget(e.target);

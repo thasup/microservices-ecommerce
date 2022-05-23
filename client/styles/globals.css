@@ -261,19 +261,21 @@ a::before {
 /* review */
 .review-name {
 	font-family: "Poppins", sans-serif;
-	font-size: 1.25rem;
+	font-size: 1rem;
 	font-weight: 500;
 	margin-bottom: 0;
 }
 
 .review-title {
-	font-weight: 400;
-	font-size: 1.1rem;
+	font-family: 'Montserrat Alternates', sans-serif;
+	font-size: 1.25rem;
+	font-weight: 500;
 	margin-bottom: 0;
 }
 
 .review-comment {
 	font-size: 1rem;
+	color: #555;
 }
 
 /* Header */
@@ -285,6 +287,11 @@ header {
 .navbar {
 	background-color: #fff;
 	height: 75px;
+}
+
+.menu-container {
+	padding: 0;
+	height: 100%;
 }
 
 .header-logo {
@@ -329,6 +336,7 @@ header {
 	margin: 0;
 	color: #222;
 	background-color: #fff;
+	box-shadow: 0px 10px 12px -4px rgba(0,0,0,0.35);
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	transition: all 0.7s ease-in-out;
@@ -342,6 +350,28 @@ header {
 	height: 100%;
 	aspect-ratio: 3/2;
 	cursor: pointer;
+}
+
+.dropdown-menu-img-wrapper img {
+	transition: all 0.5s ease-in-out;
+}
+
+.dropdown-menu-img-wrapper:hover img {
+	transform: scale(1.1);
+}
+
+.dropdown-menu-img-wrapper .overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	transition: background-color 0.5s ease-in-out;
+	z-index: 1;
+}
+
+.dropdown-menu-img-wrapper:hover .overlay {
+	background-color: rgba(0,0,0,0.15);
 }
 
 .category-dropdown-menu .dropdown-menu-img__cover {
@@ -409,6 +439,7 @@ header {
 	text-align: left;
 	list-style: none;
 	background-color: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .account-dropdown-menu .account-dropdown-item {
@@ -439,16 +470,25 @@ header {
 }
 
 .sub-menu {
+	align-items: center;
 	height: 100%;
 	text-transform: uppercase;
 }
 
 .sub-menu a {
 	position: static;
+	height: 100%;
+	display: flex;
+	align-items: center;
 }
 
 .sub-menu a:hover {
 	color: #000;
+	font-weight: 600;
+}
+
+.sub-menu .nav-link.active {
+	color: rgba(0,0,0,.55) !important;
 }
 
 #dropdown-menu .dropdown-menu {

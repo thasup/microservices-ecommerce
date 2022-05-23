@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import TopBannerSrc from "../../public/asset/header-banner/Top-category-banner.png"
-import BottomBannerSrc from "../../public/asset/header-banner/Bottom-category-banner.png"
-import DressBannerSrc from "../../public/asset/header-banner/Dress-category-banner.png"
-import SetBannerSrc from "../../public/asset/header-banner/Set-category-banner.png"
-import CoatBannerSrc from "../../public/asset/header-banner/Coat-category-banner.png"
+import TopBannerSrc from "../../public/asset/header-banner/Top-category-banner.png";
+import BottomBannerSrc from "../../public/asset/header-banner/Bottom-category-banner.png";
+import DressBannerSrc from "../../public/asset/header-banner/Dress-category-banner.png";
+import SetBannerSrc from "../../public/asset/header-banner/Set-category-banner.png";
+import CoatBannerSrc from "../../public/asset/header-banner/Coat-category-banner.png";
 
 const HeaderBannerSrc = {
 	Top: TopBannerSrc,
@@ -14,7 +14,7 @@ const HeaderBannerSrc = {
 	Dress: DressBannerSrc,
 	Set: SetBannerSrc,
 	Coat: CoatBannerSrc,
-}
+};
 
 const CategoryDropDown = ({
 	eventTarget,
@@ -33,7 +33,15 @@ const CategoryDropDown = ({
 	const [toggle, setToggle] = useState(false);
 	const [isReady, setIsReady] = useState(false);
 
-	const menuItems = ["Bestseller", "New Arrivals", "Top Brands", "Recommended", "Trending", "Coming Soon", "Sale"];
+	const menuItems = [
+		"Bestseller",
+		"New Arrivals",
+		"Top Brands",
+		"Recommended",
+		"Trending",
+		"Coming Soon",
+		"Sale",
+	];
 
 	useEffect(async () => {
 		if (eventTarget) {
@@ -115,6 +123,9 @@ const CategoryDropDown = ({
 						</div>
 					</div>
 				))} */}
+				<Link href={categoryParams} passHref>
+					<a className="overlay"></a>
+				</Link>
 				<Image
 					src={HeaderBannerSrc[`${categoryName}`]}
 					layout="fill"
@@ -126,10 +137,14 @@ const CategoryDropDown = ({
 			</div>
 			<div className="category-dropdown-wrapper">
 				<ul className="menu-parent">
-
 					{menuItems.map((item, index) => (
 						<li className="menu-parent-item" key={index}>
-							<Link href={`${categoryParams}/${item.replace(" ", "-").toLowerCase()}`} passHref>
+							<Link
+								href={`${categoryParams}/${item
+									.replace(" ", "-")
+									.toLowerCase()}`}
+								passHref
+							>
 								<a
 									className="menu-parent-link"
 									onClick={() => setShowCategoryDropDown(false)}
@@ -139,39 +154,38 @@ const CategoryDropDown = ({
 							</Link>
 							{item === "Bestseller" && (
 								<ul className="menu-child">
-										{bestsellerProducts.map((product, index) => (
-											<li key={index}>
-												<Link href={`/products/${product.id}`} passHref>
-													<a
-														className="menu-child-link"
-														onClick={() => setShowCategoryDropDown(false)}
-													>
-														{product.title}
-													</a>
-												</Link>
-											</li>
-										))}
+									{bestsellerProducts.map((product, index) => (
+										<li key={index}>
+											<Link href={`/products/${product.id}`} passHref>
+												<a
+													className="menu-child-link"
+													onClick={() => setShowCategoryDropDown(false)}
+												>
+													{product.title}
+												</a>
+											</Link>
+										</li>
+									))}
 								</ul>
 							)}
-							{item === "New Arrivals" &&  (
+							{item === "New Arrivals" && (
 								<ul className="menu-child">
-										{newArrivalsProducts.map((product, index) => (
-											<li key={index}>
-												<Link href={`/products/${product.id}`} passHref>
-													<a
-														className="menu-child-link"
-														onClick={() => setShowCategoryDropDown(false)}
-													>
-														{product.title}
-													</a>
-												</Link>
-											</li>
-										))}
+									{newArrivalsProducts.map((product, index) => (
+										<li key={index}>
+											<Link href={`/products/${product.id}`} passHref>
+												<a
+													className="menu-child-link"
+													onClick={() => setShowCategoryDropDown(false)}
+												>
+													{product.title}
+												</a>
+											</Link>
+										</li>
+									))}
 								</ul>
 							)}
 						</li>
 					))}
-
 				</ul>
 			</div>
 		</div>
