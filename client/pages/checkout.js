@@ -16,8 +16,12 @@ const CheckoutPage = ({ currentUser }) => {
 	const [shippingDiscount, setShippingDiscount] = useState(1);
 
 	const [onSuccess, setOnSuccess] = useState(false);
-	const [isReady, setIsReady] = useState(false);
 	const [storageReady, setStorageReady] = useState(false);
+
+	let itemsPrice;
+	let shippingPrice;
+	let taxPrice;
+	let totalPrice;
 
 	const { doRequest, errors } = useRequest({
 		url: `/api/orders`,
@@ -37,8 +41,6 @@ const CheckoutPage = ({ currentUser }) => {
 		// Protect unauthorized access
 		if (!currentUser) {
 			return Router.push("/signin");
-		} else {
-			setIsReady(true);
 		}
 
 		const cartItemsData = localStorage.getItem("cartItems")
@@ -77,15 +79,15 @@ const CheckoutPage = ({ currentUser }) => {
 		}
 	}, [onSuccess]);
 
-	if (storageReady) {
-		const itemsPrice = Number(
+	if (cart && storageReady) {
+		itemsPrice = Number(
 			cart.reduce((acc, item) => acc + item.price * item.qty * item.discount, 0)
 		).toFixed(2);
-		const shippingPrice = (
+		shippingPrice = (
 			itemsPrice > 100.0 ? 0.0 : 10.0 * shippingDiscount
 		).toFixed(2);
-		const taxPrice = (0.07 * itemsPrice).toFixed(2);
-		const totalPrice = (
+		taxPrice = (0.07 * itemsPrice).toFixed(2);
+		totalPrice = (
 			Number(itemsPrice) +
 			Number(shippingPrice) +
 			Number(taxPrice)
@@ -98,12 +100,11 @@ const CheckoutPage = ({ currentUser }) => {
 	};
 
 	return (
-		isReady && (
 			<>
 				<Head>
 					<title>Checkout | Aurapan</title>
 				</Head>
-				{storageReady ? (
+				{storageReady && (
 					<Container className="app-container">
 						<CheckoutSteps
 							step1
@@ -240,7 +241,7 @@ const CheckoutPage = ({ currentUser }) => {
 												<Col>
 													<strong>Items</strong>
 												</Col>
-												<Col>${itemsPrice}</Col>
+												<Col>${itemsPrice ? itemsPrice : "N/A" }</Col>
 											</Row>
 										</ListGroup.Item>
 
@@ -249,7 +250,7 @@ const CheckoutPage = ({ currentUser }) => {
 												<Col>
 													<strong>Shipping</strong>
 												</Col>
-												<Col>${shippingPrice}</Col>
+												<Col>${shippingPrice ? shippingPrice : "N/A" }</Col>
 											</Row>
 										</ListGroup.Item>
 
@@ -258,7 +259,7 @@ const CheckoutPage = ({ currentUser }) => {
 												<Col>
 													<strong>Tax</strong>
 												</Col>
-												<Col>${taxPrice}</Col>
+												<Col>${taxPrice ? taxPrice : "N/A" }</Col>
 											</Row>
 										</ListGroup.Item>
 
@@ -267,7 +268,7 @@ const CheckoutPage = ({ currentUser }) => {
 												<Col>
 													<strong>Total</strong>
 												</Col>
-												<Col>${totalPrice}</Col>
+												<Col>${totalPrice ? totalPrice : "N/A" }</Col>
 											</Row>
 										</ListGroup.Item>
 
@@ -287,9 +288,8 @@ const CheckoutPage = ({ currentUser }) => {
 							</Col>
 						</Row>
 					</Container>
-				) : null}
+				) }
 			</>
-		)
 	);
 };
 
