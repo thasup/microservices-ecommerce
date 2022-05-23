@@ -289,6 +289,11 @@ header {
 	height: 75px;
 }
 
+.menu-container {
+	padding: 0;
+	height: 100%;
+}
+
 .header-logo {
 	font-family: "Italiana", serif;
 	font-size: 2rem;
@@ -344,6 +349,14 @@ header {
 	height: 100%;
 	aspect-ratio: 3/2;
 	cursor: pointer;
+}
+
+.dropdown-menu-img-wrapper img {
+	transition: all 0.5s ease-in-out;
+}
+
+.dropdown-menu-img-wrapper img:hover {
+	transform: scale(1.1);
 }
 
 .category-dropdown-menu .dropdown-menu-img__cover {
@@ -442,16 +455,25 @@ header {
 }
 
 .sub-menu {
+	align-items: center;
 	height: 100%;
 	text-transform: uppercase;
 }
 
 .sub-menu a {
 	position: static;
+	height: 100%;
+	display: flex;
+	align-items: center;
 }
 
 .sub-menu a:hover {
 	color: #000;
+	font-weight: 600;
+}
+
+.sub-menu .nav-link.active {
+	color: rgba(0,0,0,.55) !important;
 }
 
 #dropdown-menu .dropdown-menu {

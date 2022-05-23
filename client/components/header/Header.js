@@ -156,7 +156,7 @@ const Header = ({ currentUser, products, bestseller }) => {
 				className="py-0"
 			>
 				<Container
-					className="menu-container d-flex flex-row py-2"
+					className="menu-container d-flex flex-row"
 					onMouseLeave={() => setShowAccountDropDown(false)}
 				>
 					<Link href="/" passHref>

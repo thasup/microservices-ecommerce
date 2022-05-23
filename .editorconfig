@@ -14,5 +14,5 @@ insert_final_newline = true
 trim_trailing_whitespace = false
 
 [{package.json,package-lock.json}]
-indent_style = space
+indent_style = tab
 indent_size = 2
