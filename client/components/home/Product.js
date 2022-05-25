@@ -14,6 +14,7 @@ const Product = ({
 	showAddToCart = true,
 	showColors = true,
 	showRating = true,
+	priority = false,
 }) => {
 	const [color, setColor] = useState(null);
 	const [toggle, setToggle] = useState(false);
@@ -51,6 +52,7 @@ const Product = ({
 							layout="fill"
 							objectFit="cover"
 							lazyBoundary={onMobile ? "400px" : "800px"}
+							priority={priority || false}
 							alt={`${product.title} image 1`}
 						/>
 					</Card.Body>
@@ -71,6 +73,7 @@ const Product = ({
 							layout="fill"
 							objectFit="cover"
 							lazyBoundary={onMobile ? "400px" : "800px"}
+							priority={priority || false}
 							alt={`${product.title} image 2`}
 						/>
 					</Card.Body>

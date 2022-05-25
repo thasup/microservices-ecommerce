@@ -16,6 +16,7 @@ import Review from "../../components/product/Review";
 import Coupon from "../../components/product/Coupon";
 import AddToCart from "../../components/common/AddToCart";
 import QuantitySelector from "../../components/common/QuantitySelector";
+import YouMayAlsoLike from "../../components/common/YouMayAlsoLike";
 
 const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const { productId } = useRouter().query;
@@ -35,7 +36,9 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const [screenWidth, setScreenWidth] = useState(0);
 
 	const product = products.find((product) => product.id === productId);
-	const categoryParams = `${product?.category.toLowerCase()}${product?.category === "Dress" ? "es" : "s"}`;
+	const categoryParams = `${product?.category.toLowerCase()}${
+		product?.category === "Dress" ? "es" : "s"
+	}`;
 
 	useEffect(() => {
 		function updateSize() {
@@ -177,10 +180,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 								<Breadcrumb.Item>Home</Breadcrumb.Item>
 							</Link>
 
-							<Link
-								href={`/products/${categoryParams}`}
-								passHref
-							>
+							<Link href={`/products/${categoryParams}`} passHref>
 								<Breadcrumb.Item>{product.category}</Breadcrumb.Item>
 							</Link>
 
@@ -382,6 +382,19 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 									isPurchase={isPurchase}
 									currentUser={currentUser}
 								/>
+							</Col>
+						</Row>
+
+						<Row className="mt-4 pb-5">
+							<Col sm={12} className="mb-3">
+								<div className="px-0 mt-2">
+									<YouMayAlsoLike
+										products={products}
+										currentUser={currentUser}
+										onMobile={onMobile}
+										screenWidth={screenWidth}
+									/>
+								</div>
 							</Col>
 						</Row>
 					</>
