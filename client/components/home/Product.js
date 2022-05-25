@@ -7,7 +7,14 @@ import Rating from "../common/Rating";
 import AddToCart from "../common/AddToCart";
 import ColorSelector from "../common/ColorSelector";
 
-const Product = ({ onMobile, product, currentUser }) => {
+const Product = ({
+	onMobile,
+	product,
+	currentUser,
+	showAddToCart = true,
+	showColors = true,
+	showRating = true,
+}) => {
 	const [color, setColor] = useState(null);
 	const [toggle, setToggle] = useState(false);
 
@@ -69,7 +76,7 @@ const Product = ({ onMobile, product, currentUser }) => {
 					</Card.Body>
 				</Link>
 
-				{!onMobile && (
+				{showAddToCart && !onMobile && (
 					<div className="menu-tab" style={{ opacity: toggle ? "1" : "0" }}>
 						<AddToCart
 							product={product}
@@ -108,26 +115,30 @@ const Product = ({ onMobile, product, currentUser }) => {
 				</Row>
 
 				<Row className="d-flex flex-row justify-content-end align-items-center px-0 mx-0">
-					<Col xs={5} className="card-product-reviews" as="div">
-						<Rating
-							value={product.rating}
-							text={`(${product.numReviews})`}
-							mobile={onMobile ? true : false}
-						/>
-					</Col>
+					{showRating && (
+						<Col xs={5} className="card-product-reviews" as="div">
+							<Rating
+								value={product.rating}
+								text={`(${product.numReviews})`}
+								mobile={onMobile ? true : false}
+							/>
+						</Col>
+					)}
 
-					<Col xs={7} className="card-product-color" as="div">
-						<ColorSelector
-							product={product}
-							callback={colorSelectedHandler}
-							margin={"2px"}
-							size={onMobile ? "15px" : "25px"}
-							flex={"end"}
-						/>
-					</Col>
+					{showColors && (
+						<Col xs={7} className="card-product-color" as="div">
+							<ColorSelector
+								product={product}
+								callback={colorSelectedHandler}
+								margin={"2px"}
+								size={onMobile ? "15px" : "25px"}
+								flex={"end"}
+							/>
+						</Col>
+					)}
 				</Row>
 
-				{onMobile && (
+				{showAddToCart && onMobile && (
 					<AddToCart
 						className="d-flex justify-content-center"
 						product={product}
