@@ -43,7 +43,7 @@ const ImageSwiper = ({ product }) => {
 	) : (
 		<Swiper
 			// install Swiper modules
-			className="mySwiper"
+			className="mySwiper custom-swiper"
 			modules={[Navigation, Pagination, Scrollbar, Zoom, Mousewheel, Keyboard]}
 			spaceBetween={0}
 			slidesPerView={1}
