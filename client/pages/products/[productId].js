@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, ListGroup, Card, Form, Breadcrumb } from "react-bootstrap";
+import { Row, Col, ListGroup, Card, Breadcrumb } from "react-bootstrap";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
@@ -17,6 +17,7 @@ import Coupon from "../../components/product/Coupon";
 import AddToCart from "../../components/common/AddToCart";
 import QuantitySelector from "../../components/common/QuantitySelector";
 import YouMayAlsoLike from "../../components/common/YouMayAlsoLike";
+import useWindowSize from "../../hooks/useWindowSize";
 
 const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const { productId } = useRouter().query;
@@ -40,24 +41,18 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 		product?.category === "Dress" ? "es" : "s"
 	}`;
 
+	const { width } = useWindowSize();
+
 	useEffect(() => {
-		function updateSize() {
-			setScreenWidth(window.innerWidth);
-		}
+		setScreenWidth(width);
 
-		window.addEventListener("resize", updateSize);
-		updateSize();
-
-		// Check current window width to determine screen type
-		if (screenWidth <= 576) {
+		if (width <= 576) {
 			setOnMobile(true);
 		} else {
 			setInitialImage(false);
 			setOnMobile(false);
 		}
-
-		return () => window.removeEventListener("resize", updateSize);
-	}, [screenWidth]);
+	}, [width]);
 
 	useEffect(async () => {
 		//Check if orders is not an empty array
