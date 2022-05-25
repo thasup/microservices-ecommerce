@@ -171,6 +171,18 @@ a::before {
 	box-shadow: 0px 0px 5px #555;
 }
 
+.custom-swiper .swiper-pagination-bullet-active {
+	background: #000;
+}
+
+.custom-swiper .swiper-button-next, .custom-swiper .swiper-button-prev {
+	color: #000;
+}
+
+.custom-swiper .swiper-pagination-progressbar	.swiper-pagination-progressbar-fill {
+	background: #000;
+}
+
 /* color selector */
 .color-selector-outer {
 	border: 0px solid #000;
@@ -725,21 +737,6 @@ header {
 #product-page .product-page-box h5 {
 	text-transform: uppercase;
 	font-weight: 300;
-}
-
-#product-page .swiper-pagination-bullet-active {
-	background: #000;
-}
-
-#product-page .swiper-button-next,
-#product-page .swiper-button-prev {
-	color: #000;
-}
-
-#product-page
-	.swiper-pagination-progressbar
-	.swiper-pagination-progressbar-fill {
-	background: #000;
 }
 
 #product-page .coupon-text {
