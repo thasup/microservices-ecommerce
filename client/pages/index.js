@@ -10,8 +10,6 @@ const Home = ({ products, currentUser }) => {
 	const { width } = useWindowSize();
 
 	useEffect(() => {
-		// setScreenWidth(width);
-
 		if (width <= 576) {
 			setOnMobile(true);
 		} else {
