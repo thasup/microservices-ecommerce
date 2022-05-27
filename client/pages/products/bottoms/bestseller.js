@@ -27,7 +27,7 @@ const BottomsBestseller = ({ bestseller, currentUser }) => {
 		if (bestseller && bottomsBestseller) {
 			setLoading(false);
 		}
-	}, [width, products]);
+	}, [width, bestseller]);
 
 	return (
 		<>

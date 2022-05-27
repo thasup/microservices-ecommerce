@@ -27,7 +27,7 @@ const DressesBestseller = ({ bestseller, currentUser }) => {
 		if (bestseller && dressesBestseller) {
 			setLoading(false);
 		}
-	}, [width, products]);
+	}, [width, bestseller]);
 
 	return (
 		<>
