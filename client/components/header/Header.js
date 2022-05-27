@@ -173,7 +173,10 @@ const Header = ({ currentUser, products, bestseller }) => {
 						</Navbar.Brand>
 					</Link>
 
-					<Nav className="sub-menu">
+					<Nav
+						className="sub-menu"
+						onMouseLeave={() => setShowCategoryDropDown(false)}
+					>
 						{productCategories.map((category, index) => (
 							<Link
 								href={`/products/${category.toLowerCase()}${
@@ -193,14 +196,6 @@ const Header = ({ currentUser, products, bestseller }) => {
 							</Link>
 						))}
 					</Nav>
-
-					<CategoryDropDown
-						eventTarget={eventTarget}
-						showCategoryDropDown={showCategoryDropDown}
-						setShowCategoryDropDown={setShowCategoryDropDown}
-						products={products}
-						bestseller={bestseller}
-					/>
 
 					<Nav className="icon-menu d-flex flex-row position-relative">
 						<Link href="/cart" passHref>
@@ -238,6 +233,14 @@ const Header = ({ currentUser, products, bestseller }) => {
 					</Nav>
 				</Container>
 			</Navbar>
+
+			<CategoryDropDown
+				eventTarget={eventTarget}
+				showCategoryDropDown={showCategoryDropDown}
+				setShowCategoryDropDown={setShowCategoryDropDown}
+				products={products}
+				bestseller={bestseller}
+			/>
 		</header>
 	);
 };

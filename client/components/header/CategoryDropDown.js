@@ -26,11 +26,9 @@ const CategoryDropDown = ({
 	const [categoryName, setCategoryName] = useState("");
 	const [categoryParams, setCategoryParams] = useState("");
 
-	const [categoryProducts, setCategoryProducts] = useState([]);
 	const [bestsellerProducts, setBestsellerProducts] = useState([]);
 	const [newArrivalsProducts, setNewArrivalsProducts] = useState([]);
 
-	const [toggle, setToggle] = useState(false);
 	const [isReady, setIsReady] = useState(false);
 
 	const menuItems = [
@@ -47,13 +45,6 @@ const CategoryDropDown = ({
 		if (eventTarget) {
 			setCategoryName(eventTarget.text);
 			setCategoryParams(eventTarget.pathname);
-
-			const categoryArray = await products
-				.filter((product) => product.category === `${categoryName}`)
-				.slice(0, 3);
-			if (categoryArray.length !== 0) {
-				setCategoryProducts(categoryArray);
-			}
 
 			const bestsellerArray = bestseller
 				.filter((product) => product.category === `${categoryName}`)
@@ -75,54 +66,21 @@ const CategoryDropDown = ({
 		}
 	}, [eventTarget, categoryName]);
 
-	const myLoader = ({ src, quality }) => {
-		return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 50}`;
-	};
-
 	return isReady ? (
 		<div
 			className="category-dropdown-menu"
 			style={{
 				opacity: showCategoryDropDown ? 1 : 0,
 				visibility: showCategoryDropDown ? "visible" : "hidden",
-				top: showCategoryDropDown ? "75px" : "-5000px",
+				top: showCategoryDropDown ? "0px" : "-5000px",
 			}}
+			onMouseEnter={() => setShowCategoryDropDown(true)}
 			onMouseLeave={() => setShowCategoryDropDown(false)}
 		>
 			<div
 				className="dropdown-menu-img-wrapper"
-				onMouseEnter={() => setToggle(true)}
-				onMouseLeave={() => setToggle(false)}
-				onTouchStart={toggle ? () => setToggle(false) : () => setToggle(true)}
+				onClick={() => setShowCategoryDropDown(false)}
 			>
-				{/* {categoryProducts.map((product, index) => (
-					<div key={index}>
-						<div
-							className="dropdown-menu-img__cover"
-							style={{ opacity: toggle ? "0" : "1" }}
-						>
-							<Image
-								loader={myLoader}
-								src={product.images.image1}
-								layout="fill"
-								objectFit="cover"
-								alt={`${product.title} image 1`}
-							/>
-						</div>
-						<div
-							className="dropdown-menu-img__hover"
-							style={{ opacity: toggle ? "1" : "0", left: `${index * 33}%` }}
-						>
-							<Image
-								loader={myLoader}
-								src={product.images.image2}
-								layout="fill"
-								objectFit="cover"
-								alt={`${product.title} image 2`}
-							/>
-						</div>
-					</div>
-				))} */}
 				<Link href={categoryParams} passHref>
 					<a className="overlay"></a>
 				</Link>
