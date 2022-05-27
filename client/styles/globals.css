@@ -356,8 +356,6 @@ header {
 
 .dropdown-menu-img-wrapper {
 	position: relative;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
 	width: 50vw;
 	height: 100%;
 	aspect-ratio: 3/2;
@@ -432,6 +430,7 @@ header {
 }
 
 .category-dropdown-menu .category-dropdown-wrapper .menu-child-link {
+	position: static;
 	margin-left: 1rem;
 	text-transform: none;
 	font-weight: normal;
