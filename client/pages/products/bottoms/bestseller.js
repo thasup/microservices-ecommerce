@@ -5,19 +5,29 @@ import Head from "next/head";
 
 import Product from "../../../components/home/Product";
 import Loader from "../../../components/common/Loader";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 const BottomsBestseller = ({ bestseller, currentUser }) => {
 	const [loading, setLoading] = useState(true);
+	const [onMobile, setOnMobile] = useState(false);
 
-	const bottomsBestseller = bestseller.filter(
+	const { width } = useWindowSize();
+
+	const bottomsBestseller = bestseller?.filter(
 		(bottom) => bottom.category === "Bottom"
 	);
 
 	useEffect(() => {
+		if (width <= 576) {
+			setOnMobile(true);
+		} else {
+			setOnMobile(false);
+		}
+
 		if (bestseller && bottomsBestseller) {
 			setLoading(false);
 		}
-	}, []);
+	}, [width, bestseller]);
 
 	return (
 		<>
@@ -51,7 +61,11 @@ const BottomsBestseller = ({ bestseller, currentUser }) => {
 					<Row className="mx-0">
 						{bottomsBestseller.map((item) => (
 							<Col key={item.id} xs={6} md={4} xl={3} className="p-0">
-								<Product product={item} currentUser={currentUser} />
+								<Product
+									onMobile={onMobile}
+									product={item}
+									currentUser={currentUser}
+								/>
 							</Col>
 						))}
 					</Row>

@@ -14,6 +14,7 @@ import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 
 import AccountDropDown from "./AccountDropDown";
 import CategoryDropDown from "./CategoryDropDown";
+import useWindowSize from "../../hooks/useWindowSize";
 
 const Header = ({ currentUser, products, bestseller }) => {
 	const [eventTarget, setEventTarget] = useState(null);
@@ -24,6 +25,7 @@ const Header = ({ currentUser, products, bestseller }) => {
 	const [showNotification, setShowNotification] = useState(false);
 	const [onMobile, setOnMobile] = useState(true);
 
+	const { width } = useWindowSize();
 	const productCategories = ["Top", "Bottom", "Dress", "Set", "Coat"];
 
 	useEffect(() => {
@@ -41,16 +43,16 @@ const Header = ({ currentUser, products, bestseller }) => {
 				setShowNotification(false);
 				setNumItems(0);
 			}
-
-			if (window.innerWidth <= 992) {
-				setOnMobile(true);
-			} else {
-				setOnMobile(false);
-			}
 		}, 100);
 
+		if (width <= 992) {
+			setOnMobile(true);
+		} else {
+			setOnMobile(false);
+		}
+
 		return () => clearInterval(interval);
-	}, [currentUser, onMobile]);
+	}, [width, currentUser]);
 
 	return onMobile ? (
 		<header>
@@ -171,7 +173,10 @@ const Header = ({ currentUser, products, bestseller }) => {
 						</Navbar.Brand>
 					</Link>
 
-					<Nav className="sub-menu">
+					<Nav
+						className="sub-menu"
+						onMouseLeave={() => setShowCategoryDropDown(false)}
+					>
 						{productCategories.map((category, index) => (
 							<Link
 								href={`/products/${category.toLowerCase()}${
@@ -191,14 +196,6 @@ const Header = ({ currentUser, products, bestseller }) => {
 							</Link>
 						))}
 					</Nav>
-
-					<CategoryDropDown
-						eventTarget={eventTarget}
-						showCategoryDropDown={showCategoryDropDown}
-						setShowCategoryDropDown={setShowCategoryDropDown}
-						products={products}
-						bestseller={bestseller}
-					/>
 
 					<Nav className="icon-menu d-flex flex-row position-relative">
 						<Link href="/cart" passHref>
@@ -236,6 +233,14 @@ const Header = ({ currentUser, products, bestseller }) => {
 					</Nav>
 				</Container>
 			</Navbar>
+
+			<CategoryDropDown
+				eventTarget={eventTarget}
+				showCategoryDropDown={showCategoryDropDown}
+				setShowCategoryDropDown={setShowCategoryDropDown}
+				products={products}
+				bestseller={bestseller}
+			/>
 		</header>
 	);
 };

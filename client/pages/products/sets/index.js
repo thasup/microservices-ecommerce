@@ -5,17 +5,27 @@ import { Breadcrumb, Col, Row } from "react-bootstrap";
 
 import Loader from "../../../components/common/Loader";
 import Product from "../../../components/home/Product";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 const Sets = ({ products, currentUser }) => {
 	const [loading, setLoading] = useState(true);
+	const [onMobile, setOnMobile] = useState(false);
+
+	const { width } = useWindowSize();
+
+	const sets = products?.filter((product) => product.category === "Set");
 
 	useEffect(() => {
+		if (width <= 576) {
+			setOnMobile(true);
+		} else {
+			setOnMobile(false);
+		}
+
 		if (products) {
 			setLoading(false);
 		}
-	}, []);
-
-	const sets = products.filter((product) => product.category === "Set");
+	}, [width, products]);
 
 	return (
 		<>
@@ -45,7 +55,11 @@ const Sets = ({ products, currentUser }) => {
 					<Row className="mx-0">
 						{sets.map((item) => (
 							<Col key={item.id} xs={6} md={4} xl={3} className="p-0">
-								<Product product={item} currentUser={currentUser} />
+								<Product
+									onMobile={onMobile}
+									product={item}
+									currentUser={currentUser}
+								/>
 							</Col>
 						))}
 					</Row>
