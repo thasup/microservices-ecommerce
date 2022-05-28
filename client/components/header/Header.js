@@ -56,7 +56,7 @@ const Header = ({ currentUser, products, bestseller }) => {
 
 	return onMobile ? (
 		<header>
-			<Navbar variant="light" expand="lg" fixed="top" collapseOnSelect="true">
+			<Navbar variant="light" expand="lg" collapseOnSelect="true">
 				<Container>
 					<Navbar.Toggle aria-controls="offcanvasNavbar" />
 
@@ -155,11 +155,10 @@ const Header = ({ currentUser, products, bestseller }) => {
 			</Navbar>
 		</header>
 	) : (
-		<header className="position-relative">
+		<header>
 			<Navbar
 				variant="light"
 				expand="lg"
-				fixed="top"
 				collapseOnSelect="true"
 				className="py-0"
 			>
