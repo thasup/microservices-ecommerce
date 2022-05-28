@@ -72,7 +72,7 @@ const CategoryDropDown = ({
 			style={{
 				opacity: showCategoryDropDown ? 1 : 0,
 				visibility: showCategoryDropDown ? "visible" : "hidden",
-				top: showCategoryDropDown ? "0px" : "-5000px",
+				top: showCategoryDropDown ? "75px" : "-5000px",
 			}}
 			onMouseEnter={() => setShowCategoryDropDown(true)}
 			onMouseLeave={() => setShowCategoryDropDown(false)}
