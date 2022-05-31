@@ -8,7 +8,14 @@ import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import AccountDropDown from "./AccountDropDown";
 import CategoryDropDown from "./CategoryDropDown";
 
-const DesktopNavbar = ({ currentUser, products, bestseller }) => {
+const DesktopNavbar = ({
+	currentUser,
+	products,
+	bestseller,
+	numItems,
+	showNotification,
+	productCategories,
+}) => {
 	const [eventTarget, setEventTarget] = useState(null);
 	const [showCategoryDropDown, setShowCategoryDropDown] = useState(false);
 	const [showAccountDropDown, setShowAccountDropDown] = useState(false);
