@@ -6,7 +6,7 @@ module.exports = {
 		ignoreDuringBuilds: true,
 	},
 	images: {
-		domains: ["www.dropbox.com"],
+		domains: ["www.dropbox.com", "res.cloudinary.com"],
 		minimumCacheTTL: 86400,
 	},
 	async headers() {

@@ -45,7 +45,11 @@ const UserList = ({ users }) => {
 	};
 
 	const myLoader = ({ src, width, quality }) => {
-		return `${src}&w=${width}&q=${quality || 20}`;
+		if (src[0] === "v") {
+			return `https://res.cloudinary.com/thasup/image/upload/${src}`;
+		} else {
+			return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 20}`;
+		}
 	};
 
 	return (

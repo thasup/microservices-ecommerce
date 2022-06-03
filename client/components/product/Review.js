@@ -63,7 +63,11 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
 	};
 
 	const myLoader = ({ src, width, quality }) => {
-		return `${src}&w=${width}&q=${quality || 40}`;
+		if (src[0] === "v") {
+			return `https://res.cloudinary.com/thasup/image/upload/${src}`;
+		} else {
+			return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 40}`;
+		}
 	};
 
 	return (
