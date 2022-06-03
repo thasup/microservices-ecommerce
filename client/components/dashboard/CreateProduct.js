@@ -54,9 +54,11 @@ const CreateProduct = () => {
 	};
 
 	const myLoader = ({ src, width, quality }) => {
-		return `https://www.dropbox.com/s/${src}?raw=1&w=${width}&q=${
-			quality || 75
-		}`;
+		if (src[0] === "v") {
+			return `https://res.cloudinary.com/thasup/image/upload/${src}`;
+		} else {
+			return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 70}`;
+		}
 	};
 
 	const handleSelect = (selectedIndex) => {
