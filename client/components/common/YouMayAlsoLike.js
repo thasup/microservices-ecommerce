@@ -54,8 +54,8 @@ const YouMayAlsoLike = ({ products, currentUser, onMobile, screenWidth }) => {
 								: 4
 							: 2
 						: onMobile
-						? 2
-						: 6
+							? 2
+							: 6
 				}
 				loop={true}
 				navigation={true}
@@ -75,6 +75,7 @@ const YouMayAlsoLike = ({ products, currentUser, onMobile, screenWidth }) => {
 							product={product}
 							currentUser={currentUser}
 							onMobile={true}
+							isMobileStyle={true}
 							showAddToCart={false}
 							priority={true}
 						/>

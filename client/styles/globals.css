@@ -624,7 +624,6 @@ header {
 	text-decoration: none;
 	color: black;
 	font-weight: 500;
-	font-family: "Open Sans", sans-serif;
 	padding: 0;
 }
 
@@ -669,14 +668,6 @@ header {
 	.add-to-cart-btn {
 		padding: 0px 15px;
 		font-size: 0.6rem;
-	}
-
-	.card-product-title {
-		font-size: 1.1rem;
-	}
-
-	.card-product-price {
-		font-size: 1.1rem;
 	}
 }
 

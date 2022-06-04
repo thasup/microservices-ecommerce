@@ -23,7 +23,6 @@ const Header = ({ currentUser, products, bestseller }) => {
 				: [];
 
 			if (cartItems.length !== 0) {
-				console.log("cart", cartItems.length);
 				setShowNotification(true);
 				setNumItems(cartItems.length);
 			} else if (cartItems.length === 0 || !cartItems) {
