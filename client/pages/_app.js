@@ -5,6 +5,7 @@ import { Container, SSRProvider } from "react-bootstrap";
 
 import "../styles/bootstrap.min.css";
 import "../styles/globals.css";
+// import "../styles/app.css";
 
 import * as ga from "../lib/ga";
 
