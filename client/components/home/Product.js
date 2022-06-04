@@ -11,6 +11,7 @@ const Product = ({
 	onMobile,
 	product,
 	currentUser,
+	isMobileStyle = false,
 	showAddToCart = true,
 	showColors = true,
 	showRating = true,
@@ -26,7 +27,8 @@ const Product = ({
 	};
 
 	const myLoader = ({ src, quality }) => {
-		if (src[0] === "v") {
+		const isCloudinary = src.includes('aurapan');
+		if (isCloudinary) {
 			return `https://res.cloudinary.com/thasup/image/upload/${src}`;
 		} else {
 			return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 20}`;
@@ -96,10 +98,18 @@ const Product = ({
 
 			<Card.Body className="px-2 pb-0">
 				<Row
-					className="d-flex flex-row justify-content-between px-0 mx-0"
-					style={{ minHeight: onMobile ? "6rem" : "4rem" }}
+					className="d-flex justify-content-between px-0 mx-0"
+					style={{
+						flexDirection: isMobileStyle ? "column" : (onMobile ? "column" : "row"),
+						minHeight: isMobileStyle ? "5.25rem" : (onMobile ? "5.25rem" : "4rem"),
+					}}
 				>
-					<Col xs={12} sm={9} className="card-product-title" as="h4">
+					<Col xs={12} sm={9} className="card-product-title" as="h4"
+						style={{
+							fontSize: isMobileStyle ? "1.1rem" : (onMobile && "1.1rem"),
+							minHeight: isMobileStyle ? "3rem" : (onMobile && "3rem"),
+						}}
+					>
 						<Link
 							href={`/products/[productId]`}
 							as={`/products/${product.id}`}
@@ -109,11 +119,15 @@ const Product = ({
 						</Link>
 					</Col>
 
-					<Col xs={12} sm={3} className="card-product-price">
+					<Col xs={12} sm={3} className="card-product-price"
+						style={{
+							textAlign: isMobileStyle ? "start" : (onMobile ? "start" : "end"),
+							justifyContent: isMobileStyle ? "flex-end" : (onMobile ? "flex-end" : "flex-start"),
+						}}
+					>
 						<h4
 							style={{
-								textAlign: onMobile ? "start" : "end",
-								justifyContent: onMobile ? "flex-end" : "flex-start",
+								fontSize: isMobileStyle ? "1.2rem" : (onMobile && "1.2rem")
 							}}
 						>
 							${product.price}
