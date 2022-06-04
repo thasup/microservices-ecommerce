@@ -25,7 +25,7 @@ export default function Document() {
 				<meta charSet="utf-8" />
 				<meta name="description" content="Be your beautiful best." />
 				<link rel="icon" href="/asset/favicon.ico" type="image/x-icon" />
-				<link rel="preconnect" href="https://fonts.googleapis.com" />
+				{/* <link rel="preconnect" href="https://fonts.googleapis.com" />
 				<link
 					rel="preconnect"
 					href="https://fonts.gstatic.com"
@@ -34,7 +34,7 @@ export default function Document() {
 				<link
 					href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat+Alternates:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=optional"
 					rel="stylesheet"
-				/>
+				/> */}
 			</Head>
 
 			<body>
