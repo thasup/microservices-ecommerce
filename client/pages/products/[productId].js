@@ -239,7 +239,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 									</ListGroup.Item>
 
 									<ListGroup.Item>
-										<h1 id="price">$ {product.price}</h1>
+										<h1 className="product-price">$ {product.price}</h1>
 									</ListGroup.Item>
 
 									<ListGroup.Item>
@@ -276,7 +276,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 									</ListGroup.Item>
 
 									<ListGroup.Item>
-										<div className="my-1 px-0">
+										<div className="product-desc my-1 px-0">
 											<p>{product.description}</p>
 										</div>
 									</ListGroup.Item>
