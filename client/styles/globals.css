@@ -1,10 +1,10 @@
+body {
+	font-family: "Open Sans", sans-serif;
+}
+
 #__next {
 	/* min-height: 100vh; */
 	position: relative;
-}
-
-body {
-	font-family: "Open Sans", sans-serif;
 }
 
 .toast-add-item {
@@ -24,8 +24,7 @@ h6 {
 }
 
 h1 {
-	font-family: "Open Sans", sans-serif;
-	font-weight: 400;
+	font-family: "Italiana", serif;
 }
 
 h2 {
@@ -33,7 +32,7 @@ h2 {
 }
 
 h3 {
-	font-family: "Poppins", sans-serif;
+	font-family: 'Quicksand', sans-serif;
 }
 
 /* General */
@@ -272,14 +271,14 @@ a::before {
 
 /* review */
 .review-name {
-	font-family: "Poppins", sans-serif;
+	font-family: 'Quicksand', sans-serif;
 	font-size: 1rem;
 	font-weight: 500;
 	margin-bottom: 0;
 }
 
 .review-title {
-	font-family: 'Montserrat Alternates', sans-serif;
+	font-family: 'Quicksand', sans-serif;
 	font-size: 1.25rem;
 	font-weight: 500;
 	margin-bottom: 0;
@@ -482,7 +481,7 @@ header {
 .account-dropdown-menu .account-dropdown-title {
 	text-transform: uppercase;
 	font-weight: 500;
-	font-family: "Poppins", sans-serif;
+	font-family: 'Quicksand', sans-serif;
 	font-size: 1.5rem;
 	user-select: none;
 }
@@ -625,7 +624,6 @@ header {
 	text-decoration: none;
 	color: black;
 	font-weight: 500;
-	font-family: "Open Sans", sans-serif;
 	padding: 0;
 }
 
@@ -670,14 +668,6 @@ header {
 	.add-to-cart-btn {
 		padding: 0px 15px;
 		font-size: 0.6rem;
-	}
-
-	.card-product-title {
-		font-size: 1.1rem;
-	}
-
-	.card-product-price {
-		font-size: 1.1rem;
 	}
 }
 
@@ -731,12 +721,19 @@ header {
 	outline: 2px solid black;
 }
 
-#product-page #price {
+#product-page .product-price {
+	font-family: 'Open Sans', sans-serif;
 	font-weight: 300;
 }
 
+#product-page .product-desc {
+	font-size: 1rem;
+	font-weight: 100;
+	color: #555;
+}
+
 #product-page .product-page-box {
-	font-family: "Poppins", sans-serif;
+	font-family: 'Quicksand', sans-serif;
 	padding: 0.5rem;
 }
 
