@@ -176,32 +176,10 @@ a::before {
 
 .custom-swiper .swiper-button-next, .custom-swiper .swiper-button-prev {
 	color: #000;
-	height: 100%;
-	top: 0px;
-	width: 5%;
-}
-
-.custom-swiper .swiper-button-next:hover, .custom-swiper .swiper-button-prev:hover, .custom-swiper .swiper-button-next:focus, .custom-swiper .swiper-button-prev:focus {
-	background-color: rgba(85, 85, 85, 0.2);
-}
-
-.custom-swiper .swiper-button-next {
-	right: 0px;
-}
-
-.custom-swiper .swiper-button-prev {
-	left: 0px;
 }
 
 .custom-swiper .swiper-pagination-progressbar	.swiper-pagination-progressbar-fill {
 	background: #000;
-}
-
-/* Mobile Screen */
-@media only screen and (max-width: 425px) {
-	.custom-swiper .swiper-button-next, .custom-swiper .swiper-button-prev {
-		padding: 0px 10px;
-	}
 }
 
 /* color selector */
