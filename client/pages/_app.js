@@ -3,9 +3,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { Container, SSRProvider } from "react-bootstrap";
 
-// import "../styles/bootstrap.min.css";
-// import "../styles/globals.css";
-import "../styles/app.css";
+import "../styles/app.scss";
 
 import * as ga from "../lib/ga";
 
