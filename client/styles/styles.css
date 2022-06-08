@@ -180,6 +180,7 @@ a::before {
 	height: 100%;
 	top: 0px;
 	width: 5%;
+	margin-top: 0;
 }
 
 .custom-swiper .swiper-button-next:hover,
@@ -204,10 +205,10 @@ a::before {
 }
 
 /* Mobile Screen */
-@media only screen and (max-width: 425px) {
+@media only screen and (max-width: 576px) {
 	.custom-swiper .swiper-button-next,
 	.custom-swiper .swiper-button-prev {
-		padding: 0px 10px;
+		padding: 0 1.5rem;
 	}
 }
 
