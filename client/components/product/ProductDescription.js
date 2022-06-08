@@ -49,14 +49,16 @@ const ProductDescription = ({ product }) => {
 							eventKey="description"
 							title="Description"
 						>
-							<div className="mb-3 description-section">
-								<h6>Material:</h6> {product.material}
+							<div className="description-section">
+								<h6>Material:</h6>
+								<p>{product.material}</p>
 							</div>
-							<div className="mb-3 description-section">
-								<h6>Description:</h6> {product.description}
+							<div className="description-section">
+								<h6>Description:</h6>
+								<p>{product.description}</p>
 							</div>
 
-							<div className="mb-3 description-section">
+							<div className="description-section">
 								<h6>Wash and Care:</h6>
 								<p>
 									Dignissim enim sit amet venenatis urna. Sollicitudin aliquam

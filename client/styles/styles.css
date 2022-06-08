@@ -799,6 +799,7 @@ header {
 .description-tabs {
 	cursor: pointer;
 	outline: 1px solid #000;
+	text-transform: uppercase;
 }
 
 #size-chart {
@@ -809,8 +810,17 @@ header {
 	padding: 0 1.5rem;
 }
 
+.description-section {
+	margin-bottom: 2rem;
+}
+
 .description-section h6 {
 	font-family: "Lucida Sans", sans-serif;
+	font-size: 1.15rem;
+}
+
+.description-section p {
+	color: #555;
 }
 
 /* Mobile, Tablet Screen */
