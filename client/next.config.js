@@ -22,12 +22,18 @@ module.exports = {
 				],
 			},
 			{
-				source: "/(.*).(jpg|png)",
+				source: "/_next/image(.*)",
+				// has: [
+				//   {
+				//     type: "content-type",
+				//     key: "application/octet-stream",
+				//   },
+				// ],
 				headers: [
 					{
 						key: "Cache-Control",
 						value:
-							"public, max-age=31536000, s-maxage=31536000, must-revalidate",
+							"public, max-age=86401, s-maxage=86401, stale-while-revalidate=172801",
 					},
 				],
 			},

@@ -42,7 +42,7 @@ const YouMayAlsoLike = ({ products, currentUser, onMobile, screenWidth }) => {
 			<h3 className="mb-3">You May Also Like</h3>
 			<Swiper
 				// install Swiper modules
-				className="mySwiper custom-swiper you-may-also-like-section"
+				className="mySwiper custom-swiper"
 				style={{ boxShadow: "none" }}
 				modules={[Navigation, Pagination, Mousewheel, Keyboard]}
 				spaceBetween={0}
