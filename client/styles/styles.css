@@ -32,7 +32,7 @@ h2 {
 }
 
 h3 {
-	font-family: 'Quicksand', sans-serif;
+	font-family: "Quicksand", sans-serif;
 }
 
 /* General */
@@ -174,12 +174,42 @@ a::before {
 	background: #000;
 }
 
-.custom-swiper .swiper-button-next, .custom-swiper .swiper-button-prev {
+.custom-swiper .swiper-button-next,
+.custom-swiper .swiper-button-prev {
 	color: #000;
+	height: 100%;
+	top: 0px;
+	width: 5%;
+	margin-top: 0;
 }
 
-.custom-swiper .swiper-pagination-progressbar	.swiper-pagination-progressbar-fill {
+.custom-swiper .swiper-button-next:hover,
+.custom-swiper .swiper-button-prev:hover,
+.custom-swiper .swiper-button-next:focus,
+.custom-swiper .swiper-button-prev:focus {
+	background-color: rgba(85, 85, 85, 0.2);
+}
+
+.custom-swiper .swiper-button-next {
+	right: 0px;
+}
+
+.custom-swiper .swiper-button-prev {
+	left: 0px;
+}
+
+.custom-swiper
+	.swiper-pagination-progressbar
+	.swiper-pagination-progressbar-fill {
 	background: #000;
+}
+
+/* Mobile Screen */
+@media only screen and (max-width: 576px) {
+	.custom-swiper .swiper-button-next,
+	.custom-swiper .swiper-button-prev {
+		padding: 0 1.5rem;
+	}
 }
 
 /* color selector */
@@ -271,14 +301,14 @@ a::before {
 
 /* review */
 .review-name {
-	font-family: 'Quicksand', sans-serif;
+	font-family: "Quicksand", sans-serif;
 	font-size: 1rem;
 	font-weight: 500;
 	margin-bottom: 0;
 }
 
 .review-title {
-	font-family: 'Quicksand', sans-serif;
+	font-family: "Quicksand", sans-serif;
 	font-size: 1.25rem;
 	font-weight: 500;
 	margin-bottom: 0;
@@ -354,7 +384,7 @@ header {
 	margin: 0;
 	color: #222;
 	background-color: #fff;
-	box-shadow: 0px 10px 12px -4px rgba(0,0,0,0.35);
+	box-shadow: 0px 10px 12px -4px rgba(0, 0, 0, 0.35);
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	transition: all 0.7s ease-in-out;
@@ -387,7 +417,7 @@ header {
 }
 
 .dropdown-menu-img-wrapper:hover .overlay {
-	background-color: rgba(0,0,0,0.15);
+	background-color: rgba(0, 0, 0, 0.15);
 }
 
 .category-dropdown-menu .dropdown-menu-img__cover {
@@ -481,7 +511,7 @@ header {
 .account-dropdown-menu .account-dropdown-title {
 	text-transform: uppercase;
 	font-weight: 500;
-	font-family: 'Quicksand', sans-serif;
+	font-family: "Quicksand", sans-serif;
 	font-size: 1.5rem;
 	user-select: none;
 }
@@ -505,7 +535,7 @@ header {
 }
 
 .sub-menu .nav-link.active {
-	color: rgba(0,0,0,.55) !important;
+	color: rgba(0, 0, 0, 0.55) !important;
 }
 
 #dropdown-menu .dropdown-menu {
@@ -722,7 +752,7 @@ header {
 }
 
 #product-page .product-price {
-	font-family: 'Open Sans', sans-serif;
+	font-family: "Open Sans", sans-serif;
 	font-weight: 300;
 }
 
@@ -733,7 +763,7 @@ header {
 }
 
 #product-page .product-page-box {
-	font-family: 'Quicksand', sans-serif;
+	font-family: "Quicksand", sans-serif;
 	padding: 0.5rem;
 }
 
@@ -769,6 +799,7 @@ header {
 .description-tabs {
 	cursor: pointer;
 	outline: 1px solid #000;
+	text-transform: uppercase;
 }
 
 #size-chart {
@@ -779,8 +810,17 @@ header {
 	padding: 0 1.5rem;
 }
 
+.description-section {
+	margin-bottom: 2rem;
+}
+
 .description-section h6 {
 	font-family: "Lucida Sans", sans-serif;
+	font-size: 1.15rem;
+}
+
+.description-section p {
+	color: #555;
 }
 
 /* Mobile, Tablet Screen */
