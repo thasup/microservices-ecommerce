@@ -8,7 +8,7 @@ on:
 
     # watch for changes in specific file
     paths:
-      - "trigger-client.txt"
+      - "trigger2.txt"
 
 jobs:
   build:
