@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import Swiper core and required modules
 import {
 	Navigation,
 	Pagination,
 	Scrollbar,
-	Zoom,
 	Mousewheel,
 	Keyboard,
+	Autoplay,
 } from "swiper";
+import Image from 'next/image';
+
+import Loader from './Loader';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -21,52 +24,54 @@ import "swiper/css/zoom";
 import "swiper/css/mousewheel";
 import "swiper/css/keyboard";
 
-// Import Swiper styles
-import NextImage from "../common/NextImage";
-import Loader from "../common/Loader";
 
-const ImageSwiper = ({ product }) => {
-	const [imageArray, setImageArray] = useState([]);
+const ImageSwiper = ({ images }) => {
 	const [loading, setLoading] = useState(true);
 
-	if (imageArray.length === 0 && product) {
-		const filterImages = Object.values(product.images).filter(
-			(image) => image !== null && image !== ""
-		);
-
-		setLoading(false);
-		setImageArray(filterImages);
-	}
+	useEffect(() => {
+		if (images.length > 0) {
+			setLoading(false);
+		}
+	}, [images])
 
 	return loading ? (
 		<Loader />
 	) : (
 		<Swiper
 			// install Swiper modules
-			className="mySwiper custom-swiper"
-			modules={[Navigation, Pagination, Scrollbar, Zoom, Mousewheel, Keyboard]}
+			className="custom-swiper"
+			modules={[Navigation, Pagination, Scrollbar, Mousewheel, Keyboard, Autoplay]}
 			spaceBetween={0}
 			slidesPerView={1}
-			navigation={{}}
+			navigation={true}
+			loop={true}
 			pagination={{
 				clickable: true,
 				type: "bullets",
 			}}
-			mousewheel={true}
+			mousewheel={false}
 			keyboard={{
 				enabled: true,
 				onlyInViewport: false,
 			}}
-			// scrollbar={{ draggable: true }}
-			zoom={{}}
+			autoplay={{
+				delay: 3000,
+				disableOnInteraction: false,
+				pauseOnMouseEnter: true,
+			}}
 		>
-			{imageArray.map((img, index) => (
+			{images.map((img, index) => (
 				<SwiperSlide key={index}>
 					<div
-						className="product-main-img toggle-main-img"
-						id={`side-img-${index}`}
+						className="ads-img"
 					>
-						<NextImage src={img} alt={`product_image_${index}`} />
+						<Image
+							src={img}
+							layout="fill"
+							objectFit="cover"
+							objectPosition="center center"
+							priority="true"
+							alt={`image_${index}`} />
 					</div>
 				</SwiperSlide>
 			))}
