@@ -7,7 +7,7 @@ import Head from "next/head";
 import Loader from "../../components/common/Loader";
 import Rating from "../../components/common/Rating";
 import NextImage from "../../components/common/NextImage";
-import ImageSwiper from "../../components/product/ImageSwiper";
+import ProductImageSwiper from "../../components/product/ProductImageSwiper";
 import SocialShare from "../../components/product/SocialShare";
 import ColorSelector from "../../components/common/ColorSelector";
 import SizeSelector from "../../components/common/SizeSelector";
@@ -37,9 +37,8 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 	const [screenWidth, setScreenWidth] = useState(0);
 
 	const product = products.find((product) => product.id === productId);
-	const categoryParams = `${product?.category.toLowerCase()}${
-		product?.category === "Dress" ? "es" : "s"
-	}`;
+	const categoryParams = `${product?.category.toLowerCase()}${product?.category === "Dress" ? "es" : "s"
+		}`;
 
 	const { width } = useWindowSize();
 
@@ -191,7 +190,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 						<Row id="product-page">
 							{onMobile ? (
 								<Col className="mb-3">
-									<ImageSwiper product={product} />
+									<ProductImageSwiper product={product} />
 								</Col>
 							) : (
 								<>
