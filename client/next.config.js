@@ -23,12 +23,6 @@ module.exports = {
 			},
 			{
 				source: "/_next/image(.*)",
-				// has: [
-				//   {
-				//     type: "content-type",
-				//     key: "application/octet-stream",
-				//   },
-				// ],
 				headers: [
 					{
 						key: "Cache-Control",

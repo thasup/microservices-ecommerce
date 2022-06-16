@@ -22,6 +22,7 @@
     "react-rating-stars-component": "^2.2.0",
     "react-share": "^4.4.0",
     "react-stripe-checkout": "^2.6.3",
+    "sass": "^1.52.3",
     "swiper": "^8.0.7"
   },
   "devDependencies": {
