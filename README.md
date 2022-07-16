@@ -73,16 +73,27 @@ happy browsing! 😊
 11. see list of contexts by running `kubectl config get-contexts`, select new context by running `kubectl config use-context <CONTEXT_NAME>`
 12. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and [ingress-nginx for GCP](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke)
 13. find your load balancing port that GCP automatic generated in _Network Services_ tab in GCP
-14. for _windows_ users; open host file at `C:\Windows\System32\drivers\etc\hosts`, for _mac_ users; open host file at `\etc\hosts` then edit by adding `YOUR_LOAD_BALANCING_PORT YOUR_EXAMPLE_URL` and save as an admin (ex. `56.125.456.45 example.com`)
-15. config all yaml files to matches your example URL
+14. for _windows_ users; open host file at `C:\Windows\System32\drivers\etc\hosts`, for _mac_ users; open host file at `\etc\hosts` then edit by adding `YOUR_LOAD_BALANCING_PORT YOUR_CUSTOM_URL` and save as an admin (ex. `56.125.456.45 custom.com`)
+15. config all yaml files to matches your custom URL
 16. create all [kubernetes secrets](#setup-env)
 17. run `gcloud auth application-default login` then authenticate GCP account via web browser
 18. run `skaffold dev` in this project root directory, make sure to use correct context before run the command
-19. open a web browser enter your example URL to see this project come to live!
+19. open a web browser enter your custom URL to see this project come to live!
 
 **Running on Docker Desktop**
 
-1. work in process...
+1. clone _dev-mac_ branch on your computer
+2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/)
+3. enable kubernetes in docker desktop preferences
+4. create an image by running `docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .` in every folder that has _Dockerfile_
+5. push all images to docker hub by running `docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>` in every folder that has _Dockerfile_
+6. see list of kubernetes contexts by running `kubectl config get-contexts`, select new context by running `kubectl config use-context docker-desktop`
+7. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and [ingress-nginx for GCP](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke)
+8. for _windows_ users; open host file at `C:\Windows\System32\drivers\etc\hosts`, for _mac_ users; open host file at `\etc\hosts` then edit by adding `127.0.0.1 YOUR_CUSTOM_URL` and save as an admin (ex. `127.0.0.1 custom.com`)
+9. config all yaml files to matches your custom URL
+10. create all [kubernetes secrets](#setup-env)
+11. run `skaffold dev` in this project root directory, make sure to use correct context before run the command
+12. open a web browser enter your custom URL to see this project come to live!
 
 # Setup ENV
 
