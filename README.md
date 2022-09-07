@@ -23,6 +23,8 @@ Aurapan is the beautiful women's clothes e-commerce website built with **microse
 
 [(Back to top)](#table-of-contents)
 
+_The Live demo is currently **terminated** due to the high-cost maintenance for paying Kubernetes cluster to host microservices website but you can run it manully with docker-desktop on a local computer._
+
 [Demo Link](https://www.aurapan.com/)
 
 # Features
