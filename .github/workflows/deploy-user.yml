@@ -9,6 +9,7 @@ on:
     # watch for changes in user folder
     paths:
       - "user/**"
+			- "trigger-deploy.txt"
 
 jobs:
   build:

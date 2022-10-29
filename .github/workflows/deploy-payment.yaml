@@ -9,6 +9,7 @@ on:
     # watch for changes in payment folder
     paths:
       - "payment/**"
+			- "trigger-deploy.txt"
 
 jobs:
   build:
