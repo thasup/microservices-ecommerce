@@ -332,6 +332,8 @@ header {
 	z-index: 1030;
 	background-color: #fff;
 	height: 75px;
+	box-shadow: 0 2px 4px 0 rgb(227 225 224 / 60%);
+	transition: box-shadow 200ms;
 }
 
 .menu-container {
@@ -381,7 +383,7 @@ header {
 	margin: 0;
 	color: #222;
 	background-color: #fff;
-	box-shadow: 0px 10px 12px -4px rgba(0, 0, 0, 0.35);
+	box-shadow: 0 2px 4px 0 rgb(227 225 224 / 60%);
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	transition: all 0.7s ease-in-out;
