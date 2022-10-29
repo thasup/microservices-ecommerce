@@ -9,7 +9,7 @@ on:
     # watch for changes in product folder
     paths:
       - "product/**"
-			- "trigger-deploy.txt"
+      - "trigger-deploy.txt"
 
 jobs:
   build:

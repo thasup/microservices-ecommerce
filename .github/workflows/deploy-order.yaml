@@ -9,7 +9,7 @@ on:
     # watch for changes in order folder
     paths:
       - "order/**"
-			- "trigger-deploy.txt"
+      - "trigger-deploy.txt"
 
 jobs:
   build:

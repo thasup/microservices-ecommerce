@@ -9,7 +9,7 @@ on:
     # watch for changes in expiration folder
     paths:
       - "expiration/**"
-			- "trigger-deploy.txt"
+      - "trigger-deploy.txt"
 
 jobs:
   build:
