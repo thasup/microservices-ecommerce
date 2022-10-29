@@ -9,6 +9,7 @@ on:
     # watch for changes in infra folder
     paths:
       - "infra/**"
+      - "trigger-manifest.txt"
 
 jobs:
   build:
