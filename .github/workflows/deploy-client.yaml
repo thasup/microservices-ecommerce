@@ -9,6 +9,7 @@ on:
     # watch for changes in client folder
     paths:
       - "client/**"
+			- "trigger-deploy.txt"
 
 jobs:
   build:
