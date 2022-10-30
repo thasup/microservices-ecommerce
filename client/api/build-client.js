@@ -7,7 +7,7 @@ export default ({ req }) => {
 		return axios.create({
 			baseURL:
 				process.env.NODE_ENV === "production"
-					? "https://www.thasup.xyz"
+					? "https://www.aurapan.shop"
 					: "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local",
 			headers: req.headers,
 			withCredentials: true,
