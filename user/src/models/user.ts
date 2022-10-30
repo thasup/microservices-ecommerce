@@ -100,6 +100,8 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.set("versionKey", "version");
+
+// @ts-ignore
 userSchema.plugin(updateIfCurrentPlugin);
 
 userSchema.pre("save", async function (done) {
