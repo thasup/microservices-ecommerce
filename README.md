@@ -27,7 +27,7 @@ Aurapan is the beautiful women's clothes e-commerce website built with **microse
 
 <!-- _You can still run it manually with docker-desktop on a local computer._ -->
 
-[Demo Link](https://www.thasup.xyz/)
+[Demo Link](https://www.aurapan.shop/)
 
 # Features
 
