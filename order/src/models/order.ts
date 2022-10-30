@@ -158,6 +158,8 @@ const orderSchema = new mongoose.Schema(
 );
 
 orderSchema.set("versionKey", "version");
+
+// @ts-ignore
 orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
