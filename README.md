@@ -125,7 +125,7 @@ docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 kubectl config get-contexts
 kubectl config use-context docker-desktop
 ```
-7. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and [ingress-nginx for GCP](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke)
+7. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and enable kubernetes in Docker Desktop software
 8. for _windows_ users; open host file at `C:\Windows\System32\drivers\etc\hosts`, for _mac_ users; open host file at `\etc\hosts` then edit by adding `127.0.0.1 YOUR_CUSTOM_URL` and save as an admin (ex. `127.0.0.1 custom.com`)
 9. config all yaml files to matches your custom URL
 10. create all [kubernetes secrets](#setup-env)
