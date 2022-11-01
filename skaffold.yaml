@@ -9,10 +9,10 @@ build:
   local:
     push: false
   # googleCloudBuild:
-  #   projectId: aurapan-shop-348908
+  #   projectId: aurapan-shop-367317
   artifacts:
     - image: thasup/user
-    # - image: us.gcr.io/aurapan-shop-348908/user
+    # - image: us.gcr.io/aurapan-shop-367317/user
       context: user
       docker:
         dockerfile: Dockerfile
@@ -21,7 +21,7 @@ build:
           - src: "src/**/*.ts"
             dest: .
     - image: thasup/client
-    # - image: us.gcr.io/aurapan-shop-348908/client
+    # - image: us.gcr.io/aurapan-shop-367317/client
       context: client
       docker:
         dockerfile: Dockerfile
@@ -36,7 +36,7 @@ build:
           - src: "**/*.png"
             dest: .
     - image: thasup/product
-    # - image: us.gcr.io/aurapan-shop-348908/product
+    # - image: us.gcr.io/aurapan-shop-367317/product
       context: product
       docker:
         dockerfile: Dockerfile
@@ -45,7 +45,7 @@ build:
           - src: "src/**/*.ts"
             dest: .
     - image: thasup/order
-    # - image: us.gcr.io/aurapan-shop-348908/order
+    # - image: us.gcr.io/aurapan-shop-367317/order
       context: order
       docker:
         dockerfile: Dockerfile
@@ -54,7 +54,7 @@ build:
           - src: "src/**/*.ts"
             dest: .
     - image: thasup/expiration
-    # - image: us.gcr.io/aurapan-shop-348908/expiration
+    # - image: us.gcr.io/aurapan-shop-367317/expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -63,7 +63,7 @@ build:
           - src: "src/**/*.ts"
             dest: .
     - image: thasup/payment
-    # - image: us.gcr.io/aurapan-shop-348908/payment
+    # - image: us.gcr.io/aurapan-shop-367317/payment
       context: payment
       docker:
         dockerfile: Dockerfile
