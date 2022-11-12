@@ -2,7 +2,7 @@
 
 ![Project Preview](docs/aurapan-shop-banner-1.jpg)
 
-# microservices-ecommerce
+# Aurapan
 
 <!-- Describe your project in brief -->
 
@@ -10,12 +10,12 @@ Aurapan is the beautiful women's clothes e-commerce website built with **microse
 
 # Table of contents
 
-- [Microservices Ecommerce](#microservices-ecommerce)
+- [Aurapan](#aurapan)
 - [Table of contents](#table-of-contents)
 - [Demo](#demo)
 - [Features](#features)
 - [Installation](#installation)
-- [Setup ENV](#setup-env)
+- [Setup Kubernetes Secret](#setup-kubernetes-secret)
 - [Deployment](#deployment)
 - [Disclaimer](#disclaimer)
 
@@ -27,7 +27,7 @@ Aurapan is the beautiful women's clothes e-commerce website built with **microse
 
 <!-- _You can still run it manually with docker-desktop on a local computer._ -->
 
-[Demo Link](https://www.aurapan.com/)
+[https://www.aurapan.com](https://www.aurapan.com/)
 
 # Features
 
@@ -95,7 +95,7 @@ kubectl config use-context <CONTEXT_NAME>
 12. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and [ingress-nginx for GCP](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke)
 13. find your load balancing port that GCP automatic generated in _Network Services_ tab in GCP
 14. for _windows_ users; open host file at `C:\Windows\System32\drivers\etc\hosts`, for _mac_ users; open host file at `\etc\hosts` then edit by adding `YOUR_LOAD_BALANCING_PORT YOUR_CUSTOM_URL` and save as an admin (ex. `56.125.456.45 custom.com`)
-15. config all yaml files to matches your custom URL
+15. config all yaml files to matches your GCP project ID
 16. create all [kubernetes secrets](#setup-env)
 17. run this command then authenticate GCP account via web browser
 ```
@@ -132,22 +132,34 @@ kubectl config use-context docker-desktop
 11. run `skaffold dev` in this project root directory, make sure to use correct context before run the command
 12. open a web browser enter your custom URL to see this project come to live!
 
-# Setup ENV
+# Setup Kubernetes Secret
 
 [(Back to top)](#table-of-contents)
 
+Create all these kubernetes secrets in kubernetes context
+
 **MONGO_URI_USER, MONGO_URI_PRODUCT, MONGO_URI_ORDER, MONGO_URI_PAYMENT** : [MongoDB](https://www.mongodb.com/)
+```
+kubectl create secret generic mongo-secret \
+"--from-literal=MONGO_URI_PRODUCT=<YOUR_MONGO_DB_URI>" \
+"--from-literal=MONGO_URI_USER=<YOUR_MONGO_DB_URI>" \
+"--from-literal=MONGO_URI_ORDER=<YOUR_MONGO_DB_URI>" \
+"--from-literal=MONGO_URI_PAYMENT=<YOUR_MONGO_DB_URI>"
+```
 
-**JWT_KEY** : --whatever you want--
-
-**STRIPE_KEY** : [Stripe](https://stripe.com/)
-
-**PAYPAL_CLIENT_ID** : [Paypal](https://developer.paypal.com/home)
-
-Create all these secrets in kubernetes secret by run this command for example
-
+**JWT_KEY : --whatever you want--**
 ```
 kubectl create secret generic jwt-secret --from-literal=JWT_KEY=<YOUR SECRET>
+```
+
+**STRIPE_KEY** : [Stripe](https://stripe.com/)
+```
+kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=<YOUR_STRIPE_KEY>
+```
+
+**PAYPAL_CLIENT_ID** : [Paypal](https://developer.paypal.com/home)
+```
+kubectl create secret generic paypal-secret --from-literal=PAYPAL_CLIENT_ID=<YOUR_PAYPAL_CLIENT_ID>
 ```
 
 # Deployment
