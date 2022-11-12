@@ -14,8 +14,10 @@ spec:
     spec:
       containers:
         - name: payment
+          # uncomment this if you want to run on docker desktop
           image: thasup/payment
-          # image: us.gcr.io/aurapan-shop-348908/payment
+          # uncomment this if you want to run on google cloud platform
+          # image: us.gcr.io/aurapan-shop-367317/payment
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
