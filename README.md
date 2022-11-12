@@ -77,7 +77,7 @@ docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 ```
 6. create a new project on GCP then enable _Kubernetes Engine API_ and _Cloud Build API_ after successfully enable api services, grant permission for _Cloud Build_ service account permission on _Cloud Build API_
 7. create a new kubernetes cluster with minimum resource at 3 nodes (recommended), and select any region that closest to your location
-8. install **GCP SDK** to connect our images to GCP cluster context
+8. install [GCP SDK](https://cloud.google.com/sdk/docs/install-sdk) to connect our images to GCP cluster context
 9. open google cloud SDK and log in, initiate with and then choose the correct options to proceed
 ```
 gcloud auth login
