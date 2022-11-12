@@ -6,12 +6,16 @@ deploy:
       - ./infra/k8s/*
       - ./infra/k8s-dev/*
 build:
+  # uncomment this if you want to run on docker desktop
   local:
     push: false
+  # uncomment this if you want to run on google cloud platform
   # googleCloudBuild:
   #   projectId: aurapan-shop-367317
   artifacts:
+    # uncomment this if you want to run on docker desktop
     - image: thasup/user
+    # uncomment this if you want to run on google cloud platform
     # - image: us.gcr.io/aurapan-shop-367317/user
       context: user
       docker:
@@ -20,7 +24,9 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    # uncomment this if you want to run on docker desktop
     - image: thasup/client
+    # uncomment this if you want to run on google cloud platform
     # - image: us.gcr.io/aurapan-shop-367317/client
       context: client
       docker:
@@ -35,7 +41,9 @@ build:
             dest: .
           - src: "**/*.png"
             dest: .
+    # uncomment this if you want to run on docker desktop
     - image: thasup/product
+    # uncomment this if you want to run on google cloud platform
     # - image: us.gcr.io/aurapan-shop-367317/product
       context: product
       docker:
@@ -44,7 +52,9 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    # uncomment this if you want to run on docker desktop
     - image: thasup/order
+    # uncomment this if you want to run on google cloud platform
     # - image: us.gcr.io/aurapan-shop-367317/order
       context: order
       docker:
@@ -53,7 +63,9 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    # uncomment this if you want to run on docker desktop
     - image: thasup/expiration
+    # uncomment this if you want to run on google cloud platform
     # - image: us.gcr.io/aurapan-shop-367317/expiration
       context: expiration
       docker:
@@ -62,7 +74,9 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    # uncomment this if you want to run on docker desktop
     - image: thasup/payment
+    # uncomment this if you want to run on google cloud platform
     # - image: us.gcr.io/aurapan-shop-367317/payment
       context: payment
       docker:

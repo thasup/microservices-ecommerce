@@ -14,8 +14,10 @@ spec:
     spec:
       containers:
         - name: expiration
+          # uncomment this if you want to run on docker desktop
           image: thasup/expiration
-          # image: us.gcr.io/aurapan-shop-348908/expiration
+          # uncomment this if you want to run on google cloud platform
+          # image: us.gcr.io/aurapan-shop-367317/expiration
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
