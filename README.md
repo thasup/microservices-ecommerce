@@ -168,9 +168,12 @@ kubectl create secret generic paypal-secret --from-literal=PAYPAL_CLIENT_ID=<YOU
 
 **Deploy on DigitalOcean**
 
-1. sign up free account with $100 and 60 days trial and create a kubernetes cluster in new project
-2. generate new token, install [doctl](https://docs.digitalocean.com/reference/doctl/how-to/install/) and [kubectl](https://kubernetes.io/docs/tasks/tools/)
-3. connect with digitalOcean k8s cluster context by running this command and authorize with your credentials
+1. sign up free account with $200 for 60 days trial and create a kubernetes cluster in new project on Digital Ocean
+2. generate new access token from Digital Ocean, install [doctl](https://docs.digitalocean.com/reference/doctl/how-to/install/) and [kubectl](https://kubernetes.io/docs/tasks/tools/), then run
+```
+doctl auth init
+```
+3. connect with Digital Ocean k8s cluster context by running this command and authorize with your credentials
 ```
 doctl kubernetes cluster kubeconfig save <YOUR_CLUSTER_NAME>
 ``` 
@@ -252,7 +255,7 @@ IN AN ALIAS OF: @
 TTL: 30
 ```
 
-14. add your cluster name at `deploy-manifests.yaml` file then redo 9. again
+14. add your cluster name at `deploy-manifests.yaml` file then redo step 7. again
 
 ```
 name: deploy-manifests
