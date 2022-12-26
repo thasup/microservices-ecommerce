@@ -178,7 +178,7 @@ doctl kubernetes cluster kubeconfig save <YOUR_CLUSTER_NAME>
 ```
 kubectl config use-context <CONTEXT_NAME>
 ```
-5. create _github workflow_ for initial build an docker image on push event on _main_ branch and perform automate testing by running jest script in every services on pull request event trigger with trying to merge with _main_ branch
+5. create _github workflow_ for build an initial docker image on push event at the _main_ branch and perform automate testing in every services on pull request event trigger with trying to merge with the _main_ branch
 
 ```
 name: deploy-client
@@ -212,8 +212,13 @@ jobs:
       - run: docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 ```
 
-6. add github action secret for _docker credentials_ and _digitalocean token key_
-7. edit files in every services then commit code to _main_ branch for triggering **Github Action workflow** to build and push all images to our cluster
+6. add github action secrets for _docker credentials_ and _digitalocean access token key_ at security setting in repository
+```
+DIGITALOCEAN_ACCESS_TOKEN = 
+DOCKER_USERNAME = 
+DOCKER_PASSWORD = 
+```
+7. edit files in every services then commit code to the _main_ branch for triggering **Github Action workflows** to build and push all images to your Docker Hub
 8. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) for **DigitalOcean**
 9. separate k8s folder to k8s-dev and k8s-prod then copy `ingress-srv.yaml` file to both folders and edit host URL to a new domain name
 10. create github workflow for telling kubernetes cluster to use images we built by adding these lines
