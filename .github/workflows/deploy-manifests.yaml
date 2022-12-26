@@ -20,7 +20,7 @@ jobs:
       # use and cliententicate doctl
       - uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN_2 }}
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       # use and cliententicate doctl
       - run: doctl kubernetes cluster kubeconfig save aurapan-maqe-cluster
