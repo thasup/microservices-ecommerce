@@ -302,11 +302,11 @@ kubectl create -f staging_issuer.yaml
 ```
 kubectl create -f production_issuer.yaml
 ```
-20. at file `infra/k8s-prod/ingress-srv.yaml` change `cert-manager.io/cluster-issuer` to `"letsencrypt-staging"` then run this command at `infra/k8s-prod/` directory
+20. at file `infra/k8s-prod/ingress-srv.yaml` change _cert-manager.io/cluster-issuer_ to `"letsencrypt-staging"` then run this command at `infra/k8s-prod/` directory
 ```
 kubectl apply -f ingress-srv.yaml
 ```
-21. then change `cert-manager.io/cluster-issuer` back to `"letsencrypt-prod"` and run this command at `infra/k8s-prod/` directory
+21. then change _cert-manager.io/cluster-issuer_ back to `"letsencrypt-prod"` and run this command at `infra/k8s-prod/` directory
 ```
 kubectl apply -f ingress-srv.yaml
 ```
