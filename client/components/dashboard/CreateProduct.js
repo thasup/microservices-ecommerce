@@ -3,7 +3,7 @@ import { Button, Carousel, Col, Form, Row, Spinner } from "react-bootstrap";
 import Router from "next/router";
 import Image from "next/image";
 
-import useRequest from "../../hooks/use-request";
+import useRequest from "../../hooks/useRequest";
 
 const CreateProduct = () => {
 	const [title, setTitle] = useState("");

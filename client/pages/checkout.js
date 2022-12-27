@@ -4,7 +4,7 @@ import Router from "next/router";
 import Link from "next/link";
 import Head from "next/head";
 
-import useRequest from "../hooks/use-request";
+import useRequest from "../hooks/useRequest";
 import CheckoutSteps from "../components/cart/CheckoutSteps";
 import NextImage from "../components/common/NextImage";
 import Message from "../components/common/Message";
