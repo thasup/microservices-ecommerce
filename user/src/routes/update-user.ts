@@ -37,8 +37,8 @@ router.patch(
       gender,
       age,
       bio,
-      jsonShippingAddress,
-    }: {newPassword: string, jsonShippingAddress: ShippingAddressAttrs } & UserAttrs = req.body;
+      shippingAddress,
+    }: {newPassword: string } & UserAttrs = req.body;
 
     const user = await User.findById(req.params.userId);
 
@@ -63,22 +63,6 @@ router.patch(
       }
     }
 
-		// Check if it a JSON or not
-    let address: ShippingAddressAttrs = {
-			address: '',
-			city: '',
-			postalCode: '',
-			country: '',
-		};
-
-    if (typeof jsonShippingAddress === "string") {
-			console.log('string', jsonShippingAddress);
-      address = await JSON.parse(jsonShippingAddress);
-    } else if (typeof jsonShippingAddress === "object") {
-			console.log('obj', jsonShippingAddress);
-      address = jsonShippingAddress;
-    }
-
     user.set({
       email: email ?? user.email,
       password: newPassword ?? password ?? user.password,
@@ -88,7 +72,7 @@ router.patch(
       gender: gender ?? user.gender,
       age: age ?? user.age,
       bio: bio ?? user.bio,
-      shippingAddress: address ?? user.shippingAddress,
+      shippingAddress: shippingAddress ?? user.shippingAddress,
     });
 
     await user.save();
