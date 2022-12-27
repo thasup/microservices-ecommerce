@@ -30,7 +30,7 @@ build:
     # - image: us.gcr.io/aurapan-shop-367317/client
       context: client
       docker:
-        dockerfile: Dockerfile
+        dockerfile: dev.Dockerfile
       sync:
         manual:
           - src: "**/*.js"
