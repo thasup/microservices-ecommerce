@@ -27,12 +27,12 @@ const EditAddress = ({ user }) => {
 			gender: user.gender,
 			age: user.age,
 			bio: user.bio,
-			jsonShippingAddress: JSON.stringify({
+			shippingAddress: {
 				address: address,
 				city: city,
 				postalCode: postalCode,
 				country: country,
-			}),
+			},
 		},
 		onSuccess: (user) => {
 			setUpdateSuccess(true);

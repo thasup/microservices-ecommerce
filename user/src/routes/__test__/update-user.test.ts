@@ -194,12 +194,12 @@ it("return 200 when make a request to edit the address", async () => {
   await request(app)
     .patch(`/api/users/${user.id}`)
     .send({
-      jsonShippingAddress: JSON.stringify({
+      shippingAddress: {
         address: "under the oak tree",
         city: "Valen",
         postalCode: "8888",
         country: "the Northern Kingdom",
-      }),
+      },
     })
     .expect(200);
 
