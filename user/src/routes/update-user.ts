@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { param } from "express-validator";
+import { param, body } from "express-validator";
 import jwt from "jsonwebtoken";
 import {
   validateRequest,
@@ -9,13 +9,22 @@ import {
 
 import { User } from "../models/user";
 import { Password } from "../services/Password";
-import { UserAttrs } from "../types/user";
+import { UserAttrs, ShippingAddressAttrs } from "../types/user";
 
 const router = express.Router();
 
 router.patch(
   "/api/users/:userId",
-  [param("userId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
+  [
+		body("email").isEmail().optional().withMessage("Email must be valid"),
+    body("password")
+      .trim()
+      .isLength({ min: 4, max: 20 })
+			.optional()
+      .withMessage("Password must be between 4 and 20 characters"),
+    body("age").isInt({ gt: 0 }).optional().withMessage("Age can not be 0 or below"),
+		param("userId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
+	],
   validateRequest,
   async (req: Request, res: Response) => {
     const {
@@ -28,8 +37,8 @@ router.patch(
       gender,
       age,
       bio,
-      shippingAddress: jsonShippingAddress,
-    }: {newPassword: string} & UserAttrs = req.body;
+      jsonShippingAddress,
+    }: {newPassword: string, jsonShippingAddress: ShippingAddressAttrs } & UserAttrs = req.body;
 
     const user = await User.findById(req.params.userId);
 
@@ -55,13 +64,19 @@ router.patch(
     }
 
 		// Check if it a JSON or not
-    let shippingAddress;
+    let address: ShippingAddressAttrs = {
+			address: '',
+			city: '',
+			postalCode: '',
+			country: '',
+		};
+
     if (typeof jsonShippingAddress === "string") {
 			console.log('string', jsonShippingAddress);
-      shippingAddress = await JSON.parse(jsonShippingAddress);
+      address = await JSON.parse(jsonShippingAddress);
     } else if (typeof jsonShippingAddress === "object") {
 			console.log('obj', jsonShippingAddress);
-      shippingAddress = jsonShippingAddress;
+      address = jsonShippingAddress;
     }
 
     user.set({
@@ -73,7 +88,7 @@ router.patch(
       gender: gender ?? user.gender,
       age: age ?? user.age,
       bio: bio ?? user.bio,
-      shippingAddress: shippingAddress ?? user.shippingAddress,
+      shippingAddress: address ?? user.shippingAddress,
     });
 
     await user.save();
@@ -99,7 +114,7 @@ router.patch(
       jwt: userJWT,
     };
 
-    res.send(user);
+    res.status(200).send(user);
   }
 );
 

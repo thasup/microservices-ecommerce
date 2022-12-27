@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface shippingAddressAttrs {
+export interface ShippingAddressAttrs {
   address: string;
   city: string;
   postalCode: string;
@@ -18,7 +18,7 @@ export interface UserAttrs {
   gender: string;
   age: number;
   bio?: string;
-  shippingAddress?: shippingAddressAttrs;
+  shippingAddress?: ShippingAddressAttrs;
 }
 
 // An interface that describes the properties
@@ -38,7 +38,7 @@ export interface UserDoc extends mongoose.Document {
   gender: string;
   age: number;
   bio?: string;
-  shippingAddress?: shippingAddressAttrs;
+  shippingAddress?: ShippingAddressAttrs;
   version: number;
   createdAt: string;
   updatedAt: string;
