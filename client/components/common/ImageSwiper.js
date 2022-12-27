@@ -40,6 +40,7 @@ const ImageSwiper = ({ images, isBanner = false }) => {
 		<Swiper
 			// install Swiper modules
 			className="custom-swiper"
+			style={{ aspectRatio: isBanner ? "3" : "unset", }}
 			modules={[Navigation, Pagination, Scrollbar, Mousewheel, Keyboard, Autoplay]}
 			spaceBetween={0}
 			slidesPerView={1}

@@ -168,10 +168,6 @@ a::before {
 	box-shadow: 0px 0px 5px #555;
 }
 
-.custom-swiper {
-	aspect-ratio: 3;
-}
-
 .custom-swiper .swiper-pagination-bullet-active {
 	background: #000;
 }
@@ -622,10 +618,9 @@ header {
 	outline: 0;
 }
 
-/* .ads-container {
-	width: 70vw;
-	margin: 3rem auto;
-} */
+.ads-container {
+	margin: 0;
+}
 
 .ads-img {
 	width: 100%;
@@ -714,11 +709,6 @@ header {
 
 /* Mobile Screen */
 @media only screen and (max-width: 425px) {
-	/* .ads-container {
-		width: 80vw;
-		margin: 1.5rem auto;
-	} */
-
 	.add-to-cart-btn {
 		padding: 0px 15px;
 		font-size: 0.6rem;
