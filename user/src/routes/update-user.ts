@@ -1,19 +1,30 @@
 import express, { Request, Response } from "express";
-import { body, param } from "express-validator";
+import { param, body } from "express-validator";
 import jwt from "jsonwebtoken";
 import {
   validateRequest,
   NotFoundError,
   BadRequestError,
 } from "@thasup-dev/common";
+
 import { User } from "../models/user";
 import { Password } from "../services/Password";
+import { UserAttrs, ShippingAddressAttrs } from "../types/user";
 
 const router = express.Router();
 
 router.patch(
   "/api/users/:userId",
-  [param("userId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
+  [
+		body("email").isEmail().optional().withMessage("Email must be valid"),
+    body("password")
+      .trim()
+      .isLength({ min: 4, max: 20 })
+			.optional()
+      .withMessage("Password must be between 4 and 20 characters"),
+    body("age").isInt({ gt: 0 }).optional().withMessage("Age can not be 0 or below"),
+		param("userId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
+	],
   validateRequest,
   async (req: Request, res: Response) => {
     const {
@@ -26,8 +37,8 @@ router.patch(
       gender,
       age,
       bio,
-      jsonShippingAddress,
-    } = req.body;
+      shippingAddress,
+    }: {newPassword: string } & UserAttrs = req.body;
 
     const user = await User.findById(req.params.userId);
 
@@ -35,40 +46,33 @@ router.patch(
       throw new NotFoundError();
     }
 
-    if (password && password !== "") {
+    if (password) {
       const existingUser = await User.findOne({ name });
 
       if (!existingUser) {
         throw new BadRequestError("Invalid credentials");
       }
 
-      const passwordMatch = await Password.compare(
+      const isMatch = await Password.compare(
         existingUser.password,
         password
       );
 
-      if (!passwordMatch) {
+      if (!isMatch) {
         throw new BadRequestError("Invalid credentials");
       }
     }
 
-    let shippingAddress; //่JSON
-    if (typeof jsonShippingAddress === "string") {
-      shippingAddress = await JSON.parse(jsonShippingAddress);
-    } else if (typeof jsonShippingAddress === "object") {
-      shippingAddress = jsonShippingAddress;
-    }
-
     user.set({
-      email: email !== "" ? email : user.email,
-      password: newPassword ? newPassword : password ?? user.password,
-      isAdmin: isAdmin !== undefined ? isAdmin : user.isAdmin,
-      name: name !== "" ? name : user.name,
-      image: image !== "" ? image : user.image,
-      gender: gender !== "" ? gender : user.gender,
-      age: age !== undefined ? age : user.age,
-      bio: bio !== "" ? bio : user.bio,
-      shippingAddress: shippingAddress ? shippingAddress : user.shippingAddress,
+      email: email ?? user.email,
+      password: newPassword ?? password ?? user.password,
+      isAdmin: isAdmin ?? user.isAdmin,
+      name: name ?? user.name,
+      image: image ?? user.image,
+      gender: gender ?? user.gender,
+      age: age ?? user.age,
+      bio: bio ?? user.bio,
+      shippingAddress: shippingAddress ?? user.shippingAddress,
     });
 
     await user.save();
@@ -94,7 +98,7 @@ router.patch(
       jwt: userJWT,
     };
 
-    res.send(user);
+    res.status(200).send(user);
   }
 );
 

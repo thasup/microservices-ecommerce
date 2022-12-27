@@ -4,7 +4,7 @@ import Router, { useRouter } from "next/router";
 import Head from "next/head";
 
 import CustomCarousol from "../../../components/dashboard/CustomCarousel";
-import useRequest from "../../../hooks/use-request";
+import useRequest from "../../../hooks/useRequest";
 import Loader from "../../../components/common/Loader";
 
 const EditProduct = ({ products, currentUser }) => {

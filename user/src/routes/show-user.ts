@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/api/users", async (req: Request, res: Response) => {
   const users = await User.find({});
 
-  if (users.length === 0) {
+  if (!users.length) {
     throw new NotFoundError();
   }
 

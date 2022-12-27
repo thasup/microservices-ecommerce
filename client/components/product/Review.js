@@ -12,7 +12,7 @@ import {
 import { faStar } from "@fortawesome/free-regular-svg-icons";
 import ReactStars from "react-rating-stars-component";
 
-import useRequest from "../../hooks/use-request";
+import useRequest from "../../hooks/useRequest";
 import Loader from "../common/Loader";
 import Message from "../common/Message";
 import Rating from "../common/Rating";

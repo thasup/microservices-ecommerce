@@ -1,50 +1,8 @@
 import mongoose from "mongoose";
-import { Password } from "../services/Password";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
-interface shippingAddressAttrs {
-  address: string;
-  city: string;
-  postalCode: string;
-  country: string;
-}
-
-// An interface that describes the properties
-// that are requried to create a new User
-interface UserAttrs {
-  email: string;
-  password: string;
-  isAdmin: boolean;
-  name: string;
-  image?: string;
-  gender: string;
-  age: number;
-  bio?: string;
-  shippingAddress?: shippingAddressAttrs;
-}
-
-// An interface that describes the properties
-// that a User Model has
-interface UserModel extends mongoose.Model<UserDoc> {
-  build(attrs: UserAttrs): UserDoc;
-}
-
-// An interface that describes the properties
-// that a User Document has
-interface UserDoc extends mongoose.Document {
-  email: string;
-  password: string;
-  isAdmin: boolean;
-  name: string;
-  image?: string;
-  gender: string;
-  age: number;
-  bio?: string;
-  shippingAddress?: shippingAddressAttrs;
-  version: number;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Password } from "../services/Password";
+import { UserAttrs, UserDoc, UserModel } from "../types/user";
 
 const userSchema = new mongoose.Schema(
   {
@@ -100,6 +58,8 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.set("versionKey", "version");
+
+// @ts-ignore
 userSchema.plugin(updateIfCurrentPlugin);
 
 userSchema.pre("save", async function (done) {

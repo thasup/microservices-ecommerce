@@ -97,6 +97,8 @@ const productSchema = new mongoose.Schema<ProductDoc, ProductModel>(
 );
 
 productSchema.set("versionKey", "version");
+
+// @ts-ignore
 productSchema.plugin(updateIfCurrentPlugin);
 
 productSchema.statics.findByEvent = (event: {

@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import CustomTooltip from "../common/CustomTooltip";
 import profilePic from "../../public/asset/sample.jpg";
-import useRequest from "../../hooks/use-request";
+import useRequest from "../../hooks/useRequest";
 
 const UserList = ({ users }) => {
 	const [userId, setUserId] = useState(false);

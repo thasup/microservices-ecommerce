@@ -15,7 +15,7 @@ export interface CartAttrs {
   productId: string;
 }
 
-interface shippingAddressAttrs {
+interface ShippingAddressAttrs {
   address: string;
   city: string;
   postalCode: string;
@@ -29,7 +29,7 @@ interface OrderAttrs {
   status: OrderStatus;
   expiresAt: Date;
   cart?: Array<CartAttrs>;
-  shippingAddress?: shippingAddressAttrs;
+  shippingAddress?: ShippingAddressAttrs;
   paymentMethod: string;
   itemsPrice: number;
   shippingPrice: number;
@@ -54,7 +54,7 @@ interface OrderDoc extends mongoose.Document {
   status: OrderStatus;
   expiresAt: Date;
   cart?: Array<CartAttrs>;
-  shippingAddress?: shippingAddressAttrs;
+  shippingAddress?: ShippingAddressAttrs;
   paymentMethod: string;
   itemsPrice: number;
   shippingPrice: number;
@@ -158,6 +158,8 @@ const orderSchema = new mongoose.Schema(
 );
 
 orderSchema.set("versionKey", "version");
+
+// @ts-ignore
 orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {

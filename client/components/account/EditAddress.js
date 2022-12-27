@@ -2,7 +2,7 @@ import Router from "next/router";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 
-import useRequest from "../../hooks/use-request";
+import useRequest from "../../hooks/useRequest";
 import Message from "../common/Message";
 
 const EditAddress = ({ user }) => {
@@ -27,12 +27,12 @@ const EditAddress = ({ user }) => {
 			gender: user.gender,
 			age: user.age,
 			bio: user.bio,
-			jsonShippingAddress: JSON.stringify({
+			shippingAddress: {
 				address: address,
 				city: city,
 				postalCode: postalCode,
 				country: country,
-			}),
+			},
 		},
 		onSuccess: (user) => {
 			setUpdateSuccess(true);

@@ -14,8 +14,10 @@ spec:
     spec:
       containers:
         - name: client
-          # image: thasup/client
-          image: us.gcr.io/aurapan-shop-348908/client
+          # uncomment this if you want to run on docker desktop
+          image: thasup/client
+          # uncomment this if you want to run on google cloud platform
+          # image: us.gcr.io/aurapan-shop-367317/client
 ---
 apiVersion: v1
 kind: Service

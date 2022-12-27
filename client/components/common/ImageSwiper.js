@@ -25,7 +25,7 @@ import "swiper/css/mousewheel";
 import "swiper/css/keyboard";
 
 
-const ImageSwiper = ({ images }) => {
+const ImageSwiper = ({ images, isBanner = false }) => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -67,7 +67,7 @@ const ImageSwiper = ({ images }) => {
 					>
 						<Image
 							src={img}
-							layout="fill"
+							layout={isBanner ? "responsive" : "fill"}
 							objectFit="cover"
 							objectPosition="center center"
 							priority="true"
