@@ -5,6 +5,7 @@ import { validateRequest, BadRequestError } from "@thasup-dev/common";
 
 import { User } from "../models/user";
 import { Password } from "../services/Password";
+import { UserAttrs } from "../types/user";
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password }: Partial<UserAttrs>  = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -27,12 +28,12 @@ router.post(
       throw new BadRequestError("Invalid credentials");
     }
 
-    const passwordMatch = await Password.compare(
+    const isMatch = await Password.compare(
       existingUser.password,
-      password
+      password!
     );
 
-    if (!passwordMatch) {
+    if (!isMatch) {
       throw new BadRequestError("Invalid credentials");
     }
 

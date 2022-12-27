@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { BadRequestError, validateRequest } from "@thasup-dev/common";
 
 import { User } from "../models/user";
+import { UserAttrs } from "../types/user";
 
 const router = express.Router();
 
@@ -29,14 +30,14 @@ router.post(
       gender,
       age,
       bio,
-      jsonShippingAddress,
-    } = req.body;
+      shippingAddress,
+    }: UserAttrs = req.body;
     let { image } = req.body;
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      throw new BadRequestError("Email in use");
+      throw new BadRequestError("Email already in use");
     }
 
 		// Assign random generated image from API
@@ -53,7 +54,7 @@ router.post(
       gender,
       age,
       bio,
-      shippingAddress: jsonShippingAddress,
+      shippingAddress,
     });
     await user.save();
 
@@ -61,14 +62,14 @@ router.post(
     const userJWT = jwt.sign(
       {
         id: user.id,
-        email: user.email,
-        isAdmin: user.isAdmin,
+        email,
+        isAdmin,
         name,
         image,
         gender,
         age,
         bio,
-        shippingAddress: jsonShippingAddress,
+        shippingAddress,
       },
       process.env.JWT_KEY!
     );

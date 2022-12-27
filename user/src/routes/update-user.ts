@@ -1,13 +1,15 @@
 import express, { Request, Response } from "express";
-import { body, param } from "express-validator";
+import { param } from "express-validator";
 import jwt from "jsonwebtoken";
 import {
   validateRequest,
   NotFoundError,
   BadRequestError,
 } from "@thasup-dev/common";
+
 import { User } from "../models/user";
 import { Password } from "../services/Password";
+import { UserAttrs } from "../types/user";
 
 const router = express.Router();
 
@@ -26,8 +28,8 @@ router.patch(
       gender,
       age,
       bio,
-      jsonShippingAddress,
-    } = req.body;
+      shippingAddress: jsonShippingAddress,
+    }: {newPassword: string} & UserAttrs = req.body;
 
     const user = await User.findById(req.params.userId);
 
@@ -35,40 +37,43 @@ router.patch(
       throw new NotFoundError();
     }
 
-    if (password && password !== "") {
+    if (password) {
       const existingUser = await User.findOne({ name });
 
       if (!existingUser) {
         throw new BadRequestError("Invalid credentials");
       }
 
-      const passwordMatch = await Password.compare(
+      const isMatch = await Password.compare(
         existingUser.password,
         password
       );
 
-      if (!passwordMatch) {
+      if (!isMatch) {
         throw new BadRequestError("Invalid credentials");
       }
     }
 
-    let shippingAddress; //่JSON
+		// Check if it a JSON or not
+    let shippingAddress;
     if (typeof jsonShippingAddress === "string") {
+			console.log('string', jsonShippingAddress);
       shippingAddress = await JSON.parse(jsonShippingAddress);
     } else if (typeof jsonShippingAddress === "object") {
+			console.log('obj', jsonShippingAddress);
       shippingAddress = jsonShippingAddress;
     }
 
     user.set({
-      email: email !== "" ? email : user.email,
-      password: newPassword ? newPassword : password ?? user.password,
-      isAdmin: isAdmin !== undefined ? isAdmin : user.isAdmin,
-      name: name !== "" ? name : user.name,
-      image: image !== "" ? image : user.image,
-      gender: gender !== "" ? gender : user.gender,
-      age: age !== undefined ? age : user.age,
-      bio: bio !== "" ? bio : user.bio,
-      shippingAddress: shippingAddress ? shippingAddress : user.shippingAddress,
+      email: email ?? user.email,
+      password: newPassword ?? password ?? user.password,
+      isAdmin: isAdmin ?? user.isAdmin,
+      name: name ?? user.name,
+      image: image ?? user.image,
+      gender: gender ?? user.gender,
+      age: age ?? user.age,
+      bio: bio ?? user.bio,
+      shippingAddress: shippingAddress ?? user.shippingAddress,
     });
 
     await user.save();
