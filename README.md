@@ -6,6 +6,10 @@
 
 <!-- Describe your project in brief -->
 
+<!-- [![deploy-manifests](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-manifests.yaml/badge.svg)](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-manifests.yaml) -->
+
+[![deploy-client](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-client.yaml/badge.svg)](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-client.yaml)[![deploy-user](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-user.yml/badge.svg)](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-user.yml)[![deploy-product](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-product.yaml/badge.svg)](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-product.yaml)[![deploy-order](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-order.yaml/badge.svg)](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-order.yaml)[![deploy-payment](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-payment.yaml/badge.svg)](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-payment.yaml)
+
 Aurapan is the beautiful women's clothes e-commerce website built with **microservices** architecture, perform server-side rendering by **Next.js**, developing on **Google Cloud Platform** environment, integrated some CI/CD process by running automation test with **GitHub Action** workflow and deploy on **DigitalOcean** cluster with let's encrypt certificate.
 
 # Table of contents
