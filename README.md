@@ -112,11 +112,11 @@ skaffold dev
 1. clone _dev-mac_ branch on your computer
 2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/)
 3. enable kubernetes in docker desktop preferences
-4. create an image by run this command in every folder that has _Dockerfile_
+4. create an image by run a command in every folder that has a _Dockerfile_
 ```
 docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .
 ```
-5. push all images to docker hub by run this command in every folder that has _Dockerfile_
+5. push all images to docker hub by run a command in every folder that has a _Dockerfile_
 ```
 docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 ```
