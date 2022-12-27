@@ -8,10 +8,8 @@ import useWindowSize from "../hooks/useWindowSize";
 import AdsBannerSrc1 from "../public/asset/ads-banner/ads_banner_1.png";
 import AdsBannerSrc2 from "../public/asset/ads-banner/ads_banner_2.png";
 import AdsBannerSrc3 from "../public/asset/ads-banner/ads_banner_3.png";
-import AdsBannerSrc4 from "../public/asset/ads-banner/ads_banner_4.png";
-import AdsBannerSrc5 from "../public/asset/ads-banner/ads_banner_5.png";
 
-const adsBanners = [AdsBannerSrc1, AdsBannerSrc2, AdsBannerSrc3, AdsBannerSrc4, AdsBannerSrc5]
+const adsBanners = [AdsBannerSrc1, AdsBannerSrc2, AdsBannerSrc3]
 
 const Home = ({ products, currentUser }) => {
 	const [onMobile, setOnMobile] = useState(false);
@@ -29,7 +27,7 @@ const Home = ({ products, currentUser }) => {
 	return (
 		<>
 			<Row className="ads-container">
-				<ImageSwiper images={adsBanners} />
+				<ImageSwiper images={adsBanners} isBanner={true} />
 			</Row>
 			<Row className="mx-0">
 				{products.map((item) => (
