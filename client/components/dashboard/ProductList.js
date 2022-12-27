@@ -5,7 +5,7 @@ import Router from "next/router";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row, Spinner, Table } from "react-bootstrap";
 
-import useRequest from "../../hooks/use-request";
+import useRequest from "../../hooks/useRequest";
 import ColorSelector from "../common/ColorSelector";
 import CustomTooltip from "../common/CustomTooltip";
 import SizeSelector from "../common/SizeSelector";

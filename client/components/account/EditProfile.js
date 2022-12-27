@@ -3,7 +3,7 @@ import Router from "next/router";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 
-import useRequest from "../../hooks/use-request";
+import useRequest from "../../hooks/useRequest";
 import Message from "../common/Message";
 
 const EditProfile = ({ user }) => {

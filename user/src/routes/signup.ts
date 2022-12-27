@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 import { BadRequestError, validateRequest } from "@thasup-dev/common";
+import { createAvatar } from '@dicebear/avatars';
+import * as style from '@dicebear/micah';
 
 import { User } from "../models/user";
 
@@ -40,7 +42,12 @@ router.post(
     }
 
     if (!image || image === "") {
-      image = `https://joeschmoe.io/api/v1/${gender}/${name}${email}`;
+			let svg = createAvatar(style, {
+				seed: `${name}${email}`,
+				backgroundColor: '#F0F0F0',
+			});
+
+      image = svg;
     }
 
     const user = User.build({

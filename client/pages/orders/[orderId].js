@@ -17,7 +17,7 @@ import Head from "next/head";
 import NextImage from "../../components/common/NextImage";
 import Loader from "../../components/common/Loader";
 import Message from "../../components/common/Message";
-import useRequest from "../../hooks/use-request";
+import useRequest from "../../hooks/useRequest";
 import ExpireTimer from "../../components/common/ExpireTimer";
 
 const OrderPage = ({ currentUser, orders, myOrders }) => {

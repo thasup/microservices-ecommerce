@@ -3,7 +3,7 @@ import Router, { useRouter } from "next/router";
 import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import Head from "next/head";
 
-import useRequest from "../../../hooks/use-request";
+import useRequest from "../../../hooks/useRequest";
 import Loader from "../../../components/common/Loader";
 
 const UserEdit = ({ users, currentUser }) => {
