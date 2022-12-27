@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { connect } from "mongoose";
 import { app } from "./app";
 
 const start = async () => {
@@ -11,7 +11,7 @@ const start = async () => {
   }
 
   try {
-    await mongoose.connect(process.env.MONGO_URI_USER);
+    await connect(process.env.MONGO_URI_USER);
     console.log("Connected to MongoDB");
   } catch (err) {
     console.error(err);

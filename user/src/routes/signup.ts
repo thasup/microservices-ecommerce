@@ -2,10 +2,9 @@ import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 import { BadRequestError, validateRequest } from "@thasup-dev/common";
-import { createAvatar } from '@dicebear/avatars';
-import * as style from '@dicebear/micah';
 
 import { User } from "../models/user";
+import { UserAttrs } from "../types/user";
 
 const router = express.Router();
 
@@ -31,23 +30,19 @@ router.post(
       gender,
       age,
       bio,
-      jsonShippingAddress,
-    } = req.body;
+      shippingAddress,
+    }: UserAttrs = req.body;
     let { image } = req.body;
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      throw new BadRequestError("Email in use");
+      throw new BadRequestError("Email already in use");
     }
 
-    if (!image || image === "") {
-			let svg = createAvatar(style, {
-				seed: `${name}${email}`,
-				backgroundColor: '#F0F0F0',
-			});
-
-      image = svg;
+		// Assign random generated image from API
+    if (!image) {
+      image = `https://avatars.dicebear.com/api/micah/${name.trim()}${email.trim()}.svg?b=%23f0f0f0`;
     }
 
     const user = User.build({
@@ -59,7 +54,7 @@ router.post(
       gender,
       age,
       bio,
-      shippingAddress: jsonShippingAddress,
+      shippingAddress,
     });
     await user.save();
 
@@ -67,14 +62,14 @@ router.post(
     const userJWT = jwt.sign(
       {
         id: user.id,
-        email: user.email,
-        isAdmin: user.isAdmin,
+        email,
+        isAdmin,
         name,
         image,
         gender,
         age,
         bio,
-        shippingAddress: jsonShippingAddress,
+        shippingAddress,
       },
       process.env.JWT_KEY!
     );

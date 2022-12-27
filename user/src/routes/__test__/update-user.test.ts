@@ -194,13 +194,6 @@ it("return 200 when make a request to edit the address", async () => {
   await request(app)
     .patch(`/api/users/${user.id}`)
     .send({
-      email: user.email,
-      isAdmin: user.isAdmin,
-      name: user.name,
-      image: user.image,
-      gender: user.gender,
-      age: user.age,
-      bio: user.bio,
       jsonShippingAddress: JSON.stringify({
         address: "under the oak tree",
         city: "Valen",
