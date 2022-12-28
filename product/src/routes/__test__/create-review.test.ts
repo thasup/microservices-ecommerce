@@ -48,6 +48,62 @@ it("return 404 when the product data is not found", async () => {
     .expect(404);
 });
 
+it("return 400 if it does not have a title", async () => {
+  // Create a product
+  const product = await createProduct();
+
+	const userId = new mongoose.Types.ObjectId().toHexString();
+
+  // Make a post request without sign in
+  await request(app)
+    .post(`/api/products/${product.id}/reviews`)
+		.set("Cookie", global.signin(userId))
+    .send({
+      title: "",
+      rating: 3,
+      comment:
+        "Purus semper eget duis at tellus. Ut placerat orci nulla pellentesque dignissim enim.",
+    })
+    .expect(400);
+});
+
+it("return 400 if it does not have a comment", async () => {
+  // Create a product
+  const product = await createProduct();
+
+	const userId = new mongoose.Types.ObjectId().toHexString();
+
+  // Make a post request without sign in
+  await request(app)
+    .post(`/api/products/${product.id}/reviews`)
+		.set("Cookie", global.signin(userId))
+    .send({
+      title: "Good Quality",
+      rating: 3,
+      comment: "",
+    })
+    .expect(400);
+});
+
+it("return 400 if rating is lesser than 1", async () => {
+  // Create a product
+  const product = await createProduct();
+
+	const userId = new mongoose.Types.ObjectId().toHexString();
+
+  // Make a post request without sign in
+  await request(app)
+    .post(`/api/products/${product.id}/reviews`)
+		.set("Cookie", global.signin(userId))
+    .send({
+      title: "Good Quality",
+      rating: 0,
+      comment:
+        "Purus semper eget duis at tellus. Ut placerat orci nulla pellentesque dignissim enim.",
+    })
+    .expect(400);
+});
+
 it("return 401 when make a request without signed in", async () => {
   // Create a product
   const product = await createProduct();

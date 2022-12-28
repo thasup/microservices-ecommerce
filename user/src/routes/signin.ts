@@ -5,7 +5,7 @@ import { validateRequest, BadRequestError } from "@thasup-dev/common";
 
 import { User } from "../models/user";
 import { Password } from "../services/Password";
-import { UserAttrs } from "../types/user";
+import type { UserAttrs } from "../types/user";
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password }: Partial<UserAttrs>  = req.body;
+    const { email, password }: UserAttrs  = req.body;
 
     const existingUser = await User.findOne({ email });
 

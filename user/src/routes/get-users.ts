@@ -15,4 +15,4 @@ router.get("/api/users", async (req: Request, res: Response) => {
   res.status(200).send(users);
 });
 
-export { router as showUserRouter };
+export { router as getUsersRouter };

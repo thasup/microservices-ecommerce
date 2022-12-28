@@ -115,9 +115,9 @@ const signin = ({ currentUser }) => {
 
 								<Row className="py-3">
 									<Col className="px-0">
-										New here?{" "}
+										Don't have an account?{" "}
 										<Link href="/signup">
-											<a>Create an Account</a>
+											<a>Sign up</a>
 										</Link>
 									</Col>
 								</Row>

@@ -7,21 +7,13 @@ import { currentUserRouter } from "./routes/current-user";
 import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";
 import { signupRouter } from "./routes/signup";
-import { showUserRouter } from "./routes/show-user";
+import { getUsersRouter } from "./routes/get-users";
 import { updateUserRouter } from "./routes/update-user";
 import { deleteUserRouter } from "./routes/delete-user";
 
 const app = express();
 app.set("trust proxy", true);
 app.use(express.json());
-// app.use(
-//   cors({
-//     origin: ["https://www.aurapan.com", "https://localhost:3000"],
-//     methods: ["GET", "POST", "PATCH", "DELETE"],
-//     credentials: true,
-//     exposedHeaders: ["set-cookie"],
-//   })
-// );
 app.use(
   cookieSession({
     signed: false,
@@ -30,7 +22,7 @@ app.use(
 );
 
 app.use(currentUserRouter);
-app.use(showUserRouter);
+app.use(getUsersRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);

@@ -102,7 +102,7 @@ const EditSecurity = ({ user }) => {
 						<Form.Label>New Password</Form.Label>
 						<Form.Control
 							type="password"
-							placeholder="Enter password"
+							placeholder="Enter new password"
 							value={newPassword}
 							onChange={(e) => setNewPassword(e.target.value)}
 						></Form.Control>
