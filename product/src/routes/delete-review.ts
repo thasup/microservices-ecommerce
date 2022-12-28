@@ -69,7 +69,7 @@ router.delete(
 
       await product.save();
 
-      new ProductUpdatedPublisher(natsWrapper.client).publish({
+      await new ProductUpdatedPublisher(natsWrapper.client).publish({
         id: product.id,
         title: product.title,
         price: product.price,
