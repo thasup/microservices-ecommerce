@@ -22,6 +22,7 @@ Aurapan is the beautiful women's clothing e-commerce website built with **micros
 - [Table of contents](#table-of-contents)
 - [Demo](#demo)
 - [Features](#features)
+- [Usage](#usage)
 - [Installation](#installation)
 - [Setup Kubernetes Secret](#setup-kubernetes-secret)
 - [Deployment](#deployment)
@@ -65,6 +66,38 @@ Aurapan is the beautiful women's clothing e-commerce website built with **micros
 
 Something might be a bit exaggerated but one certain thing is that I put all my ❤️ into creating this project.
 happy browsing! 😊
+
+# Usage
+
+[(Back to top)](#table-of-contents)
+### How to sign up an account
+1. Browse to the [sign up page](https://www.aurapan.com/signup)
+2. Enter your email, password, name, gender and age (can be anything as this is a fictional store)
+
+### How to purchase products
+Pay with Stripe method (recommended)
+1. Using `4242 4242 4242 4242` for a card number
+2. Using any date (must be later date from now) for `MM/YY`
+3. Using any number for `CVC`
+
+Pay with Paypal method
+1. You'll need a Paypal account
+2. [Create Paypal developer account](https://developer.paypal.com/tools/sandbox/accounts/)
+3. Choose Paypal payment method and sign in with sandbox account to pay for an order (with fake money!)
+
+### How to recieve an order
+1. An order will change to `delivered` only by an admin
+2. You will never get any real products (even if your order has been marked as `delivered`) 😛
+
+### How to access admin dashboard
+1. Sign in with an admin account
+2. Access via management menu in profile dropdown menu
+
+### How to add your favorite product to wishlist
+Nope, you can't do it yet. Aurapan still doesn't support this feature. 😎
+
+### How to perform CRUD operation on the product database (create, update, delete)
+You need a permission to access this function as an admin.
 
 # Installation
 
