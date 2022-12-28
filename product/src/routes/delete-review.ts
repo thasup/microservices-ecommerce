@@ -51,7 +51,7 @@ router.delete(
       // Calculate numReviews and rating
       let numReviews;
       let productRating;
-      if (updateReviews.length !== 0) {
+      if (updateReviews.length > 0) {
         numReviews = updateReviews.length;
         productRating =
           updateReviews.reduce((acc, item) => item.rating + acc, 0) /

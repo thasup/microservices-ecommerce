@@ -11,6 +11,7 @@ import {
 import { Product } from "../models/product";
 import { ProductUpdatedPublisher } from "../events/publishers/ProductUpdatedPublisher";
 import { natsWrapper } from "../NatsWrapper";
+import type { ProductAttrs } from "../types/product";
 
 const router = express.Router();
 
@@ -39,7 +40,12 @@ router.patch(
       rating,
       countInStock,
       isReserved,
-    } = req.body;
+    }: {
+			image1: string, 
+			image2: string, 
+			image3: string, 
+			image4: string
+		} & ProductAttrs = req.body;
 
     const product = await Product.findById(req.params.id);
 
@@ -49,15 +55,18 @@ router.patch(
 
     if (product.isReserved) {
       // throw new BadRequestError("Cannot edit a reserved product");
+			// TODO: figure out why reserve need to be overide
       product.isReserved = isReserved;
     }
 
     product.title = title ?? product.title;
     product.price = price ?? product.price;
-    product.images.image1 = image1 ?? product.images.image1;
-    product.images.image2 = image2 ?? product.images.image2;
-    product.images.image3 = image3 ?? product.images.image3;
-    product.images.image4 = image4 ?? product.images.image4;
+    product.images = {
+			image1: image1 ?? product.images.image1,
+			image2: image2 ?? product.images.image2,
+			image3: image3 ?? product.images.image3,
+			image4: image4 ?? product.images.image4,
+		}
     product.colors = colors ?? product.colors;
     product.sizes = sizes ?? product.sizes;
     product.brand = brand ?? product.brand;
@@ -73,19 +82,19 @@ router.patch(
 
     await new ProductUpdatedPublisher(natsWrapper.client).publish({
       id: product.id,
-      title: title,
-      price: price,
+      title: product.title,
+      price: product.price,
       userId: product.userId,
       image: product.images.image1,
-      colors: colors,
-      sizes: sizes,
-      brand: brand,
-      category: category,
-      material: material,
-      description: description,
-      numReviews: numReviews,
-      rating: rating,
-      countInStock: countInStock,
+      colors: product.colors,
+      sizes: product.sizes,
+      brand: product.brand,
+      category: product.category,
+      material: product.material,
+      description: product.description,
+      numReviews: product.numReviews,
+      rating: product.rating,
+      countInStock: product.countInStock,
       isReserved: product.isReserved,
       version: product.version,
     });
