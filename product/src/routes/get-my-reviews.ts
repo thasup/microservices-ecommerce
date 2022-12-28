@@ -10,12 +10,12 @@ router.get(
   async (req: Request, res: Response) => {
     let reviews = await Review.find({ userId: req.currentUser!.id });
 
-    if (!reviews || reviews.length === 0) {
-      reviews = [];
+    if (!reviews || reviews.length < 1) {
+      reviews = []
     }
 
     res.status(200).send(reviews);
   }
 );
 
-export { router as showMyReviewRouter };
+export { router as getMyReviewsRouter };

@@ -5,13 +5,13 @@ import { NotFoundError, errorHandler, currentUser } from "@thasup-dev/common";
 
 import { createProductRouter } from "./routes/create-product";
 import { getProductRouter } from "./routes/get-product";
-import { showProductRouter } from "./routes/show-product";
+import { getAllProductsRouter } from "./routes/get-all-products";
 import { updateProductRouter } from "./routes/update-product";
 import { deleteProductRouter } from "./routes/delete-product";
 import { deleteReviewRouter } from "./routes/delete-review";
 import { createReviewRouter } from "./routes/create-review";
-import { showBestProductRouter } from "./routes/bestseller";
-import { showMyReviewRouter } from "./routes/show-my-review";
+import { bestsellerRouter } from "./routes/bestseller";
+import { getMyReviewsRouter } from "./routes/get-my-reviews";
 
 const app = express();
 app.set("trust proxy", true);
@@ -24,10 +24,10 @@ app.use(
 );
 app.use(currentUser);
 
-app.use(showProductRouter);
+app.use(getAllProductsRouter);
 app.use(createProductRouter);
-app.use(showBestProductRouter);
-app.use(showMyReviewRouter);
+app.use(bestsellerRouter);
+app.use(getMyReviewsRouter);
 app.use(updateProductRouter);
 app.use(deleteProductRouter);
 app.use(getProductRouter);

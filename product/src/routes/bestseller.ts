@@ -9,4 +9,4 @@ router.get("/api/products/bestseller", async (req: Request, res: Response) => {
   res.send(products);
 });
 
-export { router as showBestProductRouter };
+export { router as bestsellerRouter };
