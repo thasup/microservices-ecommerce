@@ -115,7 +115,7 @@ gcloud auth application-default login
 ```
 skaffold dev
 ```
-19. open a web browser enter your custom URL to see this project come to live!
+19. open a web browser enter your custom URL with `https://` to see this project come to live!
 
 **Running on Docker Desktop**
 
@@ -142,7 +142,7 @@ kubectl config use-context docker-desktop
 9. config all yaml files to matches your custom URL
 10. create all [kubernetes secrets](#setup-env)
 11. run `skaffold dev` in this project root directory, make sure to use correct context before run the command
-12. open a web browser enter your custom URL to see this project come to live!
+12. open a web browser enter your custom URL with `https://` to see this project come to live!
 
 # Setup Kubernetes Secret
 
