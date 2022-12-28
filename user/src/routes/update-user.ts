@@ -9,7 +9,7 @@ import {
 
 import { User } from "../models/user";
 import { Password } from "../services/Password";
-import { UserAttrs, ShippingAddressAttrs } from "../types/user";
+import type { UserAttrs } from "../types/user";
 
 const router = express.Router();
 

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { BadRequestError, validateRequest } from "@thasup-dev/common";
 
 import { User } from "../models/user";
-import { UserAttrs } from "../types/user";
+import type { UserAttrs } from "../types/user";
 
 const router = express.Router();
 
@@ -32,7 +32,8 @@ router.post(
       bio,
       shippingAddress,
     }: UserAttrs = req.body;
-    let { image } = req.body;
+
+    let { image }: UserAttrs = req.body;
 
     const existingUser = await User.findOne({ email });
 
