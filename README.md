@@ -22,6 +22,7 @@ Aurapan is the beautiful women's clothing e-commerce website built with **micros
 - [Table of contents](#table-of-contents)
 - [Demo](#demo)
 - [Features](#features)
+- [Usage](#usage)
 - [Installation](#installation)
 - [Setup Kubernetes Secret](#setup-kubernetes-secret)
 - [Deployment](#deployment)
@@ -35,7 +36,7 @@ Aurapan is the beautiful women's clothing e-commerce website built with **micros
 
 <!-- _You can still run it manually with docker-desktop on a local computer._ -->
 
-[https://www.aurapan.com](https://www.aurapan.com/)
+[www.aurapan.com](https://www.aurapan.com/)
 
 # Features
 
@@ -66,11 +67,43 @@ Aurapan is the beautiful women's clothing e-commerce website built with **micros
 Something might be a bit exaggerated but one certain thing is that I put all my ❤️ into creating this project.
 happy browsing! 😊
 
+# Usage
+
+[(Back to top)](#table-of-contents)
+### How to sign up an account
+1. Browse to the [sign up page](https://www.aurapan.com/signup)
+2. Enter your email, password, name, gender and age (can be anything as this is a fictional store)
+
+### How to purchase products
+Pay with Stripe method (recommended)
+1. Using `4242 4242 4242 4242` for a card number
+2. Using any date (must be later date from now) for `MM/YY`
+3. Using any number for `CVC`
+
+Pay with Paypal method
+1. You'll need a Paypal account
+2. [Create Paypal developer account](https://developer.paypal.com/tools/sandbox/accounts/)
+3. Choose Paypal payment method and sign in with sandbox account to pay for an order (with fake money!)
+
+### How to recieve an order
+1. An order will change to `delivered` only by an admin
+2. You will never get any real products (even if your order has been marked as `delivered`) 😛
+
+### How to access admin dashboard
+1. Sign in with an admin account
+2. Access via management menu in profile dropdown menu
+
+### How to add your favorite product to wishlist
+Nope, you can't do it yet. Aurapan still doesn't support this feature. 😎
+
+### How to perform CRUD operation on the product database (create, update, delete)
+You need a permission to access this function as an admin.
+
 # Installation
 
 [(Back to top)](#table-of-contents)
 
-**Running on Google Cloud Platform**
+## Running on Google Cloud Platform
 
 [![GCP Badge](https://img.shields.io/badge/-Google_Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white)](https://cloud.google.com/gcp/)
 
@@ -115,9 +148,9 @@ gcloud auth application-default login
 ```
 skaffold dev
 ```
-19. open a web browser enter your custom URL to see this project come to live!
+19. open a web browser enter your custom URL with `https://` to see this project come to live!
 
-**Running on Docker Desktop**
+## Running on Docker Desktop
 
 [![Docker Badge](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 
@@ -142,7 +175,7 @@ kubectl config use-context docker-desktop
 9. config all yaml files to matches your custom URL
 10. create all [kubernetes secrets](#setup-env)
 11. run `skaffold dev` in this project root directory, make sure to use correct context before run the command
-12. open a web browser enter your custom URL to see this project come to live!
+12. open a web browser enter your custom URL with `https://` to see this project come to live!
 
 # Setup Kubernetes Secret
 
@@ -178,14 +211,14 @@ kubectl create secret generic paypal-secret --from-literal=PAYPAL_CLIENT_ID=<YOU
 
 [(Back to top)](#table-of-contents)
 
-**Deploy on DigitalOcean**
+## Deploy on DigitalOcean
 
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-0080FF?style=flat&logo=digitalocean&logoColor=white)](https://www.digitalocean.com/)
 
 1. sign up free account with $200 for 60 days trial and create a kubernetes cluster in new project on Digital Ocean
 2. generate new access token from Digital Ocean, install [doctl](https://docs.digitalocean.com/reference/doctl/how-to/install/) and [kubectl](https://kubernetes.io/docs/tasks/tools/), then run
 ```
-doctl auth init
+doctl auth init --access-token <API_TOKEN_CODE>
 ```
 3. connect with Digital Ocean k8s cluster context by running this command and authorize with your credentials
 ```
@@ -236,7 +269,7 @@ DOCKER_USERNAME =
 DOCKER_PASSWORD = 
 ```
 7. edit files in every services then commit code to the _main_ branch for triggering **Github Action workflows** to build and push all images to your Docker Hub
-8. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) for **DigitalOcean**
+8. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) to create **DigitalOcean Load Balancer**
 9. separate k8s folder to k8s-dev and k8s-prod then copy `ingress-srv.yaml` file to both folders and edit host URL to a new domain name
 10. create github workflow for telling kubernetes cluster to use images we built by adding these lines
 
@@ -248,7 +281,7 @@ DOCKER_PASSWORD =
 - run: kubectl rollout restart deployment <YOUR_DEPLOYMENT_NAME>
 ```
 
-11. purchase a domain name with a promotion that can be very cheap as $1 for 1st year
+11. purchase a domain name with a promotion that can be very cheap as $1 for the 1st year such as namecheap, porkbun, dynadot
 12. config custom domain name nameserver with your domain name registor website by custom add this lines
 ```
 ns1.digitalocean.com

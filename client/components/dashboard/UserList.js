@@ -71,6 +71,7 @@ const UserList = ({ users }) => {
 							<th>POSTALCODE</th>
 							<th>COUNTRY</th>
 							<th>DETAILS</th>
+							<th>CREATED AT</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -202,6 +203,7 @@ const UserList = ({ users }) => {
 										)}
 									</Button>
 								</td>
+								<td>{`${new Date(`${user.createdAt}`).toLocaleDateString()} ${new Date(`${user.createdAt}`).toLocaleTimeString()}`}</td>
 							</tr>
 						))}
 					</tbody>

@@ -27,7 +27,7 @@ router.delete(
       throw new NotFoundError();
     }
 
-    deletedProduct.remove();
+    await deletedProduct.remove();
 
     // Publish an event
     await new ProductDeletedPublisher(natsWrapper.client).publish({

@@ -40,7 +40,7 @@ const Support = ({ user }) => {
 				{showMessage && <Message variant="success">{text}</Message>}
 
 				<Col>
-					<Form.Group controlId="name" className="mb-3">
+					<Form.Group controlId="name-contact" className="mb-3">
 						<Form.Label>Your Name</Form.Label>
 						<Form.Control
 							type="text"
@@ -50,7 +50,7 @@ const Support = ({ user }) => {
 						></Form.Control>
 					</Form.Group>
 
-					<Form.Group controlId="email" className="mb-3">
+					<Form.Group controlId="email-contact" className="mb-3">
 						<Form.Label>Your Email</Form.Label>
 						<Form.Control
 							type="text"

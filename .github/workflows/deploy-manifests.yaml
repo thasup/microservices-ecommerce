@@ -23,7 +23,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       # use and cliententicate doctl
-      - run: doctl kubernetes cluster kubeconfig save my-4th-aurapan-cluster
+      - run: doctl kubernetes cluster kubeconfig save covid-cluster
 
       # apply deployment yaml files (k8s-prod is for production!)
       - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod

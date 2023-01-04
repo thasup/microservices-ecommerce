@@ -9,4 +9,4 @@ router.get("/api/products", async (req: Request, res: Response) => {
   res.send(products);
 });
 
-export { router as showProductRouter };
+export { router as getAllProductsRouter };

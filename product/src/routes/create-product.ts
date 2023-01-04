@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { adminUser, requireAuth, validateRequest } from "@thasup-dev/common";
-import mongoose from "mongoose";
 
 import { Product } from "../models/product";
 import { ProductCreatedPublisher } from "../events/publishers/ProductCreatedPublisher";
 import { natsWrapper } from "../NatsWrapper";
+import type { ProductAttrs } from "../types/product";
 
 const router = express.Router();
 
@@ -38,7 +38,12 @@ router.post(
       numReviews,
       rating,
       countInStock,
-    } = req.body;
+    }: {
+			image1: string, 
+			image2: string, 
+			image3: string, 
+			image4: string
+		} & ProductAttrs = req.body;
 
     const product = Product.build({
       title,
@@ -64,6 +69,7 @@ router.post(
     });
 
     await product.save();
+
     await new ProductCreatedPublisher(natsWrapper.client).publish({
       id: product.id,
       title: product.title,
@@ -79,7 +85,7 @@ router.post(
       numReviews: product.numReviews,
       rating: product.rating,
       countInStock: product.countInStock,
-      isReserved: false,
+      isReserved: product.isReserved,
       version: product.version,
     });
 

@@ -26,6 +26,13 @@ const createProduct = (rating: number) => {
     });
 };
 
+it("return 404 if there are no product", async () => {
+  await request(app)
+    .get("/api/products/bestseller")
+    .send()
+    .expect(404);
+});
+
 it("can fetch a list of bestseller products", async () => {
   await createProduct(3);
   await createProduct(5);

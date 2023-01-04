@@ -11,6 +11,7 @@ import { Product } from "../models/product";
 import { Review } from "../models/review";
 import { ProductUpdatedPublisher } from "../events/publishers/ProductUpdatedPublisher";
 import { natsWrapper } from "../NatsWrapper";
+import type { ReviewAttrs } from "../types/review";
 
 const router = express.Router();
 
@@ -19,13 +20,13 @@ router.post(
   requireAuth,
   [
     body("title").not().isEmpty().withMessage("Title is required"),
-    body("rating").not().isEmpty().withMessage("Rating is required"),
+    body("rating").not().isEmpty().isInt({ gt: 0 }).withMessage("Rating is required"),
     body("comment").not().isEmpty().withMessage("Comment is required"),
     param("productId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { title, rating, comment } = req.body;
+    const { title, rating, comment }: ReviewAttrs = req.body;
 
     // Check the product is existing
     const product = await Product.findById(req.params.productId);

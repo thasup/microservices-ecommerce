@@ -158,6 +158,15 @@ const signup = ({ currentUser }) => {
 										Sign Up
 									</Button>
 								</Form>
+
+								<Row className="py-3">
+									<Col className="px-0">
+										Already have an account?{" "}
+										<Link href="/signin">
+											<a>Sign in</a>
+										</Link>
+									</Col>
+								</Row>
 							</Col>
 						</Row>
 					</Container>
