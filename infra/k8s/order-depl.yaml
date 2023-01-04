@@ -15,9 +15,9 @@ spec:
       containers:
         - name: order
           # uncomment this if you want to run on docker desktop
-          image: thasup/order
+          # image: thasup/order
           # uncomment this if you want to run on google cloud platform
-          # image: us.gcr.io/aurapan-shop-367317/order
+          image: us.gcr.io/aurapan-shop-367317/order
           env:
             - name: NATS_CLIENT_ID
               valueFrom:

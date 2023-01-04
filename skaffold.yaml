@@ -7,16 +7,16 @@ deploy:
       - ./infra/k8s-dev/*
 build:
   # uncomment this if you want to run on docker desktop
-  local:
-    push: false
+  # local:
+  #   push: false
   # uncomment this if you want to run on google cloud platform
-  # googleCloudBuild:
-  #   projectId: aurapan-shop-367317
+  googleCloudBuild:
+    projectId: aurapan-shop-367317
   artifacts:
     # uncomment this if you want to run on docker desktop
-    - image: thasup/user
+    # - image: thasup/user
     # uncomment this if you want to run on google cloud platform
-    # - image: us.gcr.io/aurapan-shop-367317/user
+    - image: us.gcr.io/aurapan-shop-367317/user
       context: user
       docker:
         dockerfile: Dockerfile
@@ -25,9 +25,9 @@ build:
           - src: "src/**/*.ts"
             dest: .
     # uncomment this if you want to run on docker desktop
-    - image: thasup/client
+    # - image: thasup/client
     # uncomment this if you want to run on google cloud platform
-    # - image: us.gcr.io/aurapan-shop-367317/client
+    - image: us.gcr.io/aurapan-shop-367317/client
       context: client
       docker:
         dockerfile: dev.Dockerfile
@@ -42,9 +42,9 @@ build:
           - src: "**/*.png"
             dest: .
     # uncomment this if you want to run on docker desktop
-    - image: thasup/product
+    # - image: thasup/product
     # uncomment this if you want to run on google cloud platform
-    # - image: us.gcr.io/aurapan-shop-367317/product
+    - image: us.gcr.io/aurapan-shop-367317/product
       context: product
       docker:
         dockerfile: Dockerfile
@@ -53,9 +53,9 @@ build:
           - src: "src/**/*.ts"
             dest: .
     # uncomment this if you want to run on docker desktop
-    - image: thasup/order
+    # - image: thasup/order
     # uncomment this if you want to run on google cloud platform
-    # - image: us.gcr.io/aurapan-shop-367317/order
+    - image: us.gcr.io/aurapan-shop-367317/order
       context: order
       docker:
         dockerfile: Dockerfile
@@ -64,9 +64,9 @@ build:
           - src: "src/**/*.ts"
             dest: .
     # uncomment this if you want to run on docker desktop
-    - image: thasup/expiration
+    # - image: thasup/expiration
     # uncomment this if you want to run on google cloud platform
-    # - image: us.gcr.io/aurapan-shop-367317/expiration
+    - image: us.gcr.io/aurapan-shop-367317/expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -75,9 +75,9 @@ build:
           - src: "src/**/*.ts"
             dest: .
     # uncomment this if you want to run on docker desktop
-    - image: thasup/payment
+    # - image: thasup/payment
     # uncomment this if you want to run on google cloud platform
-    # - image: us.gcr.io/aurapan-shop-367317/payment
+    - image: us.gcr.io/aurapan-shop-367317/payment
       context: payment
       docker:
         dockerfile: Dockerfile
