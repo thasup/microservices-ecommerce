@@ -218,7 +218,7 @@ kubectl create secret generic paypal-secret --from-literal=PAYPAL_CLIENT_ID=<YOU
 1. sign up free account with $200 for 60 days trial and create a kubernetes cluster in new project on Digital Ocean
 2. generate new access token from Digital Ocean, install [doctl](https://docs.digitalocean.com/reference/doctl/how-to/install/) and [kubectl](https://kubernetes.io/docs/tasks/tools/), then run
 ```
-doctl auth init
+doctl auth init --access-token <API_TOKEN_CODE>
 ```
 3. connect with Digital Ocean k8s cluster context by running this command and authorize with your credentials
 ```
@@ -269,7 +269,7 @@ DOCKER_USERNAME =
 DOCKER_PASSWORD = 
 ```
 7. edit files in every services then commit code to the _main_ branch for triggering **Github Action workflows** to build and push all images to your Docker Hub
-8. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) for **DigitalOcean**
+8. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) to create **DigitalOcean Load Balancer**
 9. separate k8s folder to k8s-dev and k8s-prod then copy `ingress-srv.yaml` file to both folders and edit host URL to a new domain name
 10. create github workflow for telling kubernetes cluster to use images we built by adding these lines
 
@@ -281,7 +281,7 @@ DOCKER_PASSWORD =
 - run: kubectl rollout restart deployment <YOUR_DEPLOYMENT_NAME>
 ```
 
-11. purchase a domain name with a promotion that can be very cheap as $1 for 1st year
+11. purchase a domain name with a promotion that can be very cheap as $1 for the 1st year such as namecheap, porkbun, dynadot
 12. config custom domain name nameserver with your domain name registor website by custom add this lines
 ```
 ns1.digitalocean.com
