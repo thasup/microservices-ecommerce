@@ -36,7 +36,7 @@ Aurapan is the beautiful women's clothing e-commerce website built with **micros
 
 <!-- _You can still run it manually with docker-desktop on a local computer._ -->
 
-[https://www.aurapan.com](https://www.aurapan.com/)
+[www.aurapan.com](https://www.aurapan.com/)
 
 # Features
 
@@ -103,7 +103,7 @@ You need a permission to access this function as an admin.
 
 [(Back to top)](#table-of-contents)
 
-**Running on Google Cloud Platform**
+## Running on Google Cloud Platform
 
 [![GCP Badge](https://img.shields.io/badge/-Google_Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white)](https://cloud.google.com/gcp/)
 
@@ -150,7 +150,7 @@ skaffold dev
 ```
 19. open a web browser enter your custom URL with `https://` to see this project come to live!
 
-**Running on Docker Desktop**
+## Running on Docker Desktop
 
 [![Docker Badge](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 
@@ -211,7 +211,7 @@ kubectl create secret generic paypal-secret --from-literal=PAYPAL_CLIENT_ID=<YOU
 
 [(Back to top)](#table-of-contents)
 
-**Deploy on DigitalOcean**
+## Deploy on DigitalOcean
 
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-0080FF?style=flat&logo=digitalocean&logoColor=white)](https://www.digitalocean.com/)
 
