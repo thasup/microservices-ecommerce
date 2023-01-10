@@ -26,6 +26,7 @@ Aurapan is the beautiful women's clothing e-commerce website built with **micros
 - [Installation](#installation)
 - [Setup Kubernetes Secret](#setup-kubernetes-secret)
 - [Deployment](#deployment)
+- [Technology](#technology)
 - [Disclaimer](#disclaimer)
 
 # Demo
@@ -109,7 +110,7 @@ You need a permission to access this function as an admin.
 
 1. clone _cloud_ branch on your computer
 2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/), [kubectl](https://kubernetes.io/docs/tasks/tools/)
-3. sign up free account with $100 on google cloud and sign up docker hub account
+3. sign up for free account with $300 on google cloud platform and sign up for docker hub account
 4. create an image by run this command in every sub-folder that has Dockerfile
 ```
 docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .
@@ -120,7 +121,7 @@ docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 ```
 6. create a new project on GCP then enable _Kubernetes Engine API_ and _Cloud Build API_ after successfully enable api services, grant permission for _Cloud Build_ service account permission on _Cloud Build API_
 7. create a new kubernetes cluster with minimum resource at 3 nodes (recommended), and select any region that closest to your location
-8. install [GCP SDK](https://cloud.google.com/sdk/docs/install-sdk) to connect our images to GCP cluster context
+8. install [GCP SDK](https://cloud.google.com/sdk/docs/install-sdk) to connect our images to GCP cluster context ([How to install Google Cloud SDK on macOS](https://stackoverflow.com/questions/31037279/gcloud-command-not-found-while-installing-google-cloud-sdk))
 9. open google cloud SDK and log in, initiate with and then choose the correct options to proceed
 ```
 gcloud auth login
@@ -358,6 +359,20 @@ kubectl apply -f ingress-srv.yaml
 kubectl apply -f ingress-srv.yaml
 ```
 22. waiting around 5-15 minutes for setting up then browse to your website with **HTTPS** protocal
+
+# Technology
+
+[(Back to top)](#table-of-contents)
+
+- Next.js
+- TypeScript
+- React-Bootstrap
+- MongoDB
+- Docker
+- Kubernetes
+- Github Action
+- NATS Streaming Server
+- Skaffold
 
 # Disclaimer
 
