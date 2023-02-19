@@ -1,32 +1,35 @@
-import express, { Request, Response } from "express";
-import { param } from "express-validator";
+import express, { type Request, type Response } from 'express';
+import { param } from 'express-validator';
 import {
   NotAuthorizedError,
   NotFoundError,
   requireAuth,
-  validateRequest,
-} from "@thasup-dev/common";
+  validateRequest
+} from '@thasup-dev/common';
 
-import { Order } from "../models/order";
+import { Order } from '../models/order';
 
 const router = express.Router();
 
 router.get(
-  "/api/orders/:orderId",
+  '/api/orders/:orderId',
   requireAuth,
-  [param("orderId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
+  [param('orderId').isMongoId().withMessage('Invalid MongoDB ObjectId')],
   validateRequest,
   async (req: Request, res: Response) => {
-    const order = await Order.findById(req.params.orderId);
+    const { orderId } = req.params;
 
-    if (!order) {
+    const order = await Order.findById(orderId);
+
+    if (order == null) {
       throw new NotFoundError();
     }
 
-    // Only admin *OR* the user who request that order can only access the order
+    // Only admin *OR* the user who request that order
+    // can get an access to the order
     if (
       order.userId !== req.currentUser!.id &&
-      req.currentUser!.isAdmin !== true
+      !req.currentUser!.isAdmin
     ) {
       throw new NotAuthorizedError();
     }
