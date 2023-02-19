@@ -1,7 +1,7 @@
 import type mongoose from 'mongoose';
 import { type OrderStatus } from '@thasup-dev/common';
 
-interface CartAttrs {
+export interface CartAttrs {
   userId: string
   title: string
   qty: number
