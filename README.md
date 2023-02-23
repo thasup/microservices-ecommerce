@@ -109,46 +109,64 @@ You need a permission to access this function as an admin.
 [![GCP Badge](https://img.shields.io/badge/-Google_Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white)](https://cloud.google.com/gcp/)
 
 1. clone _cloud_ branch on your computer
+
 2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/), [kubectl](https://kubernetes.io/docs/tasks/tools/)
+
 3. sign up for free account with $300 on google cloud platform and sign up for docker hub account
+
 4. create an image by run this command in every sub-folder that has Dockerfile
 ```
 docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .
 ```
+
 5. push all images to docker hub by run this command
 ```
 docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 ```
+
 6. create a new project on GCP then enable _Kubernetes Engine API_ and _Cloud Build API_ after successfully enable api services, grant permission for _Cloud Build_ service account permission on _Cloud Build API_
+
 7. create a new kubernetes cluster with minimum resource at 3 nodes (recommended), and select any region that closest to your location
+
 8. install [GCP SDK](https://cloud.google.com/sdk/docs/install-sdk) to connect our images to GCP cluster context ([How to install Google Cloud SDK on macOS](https://stackoverflow.com/questions/31037279/gcloud-command-not-found-while-installing-google-cloud-sdk))
+
 9. open google cloud SDK and log in, initiate with and then choose the correct options to proceed
 ```
 gcloud auth login
 gcloud init
 ```
+
 10. create kubernetes context in your desktop by run this command (your cluster name from GCP cluster that you created)
 ```
 gcloud container clusters get-credentials <YOUR_CLUSTER_NAME>
 ```
+
 11. see list of contexts and then selecting a new context by run these commands
 ```
 kubectl config get-contexts
 kubectl config use-context <CONTEXT_NAME>
 ```
+
 12. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and [ingress-nginx for GCP](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke)
+
 13. find your load balancing port that GCP automatic generated in _Network Services_ tab in GCP
+
 14. for _windows_ users; open host file at `C:\Windows\System32\drivers\etc\hosts`, for _mac_ users; open host file at `\etc\hosts` then edit by adding `YOUR_LOAD_BALANCING_PORT YOUR_CUSTOM_URL` and save as an admin (ex. `56.125.456.45 custom.com`)
+
 15. config all yaml files to matches your GCP project ID
+
 16. create all [kubernetes secrets](#setup-env)
+
 17. run this command then authenticate GCP account via web browser
 ```
 gcloud auth application-default login
 ```
+
 18. make sure to use correct context before run this command at root directory
 ```
 skaffold dev
 ```
+
 19. open a web browser enter your custom URL with `https://` to see this project come to live!
 
 ## Running on Docker Desktop
@@ -156,26 +174,37 @@ skaffold dev
 [![Docker Badge](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 
 1. clone _dev-mac_ branch on your computer
+
 2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/)
+
 3. enable kubernetes in docker desktop preferences
+
 4. create an image by run a command in every folder that has a _Dockerfile_
 ```
 docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .
 ```
+
 5. push all images to docker hub by run a command in every folder that has a _Dockerfile_
 ```
 docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 ```
+
 6. see list of kubernetes contexts and then selecting a new context by running these commands
 ```
 kubectl config get-contexts
 kubectl config use-context docker-desktop
 ```
+
 7. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and enable kubernetes in Docker Desktop software
+
 8. for _windows_ users; open host file at `C:\Windows\System32\drivers\etc\hosts`, for _mac_ users; open host file at `\etc\hosts` then edit by adding `127.0.0.1 YOUR_CUSTOM_URL` and save as an admin (ex. `127.0.0.1 custom.com`)
+
 9. config all yaml files to matches your custom URL
+
 10. create all [kubernetes secrets](#setup-env)
+
 11. run `skaffold dev` in this project root directory, make sure to use correct context before run the command
+
 12. open a web browser enter your custom URL with `https://` to see this project come to live!
 
 # Setup Kubernetes Secret
@@ -217,19 +246,27 @@ kubectl create secret generic paypal-secret --from-literal=PAYPAL_CLIENT_ID=<YOU
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-0080FF?style=flat&logo=digitalocean&logoColor=white)](https://www.digitalocean.com/)
 
 1. sign up free account with $200 for 60 days trial and create a kubernetes cluster in new project on Digital Ocean
-2. generate new access token from Digital Ocean, install [doctl](https://docs.digitalocean.com/reference/doctl/how-to/install/) and [kubectl](https://kubernetes.io/docs/tasks/tools/), then run
+
+2. generate new access token on Digital Ocean for connect with Digital Ocean via doctl, go to _API_ menu then click _generate new token_, set expiration date and enable both read and write scopes, copy the _token code_ for use in the next step
+
+3. install [doctl](https://docs.digitalocean.com/reference/doctl/how-to/install/) and [kubectl](https://kubernetes.io/docs/tasks/tools/), then run
 ```
 doctl auth init --access-token <API_TOKEN_CODE>
 ```
-3. connect with Digital Ocean k8s cluster context by running this command and authorize with your credentials
+
+4. connect with Digital Ocean k8s cluster context by running this command and authorize with your credentials
 ```
 doctl kubernetes cluster kubeconfig save <YOUR_CLUSTER_NAME>
 ``` 
-4. switch kubernetes context to the new context by running
+
+5. switch kubernetes context to the new context by running
 ```
 kubectl config use-context <CONTEXT_NAME>
 ```
-5. create _github workflow_ for build an initial docker image on push event at the _main_ branch and perform automate testing in every services on pull request event trigger with trying to merge with the _main_ branch
+
+6. setup all kubernetes secrets following [this step](#setup-kubernetes-secret)
+
+7. create _github workflow_ for build an initial docker image on push event at the _main_ branch and perform automate testing in every services on pull request event trigger with trying to merge with the _main_ branch
 
 ```
 name: deploy-client
@@ -263,16 +300,22 @@ jobs:
       - run: docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 ```
 
-6. add github action secrets for _docker credentials_ and _digitalocean access token key_ at security setting in repository
+8. generate another new access token on Digital Ocean for authentication via Github Action, go to _API_ menu then click _generate new token_, set expiration date and enable both read and write scopes, copy the _token code_ for use in the next step as a `DIGITALOCEAN_ACCESS_TOKEN` 
+
+9. add github action secrets for _docker credentials_ and _digitalocean access token key_ at security setting in repository
 ```
 DIGITALOCEAN_ACCESS_TOKEN = 
 DOCKER_USERNAME = 
 DOCKER_PASSWORD = 
 ```
-7. edit files in every services then commit code to the _main_ branch for triggering **Github Action workflows** to build and push all images to your Docker Hub
-8. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) to create **DigitalOcean Load Balancer**
-9. separate k8s folder to k8s-dev and k8s-prod then copy `ingress-srv.yaml` file to both folders and edit host URL to a new domain name
-10. create github workflow for telling kubernetes cluster to use images we built by adding these lines
+
+10. edit files in every services then commit code to the _main_ branch for triggering **Github Action workflows** to build and push all images to your Docker Hub
+
+11. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) to automatically create **DigitalOcean Load Balancer**
+
+12. separate k8s folder to k8s-dev and k8s-prod then copy `ingress-srv.yaml` file to both folders and edit host URL to a new domain name
+
+13. create github workflow for telling kubernetes cluster to use images we built by adding these lines
 
 ```
 - uses: digitalocean/action-doctl@v2
@@ -282,14 +325,16 @@ DOCKER_PASSWORD =
 - run: kubectl rollout restart deployment <YOUR_DEPLOYMENT_NAME>
 ```
 
-11. purchase a domain name with a promotion that can be very cheap as $1 for the 1st year such as namecheap, porkbun, dynadot
-12. config custom domain name nameserver with your domain name registor website by custom add this lines
+14. purchase a domain name with a promotion that can be very cheap as $1 for the 1st year such as namecheap, porkbun, dynadot
+
+15. config custom domain name nameserver with your domain name registor website by custom add this lines
 ```
 ns1.digitalocean.com
 ns2.digitalocean.com
 ns3.digitalocean.com
 ```
-13. add domain name in digital ocean at networking tab then create new record
+
+16. add domain name in digital ocean at networking tab then create new record
 
 ```
 // A record
@@ -303,7 +348,7 @@ IN AN ALIAS OF: @
 TTL: 30
 ```
 
-14. add your cluster name at `deploy-manifests.yaml` file then redo step 7. again
+17. add your cluster name at `deploy-manifests.yaml` file then redo step 7. again
 
 ```
 name: deploy-manifests
@@ -336,29 +381,36 @@ jobs:
       - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
 ```
 
-15. change `do-loadbalancer-hostname` and `host` at file `infra/k8s-prod/ingress-srv.yaml` to your domain name
-16. change url in `client/api/build-client.js` to your domain name
-17. after that we will follow at step 4 of this guide [How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean Kubernetes](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes) to make our website ready for **HTTPS** request with certificate issued by **Let's encrypt**
-18. begin with install _cert-manager_ namespace by running command
+18. change `do-loadbalancer-hostname` and `host` at file `infra/k8s-prod/ingress-srv.yaml` to your domain name
+
+19. change url in `client/api/build-client.js` to your domain name
+
+20. after that we will follow at step 4 of this guide [How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean Kubernetes](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes) to make our website ready for **HTTPS** request with certificate issued by **Let's encrypt**
+
+21. begin with install _cert-manager_ namespace by running command
 ```
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.7.1/cert-manager.yaml
 ```
-19. change your directory to `infra/issuer/` there will be 2 files that you need to change _email_ and _name of a secret key_ as you wish then run command
+
+22. change your directory to `infra/issuer/` there will be 2 files that you need to change _email_ and _name of a secret key_ as you wish then run command
 ```
 kubectl create -f staging_issuer.yaml
 ``` 
 ```
 kubectl create -f production_issuer.yaml
 ```
-20. at file `infra/k8s-prod/ingress-srv.yaml` change _cert-manager.io/cluster-issuer_ to `"letsencrypt-staging"` then run this command at `infra/k8s-prod/` directory
+
+23. at file `infra/k8s-prod/ingress-srv.yaml` change _cert-manager.io/cluster-issuer_ to `"letsencrypt-staging"` then run this command at `infra/k8s-prod/` directory
 ```
 kubectl apply -f ingress-srv.yaml
 ```
-21. then change _cert-manager.io/cluster-issuer_ back to `"letsencrypt-prod"` and run this command at `infra/k8s-prod/` directory
+
+24. then change _cert-manager.io/cluster-issuer_ back to `"letsencrypt-prod"` and run this command at `infra/k8s-prod/` directory
 ```
 kubectl apply -f ingress-srv.yaml
 ```
-22. waiting around 5-15 minutes for setting up then browse to your website with **HTTPS** protocal
+
+25. waiting around 2-15 minutes for setting up then browse to your website with **HTTPS** protocal
 
 # Technology
 
