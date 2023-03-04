@@ -1,36 +1,36 @@
 import {
   Subjects,
   Listener,
-  PaymentCreatedEvent,
+  type PaymentCreatedEvent,
   OrderStatus,
-  QueueGroupNames,
-} from "@thasup-dev/common";
-import { Message } from "node-nats-streaming";
+  QueueGroupNames
+} from '@thasup-dev/common';
+import { type Message } from 'node-nats-streaming';
 
-import { Order } from "../../models/order";
-import { natsWrapper } from "../../NatsWrapper";
-import { OrderUpdatedPublisher } from "../publishers/OrderUpdatedPublisher";
+import { Order } from '../../models/order';
+import { natsWrapper } from '../../NatsWrapper';
+import { OrderUpdatedPublisher } from '../publishers/OrderUpdatedPublisher';
 
 export class PaymentCreatedListener extends Listener<PaymentCreatedEvent> {
   subject: Subjects.PaymentCreated = Subjects.PaymentCreated;
   queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
-  async onMessage(data: PaymentCreatedEvent["data"], msg: Message) {
+  async onMessage (data: PaymentCreatedEvent['data'], msg: Message): Promise<void> {
     const order = await Order.findById(data.orderId);
 
-    if (!order) {
-      throw new Error("Order not found");
+    if (order == null) {
+      throw new Error('Order not found');
     }
 
     order.set({
       status: OrderStatus.Completed,
       isPaid: true,
-      paidAt: new Date(),
+      paidAt: new Date()
     });
     await order.save();
 
     // publishing an event saying this was cancelled!
-    new OrderUpdatedPublisher(natsWrapper.client).publish({
+    await new OrderUpdatedPublisher(natsWrapper.client).publish({
       id: order.id,
       status: OrderStatus.Completed,
       userId: order.userId,
@@ -43,7 +43,7 @@ export class PaymentCreatedListener extends Listener<PaymentCreatedEvent> {
       totalPrice: order.totalPrice,
       isPaid: true,
       paidAt: new Date(),
-      isDelivered: order.isDelivered,
+      isDelivered: order.isDelivered
     });
 
     msg.ack();
