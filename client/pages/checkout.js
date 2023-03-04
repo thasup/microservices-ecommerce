@@ -13,7 +13,7 @@ const CheckoutPage = ({ currentUser }) => {
 	const [cart, setCart] = useState(null);
 	const [shippingAddress, setShippingAddress] = useState(null);
 	const [paymentMethod, setPaymentMethod] = useState(null);
-	const [shippingDiscount, setShippingDiscount] = useState(1);
+	const [shippingDiscount, setShippingDiscount] = useState(1); // TODO: apply overall discount feature
 
 	const [onSuccess, setOnSuccess] = useState(false);
 	const [storageReady, setStorageReady] = useState(false);
@@ -27,9 +27,9 @@ const CheckoutPage = ({ currentUser }) => {
 		url: `/api/orders`,
 		method: "post",
 		body: {
-			jsonCartItems: JSON.stringify(cart),
-			jsonShippingAddress: JSON.stringify(shippingAddress),
-			jsonPaymentMethod: JSON.stringify(paymentMethod),
+			cart,
+			shippingAddress,
+			paymentMethod,
 		},
 		onSuccess: (order) => {
 			setOnSuccess(true);
@@ -56,11 +56,7 @@ const CheckoutPage = ({ currentUser }) => {
 			: [];
 
 		// Cart has items or empty
-		if (
-			cartItemsData !== undefined &&
-			shippingData !== undefined &&
-			paymentData !== undefined
-		) {
+		if ( cartItemsData && shippingData && paymentData ) {
 			cartItemsData.map((item) => {
 				item.userId = currentUser.id;
 			});
@@ -83,10 +79,13 @@ const CheckoutPage = ({ currentUser }) => {
 		itemsPrice = Number(
 			cart.reduce((acc, item) => acc + item.price * item.qty * item.discount, 0)
 		).toFixed(2);
+
 		shippingPrice = (
 			itemsPrice > 100.0 ? 0.0 : 10.0 * shippingDiscount
 		).toFixed(2);
+
 		taxPrice = (0.07 * itemsPrice).toFixed(2);
+
 		totalPrice = (
 			Number(itemsPrice) +
 			Number(shippingPrice) +
