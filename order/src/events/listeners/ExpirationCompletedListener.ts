@@ -1,32 +1,32 @@
 import {
-  ExpirationCompletedEvent,
+  type ExpirationCompletedEvent,
   Listener,
   OrderStatus,
   QueueGroupNames,
-  Subjects,
-} from "@thasup-dev/common";
-import { Message } from "node-nats-streaming";
+  Subjects
+} from '@thasup-dev/common';
+import { type Message } from 'node-nats-streaming';
 
-import { Order } from "../../models/order";
-import { OrderUpdatedPublisher } from "../publishers/OrderUpdatedPublisher";
+import { Order } from '../../models/order';
+import { OrderUpdatedPublisher } from '../publishers/OrderUpdatedPublisher';
 
 export class ExpirationCompletedListener extends Listener<ExpirationCompletedEvent> {
   subject: Subjects.ExpirationCompleted = Subjects.ExpirationCompleted;
   queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
-  async onMessage(data: ExpirationCompletedEvent["data"], msg: Message) {
+  async onMessage (data: ExpirationCompletedEvent['data'], msg: Message): Promise<void> {
     const order = await Order.findById(data.orderId);
 
-    if (!order) {
-      throw new Error("Order not found");
+    if (order == null) {
+      throw new Error('Order not found');
     }
 
     if (order.status === OrderStatus.Completed) {
-      return msg.ack();
+      msg.ack(); return;
     }
 
     order.set({
-      status: OrderStatus.Cancelled,
+      status: OrderStatus.Cancelled
     });
 
     await order.save();
@@ -44,7 +44,7 @@ export class ExpirationCompletedListener extends Listener<ExpirationCompletedEve
       taxPrice: order.taxPrice,
       totalPrice: order.totalPrice,
       isPaid: order.isPaid,
-      isDelivered: order.isDelivered,
+      isDelivered: order.isDelivered
     });
 
     msg.ack();
