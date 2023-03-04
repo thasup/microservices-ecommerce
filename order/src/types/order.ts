@@ -14,7 +14,7 @@ export interface CartAttrs {
   productId: string
 }
 
-interface ShippingAddressAttrs {
+export interface ShippingAddressAttrs {
   address: string
   city: string
   postalCode: string
