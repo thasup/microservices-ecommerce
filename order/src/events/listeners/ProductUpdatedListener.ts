@@ -1,19 +1,19 @@
-import { Message } from "node-nats-streaming";
+import { type Message } from 'node-nats-streaming';
 import {
   Subjects,
   Listener,
-  ProductUpdatedEvent,
+  type ProductUpdatedEvent,
   NotFoundError,
-  QueueGroupNames,
-} from "@thasup-dev/common";
+  QueueGroupNames
+} from '@thasup-dev/common';
 
-import { Product } from "../../models/product";
+import { Product } from '../../models/product';
 
 export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
   subject: Subjects.ProductUpdated = Subjects.ProductUpdated;
   queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
-  async onMessage(data: ProductUpdatedEvent["data"], msg: Message) {
+  async onMessage (data: ProductUpdatedEvent['data'], msg: Message): Promise<void> {
     const {
       title,
       price,
@@ -23,12 +23,12 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       countInStock,
       numReviews,
       rating,
-      isReserved,
+      isReserved
     } = data;
 
     const product = await Product.findByEvent(data);
 
-    if (!product) {
+    if (product == null) {
       throw new NotFoundError();
     }
 
@@ -41,7 +41,7 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
       countInStock,
       numReviews,
       rating,
-      isReserved,
+      isReserved
     });
 
     // Save and update version

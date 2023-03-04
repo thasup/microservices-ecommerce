@@ -1,33 +1,34 @@
-import express, { Request, Response } from "express";
+import express, { type Request, type Response } from 'express';
 import {
   NotAuthorizedError,
   NotFoundError,
   OrderStatus,
   requireAuth,
-  validateRequest,
-} from "@thasup-dev/common";
-import { param } from "express-validator";
+  validateRequest
+} from '@thasup-dev/common';
+import { param } from 'express-validator';
 
-import { Order } from "../models/order";
-import { natsWrapper } from "../NatsWrapper";
-import { OrderUpdatedPublisher } from "../events/publishers/OrderUpdatedPublisher";
+import { Order } from '../models/order';
+import { natsWrapper } from '../NatsWrapper';
+import { OrderUpdatedPublisher } from '../events/publishers/OrderUpdatedPublisher';
 
 const router = express.Router();
 
 router.patch(
-  "/api/orders/:orderId",
+  '/api/orders/:orderId',
   requireAuth,
-  [param("orderId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
+  [param('orderId').isMongoId().withMessage('Invalid MongoDB ObjectId')],
   validateRequest,
   async (req: Request, res: Response) => {
     const { orderId } = req.params;
 
     const order = await Order.findById(orderId);
 
-    if (!order) {
+    if (order == null) {
       throw new NotFoundError();
     }
 
+    // Only order owner can make a request
     if (order.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
     }
@@ -36,7 +37,7 @@ router.patch(
     await order.save();
 
     // publishing an event saying this was cancelled!
-    new OrderUpdatedPublisher(natsWrapper.client).publish({
+    await new OrderUpdatedPublisher(natsWrapper.client).publish({
       id: order.id,
       status: OrderStatus.Cancelled,
       userId: order.userId,
@@ -49,7 +50,7 @@ router.patch(
       taxPrice: order.taxPrice,
       totalPrice: order.totalPrice,
       isPaid: order.isPaid,
-      isDelivered: order.isDelivered,
+      isDelivered: order.isDelivered
     });
 
     res.status(200).send(order);

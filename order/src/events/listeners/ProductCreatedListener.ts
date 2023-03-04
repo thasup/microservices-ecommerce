@@ -1,18 +1,18 @@
-import { Message } from "node-nats-streaming";
+import { type Message } from 'node-nats-streaming';
 import {
   Subjects,
   Listener,
-  ProductCreatedEvent,
-  QueueGroupNames,
-} from "@thasup-dev/common";
+  type ProductCreatedEvent,
+  QueueGroupNames
+} from '@thasup-dev/common';
 
-import { Product } from "../../models/product";
+import { Product } from '../../models/product';
 
 export class ProductCreatedListener extends Listener<ProductCreatedEvent> {
   subject: Subjects.ProductCreated = Subjects.ProductCreated;
   queueGroupName = QueueGroupNames.ORDER_SERVICE;
 
-  async onMessage(data: ProductCreatedEvent["data"], msg: Message) {
+  async onMessage (data: ProductCreatedEvent['data'], msg: Message): Promise<void> {
     const {
       id,
       title,
@@ -23,7 +23,7 @@ export class ProductCreatedListener extends Listener<ProductCreatedEvent> {
       sizes,
       countInStock,
       numReviews,
-      rating,
+      rating
     } = data;
 
     const product = Product.build({
@@ -37,7 +37,7 @@ export class ProductCreatedListener extends Listener<ProductCreatedEvent> {
       countInStock,
       numReviews,
       rating,
-      isReserved: false,
+      isReserved: false
     });
     await product.save();
 

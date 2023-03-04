@@ -1,90 +1,94 @@
-import mongoose from "mongoose";
-import request from "supertest";
+import mongoose from 'mongoose';
+import request from 'supertest';
 
-import { app } from "../../app";
-import { Product, ProductDoc } from "../../models/product";
-import { natsWrapper } from "../../NatsWrapper";
+import { app } from '../../app';
+import { Product } from '../../models/product';
+import { natsWrapper } from '../../NatsWrapper';
+import type { CartAttrs, ShippingAddressAttrs } from '../../types/order';
+import type { ProductDoc } from '../../types/product';
 
-const buildProduct = async () => {
+const buildProduct = async (): Promise<ProductDoc> => {
   const product = Product.build({
     id: new mongoose.Types.ObjectId().toHexString(),
-    title: "Sample Dress",
+    title: 'Sample Dress',
     price: 1990,
     userId: new mongoose.Types.ObjectId().toHexString(),
-    image: "./asset/sample.jpg",
-    colors: "White,Black",
-    sizes: "S,M,L",
+    image: './asset/sample.jpg',
+    colors: 'White,Black',
+    sizes: 'S,M,L',
     countInStock: 1,
     numReviews: 0,
     rating: 0,
-    isReserved: false,
+    isReserved: false
   });
   await product.save();
 
   return product;
 };
 
-const buildJSON = (product: ProductDoc, userId: string) => {
-  const jsonCartItems = JSON.stringify([
-    {
-      userId: userId,
-      title: product.title,
-      qty: 1,
-      color: "white",
-      size: "M",
-      image: product.image,
-      price: product.price,
-      countInStock: product.countInStock,
-      discount: 1,
-      productId: product.id,
-    },
-  ]);
+const buildPayload = (product: ProductDoc, userId: string): {
+  cart: CartAttrs[]
+  shippingAddress: ShippingAddressAttrs
+  paymentMethod: string
+} => {
+  const cart = [{
+    userId,
+    title: product.title,
+    qty: 1,
+    color: 'white',
+    size: 'M',
+    image: product.image,
+    price: product.price,
+    countInStock: product.countInStock,
+    discount: 1,
+    productId: product.id
+  }];
 
-  const jsonShippingAddress = JSON.stringify({
-    address: "sunset villa",
-    city: "New York",
-    postalCode: "44205",
-    country: "USA",
-  });
+  const shippingAddress = {
+    address: 'sunset villa',
+    city: 'New York',
+    postalCode: '44205',
+    country: 'USA'
+  };
 
-  const jsonPaymentMethod = JSON.stringify("stripe");
+  const paymentMethod = 'stripe';
 
-  return { jsonCartItems, jsonShippingAddress, jsonPaymentMethod };
+  return { cart, shippingAddress, paymentMethod };
 };
 
-it("returns an error if some product in cart does not exist", async () => {
+it('returns an error if some product in cart does not exist', async () => {
   // @ts-ignore
   const product: ProductDoc = {
     id: new mongoose.Types.ObjectId().toHexString(),
-    title: "Sample Dress",
+    title: 'Sample Dress',
     price: 1990,
     userId: new mongoose.Types.ObjectId().toHexString(),
-    image: "./asset/sample.jpg",
-    colors: "White,Black",
-    sizes: "S,M,L",
+    image: './asset/sample.jpg',
+    colors: 'White,Black',
+    sizes: 'S,M,L',
     countInStock: 1,
-    isReserved: false,
+    isReserved: false
   };
 
   const userId = new mongoose.Types.ObjectId().toHexString();
 
-  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
+  const { cart, shippingAddress, paymentMethod } = buildPayload(
     product,
     userId
   );
 
   await request(app)
-    .post("/api/orders")
-    .set("Cookie", global.signin(userId))
+    .post('/api/orders')
+    .set('Cookie', global.signin(userId))
     .send({
-      jsonCartItems: jsonCartItems,
-      jsonShippingAddress: jsonShippingAddress,
-      jsonPaymentMethod: jsonPaymentMethod,
+      cart,
+      shippingAddress,
+      paymentMethod
     })
     .expect(404);
 });
 
-it("returns an error if the product is already reserved", async () => {
+it('returns an error if the product is already reserved', async () => {
   // Only one product
   const product = await buildProduct();
 
@@ -92,25 +96,25 @@ it("returns an error if the product is already reserved", async () => {
   const userTwoId = new mongoose.Types.ObjectId().toHexString();
 
   const {
-    jsonCartItems: jsonCartItemsUserOne,
-    jsonShippingAddress: jsonShippingAddressUserOne,
-    jsonPaymentMethod: jsonPaymentMethodUserOne,
-  } = buildJSON(product, userOneId);
+    cart: cartItemsUserOne,
+    shippingAddress: shippingAddressUserOne,
+    paymentMethod: paymentMethodUserOne
+  } = buildPayload(product, userOneId);
 
   const {
-    jsonCartItems: jsonCartItemsUserTwo,
-    jsonShippingAddress: jsonShippingAddressUserTwo,
-    jsonPaymentMethod: jsonPaymentMethodUserTwo,
-  } = buildJSON(product, userTwoId);
+    cart: cartItemsUserTwo,
+    shippingAddress: shippingAddressUserTwo,
+    paymentMethod: paymentMethodUserTwo
+  } = buildPayload(product, userTwoId);
 
   // Reserved the product
-  const { body: userOneOrder } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", global.signin(userOneId))
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin(userOneId))
     .send({
-      jsonCartItems: jsonCartItemsUserOne,
-      jsonShippingAddress: jsonShippingAddressUserOne,
-      jsonPaymentMethod: jsonPaymentMethodUserOne,
+      cart: cartItemsUserOne,
+      shippingAddress: shippingAddressUserOne,
+      paymentMethod: paymentMethodUserOne
     })
     .expect(201);
 
@@ -118,17 +122,17 @@ it("returns an error if the product is already reserved", async () => {
   updatedProduct!.set({
     isReserved: true,
     countInStock:
-      product.countInStock - JSON.parse(jsonCartItemsUserOne)[0].qty,
+      product.countInStock - cartItemsUserOne[0].qty
   });
   await updatedProduct!.save();
 
-  const { body: userTwoOrder } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", global.signin(userTwoId))
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin(userTwoId))
     .send({
-      jsonCartItems: jsonCartItemsUserTwo,
-      jsonShippingAddress: jsonShippingAddressUserTwo,
-      jsonPaymentMethod: jsonPaymentMethodUserTwo,
+      cart: cartItemsUserTwo,
+      shippingAddress: shippingAddressUserTwo,
+      paymentMethod: paymentMethodUserTwo
     })
     .expect(400);
 
@@ -138,42 +142,42 @@ it("returns an error if the product is already reserved", async () => {
   expect(updatedProduct?.countInStock).toEqual(0);
 });
 
-it("reserves a product", async () => {
+it('reserves a product', async () => {
   const product = await buildProduct();
   const userId = new mongoose.Types.ObjectId().toHexString();
 
-  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
+  const { cart, shippingAddress, paymentMethod } = buildPayload(
     product,
     userId
   );
 
   await request(app)
-    .post("/api/orders")
-    .set("Cookie", global.signin(userId))
+    .post('/api/orders')
+    .set('Cookie', global.signin(userId))
     .send({
-      jsonCartItems: jsonCartItems,
-      jsonShippingAddress: jsonShippingAddress,
-      jsonPaymentMethod: jsonPaymentMethod,
+      cart,
+      shippingAddress,
+      paymentMethod
     })
     .expect(201);
 });
 
-it("emits an order created event", async () => {
+it('emits an order created event', async () => {
   const product = await buildProduct();
   const userId = new mongoose.Types.ObjectId().toHexString();
 
-  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
+  const { cart, shippingAddress, paymentMethod } = buildPayload(
     product,
     userId
   );
 
   await request(app)
-    .post("/api/orders")
-    .set("Cookie", global.signin(userId))
+    .post('/api/orders')
+    .set('Cookie', global.signin(userId))
     .send({
-      jsonCartItems: jsonCartItems,
-      jsonShippingAddress: jsonShippingAddress,
-      jsonPaymentMethod: jsonPaymentMethod,
+      cart,
+      shippingAddress,
+      paymentMethod
     })
     .expect(201);
 
