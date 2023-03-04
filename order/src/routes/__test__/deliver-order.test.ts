@@ -1,82 +1,87 @@
-import mongoose from "mongoose";
-import request from "supertest";
-import { app } from "../../app";
-import { Product, ProductDoc } from "../../models/product";
-import { Order } from "../../models/order";
-import { natsWrapper } from "../../NatsWrapper";
-import { OrderStatus } from "@thasup-dev/common";
+import mongoose from 'mongoose';
+import request from 'supertest';
 
-const buildProduct = async () => {
+import { app } from '../../app';
+import { Product } from '../../models/product';
+import { Order } from '../../models/order';
+import { natsWrapper } from '../../NatsWrapper';
+import { OrderStatus } from '@thasup-dev/common';
+import type { ProductDoc } from '../../types/product';
+import type { CartAttrs, ShippingAddressAttrs } from '../../types/order';
+
+const buildProduct = async (): Promise<ProductDoc> => {
   const product = Product.build({
     id: new mongoose.Types.ObjectId().toHexString(),
-    title: "Sample Dress",
+    title: 'Sample Dress',
     price: 1990,
     userId: new mongoose.Types.ObjectId().toHexString(),
-    image: "./asset/sample.jpg",
-    colors: "White,Black",
-    sizes: "S,M,L",
+    image: './asset/sample.jpg',
+    colors: 'White,Black',
+    sizes: 'S,M,L',
     countInStock: 1,
     numReviews: 0,
     rating: 0,
-    isReserved: false,
+    isReserved: false
   });
   await product.save();
 
   return product;
 };
 
-const buildJSON = (product: ProductDoc, userId: string) => {
-  const jsonCartItems = JSON.stringify([
-    {
-      userId: userId,
-      title: product.title,
-      qty: 1,
-      color: "white",
-      size: "M",
-      image: product.image,
-      price: product.price,
-      countInStock: product.countInStock,
-      discount: 1,
-      productId: product.id,
-    },
-  ]);
+const buildPayload = (product: ProductDoc, userId: string): {
+  cart: CartAttrs[]
+  shippingAddress: ShippingAddressAttrs
+  paymentMethod: string
+} => {
+  const cart = [{
+    userId,
+    title: product.title,
+    qty: 1,
+    color: 'white',
+    size: 'M',
+    image: product.image,
+    price: product.price,
+    countInStock: product.countInStock,
+    discount: 1,
+    productId: product.id
+  }];
 
-  const jsonShippingAddress = JSON.stringify({
-    address: "sunset villa",
-    city: "New York",
-    postalCode: "44205",
-    country: "USA",
-  });
+  const shippingAddress = {
+    address: 'sunset villa',
+    city: 'New York',
+    postalCode: '44205',
+    country: 'USA'
+  };
 
-  const jsonPaymentMethod = JSON.stringify("stripe");
+  const paymentMethod = 'stripe';
 
-  return { jsonCartItems, jsonShippingAddress, jsonPaymentMethod };
+  return { cart, shippingAddress, paymentMethod };
 };
 
-it("return 401 when trying to marks an order as delivered by user", async () => {
+it('return 401 when trying to marks an order as delivered by user', async () => {
   const product = await buildProduct();
   const userId = new mongoose.Types.ObjectId().toHexString();
 
-  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
+  const { cart, shippingAddress, paymentMethod } = buildPayload(
     product,
     userId
   );
 
   // Create an order
   const { body: order } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", global.signin(userId))
+    .post('/api/orders')
+    .set('Cookie', global.signin(userId))
     .send({
-      jsonCartItems: jsonCartItems,
-      jsonShippingAddress: jsonShippingAddress,
-      jsonPaymentMethod: jsonPaymentMethod,
+      cart,
+      shippingAddress,
+      paymentMethod
     })
     .expect(201);
 
   // make a request to mark the order as delivered
   await request(app)
-    .patch(`/api/orders/${order.id}/deliver`)
-    .set("Cookie", global.signin(userId))
+    .patch(`/api/orders/${order.id as string}/deliver`)
+    .set('Cookie', global.signin(userId))
     .send()
     .expect(401);
 
@@ -87,30 +92,30 @@ it("return 401 when trying to marks an order as delivered by user", async () => 
   expect(updatedOrder!.deliveredAt).toBeUndefined();
 });
 
-it("return 400 when trying to marks an unpaid order as delivered", async () => {
+it('return 400 when trying to marks an unpaid order as delivered', async () => {
   const product = await buildProduct();
   const userId = new mongoose.Types.ObjectId().toHexString();
 
-  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
+  const { cart, shippingAddress, paymentMethod } = buildPayload(
     product,
     userId
   );
 
   // Create an order
   const { body: order } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", global.signin(userId))
+    .post('/api/orders')
+    .set('Cookie', global.signin(userId))
     .send({
-      jsonCartItems: jsonCartItems,
-      jsonShippingAddress: jsonShippingAddress,
-      jsonPaymentMethod: jsonPaymentMethod,
+      cart,
+      shippingAddress,
+      paymentMethod
     })
     .expect(201);
 
   // make a request to mark the *UNPAID* order as delivered
   await request(app)
-    .patch(`/api/orders/${order.id}/deliver`)
-    .set("Cookie", global.adminSignin(userId))
+    .patch(`/api/orders/${order.id as string}/deliver`)
+    .set('Cookie', global.adminSignin(userId))
     .send()
     .expect(400);
 
@@ -121,23 +126,23 @@ it("return 400 when trying to marks an unpaid order as delivered", async () => {
   expect(updatedOrder!.deliveredAt).toBeUndefined();
 });
 
-it("marks an order as delivered by admin", async () => {
+it('marks an order as delivered by admin', async () => {
   const product = await buildProduct();
   const userId = new mongoose.Types.ObjectId().toHexString();
 
-  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
+  const { cart, shippingAddress, paymentMethod } = buildPayload(
     product,
     userId
   );
 
   // Create an order
   const { body: order } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", global.signin(userId))
+    .post('/api/orders')
+    .set('Cookie', global.signin(userId))
     .send({
-      jsonCartItems: jsonCartItems,
-      jsonShippingAddress: jsonShippingAddress,
-      jsonPaymentMethod: jsonPaymentMethod,
+      cart,
+      shippingAddress,
+      paymentMethod
     })
     .expect(201);
 
@@ -147,14 +152,14 @@ it("marks an order as delivered by admin", async () => {
   newOrder!.set({
     status: OrderStatus.Completed,
     isPaid: true,
-    paidAt: new Date(),
+    paidAt: new Date()
   });
   await newOrder!.save();
 
   // make a request to mark the *PAID* order as delivered
   await request(app)
-    .patch(`/api/orders/${order.id}/deliver`)
-    .set("Cookie", global.adminSignin(userId))
+    .patch(`/api/orders/${order.id as string}/deliver`)
+    .set('Cookie', global.adminSignin(userId))
     .send()
     .expect(200);
 
@@ -165,23 +170,23 @@ it("marks an order as delivered by admin", async () => {
   expect(updatedOrder!.deliveredAt).toBeDefined();
 });
 
-it("emits a order updated event", async () => {
+it('emits a order updated event', async () => {
   const product = await buildProduct();
   const userId = new mongoose.Types.ObjectId().toHexString();
 
-  const { jsonCartItems, jsonShippingAddress, jsonPaymentMethod } = buildJSON(
+  const { cart, shippingAddress, paymentMethod } = buildPayload(
     product,
     userId
   );
 
   // Create  an order
   const { body: order } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", global.signin(userId))
+    .post('/api/orders')
+    .set('Cookie', global.signin(userId))
     .send({
-      jsonCartItems: jsonCartItems,
-      jsonShippingAddress: jsonShippingAddress,
-      jsonPaymentMethod: jsonPaymentMethod,
+      cart,
+      shippingAddress,
+      paymentMethod
     })
     .expect(201);
 
@@ -191,14 +196,14 @@ it("emits a order updated event", async () => {
   newOrder!.set({
     status: OrderStatus.Completed,
     isPaid: true,
-    paidAt: new Date(),
+    paidAt: new Date()
   });
   await newOrder!.save();
 
   // make a request to mark the order as delivered
   await request(app)
-    .patch(`/api/orders/${order.id}/deliver`)
-    .set("Cookie", global.adminSignin(userId))
+    .patch(`/api/orders/${order.id as string}/deliver`)
+    .set('Cookie', global.adminSignin(userId))
     .send()
     .expect(200);
 
