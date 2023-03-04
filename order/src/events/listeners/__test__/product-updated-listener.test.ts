@@ -91,8 +91,7 @@ it('does not call ack if the event has a skipped version number', async () => {
     data.version += 1;
   }
 
-  const callAckFunc = await listener.onMessage(data, msg);
-  void expect(callAckFunc).rejects.toThrow();
+  void expect(listener.onMessage(data, msg)).rejects.toThrow();
 
   expect(msg.ack).not.toHaveBeenCalled();
 });
