@@ -1,56 +1,60 @@
-import mongoose from "mongoose";
-import request from "supertest";
-import { app } from "../../app";
-import { Product, ProductDoc } from "../../models/product";
+import mongoose from 'mongoose';
+import request from 'supertest';
+import { app } from '../../app';
+import { Product } from '../../models/product';
+import type { ProductDoc } from '../../types/product';
+import type { CartAttrs, ShippingAddressAttrs } from '../../types/order';
 
-const buildProduct = async () => {
+const buildProduct = async (): Promise<ProductDoc> => {
   const product = Product.build({
     id: new mongoose.Types.ObjectId().toHexString(),
-    title: "Sample Dress",
+    title: 'Sample Dress',
     price: 1990,
     userId: new mongoose.Types.ObjectId().toHexString(),
-    image: "./asset/sample.jpg",
-    colors: "White,Black",
-    sizes: "S,M,L",
+    image: './asset/sample.jpg',
+    colors: 'White,Black',
+    sizes: 'S,M,L',
     countInStock: 1,
     numReviews: 0,
     rating: 0,
-    isReserved: false,
+    isReserved: false
   });
   await product.save();
 
   return product;
 };
 
-const buildJSON = (product: ProductDoc, userId: string) => {
-  const jsonCartItems = JSON.stringify([
-    {
-      userId: userId,
-      title: product.title,
-      qty: 1,
-      color: "white",
-      size: "M",
-      image: product.image,
-      price: product.price,
-      countInStock: product.countInStock,
-      discount: 1,
-      productId: product.id,
-    },
-  ]);
+const buildPayload = (product: ProductDoc, userId: string): {
+  cart: CartAttrs[]
+  shippingAddress: ShippingAddressAttrs
+  paymentMethod: string
+} => {
+  const cart = [{
+    userId,
+    title: product.title,
+    qty: 1,
+    color: 'white',
+    size: 'M',
+    image: product.image,
+    price: product.price,
+    countInStock: product.countInStock,
+    discount: 1,
+    productId: product.id
+  }];
 
-  const jsonShippingAddress = JSON.stringify({
-    address: "sunset villa",
-    city: "New York",
-    postalCode: "44205",
-    country: "USA",
-  });
+  const shippingAddress = {
+    address: 'sunset villa',
+    city: 'New York',
+    postalCode: '44205',
+    country: 'USA'
+  };
 
-  const jsonPaymentMethod = JSON.stringify("stripe");
+  const paymentMethod = 'stripe';
 
-  return { jsonCartItems, jsonShippingAddress, jsonPaymentMethod };
+  return { cart, shippingAddress, paymentMethod };
 };
 
-it("fetches all orders by admin", async () => {
+it('fetches all orders by admin', async () => {
   // Create three products
   const productOne = await buildProduct();
   const productTwo = await buildProduct();
@@ -64,59 +68,59 @@ it("fetches all orders by admin", async () => {
   const admin = global.adminSignin();
 
   const {
-    jsonCartItems: jsonCartItemsUserOne,
-    jsonShippingAddress: jsonShippingAddressUserOne,
-    jsonPaymentMethod: jsonPaymentMethodUserOne,
-  } = buildJSON(productOne, userOneId);
+    cart: cartItemsUserOne,
+    shippingAddress: shippingAddressUserOne,
+    paymentMethod: paymentMethodUserOne
+  } = buildPayload(productOne, userOneId);
 
   const {
-    jsonCartItems: jsonCartItemsUserTwoOrderOne,
-    jsonShippingAddress: jsonShippingAddressUserTwoOrderOne,
-    jsonPaymentMethod: jsonPaymentMethodUserTwoOrderOne,
-  } = buildJSON(productTwo, userTwoId);
+    cart: cartItemsUserTwoOrderOne,
+    shippingAddress: shippingAddressUserTwoOrderOne,
+    paymentMethod: paymentMethodUserTwoOrderOne
+  } = buildPayload(productTwo, userTwoId);
 
   const {
-    jsonCartItems: jsonCartItemsUserTwoOrderTwo,
-    jsonShippingAddress: jsonShippingAddressUserTwoOrderTwo,
-    jsonPaymentMethod: jsonPaymentMethodUserTwoOrderTwo,
-  } = buildJSON(productThree, userTwoId);
+    cart: cartItemsUserTwoOrderTwo,
+    shippingAddress: shippingAddressUserTwoOrderTwo,
+    paymentMethod: paymentMethodUserTwoOrderTwo
+  } = buildPayload(productThree, userTwoId);
 
   // Create one order as User #1
   const { body: orderOneForUserOne } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", userOne)
+    .post('/api/orders')
+    .set('Cookie', userOne)
     .send({
-      jsonCartItems: jsonCartItemsUserOne,
-      jsonShippingAddress: jsonShippingAddressUserOne,
-      jsonPaymentMethod: jsonPaymentMethodUserOne,
+      cart: cartItemsUserOne,
+      shippingAddress: shippingAddressUserOne,
+      paymentMethod: paymentMethodUserOne
     })
     .expect(201);
 
   // Create two orders as User #2
   const { body: orderOneForUserTwo } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", userTwo)
+    .post('/api/orders')
+    .set('Cookie', userTwo)
     .send({
-      jsonCartItems: jsonCartItemsUserTwoOrderOne,
-      jsonShippingAddress: jsonShippingAddressUserTwoOrderOne,
-      jsonPaymentMethod: jsonPaymentMethodUserTwoOrderOne,
+      cart: cartItemsUserTwoOrderOne,
+      shippingAddress: shippingAddressUserTwoOrderOne,
+      paymentMethod: paymentMethodUserTwoOrderOne
     })
     .expect(201);
 
   const { body: orderTwoForUserTwo } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", userTwo)
+    .post('/api/orders')
+    .set('Cookie', userTwo)
     .send({
-      jsonCartItems: jsonCartItemsUserTwoOrderTwo,
-      jsonShippingAddress: jsonShippingAddressUserTwoOrderTwo,
-      jsonPaymentMethod: jsonPaymentMethodUserTwoOrderTwo,
+      cart: cartItemsUserTwoOrderTwo,
+      shippingAddress: shippingAddressUserTwoOrderTwo,
+      paymentMethod: paymentMethodUserTwoOrderTwo
     })
     .expect(201);
 
   // Make request to get all orders by *ADMIN*
   const response = await request(app)
-    .get("/api/orders")
-    .set("Cookie", admin)
+    .get('/api/orders')
+    .set('Cookie', admin)
     .expect(200);
 
   // Make sure we got all orders for admin

@@ -1,45 +1,50 @@
-import { Message } from "node-nats-streaming";
-import mongoose from "mongoose";
-import { ProductCreatedEvent } from "@thasup-dev/common";
-import { ProductCreatedListener } from "../ProductCreatedListener";
-import { Product } from "../../../models/product";
-import { natsWrapper } from "../../../NatsWrapper";
+import { type Message } from 'node-nats-streaming';
+import mongoose from 'mongoose';
+import { type ProductCreatedEvent } from '@thasup-dev/common';
+import { ProductCreatedListener } from '../ProductCreatedListener';
+import { Product } from '../../../models/product';
+import type { ProductDoc } from '../../../types/product';
+import { natsWrapper } from '../../../NatsWrapper';
 
-const setup = async () => {
+const setup = async (): Promise<{
+  listener: any
+  data: Partial<ProductDoc>
+  msg: Message
+}> => {
   // create an instance of the listener
   const listener = new ProductCreatedListener(natsWrapper.client);
 
   // create a fake data event
-  const data: ProductCreatedEvent["data"] = {
+  const data: ProductCreatedEvent['data'] = {
     version: 0,
     id: new mongoose.Types.ObjectId().toHexString(),
-    title: "Sample Dress",
+    title: 'Sample Dress',
     price: 1990,
     userId: new mongoose.Types.ObjectId().toHexString(),
-    image: "./asset/sample.jpg",
-    colors: "White,Black",
-    sizes: "S,M,L",
-    brand: "Uniqlo",
-    category: "Dress",
-    material: "Polyester 100%",
+    image: './asset/sample.jpg',
+    colors: 'White,Black',
+    sizes: 'S,M,L',
+    brand: 'Uniqlo',
+    category: 'Dress',
+    material: 'Polyester 100%',
     description:
-      "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
+      'Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.',
     numReviews: 0,
     rating: 0,
     countInStock: 1,
-    isReserved: false,
+    isReserved: false
   };
 
   // create a fake message object
   // @ts-ignore
   const msg: Message = {
-    ack: jest.fn(),
+    ack: jest.fn()
   };
 
   return { listener, data, msg };
 };
 
-it("creates and saves a product", async () => {
+it('creates and saves a product', async () => {
   const { listener, data, msg } = await setup();
 
   // call the onMessage function with the data object + message object
@@ -53,7 +58,7 @@ it("creates and saves a product", async () => {
   expect(product!.price).toEqual(data.price);
 });
 
-it("acks the message", async () => {
+it('acks the message', async () => {
   const { data, listener, msg } = await setup();
 
   // call the onMessage function with the data object + message object
