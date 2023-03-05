@@ -1,30 +1,30 @@
-import express, { Request, Response } from "express";
-import { param, body } from "express-validator";
-import jwt from "jsonwebtoken";
+import express, { type Request, type Response } from 'express';
+import { param, body } from 'express-validator';
+import jwt from 'jsonwebtoken';
 import {
   validateRequest,
   NotFoundError,
-  BadRequestError,
-} from "@thasup-dev/common";
+  BadRequestError
+} from '@thasup-dev/common';
 
-import { User } from "../models/user";
-import { Password } from "../services/Password";
-import type { UserAttrs } from "../types/user";
+import { User } from '../models/user';
+import { Password } from '../services/Password';
+import type { UserAttrs } from '../types/user';
 
 const router = express.Router();
 
 router.patch(
-  "/api/users/:userId",
+  '/api/users/:userId',
   [
-		body("email").isEmail().optional().withMessage("Email must be valid"),
-    body("password")
+    body('email').isEmail().optional().withMessage('Email must be valid'),
+    body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
-			.optional()
-      .withMessage("Password must be between 4 and 20 characters"),
-    body("age").isInt({ gt: 0 }).optional().withMessage("Age can not be 0 or below"),
-		param("userId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
-	],
+      .optional()
+      .withMessage('Password must be between 4 and 20 characters'),
+    body('age').isInt({ gt: 0 }).optional().withMessage('Age can not be 0 or below'),
+    param('userId').isMongoId().withMessage('Invalid MongoDB ObjectId')
+  ],
   validateRequest,
   async (req: Request, res: Response) => {
     const {
@@ -37,20 +37,20 @@ router.patch(
       gender,
       age,
       bio,
-      shippingAddress,
-    }: {newPassword: string } & UserAttrs = req.body;
+      shippingAddress
+    }: { newPassword: string } & UserAttrs = req.body;
 
     const user = await User.findById(req.params.userId);
 
-    if (!user) {
+    if (user == null) {
       throw new NotFoundError();
     }
 
-    if (password) {
+    if (password.length > 0) {
       const existingUser = await User.findOne({ name });
 
-      if (!existingUser) {
-        throw new BadRequestError("Invalid credentials");
+      if (existingUser == null) {
+        throw new BadRequestError('Invalid credentials');
       }
 
       const isMatch = await Password.compare(
@@ -59,7 +59,7 @@ router.patch(
       );
 
       if (!isMatch) {
-        throw new BadRequestError("Invalid credentials");
+        throw new BadRequestError('Invalid credentials');
       }
     }
 
@@ -72,7 +72,7 @@ router.patch(
       gender: gender ?? user.gender,
       age: age ?? user.age,
       bio: bio ?? user.bio,
-      shippingAddress: shippingAddress ?? user.shippingAddress,
+      shippingAddress: shippingAddress ?? user.shippingAddress
     });
 
     await user.save();
@@ -88,14 +88,14 @@ router.patch(
         gender: user.gender,
         age: user.age,
         bio: user.bio,
-        shippingAddress: user.shippingAddress,
+        shippingAddress: user.shippingAddress
       },
       process.env.JWT_KEY!
     );
 
     // Store it on session object
     req.session = {
-      jwt: userJWT,
+      jwt: userJWT
     };
 
     res.status(200).send(user);
