@@ -97,7 +97,7 @@ it('return 200 when make a request to edit profile information', async () => {
       gender: 'female',
       age: 60,
       bio: "I'm retired from witcher career",
-      jsonShippingAddress: user.shippingAddress
+      shippingAddress: user.shippingAddress
     })
     .expect(200);
 
@@ -128,7 +128,7 @@ it('return 400 when make a request to edit an email with invalid password', asyn
       gender: user.gender,
       age: user.age,
       bio: user.bio,
-      jsonShippingAddress: user.shippingAddress
+      shippingAddress: user.shippingAddress
     })
     .expect(400);
 });
@@ -149,7 +149,7 @@ it('return 200 when make a request to edit an email', async () => {
       gender: user.gender,
       age: user.age,
       bio: user.bio,
-      jsonShippingAddress: user.shippingAddress
+      shippingAddress: user.shippingAddress
     })
     .expect(200);
 
@@ -177,7 +177,7 @@ it('return 200 when make a request to edit the password', async () => {
       gender: user.gender,
       age: user.age,
       bio: user.bio,
-      jsonShippingAddress: user.shippingAddress
+      shippingAddress: user.shippingAddress
     })
     .expect(200);
 

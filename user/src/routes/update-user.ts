@@ -46,7 +46,7 @@ router.patch(
       throw new NotFoundError();
     }
 
-    if (password.length > 0) {
+    if (password != null) {
       const existingUser = await User.findOne({ name });
 
       if (existingUser == null) {
@@ -72,7 +72,12 @@ router.patch(
       gender: gender ?? user.gender,
       age: age ?? user.age,
       bio: bio ?? user.bio,
-      shippingAddress: shippingAddress ?? user.shippingAddress
+      shippingAddress: {
+        address: shippingAddress?.address ?? user.shippingAddress?.address,
+        city: shippingAddress?.city ?? user.shippingAddress?.city,
+        postalCode: shippingAddress?.postalCode ?? user.shippingAddress?.postalCode,
+        country: shippingAddress?.country ?? user.shippingAddress?.country
+      }
     });
 
     await user.save();
