@@ -1,43 +1,43 @@
-import express, { Request, Response } from "express";
-import { param } from "express-validator";
+import express, { type Request, type Response } from 'express';
+import { param } from 'express-validator';
 import {
   NotFoundError,
   requireAuth,
-  validateRequest,
-} from "@thasup-dev/common";
+  validateRequest
+} from '@thasup-dev/common';
 
-import { Product } from "../models/product";
-import { Review } from "../models/review";
-import { ProductUpdatedPublisher } from "../events/publishers/ProductUpdatedPublisher";
-import { natsWrapper } from "../NatsWrapper";
+import { Product } from '../models/product';
+import { Review } from '../models/review';
+import { ProductUpdatedPublisher } from '../events/publishers/ProductUpdatedPublisher';
+import { natsWrapper } from '../NatsWrapper';
 
 const router = express.Router();
 
 router.delete(
-  "/api/products/:productId/reviews",
+  '/api/products/:productId/reviews',
   requireAuth,
-  [param("productId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
+  [param('productId').isMongoId().withMessage('Invalid MongoDB ObjectId')],
   validateRequest,
   async (req: Request, res: Response) => {
     // Check the product is existing
     const product = await Product.findById(req.params.productId);
 
-    if (!product) {
+    if (product == null) {
       throw new NotFoundError();
     }
 
-    if (product.reviews) {
+    if (product.reviews != null) {
       const deletedId = product.reviews.find(
         (review) => review.userId.toString() === req.currentUser!.id
       );
 
-      if (!deletedId) {
+      if (deletedId == null) {
         throw new NotFoundError();
       }
 
       const deletedReview = await Review.findById(deletedId.id);
 
-      if (!deletedReview) {
+      if (deletedReview == null) {
         throw new NotFoundError();
       }
 
@@ -85,7 +85,7 @@ router.delete(
         rating: product.rating,
         countInStock: product.countInStock,
         isReserved: product.isReserved,
-        version: product.version,
+        version: product.version
       });
     }
 

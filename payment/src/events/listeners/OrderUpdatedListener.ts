@@ -14,9 +14,7 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
   queueGroupName = QueueGroupNames.PAYMENT_SERVICE;
 
   async onMessage(data: OrderUpdatedEvent["data"], msg: Message) {
-    const order = await Order.findByEvent(data).catch((err) =>
-      console.log(err)
-    );
+    const order = await Order.findByEvent(data);
 
     // If no order, throw error
     if (!order) {

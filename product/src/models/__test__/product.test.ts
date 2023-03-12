@@ -1,25 +1,25 @@
-import { Product } from "../product";
+import { Product } from '../product';
 
-it("implements optimistic concurrency control", async () => {
+it('implements optimistic concurrency control', async () => {
   // Create an instance of a product
   const product = Product.build({
-    title: "Sample Dress",
+    title: 'Sample Dress',
     price: 1990,
-    userId: "6214a0227e0d2db80ddb0860",
+    userId: '6214a0227e0d2db80ddb0860',
     images: {
-      image1: "./asset/sample.jpg",
+      image1: './asset/sample.jpg'
     },
-    colors: "White,Black",
-    sizes: "S,M,L",
-    brand: "Uniqlo",
-    category: "Dress",
-    material: "Polyester 100%",
+    colors: 'White,Black',
+    sizes: 'S,M,L',
+    brand: 'Uniqlo',
+    category: 'Dress',
+    material: 'Polyester 100%',
     description:
-      "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
+      'Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.',
     numReviews: 0,
     rating: 0,
     countInStock: 1,
-    isReserved: false,
+    isReserved: false
   });
 
   // Save the product to the database
@@ -43,28 +43,28 @@ it("implements optimistic concurrency control", async () => {
     return;
   }
 
-  throw new Error("Should not reach this point");
+  throw new Error('Should not reach this point');
 });
 
-it("increments the version number on multiple saves", async () => {
+it('increments the version number on multiple saves', async () => {
   const product = Product.build({
-    title: "Sample Dress",
+    title: 'Sample Dress',
     price: 1990,
-    userId: "6214a0227e0d2db80ddb0860",
+    userId: '6214a0227e0d2db80ddb0860',
     images: {
-      image1: "./asset/sample.jpg",
+      image1: './asset/sample.jpg'
     },
-    colors: "White,Black",
-    sizes: "S,M,L",
-    brand: "Uniqlo",
-    category: "Dress",
-    material: "Polyester 100%",
+    colors: 'White,Black',
+    sizes: 'S,M,L',
+    brand: 'Uniqlo',
+    category: 'Dress',
+    material: 'Polyester 100%',
     description:
-      "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
+      'Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.',
     numReviews: 0,
     rating: 0,
     countInStock: 1,
-    isReserved: false,
+    isReserved: false
   });
 
   await product.save();
