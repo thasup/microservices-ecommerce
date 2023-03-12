@@ -1,28 +1,28 @@
 import {
   Listener,
-  OrderCreatedEvent,
+  type OrderCreatedEvent,
   Subjects,
-  QueueGroupNames,
-} from "@thasup-dev/common";
-import { Message } from "node-nats-streaming";
+  QueueGroupNames
+} from '@thasup-dev/common';
+import { type Message } from 'node-nats-streaming';
 
-import { Product } from "../../models/product";
-import { ProductUpdatedPublisher } from "../publishers/ProductUpdatedPublisher";
+import { Product } from '../../models/product';
+import { ProductUpdatedPublisher } from '../publishers/ProductUpdatedPublisher';
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   subject: Subjects.OrderCreated = Subjects.OrderCreated;
   queueGroupName = QueueGroupNames.PRODUCT_SERVICE;
 
-  async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
+  async onMessage (data: OrderCreatedEvent['data'], msg: Message): Promise<void> {
     const items = data.cart;
 
     if (items!.length === 0) {
       // ack the message
-      return msg.ack();
+      msg.ack(); return;
     }
 
-    if (!items) {
-      throw new Error("Cart not found");
+    if (items == null) {
+      throw new Error('Cart not found');
     }
 
     for (let i = 0; i < items.length; i++) {
@@ -30,8 +30,8 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       const product = await Product.findById(items[i].productId);
 
       // If no product, throw error
-      if (!product) {
-        throw new Error("Product not found");
+      if (product == null) {
+        throw new Error('Product not found');
       }
 
       // Decrease the product quantity in stock
@@ -41,11 +41,11 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       if (countInStock === 0) {
         // Mark the product as being reserved by setting its isReserved property
         product.set({
-          countInStock: countInStock,
-          isReserved: true,
+          countInStock,
+          isReserved: true
         });
       } else {
-        product.set({ countInStock: countInStock });
+        product.set({ countInStock });
       }
 
       // Save the product
@@ -67,7 +67,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
         rating: product.rating,
         countInStock: product.countInStock,
         isReserved: product.isReserved,
-        version: product.version,
+        version: product.version
       });
     }
 

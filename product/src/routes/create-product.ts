@@ -1,23 +1,23 @@
-import express, { Request, Response } from "express";
-import { body } from "express-validator";
-import { adminUser, requireAuth, validateRequest } from "@thasup-dev/common";
+import express, { type Request, type Response } from 'express';
+import { body } from 'express-validator';
+import { adminUser, requireAuth, validateRequest } from '@thasup-dev/common';
 
-import { Product } from "../models/product";
-import { ProductCreatedPublisher } from "../events/publishers/ProductCreatedPublisher";
-import { natsWrapper } from "../NatsWrapper";
-import type { ProductAttrs } from "../types/product";
+import { Product } from '../models/product';
+import { ProductCreatedPublisher } from '../events/publishers/ProductCreatedPublisher';
+import { natsWrapper } from '../NatsWrapper';
+import type { ProductAttrs } from '../types/product';
 
 const router = express.Router();
 
 router.post(
-  "/api/products",
+  '/api/products',
   requireAuth,
   adminUser,
   [
-    body("title").not().isEmpty().withMessage("Title is required"),
-    body("price")
+    body('title').not().isEmpty().withMessage('Title is required'),
+    body('price')
       .isFloat({ gt: 0 })
-      .withMessage("Price must be greater than 0"),
+      .withMessage('Price must be greater than 0')
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -37,13 +37,13 @@ router.post(
       reviews,
       numReviews,
       rating,
-      countInStock,
+      countInStock
     }: {
-			image1: string, 
-			image2: string, 
-			image3: string, 
-			image4: string
-		} & ProductAttrs = req.body;
+      image1: string
+      image2: string
+      image3: string
+      image4: string
+    } & ProductAttrs = req.body;
 
     const product = Product.build({
       title,
@@ -53,7 +53,7 @@ router.post(
         image1,
         image2,
         image3,
-        image4,
+        image4
       },
       colors,
       sizes,
@@ -65,7 +65,7 @@ router.post(
       numReviews,
       rating,
       countInStock,
-      isReserved: false,
+      isReserved: false
     });
 
     await product.save();
@@ -86,7 +86,7 @@ router.post(
       rating: product.rating,
       countInStock: product.countInStock,
       isReserved: product.isReserved,
-      version: product.version,
+      version: product.version
     });
 
     res.status(201).send(product);

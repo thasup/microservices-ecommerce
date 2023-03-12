@@ -1,45 +1,49 @@
-import mongoose from "mongoose";
-import request from "supertest";
-import { app } from "../../app";
+import mongoose from 'mongoose';
+import request from 'supertest';
 
-const createProduct = (rating: number) => {
+import { app } from '../../app';
+import type { ProductDoc } from '../../types/product';
+
+const createProduct = async (rating: number): Promise<ProductDoc> => {
   const adminId = new mongoose.Types.ObjectId().toHexString();
 
-  return request(app)
-    .post("/api/products")
-    .set("Cookie", global.adminSignin(adminId))
+  const { body: product } = await request(app)
+    .post('/api/products')
+    .set('Cookie', global.adminSignin(adminId))
     .send({
-      title: "Sample Dress",
+      title: 'Sample Dress',
       price: 99,
       userId: adminId,
-      image1: "./asset/sample.jpg",
-      colors: "White,Black",
-      sizes: "S,M,L",
-      brand: "Uniqlo",
-      category: "Dress",
-      material: "Polyester 100%",
+      image1: './asset/sample.jpg',
+      colors: 'White,Black',
+      sizes: 'S,M,L',
+      brand: 'Uniqlo',
+      category: 'Dress',
+      material: 'Polyester 100%',
       description:
-        "Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.",
+        'Turpis nunc eget lorem dolor. Augue neque gravida in fermentum et. Blandit libero volutpat sed cras ornare arcu dui vivamus. Amet venenatis urna cursus eget nunc scelerisque viverra mauris.',
       numReviews: 0,
-      rating: rating,
-      countInStock: 12,
+      rating,
+      countInStock: 12
     });
+
+  return product;
 };
 
-it("return 404 if there are no product", async () => {
+it('return 404 if there are no product', async () => {
   await request(app)
-    .get("/api/products/bestseller")
+    .get('/api/products/bestseller')
     .send()
     .expect(404);
 });
 
-it("can fetch a list of bestseller products", async () => {
+it('can fetch a list of bestseller products', async () => {
   await createProduct(3);
   await createProduct(5);
   await createProduct(4);
 
   const response = await request(app)
-    .get("/api/products/bestseller")
+    .get('/api/products/bestseller')
     .send()
     .expect(200);
 

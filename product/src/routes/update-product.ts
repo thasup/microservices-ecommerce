@@ -1,25 +1,24 @@
-import express, { Request, Response } from "express";
-import { param } from "express-validator";
+import express, { type Request, type Response } from 'express';
+import { param } from 'express-validator';
 import {
   validateRequest,
   NotFoundError,
   requireAuth,
-  adminUser,
-  BadRequestError,
-} from "@thasup-dev/common";
+  adminUser
+} from '@thasup-dev/common';
 
-import { Product } from "../models/product";
-import { ProductUpdatedPublisher } from "../events/publishers/ProductUpdatedPublisher";
-import { natsWrapper } from "../NatsWrapper";
-import type { ProductAttrs } from "../types/product";
+import { Product } from '../models/product';
+import { ProductUpdatedPublisher } from '../events/publishers/ProductUpdatedPublisher';
+import { natsWrapper } from '../NatsWrapper';
+import type { ProductAttrs } from '../types/product';
 
 const router = express.Router();
 
 router.patch(
-  "/api/products/:id",
+  '/api/products/:id',
   requireAuth,
   adminUser,
-  [param("id").isMongoId().withMessage("Invalid MongoDB ObjectId")],
+  [param('id').isMongoId().withMessage('Invalid MongoDB ObjectId')],
   validateRequest,
   async (req: Request, res: Response) => {
     const {
@@ -39,34 +38,34 @@ router.patch(
       numReviews,
       rating,
       countInStock,
-      isReserved,
+      isReserved
     }: {
-			image1: string, 
-			image2: string, 
-			image3: string, 
-			image4: string
-		} & ProductAttrs = req.body;
+      image1: string
+      image2: string
+      image3: string
+      image4: string
+    } & ProductAttrs = req.body;
 
     const product = await Product.findById(req.params.id);
 
-    if (!product) {
+    if (product == null) {
       throw new NotFoundError();
     }
 
     if (product.isReserved) {
       // throw new BadRequestError("Cannot edit a reserved product");
-			// TODO: figure out why reserve need to be overide
+      // TODO: figure out why reserve need to be overide
       product.isReserved = isReserved;
     }
 
     product.title = title ?? product.title;
     product.price = price ?? product.price;
     product.images = {
-			image1: image1 ?? product.images.image1,
-			image2: image2 ?? product.images.image2,
-			image3: image3 ?? product.images.image3,
-			image4: image4 ?? product.images.image4,
-		}
+      image1: image1 ?? product.images.image1,
+      image2: image2 ?? product.images.image2,
+      image3: image3 ?? product.images.image3,
+      image4: image4 ?? product.images.image4
+    };
     product.colors = colors ?? product.colors;
     product.sizes = sizes ?? product.sizes;
     product.brand = brand ?? product.brand;
@@ -96,7 +95,7 @@ router.patch(
       rating: product.rating,
       countInStock: product.countInStock,
       isReserved: product.isReserved,
-      version: product.version,
+      version: product.version
     });
 
     res.send(product);

@@ -1,20 +1,20 @@
-import express, { Request, Response } from "express";
-import { param } from "express-validator";
-import { NotFoundError, validateRequest } from "@thasup-dev/common";
+import express, { type Request, type Response } from 'express';
+import { param } from 'express-validator';
+import { NotFoundError, validateRequest } from '@thasup-dev/common';
 
-import { User } from "../models/user";
+import { User } from '../models/user';
 
 const router = express.Router();
 
 router.delete(
-  "/api/users/:userId",
-  [param("userId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
+  '/api/users/:userId',
+  [param('userId').isMongoId().withMessage('Invalid MongoDB ObjectId')],
   validateRequest,
   async (req: Request, res: Response) => {
     const deletedUser = await User.findById(req.params.userId);
 
     // Check if the user is existing
-    if (!deletedUser) {
+    if (deletedUser == null) {
       throw new NotFoundError();
     }
 

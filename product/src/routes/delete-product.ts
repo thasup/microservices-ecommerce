@@ -1,29 +1,29 @@
-import express, { Request, Response } from "express";
-import { param } from "express-validator";
+import express, { type Request, type Response } from 'express';
+import { param } from 'express-validator';
 import {
   adminUser,
   NotFoundError,
   requireAuth,
-  validateRequest,
-} from "@thasup-dev/common";
+  validateRequest
+} from '@thasup-dev/common';
 
-import { Product } from "../models/product";
-import { ProductDeletedPublisher } from "../events/publishers/ProductDeletedPublisher";
-import { natsWrapper } from "../NatsWrapper";
+import { Product } from '../models/product';
+import { ProductDeletedPublisher } from '../events/publishers/ProductDeletedPublisher';
+import { natsWrapper } from '../NatsWrapper';
 
 const router = express.Router();
 
 router.delete(
-  "/api/products/:productId",
+  '/api/products/:productId',
   requireAuth,
   adminUser,
-  [param("productId").isMongoId().withMessage("Invalid MongoDB ObjectId")],
+  [param('productId').isMongoId().withMessage('Invalid MongoDB ObjectId')],
   validateRequest,
   async (req: Request, res: Response) => {
     const deletedProduct = await Product.findById(req.params.productId);
 
     // Check the product is existing
-    if (!deletedProduct) {
+    if (deletedProduct == null) {
       throw new NotFoundError();
     }
 
@@ -32,7 +32,7 @@ router.delete(
     // Publish an event
     await new ProductDeletedPublisher(natsWrapper.client).publish({
       id: deletedProduct.id,
-      version: deletedProduct.version,
+      version: deletedProduct.version
     });
 
     res.status(200).send({});

@@ -1,24 +1,24 @@
-import express, { Request, Response } from "express";
-import { body } from "express-validator";
-import jwt from "jsonwebtoken";
-import { BadRequestError, validateRequest } from "@thasup-dev/common";
+import express, { type Request, type Response } from 'express';
+import { body } from 'express-validator';
+import jwt from 'jsonwebtoken';
+import { BadRequestError, validateRequest } from '@thasup-dev/common';
 
-import { User } from "../models/user";
-import type { UserAttrs } from "../types/user";
+import { User } from '../models/user';
+import type { UserAttrs } from '../types/user';
 
 const router = express.Router();
 
 router.post(
-  "/api/users/signup",
+  '/api/users/signup',
   [
-    body("email").isEmail().withMessage("Email must be valid"),
-    body("password")
+    body('email').isEmail().withMessage('Email must be valid'),
+    body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
-      .withMessage("Password must be between 4 and 20 characters"),
-    body("name").not().isEmpty().withMessage("Name is required"),
-    body("gender").not().isEmpty().withMessage("Gender is required"),
-    body("age").isInt({ gt: 0 }).not().isEmpty().withMessage("Age is required"),
+      .withMessage('Password must be between 4 and 20 characters'),
+    body('name').not().isEmpty().withMessage('Name is required'),
+    body('gender').not().isEmpty().withMessage('Gender is required'),
+    body('age').isInt({ gt: 0 }).not().isEmpty().withMessage('Age is required')
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -30,19 +30,19 @@ router.post(
       gender,
       age,
       bio,
-      shippingAddress,
+      shippingAddress
     }: UserAttrs = req.body;
 
     let { image }: UserAttrs = req.body;
 
     const existingUser = await User.findOne({ email });
 
-    if (existingUser) {
-      throw new BadRequestError("Email already in use");
+    if (existingUser != null) {
+      throw new BadRequestError('Email already in use');
     }
 
-		// Assign random generated image from API
-    if (!image) {
+    // Assign random generated image from API
+    if (image == null) {
       image = `https://avatars.dicebear.com/api/micah/${name.trim()}${email.trim()}.svg?b=%23f0f0f0`;
     }
 
@@ -55,7 +55,7 @@ router.post(
       gender,
       age,
       bio,
-      shippingAddress,
+      shippingAddress
     });
     await user.save();
 
@@ -70,14 +70,14 @@ router.post(
         gender,
         age,
         bio,
-        shippingAddress,
+        shippingAddress
       },
       process.env.JWT_KEY!
     );
 
     // Store it on session object
     req.session = {
-      jwt: userJWT,
+      jwt: userJWT
     };
 
     res.status(201).send(user);

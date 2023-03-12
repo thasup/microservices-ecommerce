@@ -1,29 +1,29 @@
 import {
   Listener,
-  OrderUpdatedEvent,
+  type OrderUpdatedEvent,
   Subjects,
-  QueueGroupNames,
-} from "@thasup-dev/common";
-import { Message } from "node-nats-streaming";
+  QueueGroupNames
+} from '@thasup-dev/common';
+import { type Message } from 'node-nats-streaming';
 
-import { Product } from "../../models/product";
-import { ProductUpdatedPublisher } from "../publishers/ProductUpdatedPublisher";
+import { Product } from '../../models/product';
+import { ProductUpdatedPublisher } from '../publishers/ProductUpdatedPublisher';
 
 export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
   subject: Subjects.OrderUpdated = Subjects.OrderUpdated;
   queueGroupName = QueueGroupNames.PRODUCT_SERVICE;
 
-  async onMessage(data: OrderUpdatedEvent["data"], msg: Message) {
+  async onMessage (data: OrderUpdatedEvent['data'], msg: Message): Promise<void> {
     // Check order status
-    if (data.status !== "cancelled") {
+    if (data.status !== 'cancelled') {
       // Do nothing, just ack the message
-      return msg.ack();
+      msg.ack(); return;
     }
 
     const items = data.cart;
 
-    if (!items) {
-      throw new Error("Cart not found");
+    if (items == null) {
+      throw new Error('Cart not found');
     }
 
     for (let i = 0; i < items.length; i++) {
@@ -31,29 +31,27 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
       const product = await Product.findById(items[i].productId);
 
       // If no product, throw error
-      if (!product) {
-        throw new Error("Product not found");
+      if (product == null) {
+        throw new Error('Product not found');
       }
 
       // Increase the product quantity in stock by return quantity from the cancelled order
       const countInStock = product.countInStock + items[i].qty;
 
       // If product already reserved
-      if (product.countInStock === 0 && product.isReserved === true) {
+      if (product.countInStock === 0 && product.isReserved) {
         // Mark the product as avaliable by setting its isReserved property
         // and return quantity in stock to previous state
         product.set({
-          countInStock: countInStock,
-          isReserved: false,
+          countInStock,
+          isReserved: false
         });
 
         // Save the product
         await product.save();
-      }
-
-      // If the product still have some stock left (isReserved is still false)
-      else {
-        product.set({ countInStock: countInStock });
+      } else {
+        // If the product still have some stock left (isReserved is still false)
+        product.set({ countInStock });
 
         // Save the product
         await product.save();
@@ -73,9 +71,9 @@ export class OrderUpdatedListener extends Listener<OrderUpdatedEvent> {
         description: product.description,
         numReviews: product.numReviews,
         rating: product.rating,
-        countInStock: countInStock,
+        countInStock,
         isReserved: product.isReserved,
-        version: product.version,
+        version: product.version
       });
     }
 
