@@ -1,28 +1,28 @@
-import express, { Request, Response } from "express";
-import { body, param } from "express-validator";
+import express, { type Request, type Response } from 'express';
+import { body, param } from 'express-validator';
 import {
   BadRequestError,
   NotFoundError,
   requireAuth,
-  validateRequest,
-} from "@thasup-dev/common";
+  validateRequest
+} from '@thasup-dev/common';
 
-import { Product } from "../models/product";
-import { Review } from "../models/review";
-import { ProductUpdatedPublisher } from "../events/publishers/ProductUpdatedPublisher";
-import { natsWrapper } from "../NatsWrapper";
-import type { ReviewAttrs } from "../types/review";
+import { Product } from '../models/product';
+import { Review } from '../models/review';
+import { ProductUpdatedPublisher } from '../events/publishers/ProductUpdatedPublisher';
+import { natsWrapper } from '../NatsWrapper';
+import type { ReviewAttrs } from '../types/review';
 
 const router = express.Router();
 
 router.post(
-  "/api/products/:productId/reviews",
+  '/api/products/:productId/reviews',
   requireAuth,
   [
-    body("title").not().isEmpty().withMessage("Title is required"),
-    body("rating").not().isEmpty().isInt({ gt: 0 }).withMessage("Rating is required"),
-    body("comment").not().isEmpty().withMessage("Comment is required"),
-    param("productId").isMongoId().withMessage("Invalid MongoDB ObjectId"),
+    body('title').not().isEmpty().withMessage('Title is required'),
+    body('rating').not().isEmpty().isInt({ gt: 0 }).withMessage('Rating is required'),
+    body('comment').not().isEmpty().withMessage('Comment is required'),
+    param('productId').isMongoId().withMessage('Invalid MongoDB ObjectId')
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -31,18 +31,18 @@ router.post(
     // Check the product is existing
     const product = await Product.findById(req.params.productId);
 
-    if (!product) {
+    if (product == null) {
       throw new NotFoundError();
     }
 
-    if (product.reviews) {
+    if (product.reviews != null) {
       // Check user does *NOT* already reviewed the product
       const alreadyReviewed = product.reviews.find(
         (review) => review.userId.toString() === req.currentUser!.id
       );
 
-      if (alreadyReviewed) {
-        throw new BadRequestError("Product already reviewed");
+      if (alreadyReviewed != null) {
+        throw new BadRequestError('Product already reviewed');
       }
 
       // Check user successfully purchased the product before trying to review
@@ -54,7 +54,7 @@ router.post(
         comment,
         userId: req.currentUser!.id,
         productTitle: product.title,
-        productId: product.id,
+        productId: product.id
       });
 
       await review.save();
@@ -82,7 +82,7 @@ router.post(
 
       await product.save();
 
-      new ProductUpdatedPublisher(natsWrapper.client).publish({
+      await new ProductUpdatedPublisher(natsWrapper.client).publish({
         id: product.id,
         title: product.title,
         price: product.price,
@@ -98,7 +98,7 @@ router.post(
         rating: product.rating,
         countInStock: product.countInStock,
         isReserved: product.isReserved,
-        version: product.version,
+        version: product.version
       });
 
       res.status(201).send(review);
