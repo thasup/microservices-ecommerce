@@ -1,18 +1,18 @@
 import {
   Listener,
-  OrderCreatedEvent,
+  type OrderCreatedEvent,
   Subjects,
-  QueueGroupNames,
-} from "@thasup-dev/common";
-import { Message } from "node-nats-streaming";
+  QueueGroupNames
+} from '@thasup-dev/common';
+import { type Message } from 'node-nats-streaming';
 
-import { Order } from "../../models/order";
+import { Order } from '../../models/order';
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   subject: Subjects.OrderCreated = Subjects.OrderCreated;
   queueGroupName = QueueGroupNames.PAYMENT_SERVICE;
 
-  async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
+  async onMessage (data: OrderCreatedEvent['data'], msg: Message): Promise<void> {
     // Build an order
     const order = Order.build({
       id: data.id,
@@ -23,7 +23,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       itemsPrice: data.itemsPrice,
       shippingPrice: data.shippingPrice,
       taxPrice: data.taxPrice,
-      totalPrice: data.totalPrice,
+      totalPrice: data.totalPrice
     });
 
     await order.save();

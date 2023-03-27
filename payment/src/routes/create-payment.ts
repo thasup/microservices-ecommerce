@@ -1,32 +1,32 @@
-import express, { Request, Response } from "express";
-import { body } from "express-validator";
+import express, { type Request, type Response } from 'express';
+import { body } from 'express-validator';
 import {
   requireAuth,
   validateRequest,
   BadRequestError,
   NotAuthorizedError,
   NotFoundError,
-  OrderStatus,
-} from "@thasup-dev/common";
-import { stripe } from "../stripe";
+  OrderStatus
+} from '@thasup-dev/common';
+import { stripe } from '../stripe';
 
-import { Order } from "../models/order";
-import { natsWrapper } from "../NatsWrapper";
-import { Payment } from "../models/payment";
-import { PaymentCreatedPublisher } from "../events/publishers/PaymentCreatedPublisher";
+import { Order } from '../models/order';
+import { natsWrapper } from '../NatsWrapper';
+import { Payment } from '../models/payment';
+import { PaymentCreatedPublisher } from '../events/publishers/PaymentCreatedPublisher';
 
 const router = express.Router();
 
 router.post(
-  "/api/payments",
+  '/api/payments',
   requireAuth,
   [
-    body("token").not().isEmpty(),
-    body("orderId")
+    body('token').not().isEmpty(),
+    body('orderId')
       .not()
       .isEmpty()
       .isMongoId()
-      .withMessage("Invalid MongoDB ObjectId"),
+      .withMessage('Invalid MongoDB ObjectId')
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -34,7 +34,7 @@ router.post(
 
     const order = await Order.findById(orderId);
 
-    if (!order) {
+    if (order == null) {
       throw new NotFoundError();
     }
 
@@ -43,13 +43,13 @@ router.post(
     }
 
     if (order.status === OrderStatus.Cancelled) {
-      throw new BadRequestError("Cannot pay for an cancelled order");
+      throw new BadRequestError('Cannot pay for an cancelled order');
     }
 
-    if (order.paymentMethod === "paypal") {
+    if (order.paymentMethod === 'paypal') {
       const payment = Payment.build({
         orderId,
-        stripeId: token,
+        stripeId: token
       });
 
       await payment.save();
@@ -57,25 +57,25 @@ router.post(
       await new PaymentCreatedPublisher(natsWrapper.client).publish({
         id: payment.id,
         orderId: payment.orderId,
-        stripeId: payment.stripeId,
+        stripeId: payment.stripeId
       });
 
       res.status(201).send(payment);
     }
 
     const charge = await stripe.charges.create({
-      currency: "usd",
+      currency: 'usd',
       amount: order.totalPrice * 100,
-      source: token,
+      source: token
     });
 
-    if (!charge.id) {
-      throw new Error("Payment failed to proceed correctly");
+    if (charge?.id == null) {
+      throw new Error('Payment failed to proceed correctly');
     }
 
     const payment = Payment.build({
       orderId,
-      stripeId: charge.id,
+      stripeId: charge.id
     });
 
     await payment.save();
@@ -83,7 +83,7 @@ router.post(
     await new PaymentCreatedPublisher(natsWrapper.client).publish({
       id: payment.id,
       orderId: payment.orderId,
-      stripeId: payment.stripeId,
+      stripeId: payment.stripeId
     });
 
     res.status(201).send(payment);

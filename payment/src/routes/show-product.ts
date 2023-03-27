@@ -1,9 +1,9 @@
-import express, { Request, Response } from "express";
-import { Product } from "../models/product";
+import express, { type Request, type Response } from 'express';
+import { Product } from '../models/product';
 
 const router = express.Router();
 
-router.get("/api/payments/products", async (req: Request, res: Response) => {
+router.get('/api/payments/products', async (req: Request, res: Response) => {
   const products = await Product.find({});
 
   res.send(products);

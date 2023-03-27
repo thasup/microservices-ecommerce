@@ -1,28 +1,34 @@
-import mongoose from "mongoose";
-import { Message } from "node-nats-streaming";
-import { OrderStatus, OrderUpdatedEvent } from "@thasup-dev/common";
+import mongoose from 'mongoose';
+import { type Message } from 'node-nats-streaming';
+import { OrderStatus, type OrderUpdatedEvent } from '@thasup-dev/common';
 
-import { OrderUpdatedListener } from "../OrderUpdatedListener";
-import { natsWrapper } from "../../../NatsWrapper";
-import { Order } from "../../../models/order";
-import { Product } from "../../../models/product";
+import { OrderUpdatedListener } from '../OrderUpdatedListener';
+import { natsWrapper } from '../../../NatsWrapper';
+import { Order } from '../../../models/order';
+import { Product } from '../../../models/product';
+import type { OrderDoc } from '../../../types/order';
 
-const setup = async () => {
+const setup = async (): Promise<{
+  listener: any
+  data: OrderUpdatedEvent['data']
+  msg: Message
+  order: OrderDoc
+}> => {
   const listener = new OrderUpdatedListener(natsWrapper.client);
 
   // Create and save a product
   const product = Product.build({
     id: new mongoose.Types.ObjectId().toHexString(),
-    title: "Sample Dress",
+    title: 'Sample Dress',
     price: 1990,
     userId: new mongoose.Types.ObjectId().toHexString(),
-    image: "./asset/sample.jpg",
-    colors: "White,Black",
-    sizes: "S,M,L",
+    image: './asset/sample.jpg',
+    colors: 'White,Black',
+    sizes: 'S,M,L',
     countInStock: 1,
     numReviews: 0,
     rating: 0,
-    isReserved: false,
+    isReserved: false
   });
   await product.save();
 
@@ -31,18 +37,18 @@ const setup = async () => {
 
   const order = Order.build({
     id: new mongoose.Types.ObjectId().toHexString(),
-    userId: "123456",
+    userId: '123456',
     status: OrderStatus.Created,
     version: 0,
-    paymentMethod: "stripe",
+    paymentMethod: 'stripe',
     itemsPrice,
     shippingPrice: 0,
     taxPrice,
-    totalPrice: itemsPrice + taxPrice,
+    totalPrice: itemsPrice + taxPrice
   });
   await order.save();
 
-  const data: OrderUpdatedEvent["data"] = {
+  const data: OrderUpdatedEvent['data'] = {
     id: order.id,
     status: OrderStatus.Cancelled,
     userId: order.userId,
@@ -52,19 +58,19 @@ const setup = async () => {
     itemsPrice: order.itemsPrice,
     shippingPrice: order.shippingPrice,
     taxPrice: order.taxPrice,
-    totalPrice: order.totalPrice,
+    totalPrice: order.totalPrice
   };
 
   // @ts-ignore
   const msg: Message = {
-    ack: jest.fn(),
+    ack: jest.fn()
   };
 
   return { listener, data, msg, order };
 };
 
-it("updates the status of the order", async () => {
-  const { listener, data, msg, order } = await setup();
+it('updates the status of the order', async () => {
+  const { listener, data, msg } = await setup();
 
   await listener.onMessage(data, msg);
 
@@ -73,8 +79,8 @@ it("updates the status of the order", async () => {
   expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
 });
 
-it("acks the message", async () => {
-  const { listener, data, msg, order } = await setup();
+it('acks the message', async () => {
+  const { listener, data, msg } = await setup();
 
   await listener.onMessage(data, msg);
 
