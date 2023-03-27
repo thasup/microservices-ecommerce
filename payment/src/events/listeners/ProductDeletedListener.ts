@@ -1,22 +1,22 @@
-import { Message } from "node-nats-streaming";
+import { type Message } from 'node-nats-streaming';
 import {
   Subjects,
   Listener,
-  ProductDeletedEvent,
+  type ProductDeletedEvent,
   NotFoundError,
-  QueueGroupNames,
-} from "@thasup-dev/common";
+  QueueGroupNames
+} from '@thasup-dev/common';
 
-import { Product } from "../../models/product";
+import { Product } from '../../models/product';
 
 export class ProductDeletedListener extends Listener<ProductDeletedEvent> {
   subject: Subjects.ProductDeleted = Subjects.ProductDeleted;
   queueGroupName = QueueGroupNames.PAYMENT_SERVICE;
 
-  async onMessage(data: ProductDeletedEvent["data"], msg: Message) {
+  async onMessage (data: ProductDeletedEvent['data'], msg: Message): Promise<void> {
     const product = await Product.findByEvent(data);
 
-    if (!product) {
+    if (product == null) {
       throw new NotFoundError();
     }
 
