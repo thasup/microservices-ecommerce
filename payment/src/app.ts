@@ -5,7 +5,6 @@ import { NotFoundError, errorHandler, currentUser } from '@thasup-dev/common';
 
 import { createChargeRouter } from './routes/create-payment';
 import { getPaymentRouter } from './routes/get-payment';
-import { paypalRouter } from './routes/paypal';
 import { showProductRouter } from './routes/show-product';
 
 const app = express();
@@ -22,7 +21,6 @@ app.use(currentUser);
 app.use(showProductRouter);
 app.use(createChargeRouter);
 app.use(getPaymentRouter);
-app.use(paypalRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
