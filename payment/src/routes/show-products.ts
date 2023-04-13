@@ -1,4 +1,5 @@
 import express, { type Request, type Response } from 'express';
+
 import { Product } from '../models/product';
 
 const router = express.Router();
@@ -9,4 +10,4 @@ router.get('/api/payments/products', async (req: Request, res: Response) => {
   res.send(products);
 });
 
-export { router as showProductRouter };
+export { router as showProductsRouter };

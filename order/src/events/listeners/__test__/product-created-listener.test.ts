@@ -1,14 +1,14 @@
 import { type Message } from 'node-nats-streaming';
 import mongoose from 'mongoose';
 import { type ProductCreatedEvent } from '@thasup-dev/common';
+
 import { ProductCreatedListener } from '../ProductCreatedListener';
 import { Product } from '../../../models/product';
-import type { ProductDoc } from '../../../types/product';
 import { natsWrapper } from '../../../NatsWrapper';
 
 const setup = async (): Promise<{
   listener: any
-  data: Partial<ProductDoc>
+  data: ProductCreatedEvent['data']
   msg: Message
 }> => {
   // create an instance of the listener
