@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { type Message } from 'node-nats-streaming';
 import { OrderStatus, type ExpirationCompletedEvent } from '@thasup-dev/common';
+
 import { ExpirationCompletedListener } from '../ExpirationCompletedListener';
 import { natsWrapper } from '../../../NatsWrapper';
 import { Order } from '../../../models/order';
@@ -12,9 +13,7 @@ const setup = async (): Promise<{
   listener: any
   order: OrderDoc
   product: ProductDoc
-  data: {
-    orderId: string
-  }
+  data: ExpirationCompletedEvent['data']
   msg: Message
 }> => {
   const listener = new ExpirationCompletedListener(natsWrapper.client);

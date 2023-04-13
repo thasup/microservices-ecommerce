@@ -173,7 +173,7 @@ skaffold dev
 
 [![Docker Badge](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 
-1. clone _dev-mac_ branch on your computer
+1. clone _dev_ branch on your computer
 
 2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/)
 

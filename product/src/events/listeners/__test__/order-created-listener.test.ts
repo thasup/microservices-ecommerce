@@ -6,12 +6,11 @@ import { OrderCreatedListener } from '../OrderCreatedListener';
 import { Product } from '../../../models/product';
 import { natsWrapper } from '../../../NatsWrapper';
 import type { ProductDoc } from '../../../types/product';
-import type { OrderDoc } from '../../../types/order';
 
 const setup = async (): Promise<{
   listener: any
   product: ProductDoc
-  data: Partial<OrderDoc>
+  data: OrderCreatedEvent['data']
   msg: Message
 }> => {
   // Create an instance of the listener

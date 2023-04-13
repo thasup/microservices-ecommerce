@@ -1,22 +1,22 @@
-import jwt from "jsonwebtoken";
-import { MongoMemoryServer } from "mongodb-memory-server";
-import mongoose from "mongoose";
+import jwt from 'jsonwebtoken';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 
 declare global {
   var signin: (userId?: string) => string[];
   var adminSignin: (userId?: string) => string[];
 }
 
-jest.mock("../NatsWrapper");
+jest.mock('../NatsWrapper');
 // jest.mock("../stripe");
 
 process.env.STRIPE_KEY =
-  "sk_test_51KYCbpCqypc6uabtqqhd5R6cl7nl25a1lNwQOIBNJlyFISVZbIwy9t50Zqvnl2fdKBTShQxMZ8cLCdXsBJKuDYhu00cwUU9fcm";
+  'sk_test_51KYCbpCqypc6uabtqqhd5R6cl7nl25a1lNwQOIBNJlyFISVZbIwy9t50Zqvnl2fdKBTShQxMZ8cLCdXsBJKuDYhu00cwUU9fcm';
 
 let mongo: any;
 
 beforeAll(async () => {
-  process.env.JWT_KEY = "missiontothemoon";
+  process.env.JWT_KEY = 'missiontothemoon';
 
   mongo = await MongoMemoryServer.create();
   const mongoURI = mongo.getUri();
@@ -28,7 +28,7 @@ beforeEach(async () => {
   jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
 
-  for (let collection of collections) {
+  for (const collection of collections) {
     await collection.deleteMany({});
   }
 });
@@ -41,10 +41,10 @@ afterAll(async () => {
 global.signin = (userId?: string) => {
   // Build a JWT payload.  { id, email }
   const payload = {
-    id: userId || new mongoose.Types.ObjectId().toHexString(),
-    email: "test@test.com",
-    password: "password",
-    isAdmin: false,
+    id: userId ?? new mongoose.Types.ObjectId().toHexString(),
+    email: 'test@test.com',
+    password: 'password',
+    isAdmin: false
   };
 
   // Create the JWT!
@@ -57,7 +57,7 @@ global.signin = (userId?: string) => {
   const sessionJSON = JSON.stringify(session);
 
   // Take JSON and encode it as base64
-  const base64 = Buffer.from(sessionJSON).toString("base64");
+  const base64 = Buffer.from(sessionJSON).toString('base64');
 
   // return a string thats the cookie with the encoded data
   return [`session=${base64}`];
@@ -66,10 +66,10 @@ global.signin = (userId?: string) => {
 global.adminSignin = (userId?: string) => {
   // Build a JWT payload.  { id, email }
   const payload = {
-    id: userId || new mongoose.Types.ObjectId().toHexString(),
-    email: "test@test.com",
-    password: "password",
-    isAdmin: true,
+    id: userId ?? new mongoose.Types.ObjectId().toHexString(),
+    email: 'test@test.com',
+    password: 'password',
+    isAdmin: true
   };
 
   // Create the JWT!
@@ -82,7 +82,7 @@ global.adminSignin = (userId?: string) => {
   const sessionJSON = JSON.stringify(session);
 
   // Take JSON and encode it as base64
-  const base64 = Buffer.from(sessionJSON).toString("base64");
+  const base64 = Buffer.from(sessionJSON).toString('base64');
 
   // return a string thats the cookie with the encoded data
   return [`session=${base64}`];

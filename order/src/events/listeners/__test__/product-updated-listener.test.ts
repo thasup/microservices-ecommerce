@@ -9,7 +9,7 @@ import type { ProductDoc } from '../../../types/product';
 
 const setup = async (): Promise<{
   listener: any
-  data: Partial<ProductDoc>
+  data: ProductUpdatedEvent['data']
   product: ProductDoc
   msg: Message
 }> => {

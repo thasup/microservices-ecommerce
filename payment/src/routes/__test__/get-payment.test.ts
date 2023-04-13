@@ -5,11 +5,7 @@ import { OrderStatus } from '@thasup-dev/common';
 import { app } from '../../app';
 import { Order } from '../../models/order';
 import { Product } from '../../models/product';
-import { stripe } from '../../stripe';
-import { Payment } from '../../models/payment';
 import type { OrderDoc } from '../../types/order';
-
-// jest.mock("../stripe");
 
 const setup = async (userId?: string): Promise<OrderDoc> => {
   const price = Math.floor(Math.random() * 100000);
@@ -50,53 +46,38 @@ const setup = async (userId?: string): Promise<OrderDoc> => {
   return order;
 };
 
-it('returns a 404 when purchasing an order that does not exist', async () => {
+it('returns 404 if there is no order with that id', async () => {
+  const randomId = new mongoose.Types.ObjectId().toHexString();
+
   await request(app)
-    .post('/api/payments')
+    .get(`/api/payments/${randomId}`)
     .set('Cookie', global.signin())
-    .send({
-      token: 'randomToken',
-      orderId: new mongoose.Types.ObjectId().toHexString()
-    })
+    .send({})
     .expect(404);
 });
 
-it('returns a 401 when purchasing an order that doesnt belong to the user', async () => {
-  // Create and save a product
-  const order = await setup();
+it('returns 201 if user does not have authorization', async () => {
+  const userId = new mongoose.Types.ObjectId().toHexString();
+  const anotherUserId = new mongoose.Types.ObjectId().toHexString();
 
+  // Create and save a product
+  const order = await setup(userId);
+
+  // Get the payment with another user id
   await request(app)
-    .post('/api/payments')
-    .set('Cookie', global.signin())
-    .send({
-      token: 'randomToken',
-      orderId: order.id
-    })
+    .get(`/api/payments/${order.id as string}`)
+    .set('Cookie', global.signin(anotherUserId))
+    .send({})
     .expect(401);
 });
 
-it('returns a 400 when purchasing a cancelled order', async () => {
+it('returns 200 if the payment has found', async () => {
   const userId = new mongoose.Types.ObjectId().toHexString();
 
   // Create and save a product
   const order = await setup(userId);
 
-  await request(app)
-    .post('/api/payments')
-    .set('Cookie', global.signin(userId))
-    .send({
-      token: 'randomToken',
-      orderId: order.id
-    })
-    .expect(400);
-});
-
-it('returns a 201 with valid inputs', async () => {
-  const userId = new mongoose.Types.ObjectId().toHexString();
-
-  // Create product and order
-  const order = await setup(userId);
-
+  // Create the payment
   await request(app)
     .post('/api/payments')
     .set('Cookie', global.signin(userId))
@@ -106,24 +87,13 @@ it('returns a 201 with valid inputs', async () => {
     })
     .expect(201);
 
-  // const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
+  // Get the payment
+  const { body: fetchedPayment } = await request(app)
+    .get(`/api/payments/${order.id as string}`)
+    .set('Cookie', global.signin(userId))
+    .send({})
+    .expect(200);
 
-  // expect(chargeOptions.source).toEqual("tok_visa");
-  // expect(chargeOptions.amount).toEqual(order.totalPrice * 100);
-  // expect(chargeOptions.currency).toEqual("usd");
-
-  const stripeCharges = await stripe.charges.list({ limit: 50 });
-  const stripeCharge = stripeCharges.data.find((charge) => {
-    return charge.amount === order.totalPrice * 100;
-  });
-
-  expect(stripeCharge).toBeDefined();
-  expect(stripeCharge!.currency).toEqual('usd');
-
-  const payment = await Payment.findOne({
-    orderId: order.id,
-    stripeId: stripeCharge!.id
-  });
-
-  expect(payment).not.toBeNull();
+  expect(fetchedPayment[0]).toBeDefined();
+  expect(fetchedPayment[0].orderId).toEqual(order.id);
 });
