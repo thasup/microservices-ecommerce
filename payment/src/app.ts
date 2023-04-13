@@ -5,7 +5,7 @@ import { NotFoundError, errorHandler, currentUser } from '@thasup-dev/common';
 
 import { createChargeRouter } from './routes/create-payment';
 import { getPaymentRouter } from './routes/get-payment';
-import { showProductRouter } from './routes/show-product';
+import { showProductsRouter } from './routes/show-products';
 
 const app = express();
 app.set('trust proxy', true);
@@ -18,7 +18,7 @@ app.use(
 );
 app.use(currentUser);
 
-app.use(showProductRouter);
+app.use(showProductsRouter);
 app.use(createChargeRouter);
 app.use(getPaymentRouter);
 
