@@ -134,6 +134,14 @@ a::before {
 	margin-bottom: 2rem;
 }
 
+/* Utility */
+.unselectable {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
 /* Bootstrap Component */
 
 .nav-link {
@@ -604,6 +612,7 @@ header {
 	padding: 6px 25px;
 	text-transform: uppercase;
 	font-weight: 600;
+	min-width: 160px;
 }
 
 .add-to-cart-btn-lg {
