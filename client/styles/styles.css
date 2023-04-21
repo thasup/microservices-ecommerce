@@ -691,13 +691,13 @@ header {
 	text-transform: uppercase;
 	text-decoration: none;
 	color: black;
-	font-weight: 500;
 	padding: 0;
 }
 
 .card-product-title a {
 	color: black;
 	text-decoration: none;
+	font-weight: 400;
 }
 
 .card-product-price {
