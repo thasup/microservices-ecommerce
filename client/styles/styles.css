@@ -590,12 +590,14 @@ header {
 	margin: 1rem 0;
 }
 
-.menu-tab .slide-in-bottom {
-					animation: slide-in-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+.slide-in-bottom {
+	-webkit-animation: slide-in-bottom 0.25s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	animation: slide-in-bottom 0.25s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
-.menu-tab .slide-out-bottom {
-					animation: slide-out-bottom 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+.slide-out-bottom {
+	-webkit-animation: slide-out-bottom 0.25s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	animation: slide-out-bottom 0.25s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
 }
 
 .add-to-cart-btn {
@@ -1124,26 +1126,30 @@ footer {
  * animation slide-in-bottom
  * ----------------------------------------
  */
- @keyframes slide-in-bottom {
+ @-webkit-keyframes slide-in-bottom {
 	0% {
-						transform: translateY(1000px);
+		-webkit-transform: translateY(100px);
+		transform: translateY(100px);
 		opacity: 0;
 	}
 
 	100% {
-						transform: translateY(0);
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
 		opacity: 1;
 	}
 	}
 
 	@keyframes slide-in-bottom {
 	0% {
-						transform: translateY(1000px);
+		-webkit-transform: translateY(100px);
+		transform: translateY(100px);
 		opacity: 0;
 	}
 
 	100% {
-						transform: translateY(0);
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
 		opacity: 1;
 	}
 }
@@ -1153,26 +1159,30 @@ footer {
  * animation slide-out-bottom
  * ----------------------------------------
  */
- @keyframes slide-out-bottom {
+ @-webkit-keyframes slide-out-bottom {
 	0% {
-						transform: translateY(0);
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
 		opacity: 1;
 	}
 
 	100% {
-						transform: translateY(1000px);
+		-webkit-transform: translateY(100px);
+		transform: translateY(100px);
 		opacity: 0;
 	}
 	}
 
 	@keyframes slide-out-bottom {
 	0% {
-						transform: translateY(0);
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
 		opacity: 1;
 	}
 
 	100% {
-						transform: translateY(1000px);
+		-webkit-transform: translateY(100px);
+		transform: translateY(100px);
 		opacity: 0;
 	}
 }

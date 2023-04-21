@@ -2,6 +2,8 @@
 	"extends": ["stylelint-config-standard"],
 	"ignoreFiles": ["bootstrap.min.css"],
 	"rules": {
-		"no-descending-specificity": null
+		"no-descending-specificity": null,
+		"property-no-vendor-prefix": null,
+		"at-rule-no-vendor-prefix": null
 	}
 }
