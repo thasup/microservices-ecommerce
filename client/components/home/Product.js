@@ -155,7 +155,7 @@ const Product = ({
 							<Col xs={5} className="card-product-reviews" as="div">
 								<Rating
 									value={product.rating}
-									text={`(${product.numReviews})`}
+									numReviews={product.numReviews}
 									mobile={!!onMobile}
 								/>
 							</Col>
