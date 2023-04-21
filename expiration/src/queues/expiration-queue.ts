@@ -1,20 +1,22 @@
-import Queue from "bull";
-import { ExpirationCompletedPublisher } from "../events/publishers/ExpirationCompletedPublisher";
-import { natsWrapper } from "../NatsWrapper";
+import Queue from 'bull';
+
+import { ExpirationCompletedPublisher } from '../events/publishers/ExpirationCompletedPublisher';
+import { natsWrapper } from '../NatsWrapper';
 
 interface Payload {
-  orderId: string;
+  orderId: string
 }
 
-const expirationQueue = new Queue<Payload>("order:expiration", {
+const expirationQueue = new Queue<Payload>('order:expiration', {
   redis: {
-    host: process.env.REDIS_HOST,
-  },
+    host: process.env.REDIS_HOST
+  }
 });
 
-expirationQueue.process(async (job) => {
-  new ExpirationCompletedPublisher(natsWrapper.client).publish({
-    orderId: job.data.orderId,
+void expirationQueue.process(async (job) => {
+  const publisher = new ExpirationCompletedPublisher(natsWrapper.client);
+  await publisher.publish({
+    orderId: job.data.orderId
   });
 });
 
