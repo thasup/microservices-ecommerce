@@ -1,78 +1,79 @@
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
-import TopBannerSrc from "../../public/asset/header-banner/Top-category-banner.png";
-import BottomBannerSrc from "../../public/asset/header-banner/Bottom-category-banner.png";
-import DressBannerSrc from "../../public/asset/header-banner/Dress-category-banner.png";
-import SetBannerSrc from "../../public/asset/header-banner/Set-category-banner.png";
-import CoatBannerSrc from "../../public/asset/header-banner/Coat-category-banner.png";
+import TopBannerSrc from '../../public/asset/header-banner/Top-category-banner.png';
+import BottomBannerSrc from '../../public/asset/header-banner/Bottom-category-banner.png';
+import DressBannerSrc from '../../public/asset/header-banner/Dress-category-banner.png';
+import SetBannerSrc from '../../public/asset/header-banner/Set-category-banner.png';
+import CoatBannerSrc from '../../public/asset/header-banner/Coat-category-banner.png';
 
 const HeaderBannerSrc = {
-	Top: TopBannerSrc,
-	Bottom: BottomBannerSrc,
-	Dress: DressBannerSrc,
-	Set: SetBannerSrc,
-	Coat: CoatBannerSrc,
+  Top: TopBannerSrc,
+  Bottom: BottomBannerSrc,
+  Dress: DressBannerSrc,
+  Set: SetBannerSrc,
+  Coat: CoatBannerSrc
 };
 
 const CategoryDropDown = ({
-	eventTarget,
-	showCategoryDropDown,
-	setShowCategoryDropDown,
-	products,
-	bestseller,
+  eventTarget,
+  showCategoryDropDown,
+  setShowCategoryDropDown,
+  products,
+  bestseller
 }) => {
-	const [categoryName, setCategoryName] = useState("");
-	const [categoryParams, setCategoryParams] = useState("");
+  const [categoryName, setCategoryName] = useState('');
+  const [categoryParams, setCategoryParams] = useState('');
 
-	const [bestsellerProducts, setBestsellerProducts] = useState([]);
-	const [newArrivalsProducts, setNewArrivalsProducts] = useState([]);
+  const [bestsellerProducts, setBestsellerProducts] = useState([]);
+  const [newArrivalsProducts, setNewArrivalsProducts] = useState([]);
 
-	const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-	const menuItems = [
-		"Bestseller",
-		"New Arrivals",
-		"Top Brands",
-		"Recommended",
-		"Trending",
-		"Coming Soon",
-		"Sale",
-	];
+  const menuItems = [
+    'Bestseller',
+    'New Arrivals',
+    'Top Brands',
+    'Recommended',
+    'Trending',
+    'Coming Soon',
+    'Sale'
+  ];
 
-	useEffect(async () => {
-		if (eventTarget) {
-			setCategoryName(eventTarget.text);
-			setCategoryParams(eventTarget.pathname);
+  useEffect(async () => {
+    if (eventTarget) {
+      setCategoryName(eventTarget.text);
+      setCategoryParams(eventTarget.pathname);
 
-			const bestsellerArray = bestseller
-				.filter((product) => product.category === `${categoryName}`)
-				.slice(0, 3);
-			if (bestsellerArray.length !== 0) {
-				setBestsellerProducts(bestsellerArray);
-			}
+      const bestsellerArray = bestseller
+        .filter((product) => product.category === `${categoryName}`)
+        .slice(0, 3);
+      if (bestsellerArray.length !== 0) {
+        setBestsellerProducts(bestsellerArray);
+      }
 
-			const newArrivalsArray = products
-				.filter((product) => product.category === `${categoryName}`)
-				.reverse()
-				.slice(0, 2);
-			if (newArrivalsArray.length !== 0) {
-				setNewArrivalsProducts(newArrivalsArray);
-			}
+      const newArrivalsArray = products
+        .filter((product) => product.category === `${categoryName}`)
+        .reverse()
+        .slice(0, 2);
+      if (newArrivalsArray.length !== 0) {
+        setNewArrivalsProducts(newArrivalsArray);
+      }
 
-			setShowCategoryDropDown(true);
-			setIsReady(true);
-		}
-	}, [eventTarget, categoryName]);
+      setShowCategoryDropDown(true);
+      setIsReady(true);
+    }
+  }, [eventTarget, categoryName]);
 
-	return isReady ? (
+  return isReady
+    ? (
 		<div
 			className="category-dropdown-menu"
 			style={{
-				opacity: showCategoryDropDown ? 1 : 0,
-				visibility: showCategoryDropDown ? "visible" : "hidden",
-				top: showCategoryDropDown ? "75px" : "-5000px",
+			  opacity: showCategoryDropDown ? 1 : 0,
+			  visibility: showCategoryDropDown ? 'visible' : 'hidden',
+			  top: showCategoryDropDown ? '75px' : '-5000px'
 			}}
 			onMouseEnter={() => setShowCategoryDropDown(true)}
 			onMouseLeave={() => setShowCategoryDropDown(false)}
@@ -99,7 +100,7 @@ const CategoryDropDown = ({
 						<li className="menu-parent-item" key={index}>
 							<Link
 								href={`${categoryParams}/${item
-									.replace(" ", "-")
+									.replace(' ', '-')
 									.toLowerCase()}`}
 								passHref
 							>
@@ -110,7 +111,7 @@ const CategoryDropDown = ({
 									{item}
 								</a>
 							</Link>
-							{item === "Bestseller" && (
+							{item === 'Bestseller' && (
 								<ul className="menu-child">
 									{bestsellerProducts.map((product, index) => (
 										<li key={index}>
@@ -126,7 +127,7 @@ const CategoryDropDown = ({
 									))}
 								</ul>
 							)}
-							{item === "New Arrivals" && (
+							{item === 'New Arrivals' && (
 								<ul className="menu-child">
 									{newArrivalsProducts.map((product, index) => (
 										<li key={index}>
@@ -147,7 +148,8 @@ const CategoryDropDown = ({
 				</ul>
 			</div>
 		</div>
-	) : null;
+      )
+    : null;
 };
 
 export default CategoryDropDown;

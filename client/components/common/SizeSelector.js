@@ -1,33 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const SizeSelector = ({ product, width, callback }) => {
-	const [index, setIndex] = useState(null);
-	const [text, setText] = useState("");
-	const [sizeArray, setSizeArray] = useState(null);
-	const [loading, setLoading] = useState(true);
+  const [index, setIndex] = useState(null);
+  const [text, setText] = useState('');
+  const [sizeArray, setSizeArray] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		if (product?.sizes) {
-			product.sizes.toUpperCase();
-			const sizes = product?.sizes.split(",");
+  useEffect(() => {
+    if (product?.sizes) {
+      product.sizes.toUpperCase();
+      const sizes = product?.sizes.split(',');
 
-			setSizeArray(sizes);
-			setLoading(false);
-		}
+      setSizeArray(sizes);
+      setLoading(false);
+    }
 
-		if (sizeArray !== null && callback) {
-			callback(sizeArray[index]);
-		}
-	}, [product, index]);
+    if (sizeArray !== null && callback) {
+      callback(sizeArray[index]);
+    }
+  }, [product, index]);
 
-	const renderTooltip = (props) => (
+  const renderTooltip = (props) => (
 		<Tooltip id="button-tooltip" {...props}>
 			{text.toUpperCase()}
 		</Tooltip>
-	);
+  );
 
-	return loading ? null : (
+  return loading
+    ? null
+    : (
 		<div className="px-0 d-flex flex-row">
 			{sizeArray.map((size, i) => (
 				<OverlayTrigger
@@ -37,35 +39,37 @@ const SizeSelector = ({ product, width, callback }) => {
 					overlay={renderTooltip}
 					onEnter={() => setText(size)}
 				>
-					{i === index ? (
+					{i === index
+					  ? (
 						<i
 							className="size-selector"
 							style={{
-								backgroundColor: "#000",
-								color: "#fff",
-								width: `${width}`,
-								height: `${width}`,
+							  backgroundColor: '#000',
+							  color: '#fff',
+							  width: `${width}`,
+							  height: `${width}`
 							}}
 							onClick={() => setIndex(i)}
 						>
 							{size}
 						</i>
-					) : (
+					    )
+					  : (
 						<i
 							className="size-selector"
 							style={{
-								width: `${width}`,
-								height: `${width}`,
+							  width: `${width}`,
+							  height: `${width}`
 							}}
 							onClick={() => setIndex(i)}
 						>
 							{size}
 						</i>
-					)}
+					    )}
 				</OverlayTrigger>
 			))}
 		</div>
-	);
+      );
 };
 
 export default SizeSelector;

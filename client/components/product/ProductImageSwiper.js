@@ -1,46 +1,47 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 // import Swiper core and required modules
 import {
-	Navigation,
-	Pagination,
-	Scrollbar,
-	Zoom,
-	Mousewheel,
-	Keyboard,
-} from "swiper";
+  Navigation,
+  Pagination,
+  Scrollbar,
+  Zoom,
+  Mousewheel,
+  Keyboard
+} from 'swiper';
 
 // Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "swiper/css/zoom";
-import "swiper/css/mousewheel";
-import "swiper/css/keyboard";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import 'swiper/css/zoom';
+import 'swiper/css/mousewheel';
+import 'swiper/css/keyboard';
 
 // Import Swiper styles
-import NextImage from "../common/NextImage";
-import Loader from "../common/Loader";
+import NextImage from '../common/NextImage';
+import Loader from '../common/Loader';
 
 const ProductImageSwiper = ({ product }) => {
-	const [imageArray, setImageArray] = useState([]);
-	const [loading, setLoading] = useState(true);
+  const [imageArray, setImageArray] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-	if (imageArray.length === 0 && product) {
-		const filterImages = Object.values(product.images).filter(
-			(image) => image !== null && image !== ""
-		);
+  if (imageArray.length === 0 && product) {
+    const filterImages = Object.values(product.images).filter(
+      (image) => image !== null && image !== ''
+    );
 
-		setLoading(false);
-		setImageArray(filterImages);
-	}
+    setLoading(false);
+    setImageArray(filterImages);
+  }
 
-	return loading ? (
+  // eslint-disable-next-line multiline-ternary
+  return loading ? (
 		<Loader />
-	) : (
+  ) : (
 		<Swiper
 			// install Swiper modules
 			className="mySwiper custom-swiper"
@@ -49,13 +50,13 @@ const ProductImageSwiper = ({ product }) => {
 			slidesPerView={1}
 			navigation={{}}
 			pagination={{
-				clickable: true,
-				type: "bullets",
+			  clickable: true,
+			  type: 'bullets'
 			}}
 			mousewheel={true}
 			keyboard={{
-				enabled: true,
-				onlyInViewport: false,
+			  enabled: true,
+			  onlyInViewport: false
 			}}
 			// scrollbar={{ draggable: true }}
 			zoom={{}}
@@ -71,7 +72,7 @@ const ProductImageSwiper = ({ product }) => {
 				</SwiperSlide>
 			))}
 		</Swiper>
-	);
+  );
 };
 
 export default ProductImageSwiper;

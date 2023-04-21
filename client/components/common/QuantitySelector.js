@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
+import React, { useEffect } from 'react';
+import { Form } from 'react-bootstrap';
 
 const QuantitySelector = ({ product, quantity, setQuantity }) => {
-	useEffect(() => {
-		if (quantity > product.countInStock) {
-			setQuantity(product.countInStock);
-		} else if (quantity < 1) {
-			setQuantity(1);
-		}
-	}, [quantity]);
+  useEffect(() => {
+    if (quantity > product.countInStock) {
+      setQuantity(product.countInStock);
+    } else if (quantity < 1) {
+      setQuantity(1);
+    }
+  }, [quantity]);
 
-	return (
+  return (
 		<div className="quantity-selector d-flex flex-row align-items-center">
 			<div
 				className="qty-btn decrease-btn"
@@ -32,7 +32,7 @@ const QuantitySelector = ({ product, quantity, setQuantity }) => {
 				+
 			</div>
 		</div>
-	);
+  );
 };
 
 export default QuantitySelector;
