@@ -158,10 +158,10 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   return (
 		<>
 			<Head>
-				<title>{product.title} | Aurapan</title>
+				<title>{product?.title} | Aurapan</title>
 			</Head>
 			<div className="breadcrumb-label">
-				{!product.id || product.id !== productId ? (
+				{product?.id !== productId ? (
 					<div
 						className="d-flex justify-content-center align-items-center px-0"
 						style={{ marginTop: '80px' }}
@@ -176,15 +176,15 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 							</Link>
 
 							<Link href={`/products/${categoryParams}`} passHref>
-								<Breadcrumb.Item>{product.category}</Breadcrumb.Item>
+								<Breadcrumb.Item>{product?.category}</Breadcrumb.Item>
 							</Link>
 
 							<Link
 								href="/products/[productId]"
-								as={`/products/${product.id}`}
+								as={`/products/${product?.id}`}
 								passHref
 							>
-								<Breadcrumb.Item>{product.title}</Breadcrumb.Item>
+								<Breadcrumb.Item>{product?.title}</Breadcrumb.Item>
 							</Link>
 						</Breadcrumb>
 
@@ -200,7 +200,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 									<Col sm={1} className="mb-3">
 										{imageArray.map((img, index) => (
 											<div
-												className="product-side-img"
+												className='product-side-img zoom-effect'
 												id={`side-img-${index}`}
 												key={index}
 												onClick={(e) => setImageEvent(e)}
@@ -233,15 +233,15 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 							<Col sm={6}>
 								<ListGroup variant="flush" className="mb-3">
 									<ListGroup.Item className="py-0">
-										<Rating value={product.rating} mobile={false} />
+										<Rating value={product?.rating} mobile={false} />
 									</ListGroup.Item>
 
 									<ListGroup.Item>
-										<h1>{product.title}</h1>
+										<h1>{product?.title}</h1>
 									</ListGroup.Item>
 
 									<ListGroup.Item>
-										<h1 className="product-price">$ {product.price}</h1>
+										<h1 className="product-price">$ {product?.price}</h1>
 									</ListGroup.Item>
 
 									<ListGroup.Item>
@@ -279,7 +279,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 
 									<ListGroup.Item>
 										<div className="product-desc my-1 px-0">
-											<p>{product.description}</p>
+											<p>{product?.description}</p>
 										</div>
 									</ListGroup.Item>
 
@@ -297,6 +297,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 												</Col>
 												<Col>
 													<h6>
+														{product?.countInStock > 0
 														  ? 'In Stock'
 														  : 'Out of Stock'}
 													</h6>
@@ -310,7 +311,7 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 													<h5>Brand:</h5>
 												</Col>
 												<Col>
-													<h6>{product.brand}</h6>
+													<h6>{product?.brand}</h6>
 												</Col>
 											</Row>
 										</ListGroup.Item>
@@ -321,12 +322,12 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
 													<h5>Category:</h5>
 												</Col>
 												<Col>
-													<h6>{product.category}</h6>
+													<h6>{product?.category}</h6>
 												</Col>
 											</Row>
 										</ListGroup.Item>
 
-										{product.countInStock > 0 && (
+										{product?.countInStock > 0 && (
 											<>
 												<ListGroup.Item>
 													<Coupon callback={couponHandler} />
