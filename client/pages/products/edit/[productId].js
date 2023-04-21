@@ -1,116 +1,118 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
-import Router, { useRouter } from "next/router";
-import Head from "next/head";
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import Router, { useRouter } from 'next/router';
+import Head from 'next/head';
 
-import CustomCarousol from "../../../components/dashboard/CustomCarousel";
-import useRequest from "../../../hooks/useRequest";
-import Loader from "../../../components/common/Loader";
+import CustomCarousol from '../../../components/dashboard/CustomCarousel';
+import useRequest from '../../../hooks/useRequest';
+import Loader from '../../../components/common/Loader';
 
 const EditProduct = ({ products, currentUser }) => {
-	const { productId } = useRouter().query;
+  const { productId } = useRouter().query;
 
-	const [title, setTitle] = useState("");
-	const [price, setPrice] = useState(0);
-	const [image1, setImage1] = useState("");
-	const [image2, setImage2] = useState("");
-	const [image3, setImage3] = useState("");
-	const [image4, setImage4] = useState("");
-	const [colors, setColors] = useState("");
-	const [sizes, setSizes] = useState("");
-	const [brand, setBrand] = useState("");
-	const [category, setCategory] = useState("");
-	const [material, setMaterial] = useState("");
-	const [description, setDescription] = useState("");
-	const [countInStock, setCountInStock] = useState(0);
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState(0);
+  const [image1, setImage1] = useState('');
+  const [image2, setImage2] = useState('');
+  const [image3, setImage3] = useState('');
+  const [image4, setImage4] = useState('');
+  const [colors, setColors] = useState('');
+  const [sizes, setSizes] = useState('');
+  const [brand, setBrand] = useState('');
+  const [category, setCategory] = useState('');
+  const [material, setMaterial] = useState('');
+  const [description, setDescription] = useState('');
+  const [countInStock, setCountInStock] = useState(0);
 
-	const [loading, setLoading] = useState(true);
-	const [imageArray, setImageArray] = useState([]);
-	const [loadingUpdate, setLoadingUpdate] = useState(false);
-	const [isReady, setIsReady] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [imageArray, setImageArray] = useState([]);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-	const product = products.find((product) => product.id === productId);
+  const product = products.find((product) => product.id === productId);
 
-	const { doRequest, errors } = useRequest({
-		url: `/api/products/${productId}`,
-		method: "patch",
-		body: {
-			title,
-			price,
-			image1,
-			image2,
-			image3,
-			image4,
-			colors,
-			sizes,
-			brand,
-			category,
-			material,
-			description,
-			countInStock,
-		},
-		onSuccess: () => {
-			setLoadingUpdate(false);
-			Router.push(`/products/${productId}`);
-		},
-	});
+  const { doRequest, errors } = useRequest({
+    url: `/api/products/${productId}`,
+    method: 'patch',
+    body: {
+      title,
+      price,
+      image1,
+      image2,
+      image3,
+      image4,
+      colors,
+      sizes,
+      brand,
+      category,
+      material,
+      description,
+      countInStock
+    },
+    onSuccess: () => {
+      setLoadingUpdate(false);
+      Router.push(`/products/${productId}`);
+    }
+  });
 
-	useEffect(() => {
-		// Protect unauthorized access
-		if (!currentUser || currentUser.isAdmin === false) {
-			return Router.push("/signin");
-		} else {
-			setIsReady(true);
-		}
+  useEffect(() => {
+    // Protect unauthorized access
+    if (!currentUser || currentUser.isAdmin === false) {
+      return Router.push('/signin');
+    } else {
+      setIsReady(true);
+    }
 
-		if (product) {
-			setTitle(product.title);
-			setPrice(product.price);
-			setImage1(product.images.image1);
-			setImage2(product.images.image2);
-			setImage3(product.images.image3);
-			setImage4(product.images.image4);
-			setColors(product.colors);
-			setSizes(product.sizes);
-			setBrand(product.brand);
-			setCategory(product.category);
-			setMaterial(product.material);
-			setDescription(product.description);
-			setCountInStock(product.countInStock);
+    if (product) {
+      setTitle(product.title);
+      setPrice(product.price);
+      setImage1(product.images.image1);
+      setImage2(product.images.image2);
+      setImage3(product.images.image3);
+      setImage4(product.images.image4);
+      setColors(product.colors);
+      setSizes(product.sizes);
+      setBrand(product.brand);
+      setCategory(product.category);
+      setMaterial(product.material);
+      setDescription(product.description);
+      setCountInStock(product.countInStock);
 
-			if (imageArray.length === 0) {
-				const images = Object.values(product.images);
+      if (imageArray.length === 0) {
+        const images = Object.values(product.images);
 
-				const filterImages = images.filter(
-					(image) => image !== null && image !== ""
-				);
+        const filterImages = images.filter(
+          (image) => image !== null && image !== ''
+        );
 
-				setLoading(false);
-				setImageArray(filterImages);
-			}
-		}
-	}, []);
+        setLoading(false);
+        setImageArray(filterImages);
+      }
+    }
+  }, []);
 
-	const submitHandler = async (e) => {
-		e.preventDefault();
-		setLoadingUpdate(true);
-		doRequest();
-	};
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setLoadingUpdate(true);
+    doRequest();
+  };
 
-	return (
-		isReady && (
+  return (
+    isReady && (
 			<>
 				<Head>
 					<title>Edit Product Information | Aurapan</title>
 				</Head>
-				{loading ? (
+				{loading
+				  ? (
 					<div
 						className="d-flex justify-content-center align-items-center px-0"
-						style={{ marginTop: "80px" }}
+						style={{ marginTop: '80px' }}
 					>
 						<Loader />
 					</div>
-				) : (
+				    )
+				  : (
 					<Container className="app-container">
 						<Row>
 							<Col
@@ -265,7 +267,8 @@ const EditProduct = ({ products, currentUser }) => {
 
 									{errors}
 									<Button type="submit" variant="dark" className="my-3">
-										{loadingUpdate ? (
+										{loadingUpdate
+										  ? (
 											<Spinner
 												animation="border"
 												role="status"
@@ -275,17 +278,18 @@ const EditProduct = ({ products, currentUser }) => {
 											>
 												<span className="visually-hidden">Loading...</span>
 											</Spinner>
-										) : null}{" "}
+										    )
+										  : null}{' '}
 										Update
 									</Button>
 								</Form>
 							</Col>
 						</Row>
 					</Container>
-				)}
+				    )}
 			</>
-		)
-	);
+    )
+  );
 };
 
 export default EditProduct;
