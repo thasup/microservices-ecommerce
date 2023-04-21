@@ -45,7 +45,7 @@ a {
 }
 
 a:hover {
-	color: #555;
+	color: #787878;
 }
 
 a::before {
@@ -67,7 +67,7 @@ a::before {
 	}
 
 	a:hover {
-		color: #555;
+		color: #787878;
 	}
 }
 
