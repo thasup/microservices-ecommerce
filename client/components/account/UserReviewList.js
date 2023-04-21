@@ -1,14 +1,14 @@
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
-import React from "react";
-import { Button, Col, Row, Table } from "react-bootstrap";
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
+import React from 'react';
+import { Button, Col, Row, Table } from 'react-bootstrap';
 
-import CustomTooltip from "../common/CustomTooltip";
-import Rating from "../common/Rating";
+import CustomTooltip from '../common/CustomTooltip';
+import Rating from '../common/Rating';
 
 const UserReviewList = ({ myReviews, products }) => {
-	return (
+  return (
 		<Row className="align-items-center">
 			<Col>
 				<Table striped bordered hover responsive className="table-sm">
@@ -28,18 +28,18 @@ const UserReviewList = ({ myReviews, products }) => {
 						{myReviews.map((review, index) => (
 							<tr key={review.id}>
 								<td>
-									<CustomTooltip index={index} mongoId={review.id} />{" "}
+									<CustomTooltip index={index} mongoId={review.id} />{' '}
 								</td>
 								<td>
 									<Link
-										href={`/products/[productId]`}
+										href={'/products/[productId]'}
 										as={`/products/${review.productId}`}
 									>
 										<a>
 											{review.productTitle
-												? review.productTitle
-												: products.find(
-														(product) => product.id === review.productId
+											  ? review.productTitle
+											  : products.find(
+											    (product) => product.id === review.productId
 												  )?.title}
 										</a>
 									</Link>
@@ -52,7 +52,7 @@ const UserReviewList = ({ myReviews, products }) => {
 									<Rating
 										value={
 											products.find(
-												(product) => product.id === review.productId
+											  (product) => product.id === review.productId
 											)?.rating
 										}
 										mobile={false}
@@ -60,7 +60,7 @@ const UserReviewList = ({ myReviews, products }) => {
 									(
 									{
 										products.find((product) => product.id === review.productId)
-											?.rating
+										  ?.rating
 									}
 									)
 								</td>
@@ -71,7 +71,7 @@ const UserReviewList = ({ myReviews, products }) => {
 								</td>
 								<td>
 									<Link
-										href={"/products/[productId]"}
+										href={'/products/[productId]'}
 										as={`/products/${review.productId}`}
 										passHref
 									>
@@ -86,7 +86,7 @@ const UserReviewList = ({ myReviews, products }) => {
 				</Table>
 			</Col>
 		</Row>
-	);
+  );
 };
 
 export default UserReviewList;

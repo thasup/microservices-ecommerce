@@ -45,7 +45,7 @@ a {
 }
 
 a:hover {
-	color: #555;
+	color: #787878;
 }
 
 a::before {
@@ -67,7 +67,7 @@ a::before {
 	}
 
 	a:hover {
-		color: #555;
+		color: #787878;
 	}
 }
 
@@ -141,6 +141,19 @@ a::before {
 	-ms-user-select: none;
 	user-select: none;
 }
+
+.zoom-effect {
+  overflow: hidden;
+}
+
+.zoom-effect img {
+  transition: transform .3s ease;
+}
+
+.zoom-effect:hover img {
+  transform: scale(1.1);
+}
+
 
 /* Bootstrap Component */
 
@@ -592,6 +605,7 @@ header {
 	justify-content: center;
 	align-items: center;
 	cursor: auto;
+	opacity: 0;
 }
 
 .menu-tab-mobile {
@@ -691,13 +705,13 @@ header {
 	text-transform: uppercase;
 	text-decoration: none;
 	color: black;
-	font-weight: 500;
 	padding: 0;
 }
 
 .card-product-title a {
 	color: black;
 	text-decoration: none;
+	font-weight: 400;
 }
 
 .card-product-price {
@@ -777,16 +791,15 @@ header {
 	margin-bottom: 1rem;
 	position: relative;
 	width: 100%;
-	box-shadow: 0 0 5px #555;
 }
 
 #product-page .product-side-img:hover {
 	cursor: pointer;
-	outline: 2px solid black;
+	box-shadow: rgb(0 0 0 / 16%) 0 3px 6px, rgb(0 0 0 / 23%) 0 3px 6px;
 }
 
 #product-page .toggle-side-img {
-	outline: 2px solid black;
+	box-shadow: rgb(6 24 44 / 40%) 0 0 0 2px, rgb(6 24 44 / 65%) 0 4px 6px -1px, rgb(255 255 255 / 8%) 0 1px 0 inset;
 }
 
 #product-page .product-price {
