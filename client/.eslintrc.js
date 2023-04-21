@@ -22,7 +22,9 @@ module.exports = {
     }
   },
   rules: {
+    semi: ['error', 'always'],
     'no-tabs': ['error', { allowIndentationTabs: true }],
-    'no-mixed-spaces-and-tabs': ['error', 'smart-tabs']
+    'no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
+    'react/prop-types': 'off'
   }
-}
+};
