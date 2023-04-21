@@ -1,125 +1,127 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
-	Col,
-	ListGroup,
-	Row,
-	Card,
-	Button,
-	Container,
-	Spinner,
-} from "react-bootstrap";
-import Router, { useRouter } from "next/router";
-import Link from "next/link";
-import StripeCheckout from "react-stripe-checkout";
-import { PayPalButton } from "react-paypal-button-v2";
-import Head from "next/head";
+  Col,
+  ListGroup,
+  Row,
+  Card,
+  Button,
+  Container,
+  Spinner
+} from 'react-bootstrap';
+import Router, { useRouter } from 'next/router';
+import Link from 'next/link';
+import StripeCheckout from 'react-stripe-checkout';
+import { PayPalButton } from 'react-paypal-button-v2';
+import Head from 'next/head';
 
-import NextImage from "../../components/common/NextImage";
-import Loader from "../../components/common/Loader";
-import Message from "../../components/common/Message";
-import useRequest from "../../hooks/useRequest";
-import ExpireTimer from "../../components/common/ExpireTimer";
+import NextImage from '../../components/common/NextImage';
+import Loader from '../../components/common/Loader';
+import Message from '../../components/common/Message';
+import useRequest from '../../hooks/useRequest';
+import ExpireTimer from '../../components/common/ExpireTimer';
 
 const OrderPage = ({ currentUser, orders, myOrders }) => {
-	const { orderId } = useRouter().query;
+  const { orderId } = useRouter().query;
 
-	const [order, setOrder] = useState(null);
+  const [order, setOrder] = useState(null);
 
-	const [isReady, setIsReady] = useState(false);
-	const [sdkReady, setSdkReady] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const [loadingPay, setLoadingPay] = useState(false);
-	const [loadingDeliver, setLoadingDeliver] = useState(false);
-	const [paypalLoaded, setPaypalLoaded] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [sdkReady, setSdkReady] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadingPay, setLoadingPay] = useState(false);
+  const [loadingDeliver, setLoadingDeliver] = useState(false);
+  const [paypalLoaded, setPaypalLoaded] = useState(false);
 
-	const { doRequest: payOrder, errors: paymentErrors } = useRequest({
-		url: `/api/payments`,
-		method: "post",
-		body: {
-			orderId: orderId,
-		},
-		onSuccess: () => {
-			setLoading(false);
-			setLoadingPay(false);
-			Router.push(`/orders/${orderId}`);
-		},
-	});
+  const { doRequest: payOrder, errors: paymentErrors } = useRequest({
+    url: '/api/payments',
+    method: 'post',
+    body: {
+      orderId
+    },
+    onSuccess: () => {
+      setLoading(false);
+      setLoadingPay(false);
+      Router.push(`/orders/${orderId}`);
+    }
+  });
 
-	const { doRequest: deliverOrder, errors: deliverErrors } = useRequest({
-		url: `/api/orders/${orderId}/deliver`,
-		method: "patch",
-		body: {},
-		onSuccess: () => {
-			setLoadingDeliver(false);
-			Router.push(`/orders/${orderId}`);
-		},
-	});
+  const { doRequest: deliverOrder, errors: deliverErrors } = useRequest({
+    url: `/api/orders/${orderId}/deliver`,
+    method: 'patch',
+    body: {},
+    onSuccess: () => {
+      setLoadingDeliver(false);
+      Router.push(`/orders/${orderId}`);
+    }
+  });
 
-	useEffect(async () => {
-		// Protect unauthorized access
-		if (!currentUser) {
-			return Router.push("/signin");
-		} else if (
-			!myOrders.some((order) => order.id === orderId) &&
+  useEffect(async () => {
+    // Protect unauthorized access
+    if (!currentUser) {
+      return Router.push('/signin');
+    } else if (
+      !myOrders.some((order) => order.id === orderId) &&
 			currentUser.isAdmin === false
-		) {
-			return Router.push("/signin");
-		} else if (!order) {
-			const order = await orders.find((order) => order.id === orderId);
-			setOrder(order);
-			setIsReady(true);
-		}
-	}, []);
+    ) {
+      return Router.push('/signin');
+    } else if (!order) {
+      const order = await orders.find((order) => order.id === orderId);
+      setOrder(order);
+      setIsReady(true);
+    }
+  }, []);
 
-	useEffect(async () => {
-		const addPayPalScript = async () => {
-			// Add paypal script to DOM
-			const script = document.createElement("script");
-			script.type = "text/javascript";
-			script.src = `https://www.paypal.com/sdk/js?client-id=AdL_T7SNeUKaFYK8QBDWYsmFP3wKpIYtwzMOAVl8I2s6kvKImr47ImGxB9NbPFQA4kfGqt-ZNrRmBtgx`;
-			script.async = true;
-			script.defer = true;
-			script.onload = () => {
-				setSdkReady(true);
-			};
-			document.body.appendChild(script);
-		};
+  useEffect(async () => {
+    const addPayPalScript = async () => {
+      // Add paypal script to DOM
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://www.paypal.com/sdk/js?client-id=AdL_T7SNeUKaFYK8QBDWYsmFP3wKpIYtwzMOAVl8I2s6kvKImr47ImGxB9NbPFQA4kfGqt-ZNrRmBtgx';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        setSdkReady(true);
+      };
+      document.body.appendChild(script);
+    };
 
-		if (order) {
-			// Check if customer hasn't paid the order and chose to proceed with paypal
-			if (order.paymentMethod === "paypal" && order.isPaid === false) {
-				// Check if the page hasn't loaded with paypal, then
-				if (!window.paypal && !paypalLoaded) {
-					// just add the paypal script (and sdk ready)
-					addPayPalScript();
-				} else {
-					// if page has loaded with paypal, then just set the sdk ready
-					setSdkReady(true);
-				}
-			}
-		}
-	}, [loadingPay, loadingDeliver, order]);
+    if (order) {
+      // Check if customer hasn't paid the order and chose to proceed with paypal
+      if (order.paymentMethod === 'paypal' && order.isPaid === false) {
+        // Check if the page hasn't loaded with paypal, then
+        if (!window.paypal && !paypalLoaded) {
+          // just add the paypal script (and sdk ready)
+          addPayPalScript();
+        } else {
+          // if page has loaded with paypal, then just set the sdk ready
+          setSdkReady(true);
+        }
+      }
+    }
+  }, [loadingPay, loadingDeliver, order]);
 
-	const deliverHandler = (e) => {
-		e.preventDefault();
-		setLoadingDeliver(true);
-		deliverOrder();
-	};
+  const deliverHandler = (e) => {
+    e.preventDefault();
+    setLoadingDeliver(true);
+    deliverOrder();
+  };
 
-	return (
-		isReady && (
+  return (
+    isReady && (
 			<>
 				<Head>
 					<title>Order | Aurapan</title>
 				</Head>
-				{loading ? (
+				{loading
+				  ? (
 					<div
 						className="d-flex justify-content-center align-items-center px-0"
-						style={{ marginTop: "80px" }}
+						style={{ marginTop: '80px' }}
 					>
 						<Loader />
 					</div>
-				) : (
+				    )
+				  : (
 					<Container className="app-container">
 						<div className="px-0">
 							<h3>
@@ -132,34 +134,36 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 									<ListGroup.Item>
 										<h3>Shipping</h3>
 										<p>
-											<strong>Name: </strong>{" "}
+											<strong>Name: </strong>{' '}
 											{order.name ? order.name.toUpperCase() : order.userId}
 										</p>
 										<p>
 											<strong>Email: </strong>
 
 											<Link
-												href={`mailto:${order.email ? order.email : ""}`}
+												href={`mailto:${order.email ? order.email : ''}`}
 												passHref
 											>
-												<a>{order.email ? order.email : ""}</a>
+												<a>{order.email ? order.email : ''}</a>
 											</Link>
 										</p>
 										<p className="mb-3">
 											<strong>Address: </strong>
-											{order.shippingAddress.address}{" "}
-											{order.shippingAddress.city},{" "}
-											{order.shippingAddress.postalCode},{" "}
+											{order.shippingAddress.address}{' '}
+											{order.shippingAddress.city},{' '}
+											{order.shippingAddress.postalCode},{' '}
 											{order.shippingAddress.country}
 										</p>
-										{order.isDelivered ? (
+										{order.isDelivered
+										  ? (
 											<Message variant="success">
-												Delivered on {order.updatedAt?.substring(0, 10)}{" "}
+												Delivered on {order.updatedAt?.substring(0, 10)}{' '}
 												{order.updatedAt?.substring(11, 16)}
 											</Message>
-										) : (
+										    )
+										  : (
 											<Message variant="danger">Not Delivered</Message>
-										)}
+										    )}
 									</ListGroup.Item>
 
 									<ListGroup.Item>
@@ -171,32 +175,38 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 											</span>
 										</p>
 
-										{order.status === "cancelled" ? (
+										{order.status === 'cancelled'
+										  ? (
 											<Message variant="danger">Order Cancelled</Message>
-										) : order.isPaid ? (
+										    )
+										  : order.isPaid
+										    ? (
 											<Message variant="success">
-												Paid on {order.paidAt?.substring(0, 10)}{" "}
+												Paid on {order.paidAt?.substring(0, 10)}{' '}
 												{order.paidAt?.substring(11, 16)}
 											</Message>
-										) : (
+										      )
+										    : (
 											<Message variant="secondary">
 												Order will expire in <ExpireTimer order={order} />
 											</Message>
-										)}
+										      )}
 									</ListGroup.Item>
 
 									<ListGroup.Item>
 										<h3>Order Items</h3>
-										{order.cart.length === 0 ? (
+										{order.cart.length === 0
+										  ? (
 											<Message>Order is empty</Message>
-										) : (
+										    )
+										  : (
 											<ListGroup variant="flush">
 												{order.cart.map((item, index) => (
 													<ListGroup.Item key={index} id="cart-items">
 														<Row>
 															<Col md={2} xs={4} className="px-0">
 																<Link
-																	href={`/products/[productId]`}
+																	href={'/products/[productId]'}
 																	as={`/products/${item.productId}`}
 																	passHref
 																>
@@ -218,7 +228,7 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 																		className="mb-3 d-flex flex-column"
 																	>
 																		<Link
-																			href={`/products/[productId]`}
+																			href={'/products/[productId]'}
 																			as={`/products/${item.productId}`}
 																		>
 																			<a className="cart-product-title mb-1">
@@ -227,25 +237,29 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 																		</Link>
 
 																		<h6>
-																			<strong>COLOR:</strong>{" "}
-																			{item.color === null ? (
-																				<p style={{ color: "red" }}>
+																			<strong>COLOR:</strong>{' '}
+																			{item.color === null
+																			  ? (
+																				<p style={{ color: 'red' }}>
 																					Color not selected
 																				</p>
-																			) : (
-																				item.color
-																			)}
+																			    )
+																			  : (
+																			  item.color
+																			    )}
 																		</h6>
 
 																		<h6>
-																			<strong>SIZE:</strong>{" "}
-																			{item.size === null ? (
-																				<p style={{ color: "red" }}>
+																			<strong>SIZE:</strong>{' '}
+																			{item.size === null
+																			  ? (
+																				<p style={{ color: 'red' }}>
 																					Size not selected
 																				</p>
-																			) : (
-																				item.size
-																			)}
+																			    )
+																			  : (
+																			  item.size
+																			    )}
 																		</h6>
 																	</Col>
 
@@ -253,7 +267,7 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 																		{item.qty} x ${item.price * item.discount} =
 																		$
 																		{(
-																			item.qty *
+																		  item.qty *
 																			item.price *
 																			item.discount
 																		).toFixed(2)}
@@ -264,7 +278,7 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 													</ListGroup.Item>
 												))}
 											</ListGroup>
-										)}
+										    )}
 									</ListGroup.Item>
 								</ListGroup>
 							</Col>
@@ -312,38 +326,43 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 											</Row>
 										</ListGroup.Item>
 
-										{!order.isPaid && order.status !== "cancelled" ? (
+										{!order.isPaid && order.status !== 'cancelled'
+										  ? (
 											<ListGroup.Item>
 												{paymentErrors}
-												{loadingPay ? (
+												{loadingPay
+												  ? (
 													<Loader />
-												) : (
+												    )
+												  : (
 													<>
-														{order.paymentMethod === "paypal" && (
+														{order.paymentMethod === 'paypal' && (
 															<>
-																{!sdkReady ? (
+																{!sdkReady
+																  ? (
 																	<Loader />
-																) : (
+																    )
+																  : (
 																	<PayPalButton
 																		amount={order.totalPrice}
 																		onSuccess={() => {
-																			setLoading(true);
-																			setLoadingPay(true);
-																			payOrder({ token: currentUser?.id });
+																		  setLoading(true);
+																		  setLoadingPay(true);
+																		  payOrder({ token: currentUser?.id });
 																		}}
 																		onButtonReady={() => {
-																			setPaypalLoaded(true);
+																		  setPaypalLoaded(true);
 																		}}
 																	/>
-																)}
+																    )}
 															</>
 														)}
-														{order.paymentMethod === "stripe" && (
+														{order.paymentMethod === 'stripe' && (
 															<StripeCheckout
 																token={({ id }) => {
-																	setLoading(true);
-																	setLoadingPay(true);
-																	payOrder({ token: id });
+																  setLoading(true);
+																  setLoadingPay(true);
+																  payOrder({ token: id });
 																}}
 																stripeKey="pk_test_51KYCbpCqypc6uabtXBYVwjkCQxYJ02VlTebqSllPb0Kei5mvKN1brmzIgEeZK371eoKkh7rJxX70lr7wet0VfZjb00PDUgCK7c"
 																amount={order.totalPrice * 100}
@@ -351,9 +370,10 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 															/>
 														)}
 													</>
-												)}
+												    )}
 											</ListGroup.Item>
-										) : null}
+										    )
+										  : null}
 
 										{deliverErrors}
 										{currentUser?.isAdmin &&
@@ -365,7 +385,8 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 														variant="dark"
 														onClick={deliverHandler}
 													>
-														{loadingDeliver ? (
+														{loadingDeliver
+														  ? (
 															<Spinner
 																animation="border"
 																role="status"
@@ -377,20 +398,21 @@ const OrderPage = ({ currentUser, orders, myOrders }) => {
 																	Loading...
 																</span>
 															</Spinner>
-														) : null}{" "}
+														    )
+														  : null}{' '}
 														Mark As Delivered
 													</Button>
 												</ListGroup.Item>
-											)}
+										)}
 									</ListGroup>
 								</Card>
 							</Col>
 						</Row>
 					</Container>
-				)}
+				    )}
 			</>
-		)
-	);
+    )
+  );
 };
 
 export default OrderPage;

@@ -1,55 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { Row, Col, Container, Nav } from "react-bootstrap";
-import dynamic from "next/dynamic";
-import Router from "next/router";
-import Head from "next/head";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Container, Nav } from 'react-bootstrap';
+import dynamic from 'next/dynamic';
+import Router from 'next/router';
+import Head from 'next/head';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
 import {
-	faBasketShopping,
-	faCircleInfo,
-	faHeart,
-	faMapLocationDot,
-	faShieldHalved,
-	faStar,
-} from "@fortawesome/free-solid-svg-icons";
+  faBasketShopping,
+  faCircleInfo,
+  faHeart,
+  faMapLocationDot,
+  faShieldHalved,
+  faStar
+} from '@fortawesome/free-solid-svg-icons';
 
-import EditProfile from "../../components/account/EditProfile";
-import EditSecurity from "../../components/account/EditSecurity";
-import EditAddress from "../../components/account/EditAddress";
-import UserOrderList from "../../components/account/UserOrderList";
-import UserReviewList from "../../components/account/UserReviewList";
-import WishList from "../../components/account/WishList";
-import Support from "../../components/account/Support";
+import EditProfile from '../../components/account/EditProfile';
+import EditSecurity from '../../components/account/EditSecurity';
+import EditAddress from '../../components/account/EditAddress';
+import UserOrderList from '../../components/account/UserOrderList';
+import UserReviewList from '../../components/account/UserReviewList';
+import WishList from '../../components/account/WishList';
+import Support from '../../components/account/Support';
 
 const DynamicTabContainer = dynamic(
-	() => import("react-bootstrap/TabContainer"),
-	{
-		ssr: false,
-	}
+  () => import('react-bootstrap/TabContainer'),
+  {
+    ssr: false
+  }
 );
-const DynamicTabContent = dynamic(() => import("react-bootstrap/TabContent"), {
-	ssr: false,
+const DynamicTabContent = dynamic(() => import('react-bootstrap/TabContent'), {
+  ssr: false
 });
-const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
-	ssr: false,
+const DynamicTabPane = dynamic(() => import('react-bootstrap/TabPane'), {
+  ssr: false
 });
 
 const Dashboard = ({ currentUser, users, myOrders, myReviews, products }) => {
-	const [isReady, setIsReady] = useState(false);
-	const user = users.find((user) => user.id === currentUser?.id);
+  const [isReady, setIsReady] = useState(false);
+  const user = users.find((user) => user.id === currentUser?.id);
 
-	useEffect(() => {
-		// Protect unauthorized access
-		if (!currentUser) {
-			return Router.push("/signin");
-		} else {
-			setIsReady(true);
-		}
-	}, []);
+  useEffect(() => {
+    // Protect unauthorized access
+    if (!currentUser) {
+      return Router.push('/signin');
+    } else {
+      setIsReady(true);
+    }
+  }, []);
 
-	return (
-		isReady && (
+  return (
+    isReady && (
 			<>
 				<Head>
 					<title>Account Setting | Aurapan</title>
@@ -145,8 +145,8 @@ const Dashboard = ({ currentUser, users, myOrders, myReviews, products }) => {
 					</DynamicTabContainer>
 				</Container>
 			</>
-		)
-	);
+    )
+  );
 };
 
 export default Dashboard;
