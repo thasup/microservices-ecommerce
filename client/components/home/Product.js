@@ -20,6 +20,19 @@ const Product = ({
 }) => {
   const [color, setColor] = useState(null);
   const [toggle, setToggle] = useState(null);
+  const [menuTabClass, setMenuTabClass] = useState('');
+
+  useEffect(() => {
+    if (toggle === null) {
+      return;
+    }
+
+    if (toggle) {
+      setMenuTabClass('slide-in-bottom');
+    } else {
+      setMenuTabClass('slide-out-bottom');
+    }
+  }, [toggle]);
 
   const colorSelectedHandler = (color) => {
     if (color !== null) {
@@ -36,8 +49,8 @@ const Product = ({
     }
   };
 
-		<Card className="mb-3 product-card">
   return (
+		<Card className="product-card">
 			<div
 				className="product-img"
 				onMouseEnter={() => setToggle(true)}
@@ -87,7 +100,7 @@ const Product = ({
 				</Link>
 
 				{showAddToCart && !onMobile && (
-					<div className="menu-tab" style={{ opacity: toggle ? "1" : "0" }}>
+					<div className={classNames('menu-tab', menuTabClass)}>
 						<AddToCart
 							product={product}
 							currentUser={currentUser}
@@ -98,6 +111,7 @@ const Product = ({
 			</div>
 
 			<Card.Body className="p-0">
+				<div className="card-body-wrapper">
 					<Row
 						className="d-flex justify-content-between px-0 mx-0"
 						style={{
@@ -169,6 +183,7 @@ const Product = ({
 							lg={true}
 						/>
 					)}
+				</div>
 			</Card.Body>
 		</Card>
   );
