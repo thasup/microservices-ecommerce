@@ -1,76 +1,78 @@
-import React, { useEffect, useState } from "react";
-import Router from "next/router";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import Link from "next/link";
-import Head from "next/head";
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import Router from 'next/router';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import Link from 'next/link';
+import Head from 'next/head';
+import Image from 'next/image';
 
-import useRequest from "../hooks/useRequest";
-import Loader from "../components/common/Loader";
+import useRequest from '../hooks/useRequest';
+import Loader from '../components/common/Loader';
 
 const signin = ({ currentUser }) => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-	const [loading, setLoading] = useState(false);
-	const [showErrors, setShowErrors] = useState(false);
-	const [isReady, setIsReady] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-	const { doRequest, errors } = useRequest({
-		url: "/api/users/signin",
-		method: "post",
-		body: {
-			email,
-			password,
-		},
-		onSuccess: () => {
-			Router.back();
-			setLoading(false);
-		},
-	});
+  const { doRequest, errors } = useRequest({
+    url: '/api/users/signin',
+    method: 'post',
+    body: {
+      email,
+      password
+    },
+    onSuccess: () => {
+      Router.back();
+      setLoading(false);
+    }
+  });
 
-	useEffect(() => {
-		// Protect unauthorized access
-		if (currentUser) {
-			return Router.push("/");
-		} else {
-			setIsReady(true);
-		}
+  useEffect(() => {
+    // Protect unauthorized access
+    if (currentUser) {
+      return Router.push('/');
+    } else {
+      setIsReady(true);
+    }
 
-		if (errors) {
-			setLoading(false);
-			setShowErrors(true);
-		}
-	}, [errors]);
+    if (errors) {
+      setLoading(false);
+      setShowErrors(true);
+    }
+  }, [errors]);
 
-	const submitHandler = async (event) => {
-		event.preventDefault();
+  const submitHandler = async (event) => {
+    event.preventDefault();
 
-		setLoading(true);
-		doRequest();
-	};
+    setLoading(true);
+    doRequest();
+  };
 
-	const myLoader = ({ src }) => {
-		return `./asset/${src}`;
-	};
+  const myLoader = ({ src }) => {
+    return `./asset/${src}`;
+  };
 
-	return (
-		isReady && (
+  return (
+    isReady && (
 			<>
 				<Head>
 					<title>Sign In | Aurapan</title>
 				</Head>
-				{loading ? (
+				{loading
+				  ? (
 					<div
 						className="d-flex justify-content-center align-items-center px-0"
-						style={{ marginTop: "80px" }}
+						style={{ marginTop: '80px' }}
 					>
 						<Loader />
 					</div>
-				) : (
+				    )
+				  : (
 					<Container className="app-container register-box">
 						<Row>
-							<Link href={`/signup`} passHref>
+							<Link href={'/signup'} passHref>
 								<Col className="banner-img">
 									<Image
 										loader={myLoader}
@@ -115,7 +117,7 @@ const signin = ({ currentUser }) => {
 
 								<Row className="py-3">
 									<Col className="px-0">
-										Don't have an account?{" "}
+										Don&apos;t have an account?{' '}
 										<Link href="/signup">
 											<a>Sign up</a>
 										</Link>
@@ -124,10 +126,10 @@ const signin = ({ currentUser }) => {
 							</Col>
 						</Row>
 					</Container>
-				)}
+				    )}
 			</>
-		)
-	);
+    )
+  );
 };
 
 export default signin;

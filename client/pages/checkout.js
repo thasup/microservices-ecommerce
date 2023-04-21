@@ -1,104 +1,105 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, ListGroup, Row, Card, Container } from "react-bootstrap";
-import Router from "next/router";
-import Link from "next/link";
-import Head from "next/head";
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Button, Col, ListGroup, Row, Card, Container } from 'react-bootstrap';
+import Router from 'next/router';
+import Link from 'next/link';
+import Head from 'next/head';
 
-import useRequest from "../hooks/useRequest";
-import CheckoutSteps from "../components/cart/CheckoutSteps";
-import NextImage from "../components/common/NextImage";
-import Message from "../components/common/Message";
+import useRequest from '../hooks/useRequest';
+import CheckoutSteps from '../components/cart/CheckoutSteps';
+import NextImage from '../components/common/NextImage';
+import Message from '../components/common/Message';
 
 const CheckoutPage = ({ currentUser }) => {
-	const [cart, setCart] = useState(null);
-	const [shippingAddress, setShippingAddress] = useState(null);
-	const [paymentMethod, setPaymentMethod] = useState(null);
-	const [shippingDiscount, setShippingDiscount] = useState(1); // TODO: apply overall discount feature
+  const [cart, setCart] = useState(null);
+  const [shippingAddress, setShippingAddress] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [shippingDiscount] = useState(1); // TODO: apply overall discount feature
 
-	const [onSuccess, setOnSuccess] = useState(false);
-	const [storageReady, setStorageReady] = useState(false);
+  const [onSuccess, setOnSuccess] = useState(false);
+  const [storageReady, setStorageReady] = useState(false);
 
-	let itemsPrice;
-	let shippingPrice;
-	let taxPrice;
-	let totalPrice;
+  let itemsPrice;
+  let shippingPrice;
+  let taxPrice;
+  let totalPrice;
 
-	const { doRequest, errors } = useRequest({
-		url: `/api/orders`,
-		method: "post",
-		body: {
-			cart,
-			shippingAddress,
-			paymentMethod,
-		},
-		onSuccess: (order) => {
-			setOnSuccess(true);
-			Router.push(`/orders/${order.id}`);
-		},
-	});
+  const { doRequest, errors } = useRequest({
+    url: '/api/orders',
+    method: 'post',
+    body: {
+      cart,
+      shippingAddress,
+      paymentMethod
+    },
+    onSuccess: (order) => {
+      setOnSuccess(true);
+      Router.push(`/orders/${order.id}`);
+    }
+  });
 
-	useEffect(() => {
-		// Protect unauthorized access
-		if (!currentUser) {
-			return Router.push("/signin");
-		}
+  useEffect(() => {
+    // Protect unauthorized access
+    if (!currentUser) {
+      return Router.push('/signin');
+    }
 
-		const cartItemsData = localStorage.getItem("cartItems")
-			? JSON.parse(localStorage.getItem("cartItems"))
-			: [];
+    const cartItemsData = localStorage.getItem('cartItems')
+      ? JSON.parse(localStorage.getItem('cartItems'))
+      : [];
 
-		const shippingData = localStorage.getItem("shippingAddress")
-			? JSON.parse(localStorage.getItem("shippingAddress"))
-			: [];
+    const shippingData = localStorage.getItem('shippingAddress')
+      ? JSON.parse(localStorage.getItem('shippingAddress'))
+      : [];
 
-		const paymentData = localStorage.getItem("paymentMethod")
-			? JSON.parse(localStorage.getItem("paymentMethod"))
-			: [];
+    const paymentData = localStorage.getItem('paymentMethod')
+      ? JSON.parse(localStorage.getItem('paymentMethod'))
+      : [];
 
-		// Cart has items or empty
-		if ( cartItemsData && shippingData && paymentData ) {
-			cartItemsData.map((item) => {
-				item.userId = currentUser.id;
-			});
+    // Cart has items or empty
+    if (cartItemsData && shippingData && paymentData) {
+      cartItemsData.forEach((item) => {
+        item.userId = currentUser.id;
+      });
 
-			// Set cart state to cartItems in localStorage
-			setCart(cartItemsData);
-			setShippingAddress(shippingData);
-			setPaymentMethod(paymentData);
+      // Set cart state to cartItems in localStorage
+      setCart(cartItemsData);
+      setShippingAddress(shippingData);
+      setPaymentMethod(paymentData);
 
-			// Start render the page
-			setStorageReady(true);
-		}
+      // Start render the page
+      setStorageReady(true);
+    }
 
-		if (onSuccess) {
-			localStorage.setItem("cartItems", []);
-		}
-	}, [onSuccess]);
+    if (onSuccess) {
+      localStorage.setItem('cartItems', []);
+    }
+  }, [onSuccess]);
 
-	if (cart && storageReady) {
-		itemsPrice = Number(
-			cart.reduce((acc, item) => acc + item.price * item.qty * item.discount, 0)
-		).toFixed(2);
+  if (cart && storageReady) {
+    itemsPrice = Number(
+      cart.reduce((acc, item) => acc + item.price * item.qty * item.discount, 0)
+    ).toFixed(2);
 
-		shippingPrice = (
-			itemsPrice > 100.0 ? 0.0 : 10.0 * shippingDiscount
-		).toFixed(2);
+    shippingPrice = (
+      itemsPrice > 100.0 ? 0.0 : 10.0 * shippingDiscount
+    ).toFixed(2);
 
-		taxPrice = (0.07 * itemsPrice).toFixed(2);
+    taxPrice = (0.07 * itemsPrice).toFixed(2);
 
-		totalPrice = (
-			Number(itemsPrice) +
+    totalPrice = (
+      Number(itemsPrice) +
 			Number(shippingPrice) +
 			Number(taxPrice)
-		).toFixed(2);
-	}
+    ).toFixed(2);
+  }
 
-	const checkoutHandler = (e) => {
-		e.preventDefault();
-		doRequest();
-	};
+  const checkoutHandler = (e) => {
+    e.preventDefault();
+    doRequest();
+  };
 
-	return (
+  return (
 			<>
 				<Head>
 					<title>Checkout | Aurapan</title>
@@ -110,7 +111,7 @@ const CheckoutPage = ({ currentUser }) => {
 							step2
 							step3
 							step4
-							currentStep={"/checkout"}
+							currentStep={'/checkout'}
 							currentUser={currentUser}
 						/>
 						<Row>
@@ -119,7 +120,7 @@ const CheckoutPage = ({ currentUser }) => {
 									<ListGroup.Item>
 										<h3>Shipping</h3>
 										<p>
-											<strong>Name: </strong>{" "}
+											<strong>Name: </strong>{' '}
 											{currentUser?.name ? currentUser.name : currentUser.id}
 										</p>
 										<p>
@@ -131,7 +132,7 @@ const CheckoutPage = ({ currentUser }) => {
 										</p>
 										<p className="mb-0">
 											<strong>Address: </strong>
-											{shippingAddress.address} {shippingAddress.city},{" "}
+											{shippingAddress.address} {shippingAddress.city},{' '}
 											{shippingAddress.postalCode}, {shippingAddress.country}
 										</p>
 									</ListGroup.Item>
@@ -146,16 +147,18 @@ const CheckoutPage = ({ currentUser }) => {
 
 									<ListGroup.Item>
 										<h3>Order Items</h3>
-										{cart.length === 0 ? (
+										{cart.length === 0
+										  ? (
 											<Message>Your cart is empty</Message>
-										) : (
+										    )
+										  : (
 											<ListGroup variant="flush">
 												{cart.map((item, index) => (
 													<ListGroup.Item key={index} id="cart-items">
 														<Row>
 															<Col md={2} xs={4} className="px-0">
 																<Link
-																	href={`/products/[productId]`}
+																	href={'/products/[productId]'}
 																	as={`/products/${item.productId}`}
 																	passHref
 																>
@@ -177,7 +180,7 @@ const CheckoutPage = ({ currentUser }) => {
 																		className="mb-3 d-flex flex-column"
 																	>
 																		<Link
-																			href={`/products/[productId]`}
+																			href={'/products/[productId]'}
 																			as={`/products/${item.productId}`}
 																		>
 																			<a className="cart-product-title mb-1">
@@ -186,25 +189,29 @@ const CheckoutPage = ({ currentUser }) => {
 																		</Link>
 
 																		<h6>
-																			<strong>COLOR:</strong>{" "}
-																			{item.color === null ? (
-																				<p style={{ color: "red" }}>
+																			<strong>COLOR:</strong>{' '}
+																			{item.color === null
+																			  ? (
+																				<p style={{ color: 'red' }}>
 																					Color not selected
 																				</p>
-																			) : (
-																				item.color
-																			)}
+																			    )
+																			  : (
+																			  item.color
+																			    )}
 																		</h6>
 
 																		<h6>
-																			<strong>SIZE:</strong>{" "}
-																			{item.size === null ? (
-																				<p style={{ color: "red" }}>
+																			<strong>SIZE:</strong>{' '}
+																			{item.size === null
+																			  ? (
+																				<p style={{ color: 'red' }}>
 																					Size not selected
 																				</p>
-																			) : (
-																				item.size
-																			)}
+																			    )
+																			  : (
+																			  item.size
+																			    )}
 																		</h6>
 																	</Col>
 
@@ -212,7 +219,7 @@ const CheckoutPage = ({ currentUser }) => {
 																		{item.qty} x ${item.price * item.discount} =
 																		$
 																		{(
-																			item.qty *
+																		  item.qty *
 																			item.price *
 																			item.discount
 																		).toFixed(2)}
@@ -223,7 +230,7 @@ const CheckoutPage = ({ currentUser }) => {
 													</ListGroup.Item>
 												))}
 											</ListGroup>
-										)}
+										    )}
 									</ListGroup.Item>
 								</ListGroup>
 							</Col>
@@ -240,7 +247,7 @@ const CheckoutPage = ({ currentUser }) => {
 												<Col>
 													<strong>Items</strong>
 												</Col>
-												<Col>${itemsPrice ? itemsPrice : "N/A" }</Col>
+												<Col>${itemsPrice || 'N/A' }</Col>
 											</Row>
 										</ListGroup.Item>
 
@@ -249,7 +256,7 @@ const CheckoutPage = ({ currentUser }) => {
 												<Col>
 													<strong>Shipping</strong>
 												</Col>
-												<Col>${shippingPrice ? shippingPrice : "N/A" }</Col>
+												<Col>${shippingPrice || 'N/A' }</Col>
 											</Row>
 										</ListGroup.Item>
 
@@ -258,7 +265,7 @@ const CheckoutPage = ({ currentUser }) => {
 												<Col>
 													<strong>Tax</strong>
 												</Col>
-												<Col>${taxPrice ? taxPrice : "N/A" }</Col>
+												<Col>${taxPrice || 'N/A' }</Col>
 											</Row>
 										</ListGroup.Item>
 
@@ -267,7 +274,7 @@ const CheckoutPage = ({ currentUser }) => {
 												<Col>
 													<strong>Total</strong>
 												</Col>
-												<Col>${totalPrice ? totalPrice : "N/A" }</Col>
+												<Col>${totalPrice || 'N/A' }</Col>
 											</Row>
 										</ListGroup.Item>
 
@@ -289,7 +296,11 @@ const CheckoutPage = ({ currentUser }) => {
 					</Container>
 				) }
 			</>
-	);
+  );
+};
+
+CheckoutPage.propTypes = {
+  currentUser: PropTypes.any.isRequired
 };
 
 export default CheckoutPage;

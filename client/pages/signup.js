@@ -1,82 +1,84 @@
-import React, { useEffect, useState } from "react";
-import Router from "next/router";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
+import React, { useEffect, useState } from 'react';
+import Router from 'next/router';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import useRequest from "../hooks/useRequest";
-import Loader from "../components/common/Loader";
+import useRequest from '../hooks/useRequest';
+import Loader from '../components/common/Loader';
 
 const signup = ({ currentUser }) => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [name, setName] = useState("");
-	const [gender, setGender] = useState("");
-	const [age, setAge] = useState(undefined);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState(undefined);
 
-	const [loading, setLoading] = useState(false);
-	const [showErrors, setShowErrors] = useState(false);
-	const [isReady, setIsReady] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-	const { doRequest, errors } = useRequest({
-		url: "/api/users/signup",
-		method: "post",
-		body: {
-			email,
-			password,
-			name,
-			gender,
-			age,
-		},
-		onSuccess: () => {
-			Router.push("/");
-			setLoading(false);
-		},
-	});
+  const { doRequest, errors } = useRequest({
+    url: '/api/users/signup',
+    method: 'post',
+    body: {
+      email,
+      password,
+      name,
+      gender,
+      age
+    },
+    onSuccess: () => {
+      Router.push('/');
+      setLoading(false);
+    }
+  });
 
-	useEffect(() => {
-		// Protect unauthorized access
-		if (currentUser) {
-			return Router.push("/");
-		} else {
-			setIsReady(true);
-		}
+  useEffect(() => {
+    // Protect unauthorized access
+    if (currentUser) {
+      return Router.push('/');
+    } else {
+      setIsReady(true);
+    }
 
-		if (errors) {
-			setLoading(false);
-			setShowErrors(true);
-		}
-	}, [errors]);
+    if (errors) {
+      setLoading(false);
+      setShowErrors(true);
+    }
+  }, [errors]);
 
-	const submitHandler = async (event) => {
-		event.preventDefault();
-		setLoading(true);
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    setLoading(true);
 
-		doRequest();
-	};
+    doRequest();
+  };
 
-	const myLoader = ({ src }) => {
-		return `./asset/${src}`;
-	};
+  const myLoader = ({ src }) => {
+    return `./asset/${src}`;
+  };
 
-	return (
-		isReady && (
+  return (
+    isReady && (
 			<>
 				<Head>
 					<title>Sign Up | Aurapan</title>
 				</Head>
-				{loading ? (
+				{loading
+				  ? (
 					<div
 						className="d-flex justify-content-center align-items-center px-0"
-						style={{ marginTop: "80px" }}
+						style={{ marginTop: '80px' }}
 					>
 						<Loader />
 					</div>
-				) : (
+				    )
+				  : (
 					<Container className="app-container register-box">
 						<Row>
-							<Link href={`/signin`} passHref>
+							<Link href={'/signin'} passHref>
 								<Col className="banner-img">
 									<Image
 										loader={myLoader}
@@ -161,7 +163,7 @@ const signup = ({ currentUser }) => {
 
 								<Row className="py-3">
 									<Col className="px-0">
-										Already have an account?{" "}
+										Already have an account?{' '}
 										<Link href="/signin">
 											<a>Sign in</a>
 										</Link>
@@ -170,10 +172,10 @@ const signup = ({ currentUser }) => {
 							</Col>
 						</Row>
 					</Container>
-				)}
+				    )}
 			</>
-		)
-	);
+    )
+  );
 };
 
 export default signup;

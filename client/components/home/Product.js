@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Card, Col, Row } from 'react-bootstrap';
 import Link from 'next/link';
 import Image from 'next/image';

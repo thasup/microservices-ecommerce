@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
 
-import Product from "../components/home/Product";
+import Product from '../components/home/Product';
 import ImageSwiper from '../components/common/ImageSwiper';
-import useWindowSize from "../hooks/useWindowSize";
+import useWindowSize from '../hooks/useWindowSize';
 
-import AdsBannerSrc1 from "../public/asset/ads-banner/ads_banner_1.png";
-import AdsBannerSrc2 from "../public/asset/ads-banner/ads_banner_2.png";
-import AdsBannerSrc3 from "../public/asset/ads-banner/ads_banner_3.png";
+import AdsBannerSrc1 from '../public/asset/ads-banner/ads_banner_1.png';
+import AdsBannerSrc2 from '../public/asset/ads-banner/ads_banner_2.png';
+import AdsBannerSrc3 from '../public/asset/ads-banner/ads_banner_3.png';
 
-const adsBanners = [AdsBannerSrc1, AdsBannerSrc2, AdsBannerSrc3]
+const adsBanners = [AdsBannerSrc1, AdsBannerSrc2, AdsBannerSrc3];
 
 const Home = ({ products, currentUser }) => {
-	const [onMobile, setOnMobile] = useState(false);
+  const [onMobile, setOnMobile] = useState(false);
 
-	const { width } = useWindowSize();
+  const { width } = useWindowSize();
 
-	useEffect(() => {
-		if (width <= 576) {
-			setOnMobile(true);
-		} else {
-			setOnMobile(false);
-		}
-	}, [width]);
+  useEffect(() => {
+    if (width <= 576) {
+      setOnMobile(true);
+    } else {
+      setOnMobile(false);
+    }
+  }, [width]);
 
-	return (
+  return (
 		<>
 			<Row className="ads-container">
 				<ImageSwiper images={adsBanners} isBanner={true} />
@@ -41,7 +41,7 @@ const Home = ({ products, currentUser }) => {
 				))}
 			</Row>
 		</>
-	);
+  );
 };
 
 export default Home;
