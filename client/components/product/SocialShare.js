@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
 import {
-	FacebookShareButton,
-	TwitterShareButton,
-	LineShareButton,
-	EmailShareButton,
-	FacebookIcon,
-	TwitterIcon,
-	LineIcon,
-	EmailIcon,
-} from "react-share";
+  FacebookShareButton,
+  TwitterShareButton,
+  LineShareButton,
+  EmailShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  LineIcon,
+  EmailIcon
+} from 'react-share';
 
 const SocialShare = ({ product }) => {
-	const [shareMsg, setShareMsg] = useState("");
+  const [shareMsg, setShareMsg] = useState('');
 
-	useEffect(() => {
-		const message = `I Love this "${
+  useEffect(() => {
+    const message = `I Love this "${
 			product.title
 		}" product on Aurapan Shop! \n visit this lovely shop here! ${
-			window.location.protocol !== "https" ? "http" : "https"
+			window.location.protocol !== 'https' ? 'http' : 'https'
 		}://www.aurapan.com/products/${product.id}`;
 
-		setShareMsg(message);
-	}, []);
+    setShareMsg(message);
+  }, []);
 
-	return (
+  return (
 		<Row className="mx-0">
 			<Col
 				md={3}
@@ -32,7 +32,7 @@ const SocialShare = ({ product }) => {
 			>
 				<FacebookShareButton
 					url={`https://www.aurapan.com/products/${product.id}`}
-					quote={"Be your beautiful best."}
+					quote={'Be your beautiful best.'}
 					className="me-2"
 				>
 					<FacebookIcon size={32} round={true} />
@@ -40,7 +40,7 @@ const SocialShare = ({ product }) => {
 
 				<TwitterShareButton
 					url={`${shareMsg}`}
-					hashtags={["lovely", "dress", "aurapan", "shopping"]}
+					hashtags={['lovely', 'dress', 'aurapan', 'shopping']}
 					className="me-2"
 				>
 					<TwitterIcon size={32} round={true} />
@@ -48,7 +48,7 @@ const SocialShare = ({ product }) => {
 
 				<LineShareButton
 					url={`https://www.aurapan.com/products/${product.id}`}
-					title={"Be your beautiful best."}
+					title={'Be your beautiful best.'}
 					className="me-2"
 				>
 					<LineIcon size={32} round={true} />
@@ -59,7 +59,7 @@ const SocialShare = ({ product }) => {
 				</EmailShareButton>
 			</Col>
 		</Row>
-	);
+  );
 };
 
 export default SocialShare;

@@ -1,19 +1,19 @@
-import React from "react";
-import { Button, Row, Col, Table } from "react-bootstrap";
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaypal, faStripeS } from "@fortawesome/free-brands-svg-icons";
+import React from 'react';
+import { Button, Row, Col, Table } from 'react-bootstrap';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaypal, faStripeS } from '@fortawesome/free-brands-svg-icons';
 import {
-	faCheck,
-	faInfoCircle,
-	faTimes,
-} from "@fortawesome/free-solid-svg-icons";
+  faCheck,
+  faInfoCircle,
+  faTimes
+} from '@fortawesome/free-solid-svg-icons';
 
-import CustomTooltip from "../common/CustomTooltip";
-import ExpireTimer from "../common/ExpireTimer";
+import CustomTooltip from '../common/CustomTooltip';
+import ExpireTimer from '../common/ExpireTimer';
 
 const OrderList = ({ orders, users }) => {
-	return (
+  return (
 		<Row className="align-items-center">
 			<Col>
 				<Table striped bordered hover responsive className="table-sm">
@@ -35,7 +35,7 @@ const OrderList = ({ orders, users }) => {
 						{orders.map((order, index) => (
 							<tr key={order.id}>
 								<td>
-									<CustomTooltip index={index} mongoId={order.id} />{" "}
+									<CustomTooltip index={index} mongoId={order.id} />{' '}
 								</td>
 								<td>{users.find((user) => user.id === order.userId).name}</td>
 								<td>{order.createdAt.substring(0, 10)}</td>
@@ -44,74 +44,84 @@ const OrderList = ({ orders, users }) => {
 								</td>
 								<td>$ {order.totalPrice}</td>
 								<td>
-									<p style={{ fontSize: "1rem" }}>
-										{order.paymentMethod === "paypal" ? (
+									<p style={{ fontSize: '1rem' }}>
+										{order.paymentMethod === 'paypal'
+										  ? (
 											<>
 												<FontAwesomeIcon icon={faPaypal} /> PayPal
 											</>
-										) : (
+										    )
+										  : (
 											<>
 												<FontAwesomeIcon icon={faStripeS} /> Stripe
 											</>
-										)}
+										    )}
 									</p>
 								</td>
 								<td>
-									{order.status === "cancelled" ? (
-										<p style={{ color: "red", fontWeight: "bolder" }}>
+									{order.status === 'cancelled'
+									  ? (
+										<p style={{ color: 'red', fontWeight: 'bolder' }}>
 											Expired
 										</p>
-									) : order.status === "completed" ? (
-										<p style={{ color: "green", fontWeight: "bolder" }}>
+									    )
+									  : order.status === 'completed'
+									    ? (
+										<p style={{ color: 'green', fontWeight: 'bolder' }}>
 											Completed
 										</p>
-									) : (
+									      )
+									    : (
 										<>
 											<ExpireTimer order={order} />
 										</>
-									)}
+									      )}
 								</td>
 								<td>
-									{order.isPaid ? (
+									{order.isPaid
+									  ? (
 										<p>
 											<FontAwesomeIcon
 												icon={faCheck}
-												style={{ color: "green" }}
-											/>{" "}
+												style={{ color: 'green' }}
+											/>{' '}
 											{order.paidAt?.substring(0, 10)}
 										</p>
-									) : (
+									    )
+									  : (
 										<p>
 											<FontAwesomeIcon
 												icon={faTimes}
-												style={{ color: "red" }}
-											/>{" "}
+												style={{ color: 'red' }}
+											/>{' '}
 											Not Paid
 										</p>
-									)}
+									    )}
 								</td>
 								<td>
-									{order.isDelivered ? (
+									{order.isDelivered
+									  ? (
 										<p>
 											<FontAwesomeIcon
 												icon={faCheck}
-												style={{ color: "green" }}
-											/>{" "}
+												style={{ color: 'green' }}
+											/>{' '}
 											{order.deliveredAt?.substring(0, 10)}
 										</p>
-									) : (
+									    )
+									  : (
 										<p>
 											<FontAwesomeIcon
 												icon={faTimes}
-												style={{ color: "red" }}
-											/>{" "}
+												style={{ color: 'red' }}
+											/>{' '}
 											Not Delivered
 										</p>
-									)}
+									    )}
 								</td>
 								<td>
 									<Link
-										href={"/orders/[orderId]"}
+										href={'/orders/[orderId]'}
 										as={`/orders/${order.id}`}
 										passHref
 									>
@@ -126,7 +136,7 @@ const OrderList = ({ orders, users }) => {
 				</Table>
 			</Col>
 		</Row>
-	);
+  );
 };
 
 export default OrderList;

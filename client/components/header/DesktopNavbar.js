@@ -1,26 +1,26 @@
-import React, { useState } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBasketShopping } from "@fortawesome/free-solid-svg-icons";
-import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
+import React, { useState } from 'react';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBasketShopping } from '@fortawesome/free-solid-svg-icons';
+import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
 
-import AccountDropDown from "./AccountDropDown";
-import CategoryDropDown from "./CategoryDropDown";
+import AccountDropDown from './AccountDropDown';
+import CategoryDropDown from './CategoryDropDown';
 
 const DesktopNavbar = ({
-	currentUser,
-	products,
-	bestseller,
-	numItems,
-	showNotification,
-	productCategories,
+  currentUser,
+  products,
+  bestseller,
+  numItems,
+  showNotification,
+  productCategories
 }) => {
-	const [eventTarget, setEventTarget] = useState(null);
-	const [showCategoryDropDown, setShowCategoryDropDown] = useState(false);
-	const [showAccountDropDown, setShowAccountDropDown] = useState(false);
+  const [eventTarget, setEventTarget] = useState(null);
+  const [showCategoryDropDown, setShowCategoryDropDown] = useState(false);
+  const [showAccountDropDown, setShowAccountDropDown] = useState(false);
 
-	return (
+  return (
 		<header>
 			<Navbar
 				variant="light"
@@ -45,15 +45,15 @@ const DesktopNavbar = ({
 						{productCategories.map((category, index) => (
 							<Link
 								href={`/products/${category.toLowerCase()}${
-									category === "Dress" ? "es" : "s"
+									category === 'Dress' ? 'es' : 's'
 								}`}
 								key={index}
 								passHref
 							>
 								<Nav.Link
 									onMouseEnter={(e) => {
-										setEventTarget(e.target);
-										setShowCategoryDropDown(true);
+									  setEventTarget(e.target);
+									  setShowCategoryDropDown(true);
 									}}
 								>
 									{category}
@@ -69,7 +69,7 @@ const DesktopNavbar = ({
 								<span
 									id="notification"
 									className="position-absolute badge border border-light rounded-circle bg-danger"
-									style={{ display: showNotification ? "block" : "none" }}
+									style={{ display: showNotification ? 'block' : 'none' }}
 								>
 									<span className="visually-hidden">unread messages</span>
 									{numItems}
@@ -77,13 +77,13 @@ const DesktopNavbar = ({
 							</Nav.Link>
 						</Link>
 
-						<Link href={currentUser ? "/dashboard" : "/signin"} passHref>
+						<Link href={currentUser ? '/dashboard' : '/signin'} passHref>
 							<Nav.Link
 								className="account-icon"
 								onMouseEnter={() =>
-									currentUser
-										? setShowAccountDropDown(true)
-										: setShowAccountDropDown(false)
+								  currentUser
+								    ? setShowAccountDropDown(true)
+								    : setShowAccountDropDown(false)
 								}
 							>
 								<FontAwesomeIcon icon={faCircleUser} /> Account
@@ -107,7 +107,7 @@ const DesktopNavbar = ({
 				bestseller={bestseller}
 			/>
 		</header>
-	);
+  );
 };
 
 export default DesktopNavbar;

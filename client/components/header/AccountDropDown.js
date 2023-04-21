@@ -1,21 +1,21 @@
-import React from "react";
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from 'react';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-	faListCheck,
-	faRightFromBracket,
-	faUser,
-} from "@fortawesome/free-solid-svg-icons";
+  faListCheck,
+  faRightFromBracket,
+  faUser
+} from '@fortawesome/free-solid-svg-icons';
 
 const AccountDropDown = ({
-	currentUser,
-	showAccountDropDown,
-	setShowAccountDropDown,
+  currentUser,
+  showAccountDropDown,
+  setShowAccountDropDown
 }) => {
-	return (
+  return (
 		<div
 			className="account-dropdown-menu"
-			style={{ display: showAccountDropDown ? "block" : "none" }}
+			style={{ display: showAccountDropDown ? 'block' : 'none' }}
 			onMouseLeave={() => setShowAccountDropDown(false)}
 		>
 			<div className="account-dropdown-item account-dropdown-title d-flex justify-content-center">
@@ -42,7 +42,7 @@ const AccountDropDown = ({
 				</a>
 			</Link>
 		</div>
-	);
+  );
 };
 
 export default AccountDropDown;

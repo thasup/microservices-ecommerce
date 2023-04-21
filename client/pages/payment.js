@@ -1,56 +1,56 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, Form } from "react-bootstrap";
-import Router from "next/router";
-import Head from "next/head";
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Form } from 'react-bootstrap';
+import Router from 'next/router';
+import Head from 'next/head';
 
-import CheckoutSteps from "../components/cart/CheckoutSteps";
-import FormContainer from "../components/common/FormContainer";
+import CheckoutSteps from '../components/cart/CheckoutSteps';
+import FormContainer from '../components/common/FormContainer';
 
 const PaymentPage = ({ currentUser }) => {
-	const [paymentMethod, setPaymentMethod] = useState("stripe");
-	const [onSubmit, setOnSubmit] = useState(false);
-	const [isReady, setIsReady] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('stripe');
+  const [onSubmit, setOnSubmit] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-	useEffect(() => {
-		// Protect unauthorized access
-		if (!currentUser) {
-			return Router.push("/signin");
-		} else {
-			setIsReady(true);
-		}
+  useEffect(() => {
+    // Protect unauthorized access
+    if (!currentUser) {
+      return Router.push('/signin');
+    } else {
+      setIsReady(true);
+    }
 
-		const shippingAddress = localStorage.getItem("shippingAddress")
-			? JSON.parse(localStorage.getItem("shippingAddress"))
-			: [];
+    const shippingAddress = localStorage.getItem('shippingAddress')
+      ? JSON.parse(localStorage.getItem('shippingAddress'))
+      : [];
 
-		if (!shippingAddress.address) {
-			Router.push("/shipping");
-		}
+    if (!shippingAddress.address) {
+      Router.push('/shipping');
+    }
 
-		const data = localStorage.getItem("paymentMethod")
-			? JSON.parse(localStorage.getItem("paymentMethod"))
-			: [];
+    const data = localStorage.getItem('paymentMethod')
+      ? JSON.parse(localStorage.getItem('paymentMethod'))
+      : [];
 
-		if (data !== undefined) {
-			// Set state to paymentMethod data in localStorage
-			setPaymentMethod(data);
-		}
+    if (data !== undefined) {
+      // Set state to paymentMethod data in localStorage
+      setPaymentMethod(data);
+    }
 
-		if (onSubmit) {
-			localStorage.setItem("paymentMethod", JSON.stringify(paymentMethod));
+    if (onSubmit) {
+      localStorage.setItem('paymentMethod', JSON.stringify(paymentMethod));
 
-			setOnSubmit(false);
-			Router.push("/checkout");
-		}
-	}, [onSubmit]);
+      setOnSubmit(false);
+      Router.push('/checkout');
+    }
+  }, [onSubmit]);
 
-	const submitHandler = (e) => {
-		e.preventDefault();
-		setOnSubmit(true);
-	};
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setOnSubmit(true);
+  };
 
-	return (
-		isReady && (
+  return (
+    isReady && (
 			<>
 				<Head>
 					<title>Payment Method | Aurapan</title>
@@ -60,7 +60,7 @@ const PaymentPage = ({ currentUser }) => {
 						step1
 						step2
 						step3
-						currentStep={"/payment"}
+						currentStep={'/payment'}
 						currentUser={currentUser}
 					/>
 					<h1>Payment Method</h1>
@@ -77,7 +77,7 @@ const PaymentPage = ({ currentUser }) => {
 									id="stripe"
 									name="paymentMethod"
 									value="stripe"
-									checked={paymentMethod === "stripe"}
+									checked={paymentMethod === 'stripe'}
 									onChange={(e) => setPaymentMethod(e.target.value)}
 								></Form.Check>
 
@@ -88,7 +88,7 @@ const PaymentPage = ({ currentUser }) => {
 									id="paypal"
 									name="paymentMethod"
 									value="paypal"
-									checked={paymentMethod === "paypal"}
+									checked={paymentMethod === 'paypal'}
 									onChange={(e) => setPaymentMethod(e.target.value)}
 								></Form.Check>
 							</Col>
@@ -100,8 +100,8 @@ const PaymentPage = ({ currentUser }) => {
 					</Form>
 				</FormContainer>
 			</>
-		)
-	);
+    )
+  );
 };
 
 export default PaymentPage;

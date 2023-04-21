@@ -1,45 +1,47 @@
-import Head from "next/head";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Breadcrumb, Col, Row } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { Breadcrumb, Col, Row } from 'react-bootstrap';
+import Head from 'next/head';
+import Link from 'next/link';
 
-import Loader from "../../../components/common/Loader";
-import Product from "../../../components/home/Product";
-import useWindowSize from "../../../hooks/useWindowSize";
+import Loader from '../../../components/common/Loader';
+import Product from '../../../components/home/Product';
+import useWindowSize from '../../../hooks/useWindowSize';
 
 const Bottoms = ({ products, currentUser }) => {
-	const [loading, setLoading] = useState(true);
-	const [onMobile, setOnMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [onMobile, setOnMobile] = useState(false);
 
-	const { width } = useWindowSize();
+  const { width } = useWindowSize();
 
-	const bottoms = products?.filter((product) => product.category === "Bottom");
+  const bottoms = products?.filter((product) => product.category === 'Bottom');
 
-	useEffect(() => {
-		if (width <= 576) {
-			setOnMobile(true);
-		} else {
-			setOnMobile(false);
-		}
+  useEffect(() => {
+    if (width <= 576) {
+      setOnMobile(true);
+    } else {
+      setOnMobile(false);
+    }
 
-		if (products) {
-			setLoading(false);
-		}
-	}, [width, products]);
+    if (products) {
+      setLoading(false);
+    }
+  }, [width, products]);
 
-	return (
+  return (
 		<>
 			<Head>
 				<title>Bottoms | Aurapan</title>
 			</Head>
-			{loading ? (
+			{loading
+			  ? (
 				<div
 					className="d-flex justify-content-center align-items-center px-0"
-					style={{ marginTop: "80px" }}
+					style={{ marginTop: '80px' }}
 				>
 					<Loader />
 				</div>
-			) : (
+			    )
+			  : (
 				<>
 					<h1 className="category-header">Bottoms</h1>
 					<Breadcrumb className="breadcrumb-label">
@@ -64,9 +66,9 @@ const Bottoms = ({ products, currentUser }) => {
 						))}
 					</Row>
 				</>
-			)}
+			    )}
 		</>
-	);
+  );
 };
 
 export default Bottoms;

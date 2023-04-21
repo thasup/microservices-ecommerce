@@ -1,80 +1,80 @@
-import Image from "next/image";
-import Router from "next/router";
-import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
+import Image from 'next/image';
+import Router from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 
-import useRequest from "../../hooks/useRequest";
-import Message from "../common/Message";
+import useRequest from '../../hooks/useRequest';
+import Message from '../common/Message';
 
 const EditProfile = ({ user }) => {
-	const [name, setName] = useState("");
-	const [image, setImage] = useState("");
-	const [gender, setGender] = useState("");
-	const [age, setAge] = useState(undefined);
-	const [bio, setBio] = useState("");
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState(undefined);
+  const [bio, setBio] = useState('');
 
-	const [message, setMessage] = useState(null);
-	const [showErrors, setShowErrors] = useState(false);
-	const [loadingUpdate, setLoadingUpdate] = useState(false);
-	const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [showErrors, setShowErrors] = useState(false);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
-	const { doRequest, errors } = useRequest({
-		url: `/api/users/${user.id}`,
-		method: "patch",
-		body: {
-			email: user.email,
-			isAdmin: user.isAdmin,
-			name,
-			image,
-			gender,
-			age,
-			bio,
-			jsonShippingAddress: user.shippingAddress,
-		},
-		onSuccess: () => {
-			setUpdateSuccess(true);
-			Router.push("/dashboard");
-		},
-	});
+  const { doRequest, errors } = useRequest({
+    url: `/api/users/${user.id}`,
+    method: 'patch',
+    body: {
+      email: user.email,
+      isAdmin: user.isAdmin,
+      name,
+      image,
+      gender,
+      age,
+      bio,
+      jsonShippingAddress: user.shippingAddress
+    },
+    onSuccess: () => {
+      setUpdateSuccess(true);
+      Router.push('/dashboard');
+    }
+  });
 
-	useEffect(() => {
-		if (user || updateSuccess) {
-			setName(user.name);
-			setImage(user.image);
-			setGender(user.gender);
-			setAge(user.age);
-			setBio(user.bio);
-		}
+  useEffect(() => {
+    if (user || updateSuccess) {
+      setName(user.name);
+      setImage(user.image);
+      setGender(user.gender);
+      setAge(user.age);
+      setBio(user.bio);
+    }
 
-		if (errors) {
-			setLoadingUpdate(false);
-			setShowErrors(true);
-		}
+    if (errors) {
+      setLoadingUpdate(false);
+      setShowErrors(true);
+    }
 
-		setTimeout(() => {
-			setUpdateSuccess(false);
-			setLoadingUpdate(false);
-		}, 1000);
-	}, [user, updateSuccess, errors]);
+    setTimeout(() => {
+      setUpdateSuccess(false);
+      setLoadingUpdate(false);
+    }, 1000);
+  }, [user, updateSuccess, errors]);
 
-	const submitHandler = (e) => {
-		e.preventDefault();
-		setMessage(null);
-		setShowErrors(false);
-		setLoadingUpdate(true);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setMessage(null);
+    setShowErrors(false);
+    setLoadingUpdate(true);
 
-		doRequest();
-	};
+    doRequest();
+  };
 
-	const myLoader = ({ src, width, quality }) => {
-		if (src[0] === "v") {
-			return `https://res.cloudinary.com/thasup/image/upload/${src}`;
-		} else {
-			return `${src}&q=${quality || 40}`;
-		}
-	};
+  const myLoader = ({ src, width, quality }) => {
+    if (src[0] === 'v') {
+      return `https://res.cloudinary.com/thasup/image/upload/q_${quality || 60}/${src}`;
+    } else {
+      return `${src}&q=${quality || 40}`;
+    }
+  };
 
-	return (
+  return (
 		<Form onSubmit={submitHandler}>
 			<Row>
 				{message && <Message variant="danger">{message}</Message>}
@@ -89,7 +89,7 @@ const EditProfile = ({ user }) => {
 							layout="fill"
 							objectFit="cover"
 							priority={true}
-							alt={"profile image"}
+							alt={'profile image'}
 						/>
 					</div>
 				</Col>
@@ -145,14 +145,15 @@ const EditProfile = ({ user }) => {
 						<Form.Label>Bio</Form.Label>
 						<Form.Control
 							as="textarea"
-							style={{ height: "100px" }}
+							style={{ height: '100px' }}
 							placeholder="Enter bio"
 							value={bio}
 							onChange={(e) => setBio(e.target.value)}
 						></Form.Control>
 					</Form.Group>
 					<Button type="submit" variant="dark">
-						{loadingUpdate ? (
+						{loadingUpdate
+						  ? (
 							<Spinner
 								animation="border"
 								role="status"
@@ -162,13 +163,14 @@ const EditProfile = ({ user }) => {
 							>
 								<span className="visually-hidden">Loading...</span>
 							</Spinner>
-						) : null}{" "}
+						    )
+						  : null}{' '}
 						Update
 					</Button>
 				</Col>
 			</Row>
 		</Form>
-	);
+  );
 };
 
 export default EditProfile;

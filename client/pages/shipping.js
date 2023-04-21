@@ -1,84 +1,85 @@
-import React, { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
-import Router from "next/router";
-import Head from "next/head";
+import React, { useEffect, useState } from 'react';
+import { Button, Form } from 'react-bootstrap';
+import Router from 'next/router';
+import Head from 'next/head';
 
-import FormContainer from "../components/common/FormContainer";
-import CheckoutSteps from "../components/cart/CheckoutSteps";
+import FormContainer from '../components/common/FormContainer';
+import CheckoutSteps from '../components/cart/CheckoutSteps';
 
 const ShippingPage = ({ currentUser }) => {
-	const [address, setAddress] = useState(null);
-	const [city, setCity] = useState(null);
-	const [postalCode, setPostalCode] = useState(null);
-	const [country, setCountry] = useState(null);
+  const [address, setAddress] = useState(null);
+  const [city, setCity] = useState(null);
+  const [postalCode, setPostalCode] = useState(null);
+  const [country, setCountry] = useState(null);
 
-	const [onSubmit, setOnSubmit] = useState(false);
-	const [isReady, setIsReady] = useState(false);
-	const [storageReady, setStorageReady] = useState(false);
+  const [onSubmit, setOnSubmit] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [storageReady, setStorageReady] = useState(false);
 
-	useEffect(() => {
-		// Protect unauthorized access
-		if (!currentUser) {
-			return Router.push("/signin");
-		} else {
-			setIsReady(true);
-		}
+  useEffect(() => {
+    // Protect unauthorized access
+    if (!currentUser) {
+      return Router.push('/signin');
+    } else {
+      setIsReady(true);
+    }
 
-		const data = localStorage.getItem("shippingAddress")
-			? JSON.parse(localStorage.getItem("shippingAddress"))
-			: [];
+    const data = localStorage.getItem('shippingAddress')
+      ? JSON.parse(localStorage.getItem('shippingAddress'))
+      : [];
 
-		if (currentUser?.shippingAddress) {
-			// Set state to shippingAddress data in profile information
-			setAddress(currentUser?.shippingAddress.address);
-			setCity(currentUser?.shippingAddress.city);
-			setPostalCode(currentUser?.shippingAddress.postalCode);
-			setCountry(currentUser?.shippingAddress.country);
+    if (currentUser?.shippingAddress) {
+      // Set state to shippingAddress data in profile information
+      setAddress(currentUser?.shippingAddress.address);
+      setCity(currentUser?.shippingAddress.city);
+      setPostalCode(currentUser?.shippingAddress.postalCode);
+      setCountry(currentUser?.shippingAddress.country);
 
-			setStorageReady(true);
-		} else if (data !== undefined) {
-			// Set state to shippingAddress data in localStorage
-			setAddress(data.address);
-			setCity(data.city);
-			setPostalCode(data.postalCode);
-			setCountry(data.country);
+      setStorageReady(true);
+    } else if (data !== undefined) {
+      // Set state to shippingAddress data in localStorage
+      setAddress(data.address);
+      setCity(data.city);
+      setPostalCode(data.postalCode);
+      setCountry(data.country);
 
-			// Start render the page
-			setStorageReady(true);
-		}
+      // Start render the page
+      setStorageReady(true);
+    }
 
-		const shippingAddress = {
-			address: address,
-			city: city,
-			postalCode: postalCode,
-			country: country,
-		};
+    const shippingAddress = {
+      address,
+      city,
+      postalCode,
+      country
+    };
 
-		if (onSubmit) {
-			localStorage.setItem("shippingAddress", JSON.stringify(shippingAddress));
+    if (onSubmit) {
+      localStorage.setItem('shippingAddress', JSON.stringify(shippingAddress));
 
-			setOnSubmit(false);
-			Router.push("/payment");
-		}
-	}, [onSubmit]);
+      setOnSubmit(false);
+      Router.push('/payment');
+    }
+  }, [onSubmit]);
 
-	const submitHandler = (e) => {
-		e.preventDefault();
-		setOnSubmit(true);
-	};
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setOnSubmit(true);
+  };
 
-	return (
-		isReady && (
+  return (
+    isReady && (
 			<>
 				<Head>
 					<title>Shipping Address | Aurapan</title>
 				</Head>
-				{storageReady ? (
+				{storageReady
+				  ? (
 					<FormContainer>
 						<CheckoutSteps
 							step1
 							step2
-							currentStep={"/shipping"}
+							currentStep={'/shipping'}
 							currentUser={currentUser}
 						/>
 						<h1>Shipping</h1>
@@ -132,10 +133,11 @@ const ShippingPage = ({ currentUser }) => {
 							</Button>
 						</Form>
 					</FormContainer>
-				) : null}
+				    )
+				  : null}
 			</>
-		)
-	);
+    )
+  );
 };
 
 export default ShippingPage;

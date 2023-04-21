@@ -7,7 +7,7 @@ module.exports = {
   },
   images: {
     domains: ['www.dropbox.com', 'res.cloudinary.com'],
-    minimumCacheTTL: 86400
+    minimumCacheTTL: 31536000 // 1 year
   },
   async headers () {
     return [

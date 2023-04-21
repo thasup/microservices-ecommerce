@@ -1,45 +1,47 @@
-import Head from "next/head";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Breadcrumb, Col, Row } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { Breadcrumb, Col, Row } from 'react-bootstrap';
+import Head from 'next/head';
+import Link from 'next/link';
 
-import Loader from "../../../components/common/Loader";
-import Product from "../../../components/home/Product";
-import useWindowSize from "../../../hooks/useWindowSize";
+import Loader from '../../../components/common/Loader';
+import Product from '../../../components/home/Product';
+import useWindowSize from '../../../hooks/useWindowSize';
 
 const Coats = ({ products, currentUser }) => {
-	const [loading, setLoading] = useState(true);
-	const [onMobile, setOnMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [onMobile, setOnMobile] = useState(false);
 
-	const { width } = useWindowSize();
+  const { width } = useWindowSize();
 
-	const coats = products?.filter((product) => product.category === "Coat");
+  const coats = products?.filter((product) => product.category === 'Coat');
 
-	useEffect(() => {
-		if (width <= 576) {
-			setOnMobile(true);
-		} else {
-			setOnMobile(false);
-		}
+  useEffect(() => {
+    if (width <= 576) {
+      setOnMobile(true);
+    } else {
+      setOnMobile(false);
+    }
 
-		if (products) {
-			setLoading(false);
-		}
-	}, [width, products]);
+    if (products) {
+      setLoading(false);
+    }
+  }, [width, products]);
 
-	return (
+  return (
 		<>
 			<Head>
 				<title>Coats | Aurapan</title>
 			</Head>
-			{loading ? (
+			{loading
+			  ? (
 				<div
 					className="d-flex justify-content-center align-items-center px-0"
-					style={{ marginTop: "80px" }}
+					style={{ marginTop: '80px' }}
 				>
 					<Loader />
 				</div>
-			) : (
+			    )
+			  : (
 				<>
 					<h1 className="category-header">Coats</h1>
 					<Breadcrumb className="breadcrumb-label">
@@ -64,9 +66,9 @@ const Coats = ({ products, currentUser }) => {
 						))}
 					</Row>
 				</>
-			)}
+			    )}
 		</>
-	);
+  );
 };
 
 export default Coats;

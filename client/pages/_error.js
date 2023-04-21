@@ -1,14 +1,16 @@
-function Error({ statusCode }) {
+import React from 'react';
+
+function Error ({ statusCode }) {
   return (
     <p
       className="d-flex justify-content-center align-items-center"
-      style={{ height: "90vh" }}
+      style={{ height: '90vh' }}
     >
       {statusCode
         ? statusCode === 404
-          ? "404 Page not found X("
+          ? '404 Page not found X('
           : `An error ${statusCode} occurred on server`
-        : "404 Page not found :("}
+        : '404 Page not found :('}
     </p>
   );
 }

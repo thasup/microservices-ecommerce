@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import Link from "next/link";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import Image from "next/image";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import Image from 'next/image';
 
 const Footer = () => {
-	const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
 
-	const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
-	return (
+  return (
 		<footer>
 			<Container>
 				<Row className="flex-wrap">
@@ -131,8 +131,8 @@ const Footer = () => {
 											type="button"
 											variant="dark"
 											onClick={() => {
-												console.log(email);
-												setEmail("");
+											  console.log(email);
+											  setEmail('');
 											}}
 										>
 											Subscribe
@@ -187,7 +187,7 @@ const Footer = () => {
 				</Row>
 			</Container>
 		</footer>
-	);
+  );
 };
 
 export default Footer;

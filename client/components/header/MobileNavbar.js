@@ -1,23 +1,23 @@
-import React from "react";
-import { Navbar, Nav, Container, Offcanvas } from "react-bootstrap";
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from 'react';
+import { Navbar, Nav, Container, Offcanvas } from 'react-bootstrap';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-	faBasketShopping,
-	faChevronRight,
-	faListCheck,
-	faRightFromBracket,
-	faRightToBracket,
-	faUser,
-} from "@fortawesome/free-solid-svg-icons";
+  faBasketShopping,
+  faChevronRight,
+  faListCheck,
+  faRightFromBracket,
+  faRightToBracket,
+  faUser
+} from '@fortawesome/free-solid-svg-icons';
 
 const MobileNavbar = ({
-	currentUser,
-	numItems,
-	showNotification,
-	productCategories,
+  currentUser,
+  numItems,
+  showNotification,
+  productCategories
 }) => {
-	return (
+  return (
 		<header>
 			<Navbar variant="light" expand="lg" collapseOnSelect="true">
 				<Container>
@@ -49,7 +49,7 @@ const MobileNavbar = ({
 								{productCategories.map((category, index) => (
 									<Link
 										href={`/products/${category.toLowerCase()}${
-											category === "Dress" ? "es" : "s"
+											category === 'Dress' ? 'es' : 's'
 										}`}
 										key={index}
 										passHref
@@ -61,7 +61,8 @@ const MobileNavbar = ({
 								))}
 							</Nav>
 
-							{currentUser ? (
+							{currentUser
+							  ? (
 								<Nav className="offcanvas-body-lower mb-2 d-flex flex-row justify-content-around">
 									<Link href="/dashboard" passHref>
 										<Nav.Link>
@@ -81,7 +82,8 @@ const MobileNavbar = ({
 										</Nav.Link>
 									</Link>
 								</Nav>
-							) : (
+							    )
+							  : (
 								<Nav className="mx-3 d-flex flex-row justify-content-end ">
 									<Link href="/signin" passHref>
 										<Nav.Link>
@@ -89,7 +91,7 @@ const MobileNavbar = ({
 										</Nav.Link>
 									</Link>
 								</Nav>
-							)}
+							    )}
 						</Offcanvas.Body>
 					</Navbar.Offcanvas>
 
@@ -106,7 +108,7 @@ const MobileNavbar = ({
 								<span
 									id="notification"
 									className="position-absolute  badge border border-light rounded-circle bg-danger"
-									style={{ display: showNotification ? "block" : "none" }}
+									style={{ display: showNotification ? 'block' : 'none' }}
 								>
 									<span className="visually-hidden">unread messages</span>
 									{numItems}
@@ -117,7 +119,7 @@ const MobileNavbar = ({
 				</Container>
 			</Navbar>
 		</header>
-	);
+  );
 };
 
 export default MobileNavbar;

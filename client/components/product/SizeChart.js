@@ -1,22 +1,22 @@
-import React from "react";
-import dynamic from "next/dynamic";
-import { Col, Nav, Row, Table } from "react-bootstrap";
+import React from 'react';
+import dynamic from 'next/dynamic';
+import { Col, Nav, Row, Table } from 'react-bootstrap';
 
 const DynamicTabContainer = dynamic(
-	() => import("react-bootstrap/TabContainer"),
-	{
-		ssr: false,
-	}
+  () => import('react-bootstrap/TabContainer'),
+  {
+    ssr: false
+  }
 );
-const DynamicTabContent = dynamic(() => import("react-bootstrap/TabContent"), {
-	ssr: false,
+const DynamicTabContent = dynamic(() => import('react-bootstrap/TabContent'), {
+  ssr: false
 });
-const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
-	ssr: false,
+const DynamicTabPane = dynamic(() => import('react-bootstrap/TabPane'), {
+  ssr: false
 });
 
 const SizeChart = () => {
-	return (
+  return (
 		<DynamicTabContainer id="size-chart-box" defaultActiveKey="inch">
 			<Row>
 				<Col className="px-0">
@@ -140,7 +140,7 @@ const SizeChart = () => {
 				</Col>
 			</Row>
 		</DynamicTabContainer>
-	);
+  );
 };
 
 export default SizeChart;

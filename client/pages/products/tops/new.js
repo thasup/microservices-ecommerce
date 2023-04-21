@@ -1,47 +1,49 @@
-import { useEffect, useState } from "react";
-import { Breadcrumb, Col, Row } from "react-bootstrap";
-import Link from "next/link";
-import Head from "next/head";
+import React, { useEffect, useState } from 'react';
+import { Breadcrumb, Col, Row } from 'react-bootstrap';
+import Link from 'next/link';
+import Head from 'next/head';
 
-import Product from "../../../components/home/Product";
-import Loader from "../../../components/common/Loader";
-import useWindowSize from "../../../hooks/useWindowSize";
+import Product from '../../../components/home/Product';
+import Loader from '../../../components/common/Loader';
+import useWindowSize from '../../../hooks/useWindowSize';
 
 const TopsNewArrivals = ({ products, currentUser }) => {
-	const [loading, setLoading] = useState(true);
-	const [onMobile, setOnMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [onMobile, setOnMobile] = useState(false);
 
-	const { width } = useWindowSize();
+  const { width } = useWindowSize();
 
-	const topsNewArrivals = products
-		?.filter((top) => top.category === "Top")
-		.reverse();
+  const topsNewArrivals = products
+    ?.filter((top) => top.category === 'Top')
+    .reverse();
 
-	useEffect(() => {
-		if (width <= 576) {
-			setOnMobile(true);
-		} else {
-			setOnMobile(false);
-		}
+  useEffect(() => {
+    if (width <= 576) {
+      setOnMobile(true);
+    } else {
+      setOnMobile(false);
+    }
 
-		if (products && topsNewArrivals) {
-			setLoading(false);
-		}
-	}, [width, products]);
+    if (products && topsNewArrivals) {
+      setLoading(false);
+    }
+  }, [width, products]);
 
-	return (
+  return (
 		<>
 			<Head>
 				<title>New Arrivals Tops | Aurapan</title>
 			</Head>
-			{loading ? (
+			{loading
+			  ? (
 				<div
 					className="d-flex justify-content-center align-items-center px-0"
-					style={{ marginTop: "80px" }}
+					style={{ marginTop: '80px' }}
 				>
 					<Loader />
 				</div>
-			) : (
+			    )
+			  : (
 				<>
 					<h1 className="category-header">New Arrivals Tops</h1>
 					<Breadcrumb className="breadcrumb-label">
@@ -70,9 +72,9 @@ const TopsNewArrivals = ({ products, currentUser }) => {
 						))}
 					</Row>
 				</>
-			)}
+			    )}
 		</>
-	);
+  );
 };
 
 export default TopsNewArrivals;

@@ -1,7 +1,8 @@
-import { Html, Head, Main, NextScript } from "next/document";
+import React from 'react';
+import { Html, Head, Main, NextScript } from 'next/document';
 
-export default function Document() {
-	return (
+export default function Document () {
+  return (
 		<Html lang="en">
 			<Head>
 				{/* Global site tag (gtag.js) - Google Analytics */}
@@ -11,14 +12,14 @@ export default function Document() {
 				/>
 				<script
 					dangerouslySetInnerHTML={{
-						__html: `
+					  __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-2B8SVV4K29', {
               page_path: window.location.pathname,
             });
-          `,
+          `
 					}}
 				/>
 
@@ -32,5 +33,5 @@ export default function Document() {
 				<NextScript />
 			</body>
 		</Html>
-	);
+  );
 }

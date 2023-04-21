@@ -1,106 +1,108 @@
-import React, { useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
-import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
-import Head from "next/head";
+import React, { useEffect, useState } from 'react';
+import Router, { useRouter } from 'next/router';
+import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import Head from 'next/head';
 
-import useRequest from "../../../hooks/useRequest";
-import Loader from "../../../components/common/Loader";
+import useRequest from '../../../hooks/useRequest';
+import Loader from '../../../components/common/Loader';
 
 const UserEdit = ({ users, currentUser }) => {
-	const { userId } = useRouter().query;
+  const { userId } = useRouter().query;
 
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [isAdmin, setIsAdmin] = useState(undefined);
-	const [name, setName] = useState("");
-	const [image, setImage] = useState("");
-	const [gender, setGender] = useState("");
-	const [age, setAge] = useState(undefined);
-	const [bio, setBio] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isAdmin, setIsAdmin] = useState(undefined);
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState(undefined);
+  const [bio, setBio] = useState('');
 
-	const [address, setAddress] = useState("");
-	const [city, setCity] = useState("");
-	const [postalCode, setPostalCode] = useState("");
-	const [country, setCountry] = useState("");
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [country, setCountry] = useState('');
 
-	const [isReady, setIsReady] = useState(false);
-	const [loading, setLoading] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-	const user = users.find((user) => user.id === userId);
+  const user = users.find((user) => user.id === userId);
 
-	const { doRequest, errors } = useRequest({
-		url: `/api/users/${userId}`,
-		method: "patch",
-		body: {
-			email,
-			password,
-			isAdmin,
-			name,
-			image,
-			gender,
-			age,
-			bio,
-			jsonShippingAddress: JSON.stringify({
-				address: address,
-				city: city,
-				postalCode: postalCode,
-				country: country,
-			}),
-		},
-		onSuccess: () => {
-			Router.push("/admin");
-			setLoading(false);
-		},
-	});
+  const { doRequest, errors } = useRequest({
+    url: `/api/users/${userId}`,
+    method: 'patch',
+    body: {
+      email,
+      password,
+      isAdmin,
+      name,
+      image,
+      gender,
+      age,
+      bio,
+      jsonShippingAddress: JSON.stringify({
+        address,
+        city,
+        postalCode,
+        country
+      })
+    },
+    onSuccess: () => {
+      Router.push('/admin');
+      setLoading(false);
+    }
+  });
 
-	useEffect(() => {
-		// Protect unauthorized access
-		if (!currentUser || currentUser.isAdmin === false) {
-			return Router.push("/signin");
-		} else {
-			setIsReady(true);
-		}
+  useEffect(() => {
+    // Protect unauthorized access
+    if (!currentUser || currentUser.isAdmin === false) {
+      return Router.push('/signin');
+    } else {
+      setIsReady(true);
+    }
 
-		if (user) {
-			setEmail(user.email);
-			setPassword(user.password);
-			setIsAdmin(user.isAdmin);
-			setName(user.name);
-			setImage(user.image);
-			setGender(user.gender);
-			setAge(user.age);
-			setBio(user.bio);
+    if (user) {
+      setEmail(user.email);
+      setPassword(user.password);
+      setIsAdmin(user.isAdmin);
+      setName(user.name);
+      setImage(user.image);
+      setGender(user.gender);
+      setAge(user.age);
+      setBio(user.bio);
 
-			if (user.shippingAddress) {
-				setAddress(user.shippingAddress.address);
-				setCity(user.shippingAddress.city);
-				setPostalCode(user.shippingAddress.postalCode);
-				setCountry(user.shippingAddress.country);
-			}
-		}
-	}, []);
+      if (user.shippingAddress) {
+        setAddress(user.shippingAddress.address);
+        setCity(user.shippingAddress.city);
+        setPostalCode(user.shippingAddress.postalCode);
+        setCountry(user.shippingAddress.country);
+      }
+    }
+  }, []);
 
-	const submitHandler = async (event) => {
-		event.preventDefault();
-		setLoading(true);
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    setLoading(true);
 
-		doRequest();
-	};
+    doRequest();
+  };
 
-	return (
-		isReady && (
+  return (
+    isReady && (
 			<>
 				<Head>
 					<title>Edit User Information | Aurapan</title>
 				</Head>
-				{loading ? (
+				{loading
+				  ? (
 					<div
 						className="d-flex justify-content-center align-items-center px-0"
-						style={{ marginTop: "80px" }}
+						style={{ marginTop: '80px' }}
 					>
 						<Loader />
 					</div>
-				) : (
+				    )
+				  : (
 					<Container className="app-container">
 						<h1>Edit User Information</h1>
 						<Row className="mt-3">
@@ -196,7 +198,8 @@ const UserEdit = ({ users, currentUser }) => {
 
 									{errors}
 									<Button className="mt-3" type="submit" variant="dark">
-										{loading ? (
+										{loading
+										  ? (
 											<Spinner
 												animation="border"
 												role="status"
@@ -206,7 +209,8 @@ const UserEdit = ({ users, currentUser }) => {
 											>
 												<span className="visually-hidden">Loading...</span>
 											</Spinner>
-										) : null}{" "}
+										    )
+										  : null}{' '}
 										Update
 									</Button>
 								</Form>
@@ -255,10 +259,10 @@ const UserEdit = ({ users, currentUser }) => {
 							</Col>
 						</Row>
 					</Container>
-				)}
+				    )}
 			</>
-		)
-	);
+    )
+  );
 };
 
 export default UserEdit;

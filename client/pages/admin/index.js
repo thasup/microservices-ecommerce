@@ -1,55 +1,55 @@
-import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { Col, Container, Nav, Row } from "react-bootstrap";
-import Router from "next/router";
-import Head from "next/head";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Col, Container, Nav, Row } from 'react-bootstrap';
+import Router from 'next/router';
+import Head from 'next/head';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-	faBasketShopping,
-	faPlus,
-	faShirt,
-} from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
+  faBasketShopping,
+  faPlus,
+  faShirt
+} from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
 
-import CreateProduct from "../../components/dashboard/CreateProduct";
-import UserList from "../../components/dashboard/UserList";
-import OrderList from "../../components/dashboard/OrderList";
-import ProductList from "../../components/dashboard/ProductList";
+import CreateProduct from '../../components/dashboard/CreateProduct';
+import UserList from '../../components/dashboard/UserList';
+import OrderList from '../../components/dashboard/OrderList';
+import ProductList from '../../components/dashboard/ProductList';
 
 const DynamicTabContainer = dynamic(
-	() => import("react-bootstrap/TabContainer"),
-	{
-		ssr: false,
-	}
+  () => import('react-bootstrap/TabContainer'),
+  {
+    ssr: false
+  }
 );
-const DynamicTabContent = dynamic(() => import("react-bootstrap/TabContent"), {
-	ssr: false,
+const DynamicTabContent = dynamic(() => import('react-bootstrap/TabContent'), {
+  ssr: false
 });
-const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
-	ssr: false,
+const DynamicTabPane = dynamic(() => import('react-bootstrap/TabPane'), {
+  ssr: false
 });
 
 const AdminDashboard = ({
-	products,
-	users,
-	orders,
-	orderProducts,
-	paymentProducts,
-	currentUser,
+  products,
+  users,
+  orders,
+  orderProducts,
+  paymentProducts,
+  currentUser
 }) => {
-	const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-	useEffect(() => {
-		// Protect unauthorized access
-		if (!currentUser || currentUser.isAdmin === false) {
-			return Router.push("/signin");
-		} else {
-			setIsReady(true);
-		}
-	}, []);
+  useEffect(() => {
+    // Protect unauthorized access
+    if (!currentUser || currentUser.isAdmin === false) {
+      return Router.push('/signin');
+    } else {
+      setIsReady(true);
+    }
+  }, []);
 
-	return (
-		isReady && (
+  return (
+    isReady && (
 			<>
 				<Head>
 					<title>Admin Dashboard | Aurapan</title>
@@ -114,8 +114,8 @@ const AdminDashboard = ({
 					</DynamicTabContainer>
 				</Container>
 			</>
-		)
-	);
+    )
+  );
 };
 
 export default AdminDashboard;

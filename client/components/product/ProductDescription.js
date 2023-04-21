@@ -1,24 +1,24 @@
-import React from "react";
-import dynamic from "next/dynamic";
-import { Col, Nav, Row } from "react-bootstrap";
+import React from 'react';
+import dynamic from 'next/dynamic';
+import { Col, Nav, Row } from 'react-bootstrap';
 
-import SizeChart from "./SizeChart";
+import SizeChart from './SizeChart';
 
 const DynamicTabContainer = dynamic(
-	() => import("react-bootstrap/TabContainer"),
-	{
-		ssr: false,
-	}
+  () => import('react-bootstrap/TabContainer'),
+  {
+    ssr: false
+  }
 );
-const DynamicTabContent = dynamic(() => import("react-bootstrap/TabContent"), {
-	ssr: false,
+const DynamicTabContent = dynamic(() => import('react-bootstrap/TabContent'), {
+  ssr: false
 });
-const DynamicTabPane = dynamic(() => import("react-bootstrap/TabPane"), {
-	ssr: false,
+const DynamicTabPane = dynamic(() => import('react-bootstrap/TabPane'), {
+  ssr: false
 });
 
 const ProductDescription = ({ product }) => {
-	return (
+  return (
 		<DynamicTabContainer
 			id="product-desciption-box"
 			defaultActiveKey="description"
@@ -63,7 +63,7 @@ const ProductDescription = ({ product }) => {
 								<p>
 									Dignissim enim sit amet venenatis urna. Sollicitudin aliquam
 									ultrices sagittis orci a scelerisque purus. Augue neque
-									gravida in fermentum et. Vel pretium lectus quam id leo.{" "}
+									gravida in fermentum et. Vel pretium lectus quam id leo.{' '}
 								</p>
 								<p>
 									Quis commodo odio aenean sed. Turpis massa sed elementum
@@ -86,7 +86,7 @@ const ProductDescription = ({ product }) => {
 				</Col>
 			</Row>
 		</DynamicTabContainer>
-	);
+  );
 };
 
 export default ProductDescription;

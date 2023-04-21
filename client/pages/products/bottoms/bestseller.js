@@ -1,47 +1,49 @@
-import { useEffect, useState } from "react";
-import { Breadcrumb, Col, Row } from "react-bootstrap";
-import Link from "next/link";
-import Head from "next/head";
+import React, { useEffect, useState } from 'react';
+import { Breadcrumb, Col, Row } from 'react-bootstrap';
+import Link from 'next/link';
+import Head from 'next/head';
 
-import Product from "../../../components/home/Product";
-import Loader from "../../../components/common/Loader";
-import useWindowSize from "../../../hooks/useWindowSize";
+import Product from '../../../components/home/Product';
+import Loader from '../../../components/common/Loader';
+import useWindowSize from '../../../hooks/useWindowSize';
 
 const BottomsBestseller = ({ bestseller, currentUser }) => {
-	const [loading, setLoading] = useState(true);
-	const [onMobile, setOnMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [onMobile, setOnMobile] = useState(false);
 
-	const { width } = useWindowSize();
+  const { width } = useWindowSize();
 
-	const bottomsBestseller = bestseller?.filter(
-		(bottom) => bottom.category === "Bottom"
-	);
+  const bottomsBestseller = bestseller?.filter(
+    (bottom) => bottom.category === 'Bottom'
+  );
 
-	useEffect(() => {
-		if (width <= 576) {
-			setOnMobile(true);
-		} else {
-			setOnMobile(false);
-		}
+  useEffect(() => {
+    if (width <= 576) {
+      setOnMobile(true);
+    } else {
+      setOnMobile(false);
+    }
 
-		if (bestseller && bottomsBestseller) {
-			setLoading(false);
-		}
-	}, [width, bestseller]);
+    if (bestseller && bottomsBestseller) {
+      setLoading(false);
+    }
+  }, [width, bestseller]);
 
-	return (
+  return (
 		<>
 			<Head>
 				<title>Bestseller Bottoms | Aurapan</title>
 			</Head>
-			{loading ? (
+			{loading
+			  ? (
 				<div
 					className="d-flex justify-content-center align-items-center px-0"
-					style={{ marginTop: "80px" }}
+					style={{ marginTop: '80px' }}
 				>
 					<Loader />
 				</div>
-			) : (
+			    )
+			  : (
 				<>
 					<h1 className="category-header">Bestseller Bottoms</h1>
 					<Breadcrumb className="breadcrumb-label">
@@ -70,9 +72,9 @@ const BottomsBestseller = ({ bestseller, currentUser }) => {
 						))}
 					</Row>
 				</>
-			)}
+			    )}
 		</>
-	);
+  );
 };
 
 export default BottomsBestseller;
