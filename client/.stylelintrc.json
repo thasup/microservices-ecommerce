@@ -1,0 +1,7 @@
+{
+	"extends": ["stylelint-config-standard"],
+	"ignoreFiles": ["bootstrap.min.css"],
+	"rules": {
+		"no-descending-specificity": null
+	}
+}
