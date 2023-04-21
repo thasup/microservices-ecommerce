@@ -1,58 +1,58 @@
-import Image from "next/image";
-import Link from "next/link";
-import Router from "next/router";
-import React, { useEffect, useState } from "react";
-import { Button, Col, Row, Spinner, Table } from "react-bootstrap";
+import Image from 'next/image';
+import Link from 'next/link';
+import Router from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Row, Spinner, Table } from 'react-bootstrap';
 import {
-	faCheck,
-	faEdit,
-	faMars,
-	faTimes,
-	faTrash,
-	faVenus,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  faCheck,
+  faEdit,
+  faMars,
+  faTimes,
+  faTrash,
+  faVenus
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import CustomTooltip from "../common/CustomTooltip";
-import profilePic from "../../public/asset/sample.jpg";
-import useRequest from "../../hooks/useRequest";
+import CustomTooltip from '../common/CustomTooltip';
+import profilePic from '../../public/asset/sample.jpg';
+import useRequest from '../../hooks/useRequest';
 
 const UserList = ({ users }) => {
-	const [userId, setUserId] = useState(false);
-	const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-	const { doRequest, errors } = useRequest({
-		url: `/api/users/${userId}`,
-		method: "delete",
-		body: {},
-		onSuccess: () => {
-			setLoading(false);
-			Router.push("/admin");
-		},
-	});
+  const { doRequest, errors } = useRequest({
+    url: `/api/users/${userId}`,
+    method: 'delete',
+    body: {},
+    onSuccess: () => {
+      setLoading(false);
+      Router.push('/admin');
+    }
+  });
 
-	useEffect(() => {
-		if (loading) {
-			if (window.confirm("Are you sure?")) {
-				doRequest();
-			}
-		}
-	}, [loading]);
+  useEffect(() => {
+    if (loading) {
+      if (window.confirm('Are you sure?')) {
+        doRequest();
+      }
+    }
+  }, [loading]);
 
-	const deleteHandler = async (id) => {
-		setLoading(true);
-		setUserId(id);
-	};
+  const deleteHandler = async (id) => {
+    setLoading(true);
+    setUserId(id);
+  };
 
-	const myLoader = ({ src, width, quality }) => {
-		if (src[0] === "v") {
-			return `https://res.cloudinary.com/thasup/image/upload/${src}`;
-		} else {
-			return `${src}&q=${quality || 20}`;
-		}
-	};
+  const myLoader = ({ src, width, quality }) => {
+    if (src[0] === 'v') {
+      return `https://res.cloudinary.com/thasup/image/upload/q_${quality || 60}/${src}`;
+    } else {
+      return `${src}&q=${quality || 20}`;
+    }
+  };
 
-	return (
+  return (
 		<Row className="align-items-center">
 			<Col>
 				{errors}
@@ -81,7 +81,8 @@ const UserList = ({ users }) => {
 									<CustomTooltip index={index} mongoId={user.id} />
 								</td>
 								<td>
-									{user.image ? (
+									{user.image
+									  ? (
 										<div className="profile-img">
 											<Image
 												loader={myLoader}
@@ -92,7 +93,8 @@ const UserList = ({ users }) => {
 												layout="responsive"
 											/>
 										</div>
-									) : (
+									    )
+									  : (
 										<div className="profile-img">
 											<Image
 												src={profilePic}
@@ -102,80 +104,86 @@ const UserList = ({ users }) => {
 												layout="responsive"
 											/>
 										</div>
-									)}
+									    )}
 								</td>
 								<td>{user?.name}</td>
 								<td>
 									<a href={`mailto:${user.email}`}>{user.email}</a>
 								</td>
 								<td>
-									{user.isAdmin ? (
+									{user.isAdmin
+									  ? (
 										<>
 											<FontAwesomeIcon
 												icon={faCheck}
-												style={{ color: "green" }}
+												style={{ color: 'green' }}
 											/>
-											{"  "}
+											{'  '}
 											Yes
 										</>
-									) : (
+									    )
+									  : (
 										<>
 											<FontAwesomeIcon
 												icon={faTimes}
-												style={{ color: "red" }}
+												style={{ color: 'red' }}
 											/>
-											{"  "}
+											{'  '}
 											No
 										</>
-									)}
+									    )}
 								</td>
 								<td>{user.age ? user.age : null}</td>
 								<td>
-									{user.gender ? (
-										user.gender === "male" ? (
+									{user.gender
+									  ? (
+									  user.gender === 'male'
+									        ? (
 											<>
 												<FontAwesomeIcon
 													icon={faMars}
-													style={{ color: "dodgerblue" }}
+													style={{ color: 'dodgerblue' }}
 												/>
-												{"  "}
+												{'  '}
 												Male
 											</>
-										) : (
+									  )
+									        : (
 											<>
 												<FontAwesomeIcon
 													icon={faVenus}
-													style={{ color: "hotpink" }}
+													style={{ color: 'hotpink' }}
 												/>
-												{"  "}
+												{'  '}
 												Female
 											</>
-										)
-									) : null}
+									  )
+									    )
+									  : null}
 								</td>
 								<td>
 									{user.shippingAddress?.address
-										? user.shippingAddress?.address
-										: null}
+									  ? user.shippingAddress?.address
+									  : null}
 								</td>
 								<td>
 									{user.shippingAddress?.city
-										? user.shippingAddress?.city
-										: null}
+									  ? user.shippingAddress?.city
+									  : null}
 								</td>
 								<td>
 									{user.shippingAddress?.postalCode
-										? user.shippingAddress?.postalCode
-										: null}
+									  ? user.shippingAddress?.postalCode
+									  : null}
 								</td>
 								<td>
 									{user.shippingAddress?.country
-										? user.shippingAddress?.country
-										: null}
+									  ? user.shippingAddress?.country
+									  : null}
 								</td>
 								<td>
 									<Link
-										href={"/dashboard/edit/[userId]"}
+										href={'/dashboard/edit/[userId]'}
 										as={`/dashboard/edit/${user.id}`}
 										passHref
 									>
@@ -188,7 +196,8 @@ const UserList = ({ users }) => {
 										className="btn-sm mx-1"
 										onClick={() => deleteHandler(user.id)}
 									>
-										{loading ? (
+										{loading
+										  ? (
 											<Spinner
 												animation="border"
 												role="status"
@@ -198,9 +207,10 @@ const UserList = ({ users }) => {
 											>
 												<span className="visually-hidden">Loading...</span>
 											</Spinner>
-										) : (
+										    )
+										  : (
 											<FontAwesomeIcon icon={faTrash} />
-										)}
+										    )}
 									</Button>
 								</td>
 								<td>{`${new Date(`${user.createdAt}`).toLocaleDateString()} ${new Date(`${user.createdAt}`).toLocaleTimeString()}`}</td>
@@ -210,7 +220,7 @@ const UserList = ({ users }) => {
 				</Table>
 			</Col>
 		</Row>
-	);
+  );
 };
 
 export default UserList;

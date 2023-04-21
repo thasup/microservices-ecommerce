@@ -1,71 +1,71 @@
-import React, { useState } from "react";
-import { Button, Carousel, Col, Form, Row, Spinner } from "react-bootstrap";
-import Router from "next/router";
-import Image from "next/image";
+import React, { useState } from 'react';
+import { Button, Carousel, Col, Form, Row, Spinner } from 'react-bootstrap';
+import Router from 'next/router';
+import Image from 'next/image';
 
-import useRequest from "../../hooks/useRequest";
+import useRequest from '../../hooks/useRequest';
 
 const CreateProduct = () => {
-	const [title, setTitle] = useState("");
-	const [price, setPrice] = useState(0);
-	const [image1, setImage1] = useState("");
-	const [image2, setImage2] = useState("");
-	const [image3, setImage3] = useState("");
-	const [image4, setImage4] = useState("");
-	const [colors, setColors] = useState("");
-	const [sizes, setSizes] = useState("");
-	const [brand, setBrand] = useState("");
-	const [category, setCategory] = useState("");
-	const [material, setMaterial] = useState("");
-	const [description, setDescription] = useState("");
-	const [countInStock, setCountInStock] = useState(0);
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState(0);
+  const [image1, setImage1] = useState('');
+  const [image2, setImage2] = useState('');
+  const [image3, setImage3] = useState('');
+  const [image4, setImage4] = useState('');
+  const [colors, setColors] = useState('');
+  const [sizes, setSizes] = useState('');
+  const [brand, setBrand] = useState('');
+  const [category, setCategory] = useState('');
+  const [material, setMaterial] = useState('');
+  const [description, setDescription] = useState('');
+  const [countInStock, setCountInStock] = useState(0);
 
-	const [index, setIndex] = useState(0);
-	const [loadingCreate, setLoadingCreate] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [loadingCreate, setLoadingCreate] = useState(false);
 
-	const { doRequest, errors } = useRequest({
-		url: "/api/products",
-		method: "post",
-		body: {
-			title,
-			price,
-			image1,
-			image2,
-			image3,
-			image4,
-			colors,
-			sizes,
-			brand,
-			category,
-			material,
-			description,
-			countInStock,
-		},
-		onSuccess: () => {
-			setLoadingCreate(false);
-			Router.push("/");
-		},
-	});
+  const { doRequest, errors } = useRequest({
+    url: '/api/products',
+    method: 'post',
+    body: {
+      title,
+      price,
+      image1,
+      image2,
+      image3,
+      image4,
+      colors,
+      sizes,
+      brand,
+      category,
+      material,
+      description,
+      countInStock
+    },
+    onSuccess: () => {
+      setLoadingCreate(false);
+      Router.push('/');
+    }
+  });
 
-	const submitHandler = async (e) => {
-		e.preventDefault();
-		setLoadingCreate(true);
-		doRequest();
-	};
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setLoadingCreate(true);
+    doRequest();
+  };
 
-	const myLoader = ({ src, width, quality }) => {
-		if (src[0] === "v") {
-			return `https://res.cloudinary.com/thasup/image/upload/${src}`;
-		} else {
-			return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 70}`;
-		}
-	};
+  const myLoader = ({ src, width, quality }) => {
+    if (src[0] === 'v') {
+      return `https://res.cloudinary.com/thasup/image/upload/q_${quality || 60}/${src}`;
+    } else {
+      return `https://www.dropbox.com/s/${src}?raw=1&q=${quality || 70}`;
+    }
+  };
 
-	const handleSelect = (selectedIndex) => {
-		setIndex(selectedIndex);
-	};
+  const handleSelect = (selectedIndex) => {
+    setIndex(selectedIndex);
+  };
 
-	return (
+  return (
 		<Row>
 			<Col xs={12} xl={6} className="d-flex justify-content-center">
 				<Carousel
@@ -78,8 +78,8 @@ const CreateProduct = () => {
 					<Carousel.Item className="carousel-product-item">
 						<Image
 							loader={myLoader}
-							src={image1 || "gatmu67f52etjy2/4te4tet.webp"}
-							alt={`Sample Product image`}
+							src={image1 || 'gatmu67f52etjy2/4te4tet.webp'}
+							alt={'Sample Product image'}
 							layout="fill"
 							objectFit="cover"
 							priority
@@ -89,8 +89,8 @@ const CreateProduct = () => {
 					<Carousel.Item className="carousel-product-item">
 						<Image
 							loader={myLoader}
-							src={image2 || "gatmu67f52etjy2/4te4tet.webp"}
-							alt={`Sample Product image`}
+							src={image2 || 'gatmu67f52etjy2/4te4tet.webp'}
+							alt={'Sample Product image'}
 							layout="fill"
 							objectFit="cover"
 							priority
@@ -100,8 +100,8 @@ const CreateProduct = () => {
 					<Carousel.Item className="carousel-product-item">
 						<Image
 							loader={myLoader}
-							src={image3 || "gatmu67f52etjy2/4te4tet.webp"}
-							alt={`Sample Product image`}
+							src={image3 || 'gatmu67f52etjy2/4te4tet.webp'}
+							alt={'Sample Product image'}
 							layout="fill"
 							objectFit="cover"
 							priority
@@ -111,8 +111,8 @@ const CreateProduct = () => {
 					<Carousel.Item className="carousel-product-item">
 						<Image
 							loader={myLoader}
-							src={image4 || "gatmu67f52etjy2/4te4tet.webp"}
-							alt={`Sample Product image`}
+							src={image4 || 'gatmu67f52etjy2/4te4tet.webp'}
+							alt={'Sample Product image'}
 							layout="fill"
 							objectFit="cover"
 							priority
@@ -265,7 +265,8 @@ const CreateProduct = () => {
 					</Form.Group>
 
 					<Button type="submit" variant="dark" className="my-3">
-						{loadingCreate ? (
+						{loadingCreate
+						  ? (
 							<Spinner
 								animation="border"
 								role="status"
@@ -275,13 +276,14 @@ const CreateProduct = () => {
 							>
 								<span className="visually-hidden">Loading...</span>
 							</Spinner>
-						) : null}{" "}
+						    )
+						  : null}{' '}
 						Create
 					</Button>
 				</Form>
 			</Col>
 		</Row>
-	);
+  );
 };
 
 export default CreateProduct;

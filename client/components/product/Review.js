@@ -1,76 +1,76 @@
-import React, { useState } from "react";
-import { Button, Col, Form, ListGroup, Row, Spinner } from "react-bootstrap";
-import Image from "next/image";
-import Link from "next/link";
-import Router from "next/router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from 'react';
+import { Button, Col, Form, ListGroup, Row, Spinner } from 'react-bootstrap';
+import Image from 'next/image';
+import Link from 'next/link';
+import Router from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-	faStarHalfAlt,
-	faTrash,
-	faStar as fasfaStar,
-} from "@fortawesome/free-solid-svg-icons";
-import { faStar } from "@fortawesome/free-regular-svg-icons";
-import ReactStars from "react-rating-stars-component";
+  faStarHalfAlt,
+  faTrash,
+  faStar as fasfaStar
+} from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-regular-svg-icons';
+import ReactStars from 'react-rating-stars-component';
 
-import useRequest from "../../hooks/useRequest";
-import Loader from "../common/Loader";
-import Message from "../common/Message";
-import Rating from "../common/Rating";
+import useRequest from '../../hooks/useRequest';
+import Loader from '../common/Loader';
+import Message from '../common/Message';
+import Rating from '../common/Rating';
 
 const Review = ({ currentUser, product, users, isPurchase }) => {
-	const [rating, setRating] = useState(0);
-	const [reviewTitle, setReviewTitle] = useState("");
-	const [comment, setComment] = useState("");
-	const [loading, setLoading] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [reviewTitle, setReviewTitle] = useState('');
+  const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
 
-	const { doRequest: addReview, errors: addReviewErrors } = useRequest({
-		url: `/api/products/${product.id}/reviews`,
-		method: "post",
-		body: {
-			title: reviewTitle,
-			rating,
-			comment,
-		},
-		onSuccess: () => {
-			setLoading(false);
-			Router.push(`/products/${product.id}`);
-		},
-	});
+  const { doRequest: addReview, errors: addReviewErrors } = useRequest({
+    url: `/api/products/${product.id}/reviews`,
+    method: 'post',
+    body: {
+      title: reviewTitle,
+      rating,
+      comment
+    },
+    onSuccess: () => {
+      setLoading(false);
+      Router.push(`/products/${product.id}`);
+    }
+  });
 
-	const { doRequest: removeReview, errors: deleteReviewErrors } = useRequest({
-		url: `/api/products/${product.id}/reviews`,
-		method: "delete",
-		body: {},
-		onSuccess: () => {
-			setLoading(false);
-			Router.push(`/products/${product.id}`);
-		},
-	});
+  const { doRequest: removeReview, errors: deleteReviewErrors } = useRequest({
+    url: `/api/products/${product.id}/reviews`,
+    method: 'delete',
+    body: {},
+    onSuccess: () => {
+      setLoading(false);
+      Router.push(`/products/${product.id}`);
+    }
+  });
 
-	const submitReviewHandler = (e) => {
-		e.preventDefault();
-		setLoading(true);
-		addReview();
-	};
+  const submitReviewHandler = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    addReview();
+  };
 
-	const deleteReviewHandler = (review) => {
-		if (currentUser && review.userId === currentUser?.id) {
-			setLoading(true);
-			removeReview();
-		} else {
-			alert("No authorized");
-		}
-	};
+  const deleteReviewHandler = (review) => {
+    if (currentUser && review.userId === currentUser?.id) {
+      setLoading(true);
+      removeReview();
+    } else {
+      alert('No authorized');
+    }
+  };
 
-	const myLoader = ({ src, width, quality }) => {
-		if (src[0] === "v") {
-			return `https://res.cloudinary.com/thasup/image/upload/${src}`;
-		} else {
-			return `${src}&q=${quality || 40}`;
-		}
-	};
+  const myLoader = ({ src, width, quality }) => {
+    if (src[0] === 'v') {
+      return `https://res.cloudinary.com/thasup/image/upload/q_${quality || 60}/${src}`;
+    } else {
+      return `${src}&q=${quality || 40}`;
+    }
+  };
 
-	return (
+  return (
 		<>
 			<h3>Reviews</h3>
 			{deleteReviewErrors}
@@ -78,9 +78,11 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
 				<Message variant="secondary">No Reviews</Message>
 			)}
 			<ListGroup variant="flush">
-				{loading ? (
+				{loading
+				  ? (
 					<Loader />
-				) : (
+				    )
+				  : (
 					<>
 						{product.reviews.map((review) => (
 							<ListGroup.Item key={review.id}>
@@ -130,13 +132,15 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
 							</ListGroup.Item>
 						))}
 					</>
-				)}
+				    )}
 
-				{currentUser ? (
+				{currentUser
+				  ? (
 					<>
 						{!product.reviews.some(
-							(review) => review.userId === currentUser?.id
-						) && isPurchase ? (
+						  (review) => review.userId === currentUser?.id
+						) && isPurchase
+						  ? (
 							<ListGroup className="mt-3">
 								<h3>Write a Review</h3>
 
@@ -179,7 +183,8 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
 
 									{addReviewErrors}
 									<Button type="submit" variant="dark" className="mt-3">
-										{loading ? (
+										{loading
+										  ? (
 											<Spinner
 												animation="border"
 												role="status"
@@ -189,31 +194,36 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
 											>
 												<span className="visually-hidden">Loading...</span>
 											</Spinner>
-										) : null}{" "}
+										    )
+										  : null}{' '}
 										Submit
 									</Button>
 								</Form>
 							</ListGroup>
-						) : !product.reviews.some(
-								(review) => review.userId === currentUser?.id
-						  ) && !isPurchase ? (
+						    )
+						  : !product.reviews.some(
+						      (review) => review.userId === currentUser?.id
+						  ) && !isPurchase
+						      ? (
 							<Message variant="secondary">
 								You must purchase the product to write a review
 							</Message>
-						) : null}
+						        )
+						      : null}
 					</>
-				) : (
+				    )
+				  : (
 					<Message variant="secondary">
-						Please{" "}
+						Please{' '}
 						<Link href="/signin">
 							<a>sign in</a>
-						</Link>{" "}
+						</Link>{' '}
 						to write a review
 					</Message>
-				)}
+				    )}
 			</ListGroup>
 		</>
-	);
+  );
 };
 
 export default Review;
