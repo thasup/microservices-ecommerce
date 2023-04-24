@@ -35,7 +35,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       # give credential to k8s cluster
-      - run: doctl kubernetes cluster kubeconfig save aurapan-do-cluster
+      - run: doctl kubernetes cluster kubeconfig save aurapan-6th-cluster
 
       # restart deployment
       - run: kubectl rollout restart deployment user-depl
