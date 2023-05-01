@@ -14,7 +14,7 @@
 [![deploy-order](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-order.yaml/badge.svg)](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-order.yaml)
 [![deploy-payment](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-payment.yaml/badge.svg)](https://github.com/thasup/microservices-ecommerce/actions/workflows/deploy-payment.yaml)
 
-Aurapan is a beautiful women's clothing e-commerce website built with **microservices** architecture, perform server-side rendering by **Next.js**, developing on the **Google Cloud Platform** environment, integrated some CI/CD process by running automation test with **GitHub Action** workflow and deploy on **DigitalOcean** cluster with let's encrypt certificate.
+Aurapan is a women's clothing e-commerce website that features a fully operational **microservices architecture**. Built on the **Next.js** framework for the client-side, while the server-side is developed with **TypeScript and Express** framework, the website is developed on the **Google Cloud Platform** environment and integrated with automation testing through **GitHub Action** workflows. Deployed on a **DigitalOcean** cluster with a Let's Encrypt certificate, Aurapan delivers a secure and seamless shopping experience.
 
 # Table of contents
 
@@ -37,68 +37,74 @@ Aurapan is a beautiful women's clothing e-commerce website built with **microser
 
 <!-- _You can still run it manually with docker-desktop on a local computer._ -->
 
-[www.aurapan.com](https://www.aurapan.com/)
+To experience Aurapan, please visit [www.aurapan.com](https://www.aurapan.com/). 
 
 # Features
 
 [(Back to top)](#table-of-contents)
 
-- Fully operated **microservices-architecture** website with user, product, order, payment, and expiration services completely separated
-- Stored all user, product, order, and payment data in separate **MongoDB** collections
-- Login with user authentication secured by encrypting password in **JWT** and **cookie**
-- Account setting dashboard for a customer to update profile information or see all orders
-- Admin management dashboard with authority to add, edit, and delete a product, user, or order
-- Rich detail of product information and multiple options that you can choose such as color, size
-- Image display in a more fashionable design with **Swiper** library
-- Full-featured shopping cart (add, edit, and remove an item with ease!)
-- Fully checkout process (login, add a shipping address, select payment method)
-- Accept both **PayPal** and **Stripe** integration payment method
-- Mark orders as a delivered option for the admin
-- Make a product review and rating and calculate a new rating instantly
-- Accept coupon promotion
-- Easily navigate with a cool navigation bar and breadcrumb
-- Implement an **Optimistic concurrency control** concept with **Mongoose** to handle concurrency issues with event flow
-- Optimize **Next.js** features to maximize better performance and quality in the _lighthouse_ report
-- Safely secure **HTTPS** protocol with let's encrypt certificate
-- Integrate **Google Analytics 4** script and track significant events on the website
+Aurapan's features include:
+
+- A fully operational **microservices-architecture** website with user, product, order, payment, and expiration services completely separated.
+- All user, product, order, and payment data is stored in separate **MongoDB** collections.
+- User authentication secured by encrypting passwords using **JWT** and cookies.
+- A customer account settings dashboard to update profile information or see all orders.
+- An admin management dashboard with the authority to add, edit, and delete a product, user, or order.
+- Detailed product information with multiple options, such as color and size, displayed in a fashionable design with the **Swiper** library.
+- A full-featured shopping cart, including the ability to add, edit, and remove items.
+- A fully functional checkout process, including login, shipping address selection, and payment method selection.
+- Acceptance of both **PayPal and Stripe** integration payment methods.
+- Ability for an admin to mark orders as delivered.
+- The ability for customers to make product reviews and ratings with instant calculation of new ratings.
+- The ability to accept coupon promotions.
+- A cool navigation bar and breadcrumb for easy navigation.
+- Implementation of the **Optimistic concurrency control** concept with Mongoose to handle concurrency issues with event flow.
+- Optimization of **Next.js** features to maximize performance and quality in the Lighthouse report.
+- A safely secured **HTTPS protocol** with Let's Encrypt certificate.
+- Integration of **Google Analytics 4** script to track significant events on the website.
   <!-- - Integrate wishlist in user data (work in process...) -->
   <!-- - Product search feature (work in process...) -->
   <!-- - Sorting and filtering all products on store (work in process...) -->
 
-Something might be a bit exaggerated but one certain thing is that I put all my ❤️ into creating this project.
-happy browsing! 😊
+	<!--
+	Something might be a bit exaggerated but one certain thing is that I put all my ❤️ into creating this project.
+	happy browsing! 😊
+	-->
 
 # Usage
 
 [(Back to top)](#table-of-contents)
-### How to sign up for an account
-1. Browse to the [signup page](https://www.aurapan.com/signup)
-2. Enter your email, password, name, gender and age (can be anything as this is a fictional store)
 
-### How to purchase products
-Pay with Stripe method (recommended)
-1. Using `4242 4242 4242 4242` for a card number
-2. Using any date (must be a later date from now) for `MM/YY`
-3. Using any number for `CVC`
+This readme file provides an overview of the usage of the Aurapan website. Here are some instructions on how to use the website's features:
 
-Pay with the Paypal method
-1. You'll need a Paypal account
-2. [Create the Paypal developer account](https://developer.paypal.com/tools/sandbox/accounts/)
-3. Choose the Paypal payment method and sign in with sandbox account to pay for an order (with fake money!)
+## Sign up for an account
+1. To create an account, visit the [signup page](https://www.aurapan.com/signup).
+2. Enter your email, password, name, gender, and age (these can be fictional since Aurapan is a fictional store).
 
-### How to receive an order
-1. An order will change to `delivered` only by an admin
-2. You will never get any real products (even if your order has been marked as `delivered`) 😛
+## Purchase products
+### Pay with Stripe method (recommended)
+1. Use the following card number: `4242 4242 4242 4242`.
+2. Use any future date for `MM/YY`.
+3. Use any number for `CVC`.
 
-### How to access the admin dashboard
-1. Sign in with an admin account
-2. Access via the management menu in the profile dropdown menu
+### Pay with the PayPal method
+1. You will need a PayPal account.
+2. Create a PayPal developer account by visiting [https://developer.paypal.com/tools/sandbox/accounts/](https://developer.paypal.com/tools/sandbox/accounts/).
+3. Choose the PayPal payment method and sign in with your sandbox account to pay for an order (with fake money).
 
-### How to add your favorite product to your wishlist
-Nope, you can't do it yet. Aurapan still doesn't support this feature. 😎
+## Receive an order
+1. Only an admin can change an order status to `delivered`.
+2. You will never receive any real products (even if your order has been marked as `delivered`). 😛
 
-### How to perform CRUD operation on the product database (create, update, delete)
-You need permission to access this function as an admin.
+## Access the admin dashboard
+1. To access the admin dashboard, sign in with an admin account.
+2. Access the dashboard through the management menu in the profile dropdown menu.
+
+## Add a product to your wishlist
+Unfortunately, this feature is not yet available on Aurapan. 😎
+
+## Perform CRUD operations on the product database (create, update, delete)
+To perform CRUD operations on the product database, you need permission to access this function as an admin.
 
 # Installation
 
@@ -108,110 +114,126 @@ You need permission to access this function as an admin.
 
 [![GCP Badge](https://img.shields.io/badge/-Google_Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white)](https://cloud.google.com/gcp/)
 
-1. clone _cloud_ branch on your computer
+Follow these steps to run the project on Google Cloud Platform:
 
-2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/), [kubectl](https://kubernetes.io/docs/tasks/tools/)
+1. Clone the _cloud_ branch to your local machine.
 
-3. sign up for a free account with $300 on the GCP and sign up for the docker hub account
+2. Install [Node.js](https://nodejs.org/en/), [Skaffold](https://skaffold.dev/), [Docker](https://www.docker.com/), and [kubectl](https://kubernetes.io/docs/tasks/tools/).
 
-4. create an image by running this command in every sub-folder that has Dockerfile
+3. Sign up for a free account with $300 on GCP and create a Docker Hub account.
+
+4. In every sub-folder that has a Dockerfile, create an image using the following command:
 ```
 docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .
 ```
 
-5. push all images to the docker hub by running this command
+5. Push all images to the Docker Hub using the following command:
+
 ```
 docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 ```
 
-6. create a new project on GCP then enable _Kubernetes Engine API_ and _Cloud Build API_ after successfully enabling API services, grant permission for the _Cloud Build_ service account permission on _Cloud Build API_
+6. Create a new project on GCP and enable _Kubernetes Engine API_ and _Cloud Build API_. After successfully enabling API services, grant permission for the _Cloud Build_ service account permission on _Cloud Build API_.
 
-7. create a new Kubernetes cluster with the minimum resource at 3 nodes (recommended), and select any region that is closest to your location
+7. Create a new Kubernetes cluster with the minimum resource of 3 nodes (recommended) and select the region closest to your location.
 
-8. install [GCP SDK](https://cloud.google.com/sdk/docs/install-sdk) to connect our images to GCP cluster context ([How to install Google Cloud SDK on macOS](https://stackoverflow.com/questions/31037279/gcloud-command-not-found-while-installing-google-cloud-sdk))
+8. Install [GCP SDK](https://cloud.google.com/sdk/docs/install-sdk) to connect our images to the GCP cluster context. (Learn how to install Google Cloud SDK on macOS [here](https://stackoverflow.com/questions/31037279/gcloud-command-not-found-while-installing-google-cloud-sdk))
 
-9. open google cloud SDK and log in, initiate with and then choose the correct options to proceed
+9. Open the Google Cloud SDK and log in. Initiate and then choose the correct options to proceed by running the following commands:
+
 ```
 gcloud auth login
 gcloud init
 ```
 
-10. create Kubernetes context in your desktop by running this command (your cluster name from the GCP cluster that you created)
+10. Create a Kubernetes context on your desktop by running this command (replace `<YOUR_CLUSTER_NAME>` with the name of the cluster you created on GCP):
+
 ```
 gcloud container clusters get-credentials <YOUR_CLUSTER_NAME>
 ```
 
-11. see the list of contexts and then select a new context by running these commands
+11. See the list of contexts and then select a new context by running these commands:
+
 ```
 kubectl config get-contexts
 kubectl config use-context <CONTEXT_NAME>
 ```
 
-12. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and [ingress-nginx for GCP](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke)
+12. Install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and [ingress-nginx for GCP](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke).
 
-13. find your load balancing port that GCP automatically generated in the _Network Services_ tab in GCP
+13. Find your load balancing port, which GCP automatically generated, in the _Network Services_ tab in GCP.
 
-14. for _windows_ users; open host file at `C:\Windows\System32\drivers\etc\hosts`, for _mac_ users; open host file at `\etc\hosts` then edit by adding `YOUR_LOAD_BALANCING_PORT YOUR_CUSTOM_URL` and save as an admin (ex. `56.125.456.45 custom.com`)
+14. For _Windows_ users, open the host file at `C:\Windows\System32\drivers\etc\hosts`. For _Mac_ users, open the host file at `\etc\hosts`. Then, edit the file by adding `YOUR_LOAD_BALANCING_PORT YOUR_CUSTOM_URL` and save as an administrator (e.g., `56.125.456.45 custom.com`).
 
-15. config all yaml file to matches your GCP project ID
+15. Configure all the YAML files to match your GCP project ID.
 
-16. create all [kubernetes secrets](#setup-env)
+16. Create all [Kubernetes secrets](#setup-env).
 
-17. run this command then authenticate the GCP account via a web browser
+17. Run the following command and authenticate the GCP account via a web browser:
+
 ```
 gcloud auth application-default login
 ```
 
-18. make sure to use the correct context before running this command at the root directory
+18. Ensure that you are using the correct context before running this command at the root directory:
+
 ```
 skaffold dev
 ```
 
-19. open a web browser and enter your custom URL with `https://` to see this project come to life!
+19. Open a web browser and enter your custom URL with `https://` to see the project come to life
 
 ## Running on Docker Desktop
 
 [![Docker Badge](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 
-1. clone _dev_ branch on your computer
+Follow the below steps to run this project on Docker Desktop:
 
-2. install [node.js](https://nodejs.org/en/), [skaffold](https://skaffold.dev/), [docker](https://www.docker.com/)
+1. Clone the `dev` branch on your computer.
 
-3. enable Kubernetes in docker desktop preferences
+2. Install the following software: 
+   * [Node.js](https://nodejs.org/en/)
+   * [Skaffold](https://skaffold.dev/)
+   * [Docker](https://www.docker.com/)
 
-4. create an image by running a command in every folder that has a _Dockerfile_
+3. Enable Kubernetes in Docker Desktop preferences.
+
+4. Create an image by running the following command in every folder that has a `Dockerfile`:
+
 ```
 docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .
 ```
 
-5. push all images to the docker hub by running a command in every folder that has a _Dockerfile_
+5. Push all images to Docker Hub by running the following command in every folder that has a `Dockerfile`:
+
 ```
 docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
 ```
 
-6. see list of Kubernetes contexts and then select a new context by running these commands
+6. View the list of Kubernetes contexts and select a new context by running these commands:
+
 ```
 kubectl config get-contexts
 kubectl config use-context docker-desktop
 ```
 
-7. install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and enable Kubernetes in Docker Desktop software
+7. Install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and enable Kubernetes in Docker Desktop software.
 
-8. for _windows_ users; open host file at `C:\Windows\System32\drivers\etc\hosts`, for _mac_ users; open host file at `\etc\hosts` then edit by adding `127.0.0.1 YOUR_CUSTOM_URL` and save as an admin (ex. `127.0.0.1 custom.com`)
+8. For Windows users, open the host file at `C:\Windows\System32\drivers\etc\hosts`. For Mac users, open the host file at `/etc/hosts`. Then, add `127.0.0.1 YOUR_CUSTOM_URL` and save the file as an admin. For example, `127.0.0.1 custom.com`.
 
-9. config all yaml file to match your custom URL
+9. Configure all `yaml` files to match your custom URL.
 
-10. create all [kubernetes secrets](#setup-env)
+10. Create all [Kubernetes secrets](#setup-kubernetes-secret).
 
-11. run `skaffold dev` in this project root directory, and make sure to use the correct context before running the command
+11. Run `skaffold dev` in the root directory of this project, and make sure to use the correct context before running the command.
 
-12. open a web browser and enter your custom URL with `https://` to see this project come to live!
+12. Open a web browser and enter your custom URL with `https://` to see this project come to life!
 
 # Setup Kubernetes Secret
 
 [(Back to top)](#table-of-contents)
 
-Create all these Kubernetes secrets in Kubernetes context
+Create all these Kubernetes secrets in the Kubernetes context:
 
 **MONGO_URI_USER, MONGO_URI_PRODUCT, MONGO_URI_ORDER, MONGO_URI_PAYMENT** : [MongoDB](https://www.mongodb.com/)
 ```
@@ -416,19 +438,22 @@ kubectl apply -f ingress-srv.yaml
 
 [(Back to top)](#table-of-contents)
 
-- Next.js
-- TypeScript
-- React-Bootstrap
-- MongoDB
-- Docker
-- Kubernetes
-- Github Action
-- NATS Streaming Server
-- Skaffold
-- NPM package
+This project is built using the following technologies:
+
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [React-Bootstrap](https://react-bootstrap.github.io/)
+- [MongoDB](https://www.mongodb.com/)
+- [Docker](https://www.docker.com/)
+- [Kubernetes](https://kubernetes.io/)
+- [Github Action](https://github.com/features/actions)
+- [NATS Streaming Server](https://docs.nats.io/nats-streaming-concepts/intro)
+- [Skaffold](https://skaffold.dev/)
+- [NPM package](https://www.npmjs.com/)
 
 # Disclaimer
 
 [(Back to top)](#table-of-contents)
 
-All images are used for educational purposes in this fictional store 😉
+All images used in this project are for educational purposes only. 😘
+
