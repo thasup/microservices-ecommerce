@@ -11,6 +11,9 @@ on:
       - "infra/**"
       - "trigger-manifest.txt"
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +26,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       # use and cliententicate doctl
-      - run: doctl kubernetes cluster kubeconfig save aurapan-6th-cluster
+      - run: doctl kubernetes cluster kubeconfig save aurapan-cluster
 
       # apply deployment yaml files (k8s-prod is for production!)
       - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
