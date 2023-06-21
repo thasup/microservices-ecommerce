@@ -11,6 +11,9 @@ on:
       - "user/**"
       - "trigger-deploy.txt"
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,7 +38,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       # give credential to k8s cluster
-      - run: doctl kubernetes cluster kubeconfig save aurapan-6th-cluster
+      - run: doctl kubernetes cluster kubeconfig save aurapan-cluster
 
       # restart deployment
       - run: kubectl rollout restart deployment user-depl
