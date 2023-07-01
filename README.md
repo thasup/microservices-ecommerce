@@ -122,66 +122,65 @@ Follow these steps to run the project on Google Cloud Platform:
 
 3. Sign up for a free account with $300 on GCP and create a Docker Hub account.
 
-4. In every sub-folder that has a Dockerfile, create an image using the following command:
-```
-docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .
-```
+4. Run the `setup.sh` script by executing the following command in the root directory of this project:
 
-5. Push all images to the Docker Hub using the following command:
-
-```
-docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
+```sh
+source setup.sh
 ```
 
-6. Create a new project on GCP and enable _Kubernetes Engine API_ and _Cloud Build API_. After successfully enabling API services, grant permission for the _Cloud Build_ service account permission on _Cloud Build API_.
+The script will prompt you to enter your Docker registry account name and will build and push the Docker images for each folder that contains a `Dockerfile`.
 
-7. Create a new Kubernetes cluster with the minimum resource of 3 nodes (recommended) and select the region closest to your location.
+5. Create a new project on GCP and enable _Kubernetes Engine API_ and _Cloud Build API_. After successfully enabling API services, grant permission for the _Cloud Build_ service account permission on _Cloud Build API_.
 
-8. Install [GCP SDK](https://cloud.google.com/sdk/docs/install-sdk) to connect our images to the GCP cluster context. (Learn how to install Google Cloud SDK on macOS [here](https://stackoverflow.com/questions/31037279/gcloud-command-not-found-while-installing-google-cloud-sdk))
+6. Create a new Kubernetes cluster with the minimum resource of 3 nodes (recommended) and select the region closest to your location.
 
-9. Open the Google Cloud SDK and log in. Initiate and then choose the correct options to proceed by running the following commands:
+7. Install [GCP SDK](https://cloud.google.com/sdk/docs/install-sdk) to connect our images to the GCP cluster context. (Learn how to install Google Cloud SDK on macOS [here](https://stackoverflow.com/questions/31037279/gcloud-command-not-found-while-installing-google-cloud-sdk))
+
+8. Open the Google Cloud SDK and log in. Initiate and then choose the correct options to proceed by running the following commands:
 
 ```
 gcloud auth login
 gcloud init
 ```
 
-10. Create a Kubernetes context on your desktop by running this command (replace `<YOUR_CLUSTER_NAME>` with the name of the cluster you created on GCP):
+9. Create a Kubernetes context on your desktop by running this command (replace `<YOUR_CLUSTER_NAME>` with the name of the cluster you created on GCP):
 
 ```
 gcloud container clusters get-credentials <YOUR_CLUSTER_NAME>
 ```
 
-11. See the list of contexts and then select a new context by running these commands:
+10. See the list of contexts and then select a new context by running these commands:
 
 ```
 kubectl config get-contexts
 kubectl config use-context <CONTEXT_NAME>
 ```
 
-12. Install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and [ingress-nginx for GCP](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke).
+11. Install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and [ingress-nginx for GCP](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke).
 
-13. Find your load balancing port, which GCP automatically generated, in the _Network Services_ tab in GCP.
+12. Find your load balancing port, which GCP automatically generated, in the _Network Services_ tab in GCP.
 
-14. For _Windows_ users, open the host file at `C:\Windows\System32\drivers\etc\hosts`. For _Mac_ users, open the host file at `\etc\hosts`. Then, edit the file by adding `YOUR_LOAD_BALANCING_PORT YOUR_CUSTOM_URL` and save as an administrator (e.g., `56.125.456.45 custom.com`).
+13. For _Windows_ users, open the host file at `C:\Windows\System32\drivers\etc\hosts`. For _Mac_ users, open the host file at `\etc\hosts`. Then, edit the file by adding `YOUR_LOAD_BALANCING_PORT YOUR_CUSTOM_URL` and save as an administrator (e.g., `56.125.456.45 custom.com`).
 
-15. Configure all the YAML files to match your GCP project ID.
+14. Configure all the YAML files to match your GCP project ID.
 
-16. Create all [Kubernetes secrets](#setup-env).
+15. Create all [Kubernetes secrets](#setup-env).
 
-17. Run the following command and authenticate the GCP account via a web browser:
+16. Run the following command and authenticate the GCP account via a web browser:
 
 ```
 gcloud auth application-default login
 ```
 
-18. Ensure that you are using the correct context before running this command at the root directory:
+17. Ensure that you are using the correct context before running this command at the root directory:
 
 ```
 skaffold dev
 ```
 
-19. Open a web browser and enter your custom URL with `https://` to see the project come to life
+18. Open a web browser and enter your custom URL with `https://` to see the project come to life
+
+Please note that the `setup.sh` script is designed to streamline the installation process by automatically building and pushing Docker images for each folder that contains a `Dockerfile`. This helps simplify the steps required to set up the project on GCP.
 
 ## Running on Docker Desktop
 
@@ -191,43 +190,41 @@ Follow the below steps to run this project on Docker Desktop:
 
 1. Clone the `dev` branch on your computer.
 
-2. Install the following software: 
+2. Install the following software:
    * [Node.js](https://nodejs.org/en/)
    * [Skaffold](https://skaffold.dev/)
    * [Docker](https://www.docker.com/)
 
 3. Enable Kubernetes in Docker Desktop preferences.
 
-4. Create an image by running the following command in every folder that has a `Dockerfile`:
+4. Run the `setup.sh` script by executing the following command in the root directory of this project:
 
-```
-docker build -t <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME> .
-```
-
-5. Push all images to Docker Hub by running the following command in every folder that has a `Dockerfile`:
-
-```
-docker push <YOUR_ACCOUNT_NAME>/<YOUR_IMAGE_NAME>
+```sh
+source setup.sh
 ```
 
-6. View the list of Kubernetes contexts and select a new context by running these commands:
+The script will prompt you to enter your Docker registry account name and will build and push the Docker images for each folder that contains a `Dockerfile`.
 
-```
+5. View the list of Kubernetes contexts and select a new context by running these commands:
+
+```sh
 kubectl config get-contexts
 kubectl config use-context docker-desktop
 ```
 
-7. Install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and enable Kubernetes in Docker Desktop software.
+6. Install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start) and enable Kubernetes in Docker Desktop software. (choose _don't have Helm_ version)
 
-8. For Windows users, open the host file at `C:\Windows\System32\drivers\etc\hosts`. For Mac users, open the host file at `/etc/hosts`. Then, add `127.0.0.1 YOUR_CUSTOM_URL` and save the file as an admin. For example, `127.0.0.1 custom.com`.
+7. For Windows users, open the host file at `C:\Windows\System32\drivers\etc\hosts`. For Mac users, open the host file at `/etc/hosts`. Then, add `127.0.0.1 YOUR_CUSTOM_URL` and save the file as an admin. For example, `127.0.0.1 custom.com`.
 
-9. Configure all `yaml` files to match your custom URL.
+8. Configure all `yaml` files to match your custom URL.
 
-10. Create all [Kubernetes secrets](#setup-kubernetes-secret).
+9. Create all [Kubernetes secrets](#setup-kubernetes-secret).
 
-11. Run `skaffold dev` in the root directory of this project, and make sure to use the correct context before running the command.
+10. Run `skaffold dev` in the root directory of this project, and make sure to use the correct context before running the command.
 
-12. Open a web browser and enter your custom URL with `https://` to see this project come to life!
+11. Open a web browser and enter your custom URL with `https://` to see this project come to life!
+
+Please note that the `setup.sh` script is designed to streamline the installation process by automatically building and pushing Docker images for each folder that contains a `Dockerfile`. This helps simplify the steps required to set up the project on Docker Desktop.
 
 # Setup Kubernetes Secret
 
