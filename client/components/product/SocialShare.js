@@ -10,8 +10,12 @@ import {
   LineIcon,
   EmailIcon
 } from 'react-share';
+import { arrayOf, number, shape, string } from 'prop-types';
 
-const SocialShare = ({ product }) => {
+import { WEBSITE_URL } from '../../constants/site';
+
+const SocialShare = (props) => {
+  const { product } = props;
   const [shareMsg, setShareMsg] = useState('');
 
   useEffect(() => {
@@ -19,10 +23,10 @@ const SocialShare = ({ product }) => {
 			product.title
 		}" product on Aurapan Shop! \n visit this lovely shop here! ${
 			window.location.protocol !== 'https' ? 'http' : 'https'
-		}://www.aurapan.com/products/${product.id}`;
+		}://${WEBSITE_URL.replace(/^https?:\/\//, '')}products/${product.id}`;
 
     setShareMsg(message);
-  }, []);
+  }, [product]);
 
   return (
 		<Row className="mx-0">
@@ -31,7 +35,7 @@ const SocialShare = ({ product }) => {
 				className="ps-0 d-flex flex-row align-items-center justify-content-flex-start"
 			>
 				<FacebookShareButton
-					url={`https://www.aurapan.com/products/${product.id}`}
+					url={`${WEBSITE_URL}/products/${product.id}`}
 					quote={'Be your beautiful best.'}
 					className="me-2"
 				>
@@ -47,7 +51,7 @@ const SocialShare = ({ product }) => {
 				</TwitterShareButton>
 
 				<LineShareButton
-					url={`https://www.aurapan.com/products/${product.id}`}
+					url={`${WEBSITE_URL}/products/${product.id}`}
 					title={'Be your beautiful best.'}
 					className="me-2"
 				>
@@ -63,3 +67,40 @@ const SocialShare = ({ product }) => {
 };
 
 export default SocialShare;
+
+SocialShare.propTypes = {
+  product: shape({
+    images: {
+      image1: string,
+      image2: string,
+      image3: string,
+      image4: string
+    },
+    title: string,
+    price: number,
+    userId: string,
+    brand: string,
+    category: string,
+    material: string,
+    description: string,
+    reviews: arrayOf(shape({
+      title: string,
+      rating: number,
+      comment: string,
+      userId: string,
+      updatedAt: string,
+      createdAt: string,
+      id: string
+    })),
+    numReviews: number,
+    rating: number,
+    countInStock: number,
+    createdAt: string,
+    updatedAt: string,
+    version: number,
+    colors: string,
+    isReserved: false,
+    sizes: string,
+    id: string
+  })
+};
