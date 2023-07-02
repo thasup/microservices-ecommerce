@@ -9,7 +9,7 @@ import Loader from '../../components/common/Loader';
 import Rating from '../../components/common/Rating';
 import NextImage from '../../components/common/NextImage';
 import ProductImageSwiper from '../../components/product/ProductImageSwiper';
-import SocialShare from '../../components/product/SocialShare';
+import SocialShare from '../../components/common/SocialShare';
 import ColorSelector from '../../components/common/ColorSelector';
 import SizeSelector from '../../components/common/SizeSelector';
 import ProductDescription from '../../components/product/ProductDescription';

@@ -4,7 +4,7 @@ import MobileNavbar from './MobileNavbar';
 import DesktopNavbar from './DesktopNavbar';
 import useWindowSize from '../../hooks/useWindowSize';
 
-const Header = ({ currentUser, products, bestseller }) => {
+const Header = ({ products, bestseller }) => {
   const [numItems, setNumItems] = useState(0);
   const [showNotification, setShowNotification] = useState(false);
   const [onMobile, setOnMobile] = useState(true);
@@ -38,12 +38,11 @@ const Header = ({ currentUser, products, bestseller }) => {
     }
 
     return () => clearInterval(interval);
-  }, [width, currentUser]);
+  }, [width]);
 
   return onMobile
     ? (
 		<MobileNavbar
-			currentUser={currentUser}
 			numItems={numItems}
 			showNotification={showNotification}
 			productCategories={productCategories}
@@ -51,7 +50,6 @@ const Header = ({ currentUser, products, bestseller }) => {
       )
     : (
 		<DesktopNavbar
-			currentUser={currentUser}
 			products={products}
 			bestseller={bestseller}
 			numItems={numItems}

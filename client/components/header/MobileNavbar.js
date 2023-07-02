@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Navbar, Nav, Container, Offcanvas } from 'react-bootstrap';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,12 +11,17 @@ import {
   faUser
 } from '@fortawesome/free-solid-svg-icons';
 
-const MobileNavbar = ({
-  currentUser,
-  numItems,
-  showNotification,
-  productCategories
-}) => {
+import { UserContext } from '../../contexts/UserContext';
+
+const MobileNavbar = (props) => {
+	const {
+		numItems,
+		showNotification,
+		productCategories
+	} = props;
+
+	const currentUser = useContext(UserContext);
+
   return (
 		<header>
 			<Navbar variant="light" expand="lg" collapseOnSelect="true">
@@ -60,7 +65,6 @@ const MobileNavbar = ({
 									</Link>
 								))}
 							</Nav>
-
 							{currentUser
 							  ? (
 								<Nav className="offcanvas-body-lower mb-2 d-flex flex-row justify-content-around">

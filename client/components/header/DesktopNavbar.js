@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,18 +7,21 @@ import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
 
 import AccountDropDown from './AccountDropDown';
 import CategoryDropDown from './CategoryDropDown';
+import { UserContext } from '../../contexts/UserContext';
 
-const DesktopNavbar = ({
-  currentUser,
-  products,
-  bestseller,
-  numItems,
-  showNotification,
-  productCategories
-}) => {
+const DesktopNavbar = (props) => {
+	const {
+		products,
+		bestseller,
+		numItems,
+		showNotification,
+		productCategories
+	} = props;
+
   const [eventTarget, setEventTarget] = useState(null);
   const [showCategoryDropDown, setShowCategoryDropDown] = useState(false);
   const [showAccountDropDown, setShowAccountDropDown] = useState(false);
+	const currentUser = useContext(UserContext);
 
   return (
 		<header>

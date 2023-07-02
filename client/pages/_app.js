@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Container, SSRProvider } from 'react-bootstrap';
@@ -10,9 +10,18 @@ import * as ga from '../lib/ga';
 import buildClient from '../api/build-client';
 import Footer from '../components/footer/Footer';
 import Header from '../components/header/Header';
+import { UserContext } from '../contexts/UserContext';
 
-const MyApp = ({ Component, pageProps, currentUser }) => {
+const MyApp = ({ Component, pageProps }) => {
+	const { currentUser } = pageProps;
+	const [user, setUser] = useState({});
   const router = useRouter();
+
+	useEffect(() => {
+    if (currentUser) {
+			setUser(currentUser);
+		}
+  }, [currentUser]);
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -35,10 +44,12 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
 				<title>Aurapan | Women&apos;s Clothing Online Shop</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 			</Head>
-			<Header currentUser={currentUser} {...pageProps} />
+			<UserContext.Provider value={user}>
+				<Header {...pageProps} />
+			</UserContext.Provider>
 			<main className="pb-5" style={{ marginTop: '74px' }}>
 				<Container fluid className="px-0">
-					<Component currentUser={currentUser} {...pageProps} />
+					<Component {...pageProps} />
 				</Container>
 			</main>
 			<Footer />
@@ -48,44 +59,57 @@ const MyApp = ({ Component, pageProps, currentUser }) => {
 
 MyApp.getInitialProps = async (appContext) => {
   const client = buildClient(appContext.ctx);
-  const { data } = await client.get('/api/users/currentuser');
+	let pageProps = {};
+	try {
+		const { data: {currentUser} } = await client.get('/api/users/currentuser');
+		const [
+			{data: products},
+			{data: orderProducts},
+			{data: paymentProducts},
+			{data: users},
+			{data: bestseller}
+		] = await Promise.all([
+			client.get('/api/products'),
+			client.get('/api/orders/products'),
+			client.get('/api/payments/products'),
+			client.get('/api/users'),
+			client.get('/api/products/bestseller')
+		]);
+		console.log('RES >>>>>>>>>>>>>>>>>>>', {products});
 
-  const { data: products } = await client.get('/api/products');
-  const { data: orderProducts } = await client.get('/api/orders/products');
-  const { data: paymentProducts } = await client.get('/api/payments/products');
+		pageProps = {
+			currentUser,
+			products,
+			orderProducts,
+			paymentProducts,
+			users,
+			bestseller
+		};
 
-  const { data: users } = await client.get('/api/users');
+		if (currentUser) {
+			const [
+				{data: myOrders},
+				{data: myReviews},
+				{data: orders},
+			] = await Promise.all([
+				client.get('/api/orders/myorders'),
+				client.get('/api/products/myreviews'),
+				client.get('/api/orders'),
+			]);
 
-  const { data: bestseller } = await client.get('/api/products/bestseller');
-
-  let pageProps = {
-    products,
-    orderProducts,
-    paymentProducts,
-    users,
-    bestseller
-  };
-  if (data.currentUser !== null) {
-    const { data: myOrders } = await client.get('/api/orders/myorders');
-    const { data: myReviews } = await client.get('/api/products/myreviews');
-
-    const { data: orders } = await client.get('/api/orders');
-
-    pageProps = {
-      products,
-      orderProducts,
-      paymentProducts,
-      users,
-      bestseller,
-      myOrders,
-      myReviews,
-      orders
-    };
-  }
+			pageProps = {
+				myOrders,
+				myReviews,
+				orders,
+				...pageProps
+			};
+		}
+	} catch (e) {
+		console.log('>>>>>>>>>>>>>>>>ERROR<<<<<<<<<<<<<<<<<');
+	}
 
   return {
-    pageProps,
-    ...data
+    pageProps
   };
 };
 
