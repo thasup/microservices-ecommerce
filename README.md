@@ -216,7 +216,7 @@ kubectl config use-context docker-desktop
 
 7. For Windows users, open the host file at `C:\Windows\System32\drivers\etc\hosts`. For Mac users, open the host file at `/etc/hosts`. Then, add `127.0.0.1 YOUR_CUSTOM_URL` and save the file as an admin. For example, `127.0.0.1 custom.com`.
 
-8. Configure all `yaml` files to match your custom URL.
+8. Configure the `infra/k8s-dev/ingress-srv.yaml` file at line 10 to be your custom URL. (ex. mywebsite.com)
 
 9. Create all [Kubernetes secrets](#setup-kubernetes-secret).
 
@@ -240,6 +240,8 @@ kubectl create secret generic mongo-secret \
 "--from-literal=MONGO_URI_ORDER=<YOUR_MONGO_DB_URI>" \
 "--from-literal=MONGO_URI_PAYMENT=<YOUR_MONGO_DB_URI>"
 ```
+
+Example for YOUR_MONGO_DB_URI: `mongodb+srv://admin:<password>@aurapan.ygmpl.mongodb.net/<your_database_name>?retryWrites=true&w=majority`
 
 **JWT_KEY : --whatever you want--**
 ```
