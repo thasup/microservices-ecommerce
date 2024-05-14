@@ -33,11 +33,11 @@ Aurapan is a women's clothing e-commerce website that features a fully operation
 
 [(Back to top)](#table-of-contents)
 
-<!-- The Live demo is currently _**terminated**_ due to the high-cost maintenance for paying Kubernetes cluster to host the microservices website. -->
+The Live demo is currently _**terminated**_ due to the high-cost maintenance for paying Kubernetes cluster to host a microservices website. 😆
 
-<!-- _You can still run it manually with docker-desktop on a local computer._ -->
+_You can still run it manually with docker-desktop on your local machine._
 
-To experience Aurapan, please visit [www.aurapan.com](https://www.aurapan.com/). 
+<!-- To experience Aurapan, please visit [www.aurapan.com](https://www.aurapan.com/). -->
 
 # Features
 
