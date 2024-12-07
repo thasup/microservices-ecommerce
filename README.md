@@ -23,9 +23,20 @@ Aurapan is a women's clothing e-commerce website that features a fully operation
 - [Demo](#demo)
 - [Features](#features)
 - [Usage](#usage)
+	- [Sign up for an account](#sign-up-for-an-account)
+	- [Purchase products](#purchase-products)
+		- [Pay with Stripe method (recommended)](#pay-with-stripe-method-recommended)
+		- [Pay with the PayPal method](#pay-with-the-paypal-method)
+	- [Receive an order](#receive-an-order)
+	- [Access the admin dashboard](#access-the-admin-dashboard)
+	- [Add a product to your wishlist](#add-a-product-to-your-wishlist)
+	- [Perform CRUD operations on the product database (create, update, delete)](#perform-crud-operations-on-the-product-database-create-update-delete)
 - [Installation](#installation)
+	- [Running on Google Cloud Platform](#running-on-google-cloud-platform)
+	- [Running on Docker Desktop](#running-on-docker-desktop)
 - [Setup Kubernetes Secret](#setup-kubernetes-secret)
 - [Deployment](#deployment)
+	- [Deploy on DigitalOcean](#deploy-on-digitalocean)
 - [Technology](#technology)
 - [Disclaimer](#disclaimer)
 
@@ -197,13 +208,21 @@ Follow the below steps to run this project on Docker Desktop:
 
 3. Enable Kubernetes in Docker Desktop preferences.
 
-4. Run the `setup.sh` script by executing the following command in the root directory of this project:
+4. Run this script by executing the following command in the root directory of this project:
 
 ```sh
 source setup.sh
 ```
 
 The script will prompt you to enter your Docker registry account name and will build and push the Docker images for each folder that contains a `Dockerfile`.
+
+If you prefer to do it manually.
+Run the following command in each folder that contains a `Dockerfile`.
+
+```sh
+docker build -t <YOUR_DOCKER_ACCOUNT_NAME>/<CONTAINER_NAME> .
+docker push <YOUR_DOCKER_ACCOUNT_NAME>/<CONTAINER_NAME>
+```
 
 5. View the list of Kubernetes contexts and select a new context by running these commands:
 
@@ -220,7 +239,11 @@ kubectl config use-context docker-desktop
 
 9. Create all [Kubernetes secrets](#setup-kubernetes-secret).
 
-10. Run `skaffold dev` in the root directory of this project, and make sure to use the correct context before running the command.
+10. Run this script in the root directory of this project, and make sure to use the correct context before running the command.
+
+```
+skaffold dev
+```
 
 11. Open a web browser and enter your custom URL with `https://` to see this project come to life!
 
