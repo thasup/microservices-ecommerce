@@ -20,7 +20,7 @@ router.post(
   requireAuth,
   [
     body('title').not().isEmpty().withMessage('Title is required'),
-    body('rating').not().isEmpty().isInt({ gt: 0 }).withMessage('Rating is required'),
+    body('rating').not().isEmpty().isFloat({ gt: 0, max: 5 }).withMessage('Rating is required'),
     body('comment').not().isEmpty().withMessage('Comment is required'),
     param('productId').isMongoId().withMessage('Invalid MongoDB ObjectId')
   ],
