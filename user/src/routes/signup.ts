@@ -2,6 +2,8 @@ import express, { type Request, type Response } from 'express';
 import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import { BadRequestError, validateRequest } from '@thasup-dev/common';
+import { createAvatar } from '@dicebear/core';
+import { thumbs } from '@dicebear/collection';
 
 import { User } from '../models/user';
 import type { UserAttrs } from '../types/user';
@@ -43,7 +45,11 @@ router.post(
 
     // Assign random generated image from API
     if (image == null) {
-      image = `https://avatars.dicebear.com/api/micah/${name.trim()}${email.trim()}.svg?b=%23f0f0f0`;
+			const avatar = createAvatar(thumbs, {
+				seed: `${name.trim()}${email.trim()}`,
+			});
+			const svg = avatar.toString();
+      image = svg;
     }
 
     const user = User.build({

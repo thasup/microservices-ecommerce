@@ -20,6 +20,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@dicebear/collection": "^9.2.2",
+    "@dicebear/core": "^9.2.2",
     "@thasup-dev/common": "^1.0.35",
     "@types/cookie-session": "^2.0.44",
     "@types/cors": "^2.8.12",
