@@ -13,7 +13,7 @@ const ContactPage = () => {
 			<Container className="app-container">
 				<Row>
 					<Col className="banner-img">
-						<h1>Account Setting</h1>
+						<h1>Contact us</h1>
 						<Support />
 					</Col>
 				</Row>
