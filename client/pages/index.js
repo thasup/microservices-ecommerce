@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import Product from '../components/home/Product';
@@ -12,17 +12,7 @@ import AdsBannerSrc3 from '../public/asset/ads-banner/ads_banner_3.png';
 const adsBanners = [AdsBannerSrc1, AdsBannerSrc2, AdsBannerSrc3];
 
 const Home = ({ products, currentUser }) => {
-  const [onMobile, setOnMobile] = useState(false);
-
-  const { width } = useWindowSize();
-
-  useEffect(() => {
-    if (width <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
-  }, [width]);
+  const { onMobile } = useWindowSize();
 
   return (
 		<>

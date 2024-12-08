@@ -9,23 +9,15 @@ import useWindowSize from '../../../hooks/useWindowSize';
 
 const Dresses = ({ products, currentUser }) => {
   const [loading, setLoading] = useState(true);
-  const [onMobile, setOnMobile] = useState(false);
-
-  const { width } = useWindowSize();
+  const { onMobile } = useWindowSize();
 
   const dresses = products?.filter((product) => product.category === 'Dress');
 
   useEffect(() => {
-    if (width <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
-
     if (products) {
       setLoading(false);
     }
-  }, [width, products]);
+  }, [products]);
 
   return (
 		<>

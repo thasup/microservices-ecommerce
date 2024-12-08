@@ -33,26 +33,20 @@ const productDetail = ({ products, users, currentUser, myOrders }) => {
   const [imageEvent, setImageEvent] = useState(null);
 
   const [isPurchase, setIsPurchase] = useState(false);
-  const [onMobile, setOnMobile] = useState(false);
-
   const [screenWidth, setScreenWidth] = useState(0);
 
   const product = products.find((product) => product.id === productId);
-  const categoryParams = `${product?.category.toLowerCase()}${product?.category === 'Dress' ? 'es' : 's'
-		}`;
+  const categoryParams = `${product?.category.toLowerCase()}${product?.category === 'Dress' ? 'es' : 's'}`;
 
-  const { width } = useWindowSize();
+  const { windowSize: { width }, onMobile } = useWindowSize();
 
   useEffect(() => {
     setScreenWidth(width);
 
-    if (width <= 576) {
-      setOnMobile(true);
-    } else {
+    if (onMobile) {
       setInitialImage(false);
-      setOnMobile(false);
     }
-  }, [width]);
+  }, [width, onMobile]);
 
   useEffect(async () => {
     // Check if orders is not an empty array

@@ -9,25 +9,18 @@ import useWindowSize from '../../../hooks/useWindowSize';
 
 const SetsNewArrivals = ({ products, currentUser }) => {
   const [loading, setLoading] = useState(true);
-  const [onMobile, setOnMobile] = useState(false);
 
-  const { width } = useWindowSize();
+  const { onMobile } = useWindowSize();
 
   const setsNewArrivals = products
     ?.filter((set) => set.category === 'Set')
     .reverse();
 
   useEffect(() => {
-    if (width <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
-
     if (products && setsNewArrivals) {
       setLoading(false);
     }
-  }, [width, products]);
+  }, [products]);
 
   return (
 		<>

@@ -9,7 +9,7 @@ const Header = ({ currentUser, products, bestseller }) => {
   const [showNotification, setShowNotification] = useState(false);
   const [onMobile, setOnMobile] = useState(true);
 
-  const { width } = useWindowSize();
+  const { windowSize: { width } } = useWindowSize();
 
   // All category on the website
   const productCategories = ['Top', 'Bottom', 'Dress', 'Set', 'Coat'];

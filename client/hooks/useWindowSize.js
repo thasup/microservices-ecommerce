@@ -9,6 +9,8 @@ const useWindowSize = () => {
     height: isSSR ? 800 : window.innerHeight
   });
 
+  const [onMobile, setOnMobile] = useState(false);
+
   useEffect(() => {
     window.addEventListener('resize', () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
@@ -21,7 +23,18 @@ const useWindowSize = () => {
     };
   }, []);
 
-  return windowSize;
+  useEffect(() => {
+    if (windowSize.width <= 576) {
+      setOnMobile(true);
+    } else {
+      setOnMobile(false);
+    }
+  }, [windowSize.width]);
+
+  return {
+    windowSize,
+    onMobile
+  };
 };
 
 export default useWindowSize;
