@@ -40,7 +40,7 @@ const SizeChart = () => {
 				</Col>
 			</Row>
 
-			<Row className="mt-5">
+			<Row className="mt-3">
 				<Col className="px-0">
 					<DynamicTabContent>
 						<DynamicTabPane

@@ -857,10 +857,6 @@ header {
 	display: inline-flex;
 }
 
-.description-panel {
-	padding: 0 1.5rem;
-}
-
 .description-section {
 	margin-bottom: 2rem;
 }
@@ -870,8 +866,13 @@ header {
 	font-size: 1.15rem;
 }
 
-.description-section p {
+.description-section p,
+.description-section ol li {
 	color: #555;
+}
+
+.description-panel .size-chart-container {
+	padding: 0 1rem;
 }
 
 /* Mobile, Tablet Screen */
