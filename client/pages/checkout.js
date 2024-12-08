@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, ListGroup, Row, Card, Container } from 'react-bootstrap';
 import Router from 'next/router';
@@ -15,16 +15,12 @@ const CheckoutPage = ({ currentUser }) => {
   const [shippingAddress, setShippingAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [shippingDiscount] = useState(1); // TODO: apply overall discount feature
+  const [taxFactor] = useState(0.07); // Set to 7% by default
 
   const [onSuccess, setOnSuccess] = useState(false);
   const [storageReady, setStorageReady] = useState(false);
 
-  let itemsPrice;
-  let shippingPrice;
-  let taxPrice;
-  let totalPrice;
-
-  const { doRequest, errors } = useRequest({
+  const { doRequest: createOrder, errors } = useRequest({
     url: '/api/orders',
     method: 'post',
     body: {
@@ -76,27 +72,38 @@ const CheckoutPage = ({ currentUser }) => {
     }
   }, [onSuccess]);
 
-  if (cart && storageReady) {
-    itemsPrice = Number(
-      cart.reduce((acc, item) => acc + item.price * item.qty * item.discount, 0)
-    ).toFixed(2);
+  const itemsPrice = useMemo(() => {
+    if (!storageReady || !cart) {
+      return null;
+    }
+    return Number(cart.reduce((acc, item) => acc + item.price * item.qty * item.discount, 0)).toFixed(2);
+  }, [cart, storageReady]);
 
-    shippingPrice = (
-      itemsPrice > 100.0 ? 0.0 : 10.0 * shippingDiscount
-    ).toFixed(2);
+  const shippingPrice = useMemo(() => {
+    if (!storageReady) {
+      return null;
+    }
+    return Number(itemsPrice > 100.0 ? 0.0 : 10.0 * shippingDiscount).toFixed(2);
+  }, [itemsPrice, shippingDiscount, storageReady]);
 
-    taxPrice = (0.07 * itemsPrice).toFixed(2);
+  const taxPrice = useMemo(() => {
+    if (!storageReady) {
+      return null;
+    }
+    return Number(taxFactor * itemsPrice).toFixed(2);
+  }, [itemsPrice, taxFactor, storageReady]);
 
-    totalPrice = (
-      Number(itemsPrice) +
-			Number(shippingPrice) +
-			Number(taxPrice)
-    ).toFixed(2);
-  }
+  const totalPrice = useMemo(() => {
+    if (!storageReady) {
+      return null;
+    }
+    const sum = Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice);
+    return sum.toFixed(2);
+  }, [itemsPrice, shippingPrice, taxPrice, storageReady]);
 
   const checkoutHandler = (e) => {
     e.preventDefault();
-    doRequest();
+    createOrder();
   };
 
   return (

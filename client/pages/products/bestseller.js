@@ -1,43 +1,38 @@
-import { useEffect, useState } from "react";
-import { Breadcrumb, Col, Row } from "react-bootstrap";
-import Link from "next/link";
-import Head from "next/head";
+import React, { useEffect, useState } from 'react';
+import { Breadcrumb, Col, Row } from 'react-bootstrap';
+import Link from 'next/link';
+import Head from 'next/head';
 
-import Product from "../../components/home/Product";
-import Loader from "../../components/common/Loader";
-import useWindowSize from "../../hooks/useWindowSize";
+import Product from '../../components/home/Product';
+import Loader from '../../components/common/Loader';
+import useWindowSize from '../../hooks/useWindowSize';
 
 const BestSeller = ({ bestseller, currentUser }) => {
-	const [loading, setLoading] = useState(true);
-	const [onMobile, setOnMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-	const { width } = useWindowSize();
+  const { onMobile } = useWindowSize();
 
-	useEffect(() => {
-		if (width <= 576) {
-			setOnMobile(true);
-		} else {
-			setOnMobile(false);
-		}
+  useEffect(() => {
+    if (bestseller) {
+      setLoading(false);
+    }
+  }, [bestseller]);
 
-		if (bestseller) {
-			setLoading(false);
-		}
-	}, [width, bestseller]);
-
-	return (
+  return (
 		<>
 			<Head>
 				<title>BestSeller | Aurapan</title>
 			</Head>
-			{loading ? (
+			{loading
+			  ? (
 				<div
 					className="d-flex justify-content-center align-items-center px-0"
-					style={{ marginTop: "80px" }}
+					style={{ marginTop: '80px' }}
 				>
 					<Loader />
 				</div>
-			) : (
+			    )
+			  : (
 				<>
 					<h1 className="category-header">BestSeller</h1>
 					<Breadcrumb className="breadcrumb-label">
@@ -62,9 +57,9 @@ const BestSeller = ({ bestseller, currentUser }) => {
 						))}
 					</Row>
 				</>
-			)}
+			    )}
 		</>
-	);
+  );
 };
 
 export default BestSeller;

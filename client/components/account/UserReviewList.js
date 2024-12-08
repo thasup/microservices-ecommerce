@@ -14,7 +14,7 @@ const UserReviewList = ({ myReviews, products }) => {
 				<Table striped bordered hover responsive className="table-sm">
 					<thead>
 						<tr>
-							<th>ID</th>
+							<th>No.</th>
 							<th>PRODUCT</th>
 							<th>MY RATING</th>
 							<th>OVERALL RATING</th>
@@ -28,7 +28,7 @@ const UserReviewList = ({ myReviews, products }) => {
 						{myReviews.map((review, index) => (
 							<tr key={review.id}>
 								<td>
-									<CustomTooltip index={index} mongoId={review.id} />{' '}
+									<CustomTooltip index={index + 1} mongoId={review.id} />{' '}
 								</td>
 								<td>
 									<Link

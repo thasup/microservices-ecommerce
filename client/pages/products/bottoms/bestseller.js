@@ -9,25 +9,17 @@ import useWindowSize from '../../../hooks/useWindowSize';
 
 const BottomsBestseller = ({ bestseller, currentUser }) => {
   const [loading, setLoading] = useState(true);
-  const [onMobile, setOnMobile] = useState(false);
-
-  const { width } = useWindowSize();
+  const { onMobile } = useWindowSize();
 
   const bottomsBestseller = bestseller?.filter(
     (bottom) => bottom.category === 'Bottom'
   );
 
   useEffect(() => {
-    if (width <= 576) {
-      setOnMobile(true);
-    } else {
-      setOnMobile(false);
-    }
-
     if (bestseller && bottomsBestseller) {
       setLoading(false);
     }
-  }, [width, bestseller]);
+  }, [bestseller]);
 
   return (
 		<>

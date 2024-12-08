@@ -60,18 +60,16 @@ const ProductDescription = ({ product }) => {
 
 							<div className="description-section">
 								<h6>Wash and Care:</h6>
-								<p>
-									Dignissim enim sit amet venenatis urna. Sollicitudin aliquam
-									ultrices sagittis orci a scelerisque purus. Augue neque
-									gravida in fermentum et. Vel pretium lectus quam id leo.{' '}
-								</p>
-								<p>
-									Quis commodo odio aenean sed. Turpis massa sed elementum
-									tempus egestas. Semper eget duis at tellus. Suscipit tellus
-									mauris a diam maecenas sed enim. Nec nam aliquam sem et tortor
-									consequat id. In ornare quam viverra orci sagittis.
-								</p>
-								<p>Fames ac turpis egestas integer eget aliquet.</p>
+								<p>To keep your clothing looking fresh and vibrant, follow these general care instructions:</p>
+								<ol>
+									<li><strong>Machine Wash</strong>: Wash in cold water on a gentle cycle with like colors to prevent fading and bleeding.</li>
+									<li><strong>Mild Detergent</strong>: Use a mild detergent to maintain the fabric&apos;s quality and colors.</li>
+									<li><strong>Do Not Bleach</strong>: Avoid bleach to protect the integrity of the fabric.</li>
+									<li><strong>Tumble Dry Low</strong>: If using a dryer, tumble dry on low heat. For optimal results, air drying is recommended.</li>
+									<li><strong>Iron with Care</strong>: If needed, iron on low heat while the item is slightly damp to remove wrinkles. For added protection, place a cloth between the iron and fabric.</li>
+									<li><strong>Store Properly</strong>: Hang or fold your clothes in a cool, dry place to maintain shape and quality.</li>
+								</ol>
+								<p>By following these care guidelines, you can ensure that your clothing remains a staple in your wardrobe for years to come!</p>
 							</div>
 						</DynamicTabPane>
 
@@ -80,7 +78,10 @@ const ProductDescription = ({ product }) => {
 							eventKey="size-chart"
 							title="Size Chart"
 						>
-							<SizeChart />
+							<p>Refer to our size chart to find your perfect fit. If you&apos;re between sizes, we recommend sizing up for added comfort.</p>
+							<div className="size-chart-container">
+								<SizeChart />
+							</div>
 						</DynamicTabPane>
 					</DynamicTabContent>
 				</Col>
