@@ -1,3 +1,5 @@
+import http from 'http';
+
 import { OrderCreatedListener } from './events/listeners/OrderCreatedListener';
 import { natsWrapper } from './NatsWrapper';
 
@@ -32,6 +34,22 @@ const start = async (): Promise<void> => {
   } catch (err) {
     console.error(err);
   }
+
+  // Minimal HTTP server so Kubernetes probes can check this worker.
+  const port = 3000;
+  http
+    .createServer((req, res) => {
+      if (req.url === '/healthz') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'ok' }));
+      } else {
+        res.writeHead(404);
+        res.end();
+      }
+    })
+    .listen(port, () => {
+      console.log(`Expiration server: Listening on port ${port}`);
+    });
 };
 
 void start();
