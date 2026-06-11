@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 
 import MobileNavbar from './MobileNavbar';
 import DesktopNavbar from './DesktopNavbar';
 import useWindowSize from '../../hooks/useWindowSize';
 
-const Header = ({ currentUser, products, bestseller }) => {
+const Header = ({ currentUser }) => {
   const [numItems, setNumItems] = useState(0);
   const [showNotification, setShowNotification] = useState(false);
   const [onMobile, setOnMobile] = useState(true);
@@ -42,22 +44,20 @@ const Header = ({ currentUser, products, bestseller }) => {
 
   return onMobile
     ? (
-		<MobileNavbar
-			currentUser={currentUser}
-			numItems={numItems}
-			showNotification={showNotification}
-			productCategories={productCategories}
-		/>
+      <MobileNavbar
+        currentUser={currentUser}
+        numItems={numItems}
+        showNotification={showNotification}
+        productCategories={productCategories}
+      />
       )
     : (
-		<DesktopNavbar
-			currentUser={currentUser}
-			products={products}
-			bestseller={bestseller}
-			numItems={numItems}
-			showNotification={showNotification}
-			productCategories={productCategories}
-		/>
+      <DesktopNavbar
+        currentUser={currentUser}
+        numItems={numItems}
+        showNotification={showNotification}
+        productCategories={productCategories}
+      />
       );
 };
 

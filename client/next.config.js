@@ -1,4 +1,6 @@
+/** @type {import('next').NextConfig} */
 module.exports = {
+  output: 'standalone',
   reactStrictMode: true,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -6,7 +8,16 @@ module.exports = {
     ignoreDuringBuilds: true
   },
   images: {
-    domains: ['www.dropbox.com', 'res.cloudinary.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.dropbox.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com'
+      }
+    ],
     minimumCacheTTL: 31536000 // 1 year
   },
   async headers () {
@@ -29,6 +40,6 @@ module.exports = {
           }
         ]
       }
-    ]
+    ];
   }
-}
+};
