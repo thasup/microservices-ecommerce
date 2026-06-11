@@ -1,11 +1,11 @@
-name: deploy-payment
+name: deploy-user
 
 on:
   push:
     branches:
       - main
     paths:
-      - "payment/**"
+      - "user/**"
   workflow_dispatch:
 
 jobs:
@@ -26,10 +26,10 @@ jobs:
       # EC2 node provisioned by infra/terraform.
       - uses: docker/build-push-action@v6
         with:
-          context: payment
+          context: user
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: thasup/payment:latest
+          tags: thasup/user:latest
 
   # Restarts the deployment on the AWS k3s node via SSM. Runs only when the
   # repository variables AWS_REGION and AURAPAN_INSTANCE_ID are configured
@@ -48,5 +48,5 @@ jobs:
           aws ssm send-command \
             --instance-ids "${ vars.AURAPAN_INSTANCE_ID }" \
             --document-name "AWS-RunShellScript" \
-            --comment "rollout payment" \
-            --parameters 'commands=["kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml rollout restart deployment payment-depl"]'
+            --comment "rollout user" \
+            --parameters 'commands=["kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml rollout restart deployment user-depl"]'
