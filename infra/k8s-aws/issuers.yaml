@@ -1,0 +1,36 @@
+# Let's Encrypt ClusterIssuers for cert-manager.
+# ${ACME_EMAIL} is substituted by infra/terraform/user_data.sh.tpl via
+# envsubst before this file is applied.
+#
+# Use letsencrypt-staging first when debugging certificate issuance to avoid
+# Let's Encrypt production rate limits, then switch the ingress annotation
+# back to letsencrypt-prod.
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    email: ${ACME_EMAIL}
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-staging-account-key
+    solvers:
+      - http01:
+          ingress:
+            ingressClassName: nginx
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: ${ACME_EMAIL}
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod-account-key
+    solvers:
+      - http01:
+          ingress:
+            ingressClassName: nginx

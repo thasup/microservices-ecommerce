@@ -1,0 +1,42 @@
+# Copy to terraform.tfvars and fill in. NEVER commit terraform.tfvars.
+
+aws_region = "us-east-1"
+
+# t4g.small (default) ~$12.26/mo. t4g.micro ~$6.13/mo works for light
+# traffic with MongoDB Atlas instead of in-cluster databases.
+# instance_type = "t4g.small"
+
+# Your shop's domain — point its A record at the elastic IP output by apply.
+domain     = "shop.example.com"
+acme_email = "you@example.com"
+
+# Optional: open ports 22/6443 to your IP for direct SSH / kubectl.
+# Leave unset to use AWS SSM Session Manager only (recommended).
+# admin_cidr = "203.0.113.7/32"
+
+# Where the node clones the Kubernetes manifests from.
+# git_repo = "https://github.com/thasup/microservices-ecommerce.git"
+# git_ref  = "main"
+
+# Docker Hub namespace CI pushes images to (thasup/user, thasup/product, ...).
+# docker_registry = "thasup"
+
+# --- Application secrets (all sensitive) -----------------------------------
+jwt_key          = "change-me-to-a-long-random-string"
+stripe_key       = "sk_test_..."
+paypal_client_id = "your-paypal-client-id"
+
+# Optional storefront keys
+# stripe_publishable_key  = "pk_test_..."
+# paypal_public_client_id = "your-paypal-client-id"
+# ga_id                   = "G-XXXXXXXXXX"
+
+# --- Databases --------------------------------------------------------------
+# Default: MongoDB runs in-cluster on the node's EBS volume ($0 extra).
+# For durable managed databases, create a free MongoDB Atlas M0 cluster,
+# set the four URIs and flip use_in_cluster_databases to false.
+# use_in_cluster_databases = false
+# mongo_uri_user    = "mongodb+srv://user:pass@cluster0.x.mongodb.net/users-db"
+# mongo_uri_product = "mongodb+srv://user:pass@cluster0.x.mongodb.net/products-db"
+# mongo_uri_order   = "mongodb+srv://user:pass@cluster0.x.mongodb.net/orders-db"
+# mongo_uri_payment = "mongodb+srv://user:pass@cluster0.x.mongodb.net/payments-db"

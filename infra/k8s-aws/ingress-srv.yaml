@@ -1,15 +1,22 @@
-# Local development ingress (Docker Desktop Kubernetes).
-# Requires ingress-nginx and a hosts entry: 127.0.0.1 aurapan.local
+# Production ingress for the AWS k3s deployment.
+# ${DOMAIN} is substituted by infra/terraform/user_data.sh.tpl via envsubst
+# before this file is applied. TLS certificates are issued automatically by
+# cert-manager using the letsencrypt-prod ClusterIssuer (see issuers.yaml).
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-service
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - ${DOMAIN}
+      secretName: aurapan-tls
   rules:
-    - host: aurapan.local
+    - host: ${DOMAIN}
       http:
         paths:
           - path: /api/payments/?(.*)
