@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -72,4 +74,4 @@ const SizeSelector = ({ product, width, callback }) => {
       );
 };
 
-export default SizeSelector;
+export default SizeSelector;

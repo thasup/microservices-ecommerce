@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -13,35 +14,29 @@ const AccountDropDown = ({
   setShowAccountDropDown
 }) => {
   return (
-		<div
-			className="account-dropdown-menu"
-			style={{ display: showAccountDropDown ? 'block' : 'none' }}
-			onMouseLeave={() => setShowAccountDropDown(false)}
-		>
-			<div className="account-dropdown-item account-dropdown-title d-flex justify-content-center">
-				{currentUser?.name}
-			</div>
+    <div
+      className="account-dropdown-menu"
+      style={{ display: showAccountDropDown ? 'block' : 'none' }}
+      onMouseLeave={() => setShowAccountDropDown(false)}
+    >
+      <div className="account-dropdown-item account-dropdown-title d-flex justify-content-center">
+        {currentUser?.name}
+      </div>
 
-			<Link href="/dashboard" passHref>
-				<a className="account-dropdown-item">
-					<FontAwesomeIcon icon={faUser} /> Account
-				</a>
-			</Link>
+      <Link href="/dashboard" className="account-dropdown-item">
+        <FontAwesomeIcon icon={faUser} /> Account
+      </Link>
 
-			{currentUser?.isAdmin && (
-				<Link href="/admin" passHref>
-					<a className="account-dropdown-item">
-						<FontAwesomeIcon icon={faListCheck} /> Management
-					</a>
-				</Link>
-			)}
+      {currentUser?.isAdmin && (
+        <Link href="/admin" className="account-dropdown-item">
+          <FontAwesomeIcon icon={faListCheck} /> Management
+        </Link>
+      )}
 
-			<Link href="/signout" passHref>
-				<a className="account-dropdown-item">
-					<FontAwesomeIcon icon={faRightFromBracket} /> Sign Out
-				</a>
-			</Link>
-		</div>
+      <Link href="/signout" className="account-dropdown-item">
+        <FontAwesomeIcon icon={faRightFromBracket} /> Sign Out
+      </Link>
+    </div>
   );
 };
 

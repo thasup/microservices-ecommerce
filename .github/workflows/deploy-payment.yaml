@@ -2,43 +2,51 @@ name: deploy-payment
 
 on:
   push:
-    # watch for pull request into main branch
     branches:
       - main
-
-    # watch for changes in payment folder
     paths:
       - "payment/**"
-      - "trigger-deploy.txt"
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      # build an image
-      - run: cd payment && docker build -t thasup/payment .
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
 
-      # login on docker hub
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-      # push an image to docker hub
-      - run: docker push thasup/payment
-
-      # use and cliententicate doctl
-      - uses: digitalocean/action-doctl@v2
+      - uses: docker/login-action@v3
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          username: ${ secrets.DOCKER_USERNAME }
+          password: ${ secrets.DOCKER_PASSWORD }
 
-      # give credential to k8s cluster
-      - run: doctl kubernetes cluster kubeconfig save aurapan-cluster
+      # Multi-arch so the image runs on both x86 and the Graviton (arm64)
+      # EC2 node provisioned by infra/terraform.
+      - uses: docker/build-push-action@v6
+        with:
+          context: payment
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: thasup/payment:latest
 
-      # restart deployment
-      - run: kubectl rollout restart deployment payment-depl
+  # Restarts the deployment on the AWS k3s node via SSM. Runs only when the
+  # repository variables AWS_REGION and AURAPAN_INSTANCE_ID are configured
+  # (plus AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY secrets).
+  rollout:
+    needs: build
+    if: vars.AWS_REGION != '' && vars.AURAPAN_INSTANCE_ID != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${ secrets.AWS_ACCESS_KEY_ID }
+          aws-secret-access-key: ${ secrets.AWS_SECRET_ACCESS_KEY }
+          aws-region: ${ vars.AWS_REGION }
+      - run: |
+          aws ssm send-command \
+            --instance-ids "${ vars.AURAPAN_INSTANCE_ID }" \
+            --document-name "AWS-RunShellScript" \
+            --comment "rollout payment" \
+            --parameters 'commands=["kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml rollout restart deployment payment-depl"]'

@@ -1,9 +1,11 @@
+# Redis backs the Bull expiration queue. Its state is ephemeral (in-flight
+# timers only), so it always runs in-cluster — no managed alternative needed.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: expiration-redis-depl
 spec:
-  replicas:
+  replicas: 1
   selector:
     matchLabels:
       app: expiration-redis
@@ -14,7 +16,26 @@ spec:
     spec:
       containers:
         - name: expiration-redis
-          image: redis
+          image: redis:7-alpine
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          readinessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          securityContext:
+            allowPrivilegeEscalation: false
 ---
 apiVersion: v1
 kind: Service

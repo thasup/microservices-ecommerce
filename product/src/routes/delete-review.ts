@@ -41,7 +41,7 @@ router.delete(
         throw new NotFoundError();
       }
 
-      await deletedReview.remove();
+      await deletedReview.deleteOne();
 
       // Filter all reviews of the product *EXCEPT* the review of this user
       const updateReviews = product.reviews.filter(

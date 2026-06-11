@@ -20,7 +20,7 @@ export class ProductDeletedListener extends Listener<ProductDeletedEvent> {
       throw new NotFoundError();
     }
 
-    await product.remove();
+    await product.deleteOne();
 
     // Acknowledge the message and tell NATS server it successfully processed
     msg.ack();

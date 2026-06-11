@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 
 const ExpireTimer = ({ order }) => {
   const [timeLeft, setTimeLeft] = useState(0);
@@ -6,7 +8,8 @@ const ExpireTimer = ({ order }) => {
   useEffect(() => {
     const findTimeLeft = () => {
       const msLeft = new Date(order?.expiresAt) - new Date();
-      setTimeLeft(Math.round(msLeft / (60 * 1000)));
+      const minutesLeft = Math.round(msLeft / (60 * 1000));
+      setTimeLeft(minutesLeft < 0 ? null : minutesLeft);
     };
 
     findTimeLeft();
@@ -17,18 +20,14 @@ const ExpireTimer = ({ order }) => {
     };
   }, [order]);
 
-  if (timeLeft < 0) {
-    setTimeLeft(null);
-  }
-
   return timeLeft === null
     ? (
-		<p style={{ color: 'red', fontWeight: 'bolder' }}>Expired</p>
+      <p style={{ color: 'red', fontWeight: 'bolder' }}>Expired</p>
       )
     : (
-		<>
-			<strong>{timeLeft}</strong> minutes
-		</>
+      <>
+        <strong>{timeLeft}</strong> minutes
+      </>
       );
 };
 

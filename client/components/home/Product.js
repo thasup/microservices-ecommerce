@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -50,142 +52,128 @@ const Product = ({
   };
 
   return (
-		<Card className="product-card">
-			<div
-				className="product-img"
-				onMouseEnter={() => setToggle(true)}
-				onMouseLeave={() => setToggle(false)}
-				onTouchStart={toggle ? () => setToggle(false) : () => setToggle(true)}
-			>
-				<Link
-					href={'/products/[productId]'}
-					as={`/products/${product.id}`}
-					passHref
-				>
-					<Card.Body
-						className="product-img__cover"
-						style={{ opacity: toggle ? '0' : '1' }}
-					>
-						<Image
-							loader={myLoader}
-							src={product.images.image1}
-							layout="fill"
-							objectFit="cover"
-							lazyBoundary={onMobile ? '400px' : '800px'}
-							priority={priority || false}
-							alt={`${product.title} image 1`}
-						/>
-					</Card.Body>
-				</Link>
+    <Card className="product-card">
+      <div
+        className="product-img"
+        onMouseEnter={() => setToggle(true)}
+        onMouseLeave={() => setToggle(false)}
+        onTouchStart={toggle ? () => setToggle(false) : () => setToggle(true)}
+      >
+        <Link href={`/products/${product.id}`}>
+          <Card.Body
+            className="product-img__cover"
+            style={{ opacity: toggle ? '0' : '1' }}
+          >
+            <Image
+              loader={myLoader}
+              src={product.images.image1}
+              fill
+              sizes="(max-width: 576px) 50vw, (max-width: 1200px) 33vw, 25vw"
+              style={{ objectFit: 'cover' }}
+              priority={priority}
+              alt={`${product.title} image 1`}
+            />
+          </Card.Body>
+        </Link>
 
-				<Link
-					href={'/products/[productId]'}
-					as={`/products/${product.id}`}
-					passHref
-				>
-					<Card.Body
-						className="product-img__hover"
-						style={{ opacity: toggle ? '1' : '0' }}
-					>
-						<Image
-							loader={myLoader}
-							src={product.images.image2}
-							layout="fill"
-							objectFit="cover"
-							lazyBoundary={onMobile ? '400px' : '800px'}
-							priority={priority || false}
-							alt={`${product.title} image 2`}
-						/>
-					</Card.Body>
-				</Link>
+        <Link href={`/products/${product.id}`}>
+          <Card.Body
+            className="product-img__hover"
+            style={{ opacity: toggle ? '1' : '0' }}
+          >
+            <Image
+              loader={myLoader}
+              src={product.images.image2}
+              fill
+              sizes="(max-width: 576px) 50vw, (max-width: 1200px) 33vw, 25vw"
+              style={{ objectFit: 'cover' }}
+              priority={priority}
+              alt={`${product.title} image 2`}
+            />
+          </Card.Body>
+        </Link>
 
-				{showAddToCart && !onMobile && (
-					<div className={classNames('menu-tab', menuTabClass)}>
-						<AddToCart
-							product={product}
-							currentUser={currentUser}
-							color={color}
-						/>
-					</div>
-				)}
-			</div>
+        {showAddToCart && !onMobile && (
+          <div className={classNames('menu-tab', menuTabClass)}>
+            <AddToCart
+              product={product}
+              currentUser={currentUser}
+              color={color}
+            />
+          </div>
+        )}
+      </div>
 
-			<Card.Body className="p-0">
-				<div className="card-body-wrapper">
-					<Row
-						className="d-flex justify-content-between px-0 mx-0"
-						style={{
-						  flexDirection: isMobileStyle ? 'column' : (onMobile ? 'column' : 'row'),
-						  minHeight: isMobileStyle ? '5.25rem' : (onMobile ? '5.25rem' : '4rem')
-						}}
-					>
-						<Col xs={12} sm={9} className="card-product-title" as="h4"
-							style={{
-							  fontSize: isMobileStyle ? '1.1rem' : (onMobile && '1.1rem'),
-							  minHeight: isMobileStyle ? '3rem' : (onMobile && '3rem')
-							}}
-						>
-							<Link
-								href={'/products/[productId]'}
-								as={`/products/${product.id}`}
-								passHref
-							>
-								<a>{product.title}</a>
-							</Link>
-						</Col>
+      <Card.Body className="p-0">
+        <div className="card-body-wrapper">
+          <Row
+            className="d-flex justify-content-between px-0 mx-0"
+            style={{
+              flexDirection: isMobileStyle ? 'column' : (onMobile ? 'column' : 'row'),
+              minHeight: isMobileStyle ? '5.25rem' : (onMobile ? '5.25rem' : '4rem')
+            }}
+          >
+            <Col xs={12} sm={9} className="card-product-title" as="h4"
+              style={{
+                fontSize: isMobileStyle ? '1.1rem' : (onMobile ? '1.1rem' : undefined),
+                minHeight: isMobileStyle ? '3rem' : (onMobile ? '3rem' : undefined)
+              }}
+            >
+              <Link href={`/products/${product.id}`}>{product.title}</Link>
+            </Col>
 
-						<Col xs={12} sm={3} className="card-product-price unselectable"
-							style={{
-							  textAlign: isMobileStyle ? 'start' : (onMobile ? 'start' : 'end'),
-							  justifyContent: isMobileStyle ? 'flex-end' : (onMobile ? 'flex-end' : 'flex-start')
-							}}
-						>
-							<h4
-								style={{
-								  fontSize: isMobileStyle ? '1.2rem' : (onMobile && '1.2rem')
-								}}
-							>
-								${product.price}
-							</h4>
-						</Col>
-					</Row>
+            <Col xs={12} sm={3} className="card-product-price unselectable"
+              style={{
+                textAlign: isMobileStyle ? 'start' : (onMobile ? 'start' : 'end'),
+                justifyContent: isMobileStyle ? 'flex-end' : (onMobile ? 'flex-end' : 'flex-start')
+              }}
+            >
+              <h4
+                style={{
+                  fontSize: isMobileStyle ? '1.2rem' : (onMobile ? '1.2rem' : undefined)
+                }}
+              >
+                ${product.price}
+              </h4>
+            </Col>
+          </Row>
 
-					<Row className="d-flex flex-row justify-content-end align-items-center px-0 mx-0">
-						{showRating && (
-							<Col xs={5} className="card-product-reviews" as="div">
-								<Rating
-									value={product.rating}
-									numReviews={product.numReviews}
-									mobile={!!onMobile}
-								/>
-							</Col>
-						)}
+          <Row className="d-flex flex-row justify-content-end align-items-center px-0 mx-0">
+            {showRating && (
+              <Col xs={5} className="card-product-reviews" as="div">
+                <Rating
+                  value={product.rating}
+                  numReviews={product.numReviews}
+                  mobile={!!onMobile}
+                />
+              </Col>
+            )}
 
-						{showColors && (
-							<Col xs={7} className="card-product-color" as="div">
-								<ColorSelector
-									product={product}
-									callback={colorSelectedHandler}
-									margin={'2px'}
-									size={onMobile ? '15px' : '25px'}
-									flex={'end'}
-								/>
-							</Col>
-						)}
-					</Row>
+            {showColors && (
+              <Col xs={7} className="card-product-color" as="div">
+                <ColorSelector
+                  product={product}
+                  callback={colorSelectedHandler}
+                  margin={'2px'}
+                  size={onMobile ? '15px' : '25px'}
+                  flex={'end'}
+                />
+              </Col>
+            )}
+          </Row>
 
-					{showAddToCart && onMobile && (
-						<AddToCart
-							className="d-flex justify-content-center"
-							product={product}
-							currentUser={currentUser}
-							color={color}
-							lg={true}
-						/>
-					)}
-				</div>
-			</Card.Body>
-		</Card>
+          {showAddToCart && onMobile && (
+            <AddToCart
+              className="d-flex justify-content-center"
+              product={product}
+              currentUser={currentUser}
+              color={color}
+              lg={true}
+            />
+          )}
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 

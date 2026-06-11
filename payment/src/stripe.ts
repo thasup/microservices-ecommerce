@@ -4,6 +4,5 @@ if (!process.env.STRIPE_KEY) {
   throw new Error("STRIPE_KEY must be defined");
 }
 
-export const stripe = new Stripe(process.env.STRIPE_KEY, {
-  apiVersion: "2020-08-27",
-});
+// No pinned apiVersion: the SDK uses the version it was built against.
+export const stripe = new Stripe(process.env.STRIPE_KEY);

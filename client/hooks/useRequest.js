@@ -1,3 +1,5 @@
+'use client';
+
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Alert, ListGroup } from 'react-bootstrap';
@@ -41,4 +43,4 @@ export default ({ url, method, body, onSuccess }) => {
   };
 
   return { doRequest, errors };
-};
+};

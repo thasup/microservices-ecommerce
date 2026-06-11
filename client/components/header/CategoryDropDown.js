@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -41,20 +43,22 @@ const CategoryDropDown = ({
     'Sale'
   ];
 
-  useEffect(async () => {
+  useEffect(() => {
     if (eventTarget) {
-      setCategoryName(eventTarget.text);
+      const name = eventTarget.text;
+
+      setCategoryName(name);
       setCategoryParams(eventTarget.pathname);
 
-      const bestsellerArray = bestseller
-        .filter((product) => product.category === `${categoryName}`)
+      const bestsellerArray = (bestseller ?? [])
+        .filter((product) => product.category === name)
         .slice(0, 3);
       if (bestsellerArray.length !== 0) {
         setBestsellerProducts(bestsellerArray);
       }
 
-      const newArrivalsArray = products
-        .filter((product) => product.category === `${categoryName}`)
+      const newArrivalsArray = (products ?? [])
+        .filter((product) => product.category === name)
         .reverse()
         .slice(0, 2);
       if (newArrivalsArray.length !== 0) {
@@ -64,90 +68,82 @@ const CategoryDropDown = ({
       setShowCategoryDropDown(true);
       setIsReady(true);
     }
-  }, [eventTarget, categoryName]);
+  }, [eventTarget, products, bestseller, setShowCategoryDropDown]);
 
   return isReady
     ? (
-		<div
-			className="category-dropdown-menu"
-			style={{
-			  opacity: showCategoryDropDown ? 1 : 0,
-			  visibility: showCategoryDropDown ? 'visible' : 'hidden',
-			  top: showCategoryDropDown ? '75px' : '-5000px'
-			}}
-			onMouseEnter={() => setShowCategoryDropDown(true)}
-			onMouseLeave={() => setShowCategoryDropDown(false)}
-		>
-			<div
-				className="dropdown-menu-img-wrapper"
-				onClick={() => setShowCategoryDropDown(false)}
-			>
-				<Link href={categoryParams} passHref>
-					<a className="overlay"></a>
-				</Link>
-				<Image
-					src={HeaderBannerSrc[`${categoryName}`]}
-					layout="fill"
-					objectFit="cover"
-					objectPosition="center center"
-					priority="true"
-					alt="category banner"
-				/>
-			</div>
-			<div className="category-dropdown-wrapper">
-				<ul className="menu-parent">
-					{menuItems.map((item, index) => (
-						<li className="menu-parent-item" key={index}>
-							<Link
-								href={`${categoryParams}/${item
-									.replace(' ', '-')
-									.toLowerCase()}`}
-								passHref
-							>
-								<a
-									className="menu-parent-link"
-									onClick={() => setShowCategoryDropDown(false)}
-								>
-									{item}
-								</a>
-							</Link>
-							{item === 'Bestseller' && (
-								<ul className="menu-child">
-									{bestsellerProducts.map((product, index) => (
-										<li key={index}>
-											<Link href={`/products/${product.id}`} passHref>
-												<a
-													className="menu-child-link"
-													onClick={() => setShowCategoryDropDown(false)}
-												>
-													{product.title}
-												</a>
-											</Link>
-										</li>
-									))}
-								</ul>
-							)}
-							{item === 'New Arrivals' && (
-								<ul className="menu-child">
-									{newArrivalsProducts.map((product, index) => (
-										<li key={index}>
-											<Link href={`/products/${product.id}`} passHref>
-												<a
-													className="menu-child-link"
-													onClick={() => setShowCategoryDropDown(false)}
-												>
-													{product.title}
-												</a>
-											</Link>
-										</li>
-									))}
-								</ul>
-							)}
-						</li>
-					))}
-				</ul>
-			</div>
-		</div>
+      <div
+        className="category-dropdown-menu"
+        style={{
+          opacity: showCategoryDropDown ? 1 : 0,
+          visibility: showCategoryDropDown ? 'visible' : 'hidden',
+          top: showCategoryDropDown ? '75px' : '-5000px'
+        }}
+        onMouseEnter={() => setShowCategoryDropDown(true)}
+        onMouseLeave={() => setShowCategoryDropDown(false)}
+      >
+        <div
+          className="dropdown-menu-img-wrapper"
+          onClick={() => setShowCategoryDropDown(false)}
+        >
+          <Link href={categoryParams || '/'} className="overlay"></Link>
+          <Image
+            src={HeaderBannerSrc[`${categoryName}`] ?? TopBannerSrc}
+            fill
+            sizes="100vw"
+            style={{ objectFit: 'cover', objectPosition: 'center center' }}
+            priority
+            alt="category banner"
+          />
+        </div>
+        <div className="category-dropdown-wrapper">
+          <ul className="menu-parent">
+            {menuItems.map((item, index) => (
+              <li className="menu-parent-item" key={index}>
+                <Link
+                  href={`${categoryParams}/${item
+                    .replace(' ', '-')
+                    .toLowerCase()}`}
+                  className="menu-parent-link"
+                  onClick={() => setShowCategoryDropDown(false)}
+                >
+                  {item}
+                </Link>
+                {item === 'Bestseller' && (
+                  <ul className="menu-child">
+                    {bestsellerProducts.map((product, index) => (
+                      <li key={index}>
+                        <Link
+                          href={`/products/${product.id}`}
+                          className="menu-child-link"
+                          onClick={() => setShowCategoryDropDown(false)}
+                        >
+                          {product.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {item === 'New Arrivals' && (
+                  <ul className="menu-child">
+                    {newArrivalsProducts.map((product, index) => (
+                      <li key={index}>
+                        <Link
+                          href={`/products/${product.id}`}
+                          className="menu-child-link"
+                          onClick={() => setShowCategoryDropDown(false)}
+                        >
+                          {product.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
       )
     : null;
 };
