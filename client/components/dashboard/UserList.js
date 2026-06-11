@@ -1,6 +1,8 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Spinner, Table } from 'react-bootstrap';
 import {
@@ -18,6 +20,8 @@ import profilePic from '../../public/asset/sample.jpg';
 import useRequest from '../../hooks/useRequest';
 
 const UserList = ({ users }) => {
+  const router = useRouter();
+
   const [userId, setUserId] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +31,7 @@ const UserList = ({ users }) => {
     body: {},
     onSuccess: () => {
       setLoading(false);
-      Router.push('/admin');
+      router.refresh();
     }
   });
 
@@ -90,7 +94,7 @@ const UserList = ({ users }) => {
 												alt="profile image"
 												width={150}
 												height={150}
-												layout="responsive"
+												style={{ width: '100%', height: 'auto' }}
 											/>
 										</div>
 									    )
@@ -101,7 +105,7 @@ const UserList = ({ users }) => {
 												alt="profile image"
 												width={150}
 												height={150}
-												layout="responsive"
+												style={{ width: '100%', height: 'auto' }}
 											/>
 										</div>
 									    )}
@@ -182,15 +186,14 @@ const UserList = ({ users }) => {
 									  : null}
 								</td>
 								<td>
-									<Link
-										href={'/dashboard/edit/[userId]'}
-										as={`/dashboard/edit/${user.id}`}
-										passHref
+									<Button
+										as={Link}
+										href={`/dashboard/edit/${user.id}`}
+										variant="dark"
+										className="btn-sm mx-1"
 									>
-										<Button variant="dark" className="btn-sm mx-1">
-											<FontAwesomeIcon icon={faEdit} />
-										</Button>
-									</Link>
+										<FontAwesomeIcon icon={faEdit} />
+									</Button>
 									<Button
 										variant="danger"
 										className="btn-sm mx-1"

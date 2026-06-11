@@ -1,5 +1,7 @@
+'use client';
+
 import Image from 'next/image';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 
@@ -7,6 +9,8 @@ import useRequest from '../../hooks/useRequest';
 import Message from '../common/Message';
 
 const EditProfile = ({ user }) => {
+  const router = useRouter();
+
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [gender, setGender] = useState('');
@@ -33,7 +37,7 @@ const EditProfile = ({ user }) => {
     },
     onSuccess: () => {
       setUpdateSuccess(true);
-      Router.push('/dashboard');
+      router.refresh();
     }
   });
 
@@ -86,8 +90,9 @@ const EditProfile = ({ user }) => {
 						<Image
 							loader={myLoader}
 							src={user.image}
-							layout="fill"
-							objectFit="cover"
+							fill
+							sizes="50vw"
+							style={{ objectFit: 'cover' }}
 							priority={true}
 							alt={'profile image'}
 						/>

@@ -1,4 +1,6 @@
-import Router from "next/router";
+"use client";
+
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 
@@ -6,6 +8,8 @@ import useRequest from "../../hooks/useRequest";
 import Message from "../common/Message";
 
 const EditAddress = ({ user }) => {
+	const router = useRouter();
+
 	const [address, setAddress] = useState("");
 	const [city, setCity] = useState("");
 	const [postalCode, setPostalCode] = useState("");
@@ -36,7 +40,7 @@ const EditAddress = ({ user }) => {
 		},
 		onSuccess: (user) => {
 			setUpdateSuccess(true);
-			Router.push("/dashboard");
+			router.refresh();
 		},
 	});
 

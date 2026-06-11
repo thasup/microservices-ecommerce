@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Carousel } from 'react-bootstrap';
@@ -49,8 +51,9 @@ const CustomCarousol = ({ images, quality }) => {
 						loader={myLoader}
 						src={image === '' ? 'gatmu67f52etjy2/4te4tet.webp' : image}
 						alt={`product image ${index}`}
-						layout="fill"
-						objectFit="cover"
+						fill
+						style={{ objectFit: 'cover' }}
+						sizes="100vw"
 						quality={quality}
 						priority
 					/>

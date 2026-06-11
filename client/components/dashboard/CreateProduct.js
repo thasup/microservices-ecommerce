@@ -1,11 +1,15 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Button, Carousel, Col, Form, Row, Spinner } from 'react-bootstrap';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import useRequest from '../../hooks/useRequest';
 
 const CreateProduct = () => {
+  const router = useRouter();
+
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState(0);
   const [image1, setImage1] = useState('');
@@ -43,7 +47,7 @@ const CreateProduct = () => {
     },
     onSuccess: () => {
       setLoadingCreate(false);
-      Router.push('/');
+      router.push('/');
     }
   });
 
@@ -80,8 +84,9 @@ const CreateProduct = () => {
 							loader={myLoader}
 							src={image1 || 'gatmu67f52etjy2/4te4tet.webp'}
 							alt={'Sample Product image'}
-							layout="fill"
-							objectFit="cover"
+							fill
+							style={{ objectFit: 'cover' }}
+							sizes="100vw"
 							priority
 						/>
 					</Carousel.Item>
@@ -91,8 +96,9 @@ const CreateProduct = () => {
 							loader={myLoader}
 							src={image2 || 'gatmu67f52etjy2/4te4tet.webp'}
 							alt={'Sample Product image'}
-							layout="fill"
-							objectFit="cover"
+							fill
+							style={{ objectFit: 'cover' }}
+							sizes="100vw"
 							priority
 						/>
 					</Carousel.Item>
@@ -102,8 +108,9 @@ const CreateProduct = () => {
 							loader={myLoader}
 							src={image3 || 'gatmu67f52etjy2/4te4tet.webp'}
 							alt={'Sample Product image'}
-							layout="fill"
-							objectFit="cover"
+							fill
+							style={{ objectFit: 'cover' }}
+							sizes="100vw"
 							priority
 						/>
 					</Carousel.Item>
@@ -113,8 +120,9 @@ const CreateProduct = () => {
 							loader={myLoader}
 							src={image4 || 'gatmu67f52etjy2/4te4tet.webp'}
 							alt={'Sample Product image'}
-							layout="fill"
-							objectFit="cover"
+							fill
+							style={{ objectFit: 'cover' }}
+							sizes="100vw"
 							priority
 						/>
 					</Carousel.Item>

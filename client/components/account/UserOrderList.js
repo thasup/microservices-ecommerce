@@ -1,3 +1,5 @@
+"use client";
+
 import { faPaypal, faStripeS } from "@fortawesome/free-brands-svg-icons";
 import {
 	faCheck,
@@ -108,15 +110,14 @@ const UserOrderList = ({ myOrders }) => {
 									)}
 								</td>
 								<td>
-									<Link
-										href={"/orders/[orderId]"}
-										as={`/orders/${order.id}`}
-										passHref
+									<Button
+										as={Link}
+										href={`/orders/${order.id}`}
+										className="btn-sm"
+										variant="light"
 									>
-										<Button className="btn-sm" variant="light">
-											<FontAwesomeIcon icon={faInfoCircle} /> Details
-										</Button>
-									</Link>
+										<FontAwesomeIcon icon={faInfoCircle} /> Details
+									</Button>
 								</td>
 							</tr>
 						))}
