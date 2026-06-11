@@ -67,7 +67,9 @@ orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.findByEvent = (event: { id: string, version: number }) => {
   return Order.findOne({
-    id: event.id,
+    // `_id`, not `id`: mongoose <7 silently stripped the unknown `id` path
+    // from queries (strictQuery), which made this match by version alone.
+    _id: event.id,
     version: event.version - 1
   });
 };
