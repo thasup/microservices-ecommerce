@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Row, Spinner } from 'react-bootstrap';
 
@@ -97,4 +99,4 @@ const Coupon = ({ callback }) => {
   );
 };
 
-export default Coupon;
+export default Coupon;

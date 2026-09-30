@@ -1,0 +1,74 @@
+# In-cluster MongoDB for the user service.
+# Used for local development (always) and on AWS when
+# use_in_cluster_databases = true. For durable production data, prefer
+# MongoDB Atlas M0 (free) and point MONGO_URI_USER at it instead.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: user-mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-mongo-depl
+spec:
+  replicas: 1
+  # Recreate avoids two pods fighting over the same RWO volume during updates.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: user-mongo
+  template:
+    metadata:
+      labels:
+        app: user-mongo
+    spec:
+      containers:
+        - name: user-mongo
+          image: mongo:7
+          volumeMounts:
+            - name: data
+              mountPath: /data/db
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            tcpSocket:
+              port: 27017
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 27017
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          securityContext:
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: user-mongo-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-mongo-srv
+spec:
+  selector:
+    app: user-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

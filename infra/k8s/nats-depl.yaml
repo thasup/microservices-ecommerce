@@ -14,7 +14,10 @@ spec:
     spec:
       containers:
         - name: nats
-          image: nats-streaming:0.17.0
+          # NOTE: NATS Streaming is deprecated (EOL June 2023). 0.25.6 is the
+          # final release; it is only reachable inside the cluster. A future
+          # migration to NATS JetStream is recommended (see docs/SECURITY-AUDIT.md).
+          image: nats-streaming:0.25.6
           args:
             [
               "-p",
@@ -31,6 +34,30 @@ spec:
               "-cid",
               "my-covid-cluster",
             ]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8222
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8222
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
 ---
 apiVersion: v1
 kind: Service

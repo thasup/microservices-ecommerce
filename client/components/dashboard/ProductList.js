@@ -1,7 +1,9 @@
+'use client';
+
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Spinner, Table } from 'react-bootstrap';
 
@@ -11,6 +13,8 @@ import CustomTooltip from '../common/CustomTooltip';
 import SizeSelector from '../common/SizeSelector';
 
 const ProductList = ({ products, orderProducts, paymentProducts }) => {
+  const router = useRouter();
+
   const [deleteProductId, setDeleteProductId] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +24,7 @@ const ProductList = ({ products, orderProducts, paymentProducts }) => {
     body: {},
     onSuccess: () => {
       setLoading(false);
-      Router.push('/admin');
+      router.refresh();
     }
   });
 
@@ -67,12 +71,7 @@ const ProductList = ({ products, orderProducts, paymentProducts }) => {
 									<CustomTooltip index={index} mongoId={product.id} />
 								</td>
 								<td>
-									<Link
-										href={'/products/[productId]'}
-										as={`/products/${product.id}`}
-									>
-										<a>{product.title}</a>
-									</Link>
+									<Link href={`/products/${product.id}`}>{product.title}</Link>
 								</td>
 								<td>{product.countInStock}</td>
 								<td>${product.price}</td>
@@ -127,15 +126,14 @@ const ProductList = ({ products, orderProducts, paymentProducts }) => {
 									    )}
 								</td>
 								<td>
-									<Link
-										href={'/products/edit/[productId]'}
-										as={`/products/edit/${product.id}`}
-										passHref
+									<Button
+										as={Link}
+										href={`/products/edit/${product.id}`}
+										variant="dark"
+										className="btn-sm mx-1"
 									>
-										<Button variant="dark" className="btn-sm mx-1">
-											<FontAwesomeIcon icon={faEdit} />
-										</Button>
-									</Link>
+										<FontAwesomeIcon icon={faEdit} />
+									</Button>
 									<Button
 										variant="danger"
 										className="btn-sm mx-1"

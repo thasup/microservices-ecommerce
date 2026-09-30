@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 
@@ -106,4 +108,4 @@ const AddToCart = ({
   );
 };
 
-export default AddToCart;
+export default AddToCart;

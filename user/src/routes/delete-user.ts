@@ -18,7 +18,7 @@ router.delete(
       throw new NotFoundError();
     }
 
-    await deletedUser.remove();
+    await deletedUser.deleteOne();
 
     res.status(200).send({});
   }

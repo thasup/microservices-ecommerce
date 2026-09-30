@@ -1,0 +1,17 @@
+{
+  "name": "aurapan-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Operational scripts for the Aurapan shop (data seeding).",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "seed": "node seed.mjs"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "mongodb": "^6.12.0"
+  }
+}

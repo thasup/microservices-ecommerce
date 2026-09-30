@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -42,4 +44,4 @@ const CustomTooltip = ({ index, mongoId, variant }) => {
   );
 };
 
-export default CustomTooltip;
+export default CustomTooltip;

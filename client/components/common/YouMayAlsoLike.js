@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-// import Swiper core and required modules
-import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper';
+'use client';
+
+import { useEffect, useState } from 'react';
+// Import Swiper core and required modules
+import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -9,10 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'swiper/css/mousewheel';
-import 'swiper/css/keyboard';
 
-// Import Swiper styles
 import Product from '../home/Product';
 import Loader from './Loader';
 
@@ -23,68 +22,66 @@ const YouMayAlsoLike = ({ products, currentUser, onMobile, screenWidth }) => {
   useEffect(() => {
     if (products.length > 0) {
       // Shuffle suggested products
-      for (let i = products.length - 1; i > 0; i--) {
+      const shuffled = [...products];
+      for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        const temp = products[i];
-        products[i] = products[j];
-        products[j] = temp;
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
 
-      setSuggestedProducts(products.slice(0, 12));
+      setSuggestedProducts(shuffled.slice(0, 12));
       setLoading(false);
     }
   }, [products]);
 
-  // eslint-disable-next-line multiline-ternary
-  return loading ? (
-		<Loader />
-  ) : (
-		<>
-			<h3 className="mb-3">You May Also Like</h3>
-			<Swiper
-				// install Swiper modules
-				className="mySwiper custom-swiper you-may-also-like-section"
-				style={{ boxShadow: 'none' }}
-				modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-				spaceBetween={0}
-				slidesPerView={
-					screenWidth
-					  ? screenWidth >= 576
-					    ? screenWidth >= 1024
-					      ? 6
-					      : 4
-					    : 2
-					  : onMobile
-					    ? 2
-					    : 6
-				}
-				loop={true}
-				navigation={true}
-				pagination={{
-				  clickable: true,
-				  type: 'progressbar'
-				}}
-				// mousewheel={true}
-				keyboard={{
-				  enabled: true,
-				  onlyInViewport: true
-				}}
-			>
-				{suggestedProducts.map((product, index) => (
-					<SwiperSlide key={index}>
-						<Product
-							product={product}
-							currentUser={currentUser}
-							onMobile={true}
-							isMobileStyle={true}
-							showAddToCart={false}
-							priority={true}
-						/>
-					</SwiperSlide>
-				))}
-			</Swiper>
-		</>
-  );
+  return loading
+    ? (
+      <Loader />
+      )
+    : (
+      <>
+        <h3 className="mb-3">You May Also Like</h3>
+        <Swiper
+          className="mySwiper custom-swiper you-may-also-like-section"
+          style={{ boxShadow: 'none' }}
+          modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+          spaceBetween={0}
+          slidesPerView={
+            screenWidth
+              ? screenWidth >= 576
+                ? screenWidth >= 1024
+                  ? 6
+                  : 4
+                : 2
+              : onMobile
+                ? 2
+                : 6
+          }
+          loop={true}
+          navigation={true}
+          pagination={{
+            clickable: true,
+            type: 'progressbar'
+          }}
+          keyboard={{
+            enabled: true,
+            onlyInViewport: true
+          }}
+        >
+          {suggestedProducts.map((product, index) => (
+            <SwiperSlide key={index}>
+              <Product
+                product={product}
+                currentUser={currentUser}
+                onMobile={true}
+                isMobileStyle={true}
+                showAddToCart={false}
+                priority={true}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </>
+      );
 };
 
 export default YouMayAlsoLike;

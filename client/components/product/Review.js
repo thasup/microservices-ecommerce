@@ -1,23 +1,22 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Button, Col, Form, ListGroup, Row, Spinner } from 'react-bootstrap';
 import Image from 'next/image';
 import Link from 'next/link';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faStarHalfAlt,
-  faTrash,
-  faStar as fasfaStar
-} from '@fortawesome/free-solid-svg-icons';
-import { faStar } from '@fortawesome/free-regular-svg-icons';
-import ReactStars from 'react-rating-stars-component';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import useRequest from '../../hooks/useRequest';
 import Loader from '../common/Loader';
 import Message from '../common/Message';
 import Rating from '../common/Rating';
+import StarRating from '../common/StarRating';
 
 const Review = ({ currentUser, product, users, isPurchase }) => {
+  const router = useRouter();
+
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState('');
   const [comment, setComment] = useState('');
@@ -33,7 +32,7 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
     },
     onSuccess: () => {
       setLoading(false);
-      Router.push(`/products/${product.id}`);
+      router.refresh();
     }
   });
 
@@ -43,7 +42,7 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
     body: {},
     onSuccess: () => {
       setLoading(false);
-      Router.push(`/products/${product.id}`);
+      router.refresh();
     }
   });
 
@@ -97,7 +96,7 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
 												alt="profile image"
 												width={200}
 												height={200}
-												layout="responsive"
+												style={{ width: '100%', height: 'auto' }}
 											/>
 										</Col>
 									)}
@@ -147,13 +146,9 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
 								<Form onSubmit={submitReviewHandler}>
 									<Form.Group className="my-3">
 										<Form.Label>Rating</Form.Label>
-										<ReactStars
+										<StarRating
 											count={5}
 											size={40}
-											isHalf={true}
-											emptyIcon={<FontAwesomeIcon icon={faStar} />}
-											halfIcon={<FontAwesomeIcon icon={faStarHalfAlt} />}
-											fullIcon={<FontAwesomeIcon icon={fasfaStar} />}
 											activeColor="#000"
 											value={rating}
 											onChange={(newValue) => setRating(newValue)}
@@ -214,11 +209,7 @@ const Review = ({ currentUser, product, users, isPurchase }) => {
 				    )
 				  : (
 					<Message variant="secondary">
-						Please{' '}
-						<Link href="/signin">
-							<a>sign in</a>
-						</Link>{' '}
-						to write a review
+						Please <Link href="/signin">sign in</Link> to write a review
 					</Message>
 				    )}
 			</ListGroup>

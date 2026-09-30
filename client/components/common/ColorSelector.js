@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -115,4 +117,4 @@ const ColorSelector = ({ product, callback, margin, size, flex }) => {
       );
 };
 
-export default ColorSelector;
+export default ColorSelector;

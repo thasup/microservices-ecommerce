@@ -1,0 +1,12 @@
+# Local Terraform state and providers
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Real variable values contain secrets — never commit them
+terraform.tfvars
+*.auto.tfvars
+
+# Plan output files
+*.tfplan

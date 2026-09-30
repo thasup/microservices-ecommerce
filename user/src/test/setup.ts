@@ -20,7 +20,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  const collections = await mongoose.connection.db.collections();
+  const collections = await mongoose.connection.db!.collections();
 
   for (const collection of collections) {
     await collection.deleteMany({});
@@ -48,6 +48,10 @@ global.signin = async () => {
     .expect(201);
 
   const cookie = response.get('Set-Cookie');
+
+  if (cookie == null) {
+    throw new Error('Failed to get session cookie from signup response');
+  }
 
   return cookie;
 };

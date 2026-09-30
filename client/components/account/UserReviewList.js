@@ -1,3 +1,5 @@
+'use client';
+
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
@@ -31,17 +33,12 @@ const UserReviewList = ({ myReviews, products }) => {
 									<CustomTooltip index={index} mongoId={review.id} />{' '}
 								</td>
 								<td>
-									<Link
-										href={'/products/[productId]'}
-										as={`/products/${review.productId}`}
-									>
-										<a>
-											{review.productTitle
-											  ? review.productTitle
-											  : products.find(
-											    (product) => product.id === review.productId
-												  )?.title}
-										</a>
+									<Link href={`/products/${review.productId}`}>
+										{review.productTitle
+										  ? review.productTitle
+										  : products.find(
+										    (product) => product.id === review.productId
+											  )?.title}
 									</Link>
 								</td>
 								<td>
@@ -70,15 +67,14 @@ const UserReviewList = ({ myReviews, products }) => {
 									{new Date(`${review.createdAt}`).toString().substring(16, 21)}
 								</td>
 								<td>
-									<Link
-										href={'/products/[productId]'}
-										as={`/products/${review.productId}`}
-										passHref
+									<Button
+										as={Link}
+										href={`/products/${review.productId}`}
+										className="btn-sm"
+										variant="light"
 									>
-										<Button className="btn-sm" variant="light">
-											<FontAwesomeIcon icon={faInfoCircle} /> Details
-										</Button>
-									</Link>
+										<FontAwesomeIcon icon={faInfoCircle} /> Details
+									</Button>
 								</td>
 							</tr>
 						))}

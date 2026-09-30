@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 // import Swiper core and required modules
 import {
@@ -7,7 +9,7 @@ import {
   Zoom,
   Mousewheel,
   Keyboard
-} from 'swiper';
+} from 'swiper/modules';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';

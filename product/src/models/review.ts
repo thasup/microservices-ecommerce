@@ -30,7 +30,7 @@ export const reviewSchema = new mongoose.Schema<ReviewDoc, ReviewModel>(
   },
   {
     toJSON: {
-      transform (doc, ret) {
+      transform (doc, ret: Record<string, any>) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;

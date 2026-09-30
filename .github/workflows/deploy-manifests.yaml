@@ -2,31 +2,29 @@ name: deploy-manifests
 
 on:
   push:
-    # watch for pull request into main branch
     branches:
       - main
-
-    # watch for changes in infra folder
     paths:
-      - "infra/**"
-      - "trigger-manifest.txt"
-
-  # Allows you to run this workflow manually from the Actions tab
+      - "infra/k8s/**"
+      - "infra/k8s-aws/**"
+      - "infra/k8s-local-db/**"
   workflow_dispatch:
 
 jobs:
-  build:
+  # Re-applies the manifests on the AWS k3s node via SSM. Runs only when the
+  # repository variables AWS_REGION and AURAPAN_INSTANCE_ID are configured.
+  apply:
+    if: vars.AWS_REGION != '' && vars.AURAPAN_INSTANCE_ID != ''
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      # use and cliententicate doctl
-      - uses: digitalocean/action-doctl@v2
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      # use and cliententicate doctl
-      - run: doctl kubernetes cluster kubeconfig save aurapan-cluster
-
-      # apply deployment yaml files (k8s-prod is for production!)
-      - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - run: |
+          aws ssm send-command \
+            --instance-ids "${{ vars.AURAPAN_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "apply k8s manifests" \
+            --parameters 'commands=["cd /opt/aurapan && git pull && KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl apply -f infra/k8s -f infra/k8s-local-db"]'

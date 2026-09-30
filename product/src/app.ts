@@ -15,6 +15,12 @@ import { getMyReviewsRouter } from './routes/get-my-reviews';
 
 const app = express();
 app.set('trust proxy', true);
+
+// Public health check for Kubernetes probes (registered before any auth middleware)
+app.get('/healthz', (req, res) => {
+  res.status(200).send({ status: 'ok' });
+});
+
 app.use(express.json());
 app.use(
   cookieSession({

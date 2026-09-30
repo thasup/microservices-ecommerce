@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 
@@ -35,4 +37,4 @@ const QuantitySelector = ({ product, quantity, setQuantity }) => {
   );
 };
 
-export default QuantitySelector;
+export default QuantitySelector;

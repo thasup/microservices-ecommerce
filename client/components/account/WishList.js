@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
 import { Col, Row, Table } from "react-bootstrap";
@@ -30,12 +32,7 @@ const WishList = ({ products }) => {
 									<CustomTooltip index={index} mongoId={product.id} />
 								</td>
 								<td>
-									<Link
-										href={`/products/[productId]`}
-										as={`/products/${product.id}`}
-									>
-										<a>{product.title}</a>
-									</Link>
+									<Link href={`/products/${product.id}`}>{product.title}</Link>
 								</td>
 								<td>${product.price}</td>
 								<td>

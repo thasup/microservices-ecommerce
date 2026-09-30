@@ -1,4 +1,6 @@
-import Router from "next/router";
+"use client";
+
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 
@@ -6,6 +8,8 @@ import useRequest from "../../hooks/useRequest";
 import Message from "../common/Message";
 
 const EditSecurity = ({ user }) => {
+	const router = useRouter();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");
@@ -31,7 +35,7 @@ const EditSecurity = ({ user }) => {
 		},
 		onSuccess: () => {
 			setUpdateSuccess(true);
-			Router.push("/dashboard");
+			router.refresh();
 		},
 	});
 

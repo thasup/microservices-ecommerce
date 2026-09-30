@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import {
@@ -32,7 +34,6 @@ const SocialShare = ({ product }) => {
 			>
 				<FacebookShareButton
 					url={`https://www.aurapan.com/products/${product.id}`}
-					quote={'Be your beautiful best.'}
 					className="me-2"
 				>
 					<FacebookIcon size={32} round={true} />
