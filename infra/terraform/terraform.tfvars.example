@@ -4,7 +4,7 @@ aws_region = "us-east-1"
 
 # t4g.small (default) ~$12.26/mo. t4g.micro ~$6.13/mo works for light
 # traffic with MongoDB Atlas instead of in-cluster databases.
-# instance_type = "t4g.small"
+# instance_type = "t4g.small"   # needs use_in_cluster_databases = false (Atlas); use "t4g.medium" for in-cluster MongoDB
 
 # Your shop's domain — point its A record at the elastic IP output by apply.
 domain     = "shop.example.com"

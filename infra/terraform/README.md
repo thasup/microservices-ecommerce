@@ -16,19 +16,39 @@ Internet ──> Elastic IP ──> EC2 t4g.small (Ubuntu 24.04 arm64)
 
 ## Monthly cost
 
-| Item | Cost (us-east-1, on-demand) |
-| --- | --- |
-| EC2 `t4g.small` (2 vCPU, 2 GiB, ARM) | ~$12.26 |
-| EBS 20 GB gp3 root volume | ~$1.60 |
-| Elastic IP (attached to a running instance) | $0.00 |
-| Data transfer out (low-traffic shop) | ~$1.00 |
-| Route 53 hosted zone (optional — any DNS provider works) | $0.50 |
-| MongoDB Atlas M0 (optional) | $0.00 |
-| **Total** | **≈ $15/mo** (vs ~$30/mo on DigitalOcean) |
+Prices: us-east-1, on-demand, as of 2026 — verify on the AWS pricing pages.
 
-Cheaper still: `instance_type = "t4g.micro"` (~$6.13/mo) handles light traffic
-if you move MongoDB to Atlas (`use_in_cluster_databases = false`). A 1-year
-no-upfront EC2 Instance Savings Plan cuts the instance price ~30% further.
+| Item | Option A: `t4g.small` + Atlas M0 (recommended) | Option B: `t4g.medium` + in-cluster MongoDB |
+| --- | --- | --- |
+| EC2 (ARM) | ~$12.26 (2 vCPU, 2 GiB) | ~$24.53 (2 vCPU, 4 GiB) |
+| EBS 20 GB gp3 root volume | ~$1.60 | ~$1.60 |
+| Public IPv4 address (AWS charges $0.005/h for every public IPv4, **including an attached Elastic IP**) | ~$3.65 | ~$3.65 |
+| Data transfer out (low-traffic shop; first 100 GB/mo is free) | ~$0-1 | ~$0-1 |
+| Route 53 hosted zone (optional — any DNS provider works) | $0.50 | $0.50 |
+| MongoDB Atlas M0 | $0.00 | not used |
+| **Total** | **≈ $18-19/mo** | **≈ $31/mo** |
+
+Compare with ~$30/mo on DigitalOcean: Option A is roughly 40% cheaper; Option B
+costs about the same as before (but is a single node with no managed database).
+
+### Why `t4g.small` needs Atlas
+
+The manifests request 1,152 Mi of memory for the app tier (client, 5 services,
+NATS, Redis) and 1,024 Mi more for the four in-cluster MongoDB pods. Together
+with k3s, ingress-nginx and cert-manager that does not fit in 2 GiB, so with
+`use_in_cluster_databases = true` some pods would stay `Pending` on a
+`t4g.small`. Either:
+
+- keep `t4g.small` and set `use_in_cluster_databases = false` with four
+  MongoDB Atlas M0 URIs (Option A), or
+- keep in-cluster MongoDB and set `instance_type = "t4g.medium"` (Option B).
+
+`t4g.micro` (1 GiB) is **not** viable with the current manifests.
+
+These sizing numbers come from summing the manifests' memory requests; they
+have not been load-tested on a real instance.
+
+A 1-year no-upfront EC2 Instance Savings Plan cuts the instance price further.
 
 Deliberately avoided: EKS control plane ($73/mo), NAT gateway (~$32/mo + data),
 ALB/NLB (~$16/mo), and paid container registries (images live on Docker Hub).

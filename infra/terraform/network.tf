@@ -67,7 +67,7 @@ resource "aws_security_group" "node" {
   }
 }
 
-# Elastic IP: free while attached to a running instance. Gives the domain a
+# Elastic IP: AWS bills ~$3.65/mo for any public IPv4, attached or not. Gives the domain a
 # stable A-record target that survives instance replacement.
 resource "aws_eip" "node" {
   domain = "vpc"

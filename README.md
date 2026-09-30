@@ -4,7 +4,7 @@
 
 # Aurapan
 
-Aurapan is a women's clothing e-commerce website built on a fully operational **microservices architecture**: a **Next.js 15 (App Router)** storefront and five independent **TypeScript / Express** services (user, product, order, payment, expiration) that communicate over **NATS Streaming** events and store data in separate **MongoDB** databases. It runs locally on **Docker Desktop Kubernetes** and deploys to **AWS** with a single **Terraform** apply on a low-cost single-node **k3s** cluster (~$15/month).
+Aurapan is a women's clothing e-commerce website built on a fully operational **microservices architecture**: a **Next.js 15 (App Router)** storefront and five independent **TypeScript / Express** services (user, product, order, payment, expiration) that communicate over **NATS Streaming** events and store data in separate **MongoDB** databases. It runs locally on **Docker Desktop Kubernetes** and deploys to **AWS** with a single **Terraform** apply on a low-cost single-node **k3s** cluster (~$18-19/month).
 
 # Table of contents
 
@@ -100,11 +100,11 @@ Configuration via env vars: `API_URL` (default `http://aurapan.local`), `MONGO_U
 
 # Deploying to AWS with Terraform
 
-The Terraform stack in [`infra/terraform`](infra/terraform) provisions the cheapest reliable setup for a sustained deployment — about **$15/month** (vs ~$30 on DigitalOcean):
+The Terraform stack in [`infra/terraform`](infra/terraform) provisions the cheapest reliable setup for a sustained deployment — about **$18-19/month** with MongoDB Atlas M0 (vs ~$30 on DigitalOcean):
 
-- 1× EC2 `t4g.small` (ARM) running single-node **k3s** — ~$12.3/mo
+- 1× EC2 `t4g.small` (ARM) running single-node **k3s** — ~$12.3/mo (use MongoDB Atlas M0; in-cluster MongoDB needs `t4g.medium`, ~$31/mo total)
 - 20 GB gp3 EBS — ~$1.6/mo
-- Elastic IP (free while attached), no NAT gateway, no EKS control-plane fee
+- Public IPv4 / Elastic IP (~$3.65/mo), no NAT gateway, no EKS control-plane fee
 - ingress-nginx + cert-manager (Let's Encrypt TLS) installed automatically
 - Access via AWS SSM Session Manager (no SSH port open)
 - MongoDB Atlas M0 (free tier) recommended for durable data, or in-cluster MongoDB at zero cost

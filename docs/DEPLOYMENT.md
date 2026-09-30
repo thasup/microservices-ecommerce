@@ -3,7 +3,7 @@
 Two supported targets:
 
 - **Local development** — Docker Desktop's built-in Kubernetes + Skaffold (hot reload)
-- **Production** — AWS, single-node k3s on EC2 provisioned by Terraform (~$15/month)
+- **Production** — AWS, single-node k3s on EC2 provisioned by Terraform (~$18-19/month with Atlas M0)
 
 ---
 
@@ -121,9 +121,14 @@ Cost breakdown: [`infra/terraform/README.md`](../infra/terraform/README.md).
    #       (optionally) MongoDB Atlas URIs, instance_type, aws_region
    ```
 
-   For durable data, create a free [MongoDB Atlas M0](https://www.mongodb.com/pricing)
-   cluster and set the four `mongo_uri_*` variables + `use_in_cluster_databases = false`.
-   Leaving the defaults runs MongoDB in-cluster on the node's EBS volume at $0 extra.
+   **Recommended (cheapest that fits in 2 GiB RAM):** create four free
+   [MongoDB Atlas M0](https://www.mongodb.com/pricing) clusters/databases and set the
+   four `mongo_uri_*` variables + `use_in_cluster_databases = false`.
+
+   If you keep the default in-cluster MongoDB instead, also set
+   `instance_type = "t4g.medium"` — the four MongoDB pods do not fit on a
+   `t4g.small` (some pods would stay `Pending`). See the cost table in
+   [`infra/terraform/README.md`](../infra/terraform/README.md).
 
 2. **Apply**
 
